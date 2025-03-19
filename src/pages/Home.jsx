@@ -14,6 +14,9 @@ import blogs1 from "../assets/blogs1.png";
 import blogs2 from "../assets/blogs2.png";
 import blogs3 from "../assets/blogs3.png";
 import blogs4 from "../assets/blogs4.png";
+import volleyballPoster from "../assets/volleyballPoster.png";
+import { LiaTrophySolid } from "react-icons/lia";
+import Footer from "../components/Footer";
 
 const sports = [
   "Men's Cycling",
@@ -402,6 +405,103 @@ export default function Home() {
               <p className="text-gray-400">March 29, 2025</p>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* trending players  */}
+      <div className="mt-5 flex gap-5">
+        <div className="w-2/3">
+          {/* trending players  */}
+          <div className="bg-white border p-4 border-[#e6e6e6]">
+            <p className="text-xl font-bold mb-3">Trending Players</p>
+            <div className="flex flex-wrap gap-3">
+              {Array(10)
+                .fill(0)
+                .map((e, i) => (
+                  <div
+                    key={i}
+                    className="pl-1 border-gray-300 border gap-4 pr-2 py-1 items-center justify-between rounded-full flex "
+                  >
+                    <div className="flex items-center gap-2">
+                      <img
+                        src="https://static.cricbuzz.com/a/img/v1/75x75/i1/c616517/virat-kohli.jpg"
+                        alt=""
+                        className="h-7 w-7 object-cover rounded-full"
+                      />
+                      <p className="text-sm font-medium text-primary">
+                        Virat Kohli
+                      </p>
+                    </div>
+                    <FaChevronRight size={10} />
+                  </div>
+                ))}
+            </div>
+          </div>
+
+          {/* match coverage  */}
+          <div className="bg-white mt-5 border p-4 border-[#e6e6e6]">
+            <h1 className="text-xl font-bold text-primary">Match Coverage</h1>
+            <div className="flex gap-10 items-center whitespace-nowrap border-b border-gray-200 no-scrollbar mt-4 overflow-x-auto pb-2">
+              {Array(6)
+                .fill(0)
+                .map((e, i) => (
+                  <div
+                    key={i}
+                    className="min-w-[7rem] text-center flex-shrink-0 focus:text-blue-500 cursor-pointer hover:text-blue-500 "
+                  >
+                    <p className="font-bold">
+                      SA <span className="text-xs">VS</span> SL
+                    </p>
+                    <p className="text-sm">2nd Men's Test</p>
+                  </div>
+                ))}
+            </div>
+            <div className="flex gap-10 mt-5">
+              <div className="flex-1">
+                <img
+                  src="https://www.cricbuzz.com/a/img/v1/980x654/i1/c625512/brilliant-calm-composed.jpg"
+                  alt=""
+                  className="rounded"
+                />
+              </div>
+              <div className="flex-1">
+                <h1 className="text-3xl font-bold">
+                  Kagiso Rabada, too unplayable for his own good
+                </h1>
+                <p className="flex my-3 bg-blue-100 px-2 p-1 items-center justify-between rounded">
+                  <span className="flex gap-3 items-center">
+                    <LiaTrophySolid className="text-blue-500" />
+                    SA vs SL: South Africa won by 109 runs
+                  </span>
+                  <FaChevronRight className="text-blue-500" size={12} />
+                </p>
+                {Array(4)
+                  .fill("a")
+                  .map((e, i) => (
+                    <p
+                      key={i}
+                      className="flex py-1 font-medium items-center gap-2"
+                    >
+                      <FaChevronRight className="text-blue-400 " size={13} />{" "}
+                      Moonda: Temba Bavuma's summer of self-fulfillment
+                    </p>
+                  ))}
+              </div>
+            </div>
+          </div>
+
+          {/* editors picks  */}
+          <div className="bg-white mt-5 border p-4 border-[#e6e6e6]">
+            <div className="flex justify-between w-full">
+              <h1 className="text-xl font-bold text-primary">Editors Picks</h1>
+              <p className="flex text-sm gap-2 items-center">
+                See All <FaChevronRight size={12} />
+              </p>
+            </div>
+          </div>
+        </div>
+        <div className="w-1/3">
+          <img src={volleyballPoster} alt="" className="w-full" />
         </div>
       </div>
     </div>
