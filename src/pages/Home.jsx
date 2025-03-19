@@ -2,7 +2,6 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { CiSearch } from "react-icons/ci";
-import { getRecentMatches } from "../api/Home";
 import { IoMdArrowDroprightCircle } from "react-icons/io";
 import { CgChevronDoubleDown } from "react-icons/cg";
 import { FaChevronRight } from "react-icons/fa";
