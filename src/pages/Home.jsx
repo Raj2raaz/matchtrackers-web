@@ -7,7 +7,7 @@ import { CgChevronDoubleDown } from "react-icons/cg";
 import { FaChevronRight } from "react-icons/fa";
 import team from "../assets/team.png";
 import headingPost from "../assets/headingpost.png";
-import headingPost2 from "../assets/headingoost2.png";
+import headingPost2 from "../assets/headingpost2.png";
 import featuredVid1 from "../assets/featuredVid1.png";
 import featuredVid2 from "../assets/featuredVid2.png";
 import blogs1 from "../assets/blogs1.png";
