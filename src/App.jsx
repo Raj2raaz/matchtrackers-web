@@ -1,0 +1,24 @@
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import Home from "./pages/Home";
+import Stats from "./pages/Stats";
+import { Toaster } from "react-hot-toast";
+
+export default function App() {
+  return (
+    <div className="font-red-hat bg-[#F5F5F5] h-full w-full">
+      <Toaster />
+      <Router>
+        <Navbar />
+
+        <div className="px-24 py-8">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/stats" element={<Stats />} />
+          </Routes>
+        </div>
+      </Router>
+    </div>
+  );
+}
