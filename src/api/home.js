@@ -15,9 +15,70 @@ const apiClient = axios.create({
 export const getRecentMatches = async () => {
   try {
     const response = await apiClient.get("/matches/v1/recent");
-    return response.data;
+    const priority = ["League", "International", "Domestic", "Women"];
+
+    const sorted = priority.flatMap((type) =>
+      response.data.typeMatches
+        .filter((e) => e.matchType === type)
+        .flatMap((e) => e.seriesMatches)
+    );
+
+    return sorted;
   } catch (error) {
     console.error("Error fetching recent matches:", error);
+    return null;
+  }
+};
+
+export const getLiveMatches = async () => {
+  try {
+    const matches = await getRecentMatches();
+
+    // Filter matches where India is playing
+    const sorted = matches.flatMap((e) => {
+      if (!e.seriesAdWrapper) return [];
+
+      return e.seriesAdWrapper.matches.filter((f) => {
+        const team1 = f.matchInfo?.team1?.teamName?.toLowerCase() || "";
+        const team2 = f.matchInfo?.team2?.teamName?.toLowerCase() || "";
+
+        return team1.includes("india") || team2.includes("india");
+      });
+    });
+
+    // Prioritize live matches first, then others
+    const finalSorted = [
+      ...sorted.filter((match) => match.matchInfo?.state === "Live"),
+      ...sorted.filter((match) => match.matchInfo?.state !== "Live"),
+    ].slice(0, 5); // Ensure we only get top 5 matches
+
+    // Fetch commentary for each match
+    const matchesWithCommentary = await Promise.all(
+      finalSorted.map(async (match) => {
+        try {
+          const response = await apiClient.get(
+            `/mcenter/v1/${match.matchInfo.matchId}/comm`
+          );
+
+          return {
+            ...match,
+            commentary: response.data.commentaryList,
+
+            // Add commentary to match data
+          };
+        } catch (error) {
+          console.error(
+            `Error fetching commentary for match ${match.matchInfo.matchId}:`,
+            error
+          );
+          return { ...match, commentary: null }; // Add null if fetching fails
+        }
+      })
+    );
+
+    return matchesWithCommentary;
+  } catch (error) {
+    console.error("Error fetching live matches:", error);
     return null;
   }
 };
@@ -25,7 +86,7 @@ export const getRecentMatches = async () => {
 // Fetch trending players (assuming endpoint exists)
 export const getTrendingPlayers = async () => {
   try {
-    const response = await apiClient.get("/players/v1/trending");
+    const response = await apiClient.get("/stats/v1/player/trending");
     return response.data;
   } catch (error) {
     console.error("Error fetching trending players:", error);
@@ -33,13 +94,59 @@ export const getTrendingPlayers = async () => {
   }
 };
 
-// Fetch featured videos (assuming endpoint exists)
-export const getFeaturedVideos = async () => {
+// fetch galary
+export const getGalaryImages = async () => {
   try {
-    const response = await apiClient.get("/videos/v1/featured");
-    return response.data;
+    const response = await apiClient.get("/photos/v1/index");
+
+    const imgs = response.data.photoGalleryInfoList
+      .slice(0, 2)
+      .map((gallery) => ({
+        headline: gallery.photoGalleryInfo.headline,
+        galleryId: gallery.photoGalleryInfo.galleryId,
+        images: [],
+      }));
+
+    // Fetch images for each gallery
+    await Promise.all(
+      imgs.map(async (gallery) => {
+        try {
+          const galleryResponse = await apiClient.get(
+            `/photos/v1/detail/${gallery.galleryId}`
+          );
+
+          gallery.images = galleryResponse.data.photoGalleryDetails.map(
+            (img) => img.imageId
+          );
+        } catch (error) {
+          console.error(
+            `Error fetching images for gallery ${gallery.galleryId}`,
+            error
+          );
+        }
+      })
+    );
+
+    return imgs;
   } catch (error) {
-    console.error("Error fetching featured videos:", error);
-    return null;
+    console.error("error fetching galary images:", error);
+  }
+};
+
+export const getNews = async () => {
+  try {
+    const news = await apiClient.get("/news/v1/index");
+    return news.data.storyList.filter((e) => e.story);
+  } catch (error) {
+    console.error("Error Fetching news:", error);
+  }
+};
+
+export const getEditorPicks = async () => {
+  try {
+    const news = await apiClient.get("/news/v1/cat/2");
+    return news.data.storyList.filter((e) => e.story);
+  } catch (error) {
+    console.error("Error Fetching News:", error);
   }
 };

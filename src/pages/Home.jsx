@@ -1,9 +1,8 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import toast from "react-hot-toast";
 import { CiSearch } from "react-icons/ci";
 import { IoMdArrowDroprightCircle } from "react-icons/io";
-import { CgChevronDoubleDown } from "react-icons/cg";
+import { CgChevronDoubleDown, CgChevronDoubleUp } from "react-icons/cg";
 import { FaChevronRight } from "react-icons/fa";
 import team from "../assets/team.png";
 import headingPost from "../assets/headingpost.png";
@@ -17,172 +16,31 @@ import blogs4 from "../assets/blogs4.png";
 import volleyballPoster from "../assets/volleyballPoster.png";
 import { LiaTrophySolid } from "react-icons/lia";
 import Footer from "../components/Footer";
+import useCricbuzzStore from "../store/mainStore";
+import Image from "../components/Image";
 
-const sports = [
-  "Men's Cycling",
-  "Wrestling",
-  "Cricket",
-  "Football",
-  "Basketball",
-];
-
-const higlighted = [
-  "India vs Pak ODI series || Match 23",
-  "Football league || Alnasar vs xyz team",
-  "India vs Pak ODI series || Match 23",
-  "Football league || Alnasar vs xyz team",
-  "India vs Pak ODI series || Match 23",
-  "Football league || Alnasar vs xyz team",
-  "India vs Pak ODI series || Match 23",
-  "Football league || Alnasar vs xyz team",
-  "India vs Pak ODI series || Match 23",
-  "Football league || Alnasar vs xyz team",
-];
-
-const matches = [
-  {
-    matchId: "01",
-    stadium: "Chinnaswami Stadium",
-    status: "Live",
-    teams: [
-      {
-        name: "India",
-        shortName: "Ind",
-        countryCode: "IN",
-        score: "39/5",
-        overs: "17.4",
-      },
-      {
-        name: "Pakistan",
-        shortName: "Pak",
-        countryCode: "PK",
-        score: "179/6",
-        overs: "20",
-      },
-    ],
-    liveUpdatesLink: "/live-updates",
-  },
-  {
-    matchId: "01",
-    stadium: "Chinnaswami Stadium",
-    status: "Live",
-    teams: [
-      {
-        name: "India",
-        shortName: "Ind",
-        countryCode: "IN",
-        score: "39/5",
-        overs: "17.4",
-      },
-      {
-        name: "Pakistan",
-        shortName: "Pak",
-        countryCode: "PK",
-        score: "179/6",
-        overs: "20",
-      },
-    ],
-    liveUpdatesLink: "/live-updates",
-  },
-  {
-    matchId: "01",
-    stadium: "Chinnaswami Stadium",
-    status: "Finished",
-    teams: [
-      {
-        name: "India",
-        shortName: "Ind",
-        countryCode: "IN",
-        score: "39/5",
-        overs: "17.4",
-      },
-      {
-        name: "Pakistan",
-        shortName: "Pak",
-        countryCode: "PK",
-        score: "179/6",
-        overs: "20",
-      },
-    ],
-    liveUpdatesLink: "/live-updates",
-  },
-  {
-    matchId: "01",
-    stadium: "Chinnaswami Stadium",
-    status: "Finished",
-    teams: [
-      {
-        name: "India",
-        shortName: "Ind",
-        countryCode: "IN",
-        score: "39/5",
-        overs: "17.4",
-      },
-      {
-        name: "Pakistan",
-        shortName: "Pak",
-        countryCode: "PK",
-        score: "179/6",
-        overs: "20",
-      },
-    ],
-    liveUpdatesLink: "/live-updates",
-  },
-  {
-    matchId: "01",
-    stadium: "Chinnaswami Stadium",
-    status: "Upcoming",
-    teams: [
-      {
-        name: "India",
-        shortName: "Ind",
-        countryCode: "IN",
-        score: "39/5",
-        overs: "17.4",
-      },
-      {
-        name: "Pakistan",
-        shortName: "Pak",
-        countryCode: "PK",
-        score: "179/6",
-        overs: "20",
-      },
-    ],
-    liveUpdatesLink: "/live-updates",
-  },
-];
-
-const featuredVids = [
-  featuredVid1,
-  featuredVid2,
-  featuredVid1,
-  featuredVid2,
-  featuredVid1,
-  featuredVid2,
-];
-
-const blogs = [
-  {
-    img: blogs1,
-    title: "Blues must treat qualifiers like playoffs, allen says",
-    by: "Mike Fink",
-    time: "Mar 28, 2020",
-  },
-  {
-    img: blogs2,
-    title: "Blues must treat qualifiers like playoffs, allen says",
-    by: "Mike Fink",
-    time: "Mar 28, 2020",
-  },
-  {
-    img: blogs3,
-    title: "Blues must treat qualifiers like playoffs, allen says",
-    by: "Mike Fink",
-    time: "Mar 28, 2020",
-  },
-];
+const sports = ["Cricket", "Football"];
 
 export default function Home() {
+  const {
+    recentMatches,
+    trendingPlayers,
+    fetchData,
+    loading,
+    error,
+    liveMatches,
+    editorPicks,
+    galleries,
+    news,
+  } = useCricbuzzStore();
+
+  const [noOfRecentMatches, setNoOfRecentMatches] = useState(7);
+  const [selectedMatch, setSelectedMatch] = useState(0);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
     <div>
       {/* search section   */}
@@ -209,72 +67,91 @@ export default function Home() {
         <div className="flex-[0.37] ">
           <div className=" bg-white shadow-lg rounded-lg border border-[#E6E6E6] p-5">
             <h1 className="text-sub  font-semibold text-xl">
-              Highligted matches today
+              Recent Highlights
             </h1>
             <div className="text-sm mt-4 text-primary">
-              {higlighted.slice(5).map((e, i) => (
-                <div
-                  key={i}
-                  className=" bg-gray-200 items-center flex justify-between mt-2 pl-3 pr-1.5 py-1.5 rounded-full"
-                >
-                  <p>{e}</p>
-                  <IoMdArrowDroprightCircle size={26} />
-                </div>
-              ))}
+              {recentMatches.slice(0, noOfRecentMatches).map((e, i) =>
+                e.seriesAdWrapper ? (
+                  <div
+                    key={i}
+                    className="bg-gray-200 items-center flex justify-between mt-2 pl-3 pr-1.5 py-1.5 rounded-full"
+                  >
+                    <p className="truncate max-w-[14rem] overflow-hidden whitespace-nowrap">
+                      {e.seriesAdWrapper.seriesName}
+                    </p>
+                    <IoMdArrowDroprightCircle size={26} />
+                  </div>
+                ) : null
+              )}
             </div>
-            <button className="flex cursor-pointer mx-auto mt-2 text-sm font-medium items-end">
-              See more <CgChevronDoubleDown size={15} />
+            <button
+              onClick={() => {
+                if (noOfRecentMatches < recentMatches.length) {
+                  setNoOfRecentMatches(noOfRecentMatches + 5);
+                } else setNoOfRecentMatches(7);
+              }}
+              className="flex cursor-pointer mx-auto mt-2 text-sm font-medium items-end"
+            >
+              {noOfRecentMatches >= recentMatches.length
+                ? "See Less"
+                : "See More"}{" "}
+              {noOfRecentMatches >= recentMatches.length ? (
+                <CgChevronDoubleUp size={15} />
+              ) : (
+                <CgChevronDoubleDown size={15} />
+              )}
             </button>
           </div>
 
           <div className="mt-5">
-            {matches.map((e, i) => (
+            {liveMatches?.map((e, i) => (
               <div
                 key={i}
                 className=" bg-white shadow-lg mt-4 rounded-lg border border-[#E6E6E6] p-5"
               >
                 <div className="flex text-sm justify-between">
-                  <p className="font-semibold text-sub">
-                    Match {e.matchId} // {e.stadium}
+                  <p className="font-semibold max-w-[13rem] truncate text-sub">
+                    {e.matchInfo.matchFormat} Match //{" "}
+                    {e.matchInfo.venueInfo.ground}
                   </p>
                   <p
-                    className={`px-3 py-0.5 font-medium rounded-full ${
+                    className={`px-3 py-0.5 flex items-center  font-medium rounded-full ${
                       e.status === "Live"
                         ? "bg-red-500 text-white"
-                        : e.status === "Upcoming"
-                        ? "bg-green-500 text-white"
                         : "bg-gray-200"
                     }`}
                   >
-                    {e.status}
+                    {e.matchInfo.state}
                   </p>
                 </div>
                 <div className="flex justify-between items-center mt-3">
                   <div className="flex flex-col items-start">
                     <div className="flex items-center font-bold text-lg gap-1">
-                      <img
-                        src={`https://flagcdn.com/w40/${e.teams[0].countryCode.toLowerCase()}.png`}
-                        alt={e.teams[0].countryCode}
-                        className="h-4"
+                      <Image
+                        faceImageId={e.matchInfo.team1.imageId}
+                        className="w-7 h-7 rounded-full"
                       />
-                      {e.teams[0].shortName}
+                      {e.matchInfo.team1.teamSName}
                     </div>
-                    <p className="text-sm text-primary">
-                      {e.teams[0].score} ({e.teams[0].overs})
+                    <p className="text-sm mt-0.5 text-primary">
+                      {e.matchScore.team1Score.inngs1.runs}/
+                      {e.matchScore.team1Score.inngs1.wickets} (
+                      {e.matchScore.team1Score.inngs1.overs})
                     </p>
                   </div>
                   <p className="font-bold text-gray-400 text-lg">vs</p>
                   <div className="flex flex-col items-end">
                     <div className="flex items-center font-bold text-lg gap-1">
-                      <img
-                        src={`https://flagcdn.com/w40/${e.teams[1].countryCode.toLowerCase()}.png`}
-                        alt={e.teams[1].countryCode}
-                        className="h-4"
+                      <Image
+                        faceImageId={e.matchInfo.team2.imageId}
+                        className="w-7 h-7 rounded-full"
                       />
-                      {e.teams[1].shortName}
+                      {e.matchInfo.team2.teamSName}
                     </div>
-                    <p className="text-sm text-primary">
-                      {e.teams[1].score} ({e.teams[1].overs})
+                    <p className="text-sm mt-0.5 text-primary">
+                      {e.matchScore.team2Score.inngs1.runs}/
+                      {e.matchScore.team2Score.inngs1.wickets} (
+                      {e.matchScore.team2Score.inngs1.overs})
                     </p>
                   </div>
                 </div>
@@ -353,15 +230,21 @@ export default function Home() {
       {/* videos section  */}
       <div className="p-4 bg-white border mt-6 shadow border-[#e6e6e6]">
         <div className="flex justify-between w-full">
-          <h1 className="text-xl font-bold text-primary">Featured Videos</h1>
+          <h1 className="text-xl font-bold text-primary">
+            {galleries[0]?.headline} Photos
+          </h1>
           <p className="flex text-sm gap-2 items-center">
             See All <FaChevronRight size={12} />
           </p>
         </div>
         <div className="flex gap-4 mt-3 overflow-x-auto no-scrollbar whitespace-nowrap px-4">
-          {featuredVids.map((e, i) => (
+          {galleries[0]?.images.map((e, i) => (
             <div key={i} className="shrink-0 w-[23vw]">
-              <img src={e} className="w-full rounded-lg" alt="" />
+              <Image
+                faceImageId={e}
+                className="w-full h-full"
+                resolution="de"
+              />
             </div>
           ))}
         </div>
@@ -376,65 +259,88 @@ export default function Home() {
           </p>
         </div>
         <div className="flex gap-16 mt-5">
-          <div className="flex-1 flex flex-col gap-14">
-            {blogs.map((e, i) => (
-              <div key={i} className="flex gap-5">
-                <img src={e.img} alt="" />
-                <div className="mt-5">
-                  <p className="text-2xl font-bold ">{e.title}</p>
-                  <div className="flex mt-5 items-center gap-2">
-                    <p>By {e.by}</p>
-                    <div className="h-1.5 w-1.5 rounded-full bg-gray-400"></div>
-                    <p className="text-gray-400">{e.time}</p>
+          <div className="flex-1 flex flex-col gap-10">
+            {news.slice(0, 3).map((e, i) =>
+              e.story ? (
+                <div key={i} className="flex items-center gap-5">
+                  <Image
+                    faceImageId={e?.story?.imageId}
+                    className="h-54 w-72 "
+                    resolution="de"
+                  />
+                  <div className="">
+                    <p className="text-2xl font-bold ">{e?.story?.hline}</p>
+                    <p className="line-clamp-3 overflow-hidden text-ellipsis">
+                      {e?.story?.intro}
+                    </p>
+                    <div className="flex mt-2 items-center gap-2">
+                      <p>By {e?.story?.coverImage?.source}</p>
+                      <div className="h-1.5 w-1.5 rounded-full bg-gray-400"></div>
+                      <p className="text-gray-400">
+                        {new Date(Number(e?.story?.pubTime)).toLocaleDateString(
+                          "en-US",
+                          {
+                            day: "numeric",
+                            month: "long",
+                            year: "numeric",
+                          }
+                        )}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ) : null
+            )}
           </div>
           <div className="flex-1">
-            <img src={blogs4} alt="" />
-            <p className="text-4xl px-3 mt-2 font-bold">{blogs[0].title}</p>
-            <div className="mt-4 flex items-center gap-3 px-3">
-              <img
-                className="h-10 w-10 object-cover rounded-full"
-                src="https://plus.unsplash.com/premium_photo-1689530775582-83b8abdb5020?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cmFuZG9tJTIwcGVyc29ufGVufDB8fDB8fHww"
-                alt=""
-              />
-              <p>By Mark Canto</p>
+            <Image
+              faceImageId={news[4]?.story?.imageId}
+              className="w-full "
+              resolution="de"
+            />
+            <p className="text-4xl px-3 mt-2 font-bold">
+              {news[4]?.story?.hline}
+            </p>
+            <p className="px-3 mt-2">{news[4]?.story?.intro}</p>
+            <div className="flex mt-2 mx-3 items-center gap-2">
+              <p>By {news[4]?.story?.coverImage?.source}</p>
               <div className="h-1.5 w-1.5 rounded-full bg-gray-400"></div>
-              <p className="text-gray-400">March 29, 2025</p>
+              <p className="text-gray-400">
+                {new Date(Number(news[4]?.story?.pubTime)).toLocaleDateString(
+                  "en-US",
+                  {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                  }
+                )}
+              </p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* trending players  */}
       <div className="mt-5 flex gap-5">
         <div className="w-2/3">
           {/* trending players  */}
           <div className="bg-white border p-4 border-[#e6e6e6]">
             <p className="text-xl font-bold mb-3">Trending Players</p>
             <div className="flex flex-wrap gap-3">
-              {Array(10)
-                .fill(0)
-                .map((e, i) => (
-                  <div
-                    key={i}
-                    className="pl-1 border-gray-300 border gap-4 pr-2 py-1 items-center justify-between rounded-full flex "
-                  >
-                    <div className="flex items-center gap-2">
-                      <img
-                        src="https://static.cricbuzz.com/a/img/v1/75x75/i1/c616517/virat-kohli.jpg"
-                        alt=""
-                        className="h-7 w-7 object-cover rounded-full"
-                      />
-                      <p className="text-sm font-medium text-primary">
-                        Virat Kohli
-                      </p>
-                    </div>
-                    <FaChevronRight size={10} />
+              {trendingPlayers?.player?.map((e, i) => (
+                <div
+                  key={i}
+                  className="pl-1 border-gray-300 border gap-4 pr-2 py-1 items-center justify-between rounded-full flex "
+                >
+                  <div className="flex items-center gap-2">
+                    <Image
+                      className="w-7 h-7 rounded-full"
+                      faceImageId={e?.faceImageId}
+                    />
+                    <p className="text-sm font-medium text-primary">{e.name}</p>
                   </div>
-                ))}
+                  <FaChevronRight size={10} />
+                </div>
+              ))}
             </div>
           </div>
 
@@ -442,19 +348,20 @@ export default function Home() {
           <div className="bg-white mt-5 border p-4 border-[#e6e6e6]">
             <h1 className="text-xl font-bold text-primary">Match Coverage</h1>
             <div className="flex gap-10 items-center whitespace-nowrap border-b border-gray-200 no-scrollbar mt-4 overflow-x-auto pb-2">
-              {Array(6)
-                .fill(0)
-                .map((e, i) => (
-                  <div
-                    key={i}
-                    className="min-w-[7rem] text-center flex-shrink-0 focus:text-blue-500 cursor-pointer hover:text-blue-500 "
-                  >
-                    <p className="font-bold">
-                      SA <span className="text-xs">VS</span> SL
-                    </p>
-                    <p className="text-sm">2nd Men's Test</p>
-                  </div>
-                ))}
+              {liveMatches.map((e, i) => (
+                <div
+                  key={i}
+                  onClick={() => setSelectedMatch(i)}
+                  className="min-w-[7rem] text-center flex-shrink-0 focus:text-blue-500 cursor-pointer hover:text-blue-500 "
+                >
+                  <p className="font-bold">
+                    {e?.matchInfo?.team1?.teamSName}{" "}
+                    <span className="text-xs">VS</span>{" "}
+                    {e?.matchInfo?.team2?.teamSName}
+                  </p>
+                  <p className="text-sm">{e?.matchInfo.matchFormat}</p>
+                </div>
+              ))}
             </div>
             <div className="flex gap-10 mt-5">
               <div className="flex-1">
@@ -466,42 +373,97 @@ export default function Home() {
               </div>
               <div className="flex-1">
                 <h1 className="text-3xl font-bold">
-                  Kagiso Rabada, too unplayable for his own good
+                  {
+                    liveMatches[selectedMatch]?.commentary[0]?.commText?.split(
+                      "B0$"
+                    )[1]
+                  }
                 </h1>
                 <p className="flex my-3 bg-blue-100 px-2 p-1 items-center justify-between rounded">
                   <span className="flex gap-3 items-center">
                     <LiaTrophySolid className="text-blue-500" />
-                    SA vs SL: South Africa won by 109 runs
+                    <p className="font-bold">
+                      {liveMatches[selectedMatch]?.matchInfo?.team1?.teamSName}{" "}
+                      <span className="text-xs">VS</span>{" "}
+                      {liveMatches[selectedMatch]?.matchInfo?.team2?.teamSName}
+                    </p>{" "}
+                    {liveMatches[selectedMatch]?.matchInfo?.status}
                   </span>
                   <FaChevronRight className="text-blue-500" size={12} />
                 </p>
-                {Array(4)
-                  .fill("a")
-                  .map((e, i) => (
-                    <p
-                      key={i}
-                      className="flex py-1 font-medium items-center gap-2"
-                    >
-                      <FaChevronRight className="text-blue-400 " size={13} />{" "}
-                      Moonda: Temba Bavuma's summer of self-fulfillment
-                    </p>
-                  ))}
+                {liveMatches[selectedMatch]?.commentary?.slice(1, 6).map(
+                  (e, i) =>
+                    e?.commText.length > 5 && (
+                      <p
+                        key={i}
+                        className="flex py-1 font-medium items-center gap-2"
+                      >
+                        <FaChevronRight className="text-blue-400 " size={13} />{" "}
+                        {e?.commText.replace("B0$", "")}
+                      </p>
+                    )
+                )}
               </div>
-            </div>
-          </div>
-
-          {/* editors picks  */}
-          <div className="bg-white mt-5 border p-4 border-[#e6e6e6]">
-            <div className="flex justify-between w-full">
-              <h1 className="text-xl font-bold text-primary">Editors Picks</h1>
-              <p className="flex text-sm gap-2 items-center">
-                See All <FaChevronRight size={12} />
-              </p>
             </div>
           </div>
         </div>
         <div className="w-1/3">
           <img src={volleyballPoster} alt="" className="w-full" />
+        </div>
+      </div>
+
+      {/* editors picks  */}
+      <div className="bg-white mt-5 border p-4 border-[#e6e6e6]">
+        <div className="flex justify-between w-full">
+          <h1 className="text-xl font-bold text-primary">Editors Picks</h1>
+          <p className="flex text-sm gap-2 items-center">
+            See All <FaChevronRight size={12} />
+          </p>
+        </div>
+        <div className="relative">
+          <div className="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory p-2 no-scrollbar">
+            {editorPicks.slice(0, 6).map((e, i) => (
+              <div
+                key={i}
+                className="bg-black flex-shrink-0 w-[calc(100%/3.5)] text-white rounded-2xl snap-start"
+              >
+                <Image
+                  faceImageId={e?.story?.imageId}
+                  resolution="gthumb"
+                  className="w-full h-[15rem] rounded-2xl"
+                />
+                <div className="p-4">
+                  <h1 className="text-lg font-semibold">{e?.story?.hline}</h1>
+                  <p className="line-clamp-3 text-sm">{e?.story?.intro}</p>
+                  <p className="text-gray-200">
+                    Source: {e?.story.coverImage?.source}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="p-4 bg-white border mt-6 shadow border-[#e6e6e6]">
+        <div className="flex justify-between w-full">
+          <h1 className="text-xl font-bold text-primary">
+            {galleries[1]?.headline} Photos
+          </h1>
+          <p className="flex text-sm gap-2 items-center">
+            See All <FaChevronRight size={12} />
+          </p>
+        </div>
+        <div className="flex gap-4 mt-3 overflow-x-auto no-scrollbar whitespace-nowrap px-4">
+          {galleries[1]?.images.map((e, i) => (
+            <div key={i} className="shrink-0 w-[23vw]">
+              <Image
+                faceImageId={e}
+                className="w-full h-full"
+                resolution="gthumb"
+              />
+            </div>
+          ))}
         </div>
       </div>
     </div>

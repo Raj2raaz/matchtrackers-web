@@ -7,7 +7,7 @@ const links = ["stats", "teams", "news", "matches"];
 
 export default function Navbar() {
   return (
-    <div className="sticky top-0 w-full left-0">
+    <div className="sticky z-60 top-0 w-full left-0">
       <div className="bg-secondary px-24 py-2 text-white items-center bg- flex w-full justify-between gap-10">
         <img className="h-16" src={navLogo} alt="" />
         <div className="flex gap-10 font-bold items-center">
