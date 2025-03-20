@@ -6,7 +6,7 @@ import {
   getGalaryImages,
   getNews,
   getEditorPicks,
-} from "../api/Home"; // Import your API functions
+} from "../api/Home.js";
 
 const useCricbuzzStore = create((set) => ({
   recentMatches: [],
