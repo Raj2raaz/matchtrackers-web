@@ -1,0 +1,104 @@
+{
+  "IndianPlayers": [
+    {
+      "name": "Virat Kohli",
+      "imageLink": "https://static.cricbuzz.com/a/img/v1/75x75/i1/c616517/virat-kohli.jpg",
+      "profileId": "1413"
+    },
+    {
+      "name": "Rohit Sharma",
+      "imageLink": "https://static.cricbuzz.com/a/img/v1/75x75/i1/c616514/rohit-sharma.jpg",
+      "profileId": "576"
+    },
+    {
+      "name": "Shikhar Dhawan",
+      "imageLink": "https://static.cricbuzz.com/a/img/v1/75x75/i1/c170660/shikhar-dhawan.jpg",
+      "profileId": "1446"
+    },
+    {
+      "name": "Shubman Gill",
+      "imageLink": "https://static.cricbuzz.com/a/img/v1/75x75/i1/c616515/shubman-gill.jpg",
+      "profileId": "11808"
+    },
+    {
+      "name": "Shreyas Iyer",
+      "imageLink": "https://static.cricbuzz.com/a/img/v1/75x75/i1/c616518/shreyas-iyer.jpg",
+      "profileId": "9428"
+    },
+    {
+      "name": "Manish Pandey",
+      "imageLink": "https://static.cricbuzz.com/a/img/v1/75x75/i1/c171022/manish-pandey.jpg",
+      "profileId": "1836"
+    },
+    {
+      "name": "Mayank Agarawal",
+      "imageLink": "https://static.cricbuzz.com/a/img/v1/75x75/i1/c591981/mayank-agarawal.jpg",
+      "profileId": "2195"
+    },
+    {
+      "name": "Prithvi Shaw",
+      "imageLink": "https://static.cricbuzz.com/a/img/v1/75x75/i1/c593782/prithvi-shaw.jpg",
+      "profileId": "12094"
+    },
+    {
+      "name": "Cheteshwar Pujara",
+      "imageLink": "https://static.cricbuzz.com/a/img/v1/75x75/i1/c332890/cheteshwar-pujara.jpg",
+      "profileId": "1448"
+    },
+    {
+      "name": "Ajinkya Rahane",
+      "imageLink": "https://static.cricbuzz.com/a/img/v1/75x75/i1/c332892/ajinkya-rahane.jpg",
+      "profileId": "1447"
+    },
+    {
+      "name": "Ruturaj Gaikwad",
+      "imageLink": "https://static.cricbuzz.com/a/img/v1/75x75/i1/c333874/ruturaj-gaikwad.jpg",
+      "profileId": "11813"
+    },
+    {
+      "name": "Hardik Pandya",
+      "imageLink": "https://static.cricbuzz.com/a/img/v1/75x75/i1/c616519/hardik-pandya.jpg",
+      "profileId": "9647"
+    },
+    {
+      "name": "Hanuma Vihari",
+      "imageLink": "https://static.cricbuzz.com/a/img/v1/75x75/i1/c171080/hanuma-vihari.jpg",
+      "profileId": "8424"
+    },
+    {
+      "name": "Ravindra Jadeja",
+      "imageLink": "https://static.cricbuzz.com/a/img/v1/75x75/i1/c616520/ravindra-jadeja.jpg",
+      "profileId": "587"
+    },
+    {
+      "name": "Shardul Thakur",
+      "imageLink": "https://static.cricbuzz.com/a/img/v1/75x75/i1/c352487/shardul-thakur.jpg",
+      "profileId": "8683"
+    },
+    {
+      "name": "Ravichandran Ashwin",
+      "imageLink": "https://static.cricbuzz.com/a/img/v1/75x75/i1/c591961/ravichandran-ashwin.jpg",
+      "profileId": "1593"
+    },
+    {
+      "name": "KL Rahul",
+      "imageLink": "https://static.cricbuzz.com/a/img/v1/75x75/i1/c616523/kl-rahul.jpg",
+      "profileId": "8733"
+    },
+    {
+      "name": "Sanju Samson",
+      "imageLink": "https://static.cricbuzz.com/a/img/v1/75x75/i1/c226289/sanju-samson.jpg",
+      "profileId": "8271"
+    },
+    {
+      "name": "Wriddhiman Saha",
+      "imageLink": "https://static.cricbuzz.com/a/img/v1/75x75/i1/c171058/wriddhiman-saha.jpg",
+      "profileId": "1465"
+    },
+    {
+      "name": "Rishabh Pant",
+      "imageLink": "https://static.cricbuzz.com/a/img/v1/75x75/i1/c616524/rishabh-pant.jpg",
+      "profileId": "10744"
+    }
+  ]
+}

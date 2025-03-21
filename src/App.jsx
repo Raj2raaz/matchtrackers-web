@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import Stats from "./pages/Stats";
 import { Toaster } from "react-hot-toast";
 import Footer from "./components/Footer";
+import Player from "./pages/Player";
 
 export default function App() {
   return (
@@ -17,6 +18,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/stats" element={<Stats />} />
+            <Route path="/player/:id" element={<Player />} />
           </Routes>
         </div>
       </Router>

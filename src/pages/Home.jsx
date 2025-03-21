@@ -18,6 +18,7 @@ import { LiaTrophySolid } from "react-icons/lia";
 import Footer from "../components/Footer";
 import useCricbuzzStore from "../store/mainStore";
 import Image from "../components/Image";
+import { useNavigate } from "react-router-dom";
 
 const sports = ["Cricket", "Football"];
 
@@ -36,6 +37,7 @@ export default function Home() {
 
   const [noOfRecentMatches, setNoOfRecentMatches] = useState(7);
   const [selectedMatch, setSelectedMatch] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchData();
@@ -329,7 +331,8 @@ export default function Home() {
               {trendingPlayers?.player?.map((e, i) => (
                 <div
                   key={i}
-                  className="pl-1 border-gray-300 border gap-4 pr-2 py-1 items-center justify-between rounded-full flex "
+                  onClick={() => navigate("/player/" + e?.id)}
+                  className="pl-1 cursor-pointer hover:bg-gray-200 border-gray-300 border gap-4 pr-2 py-1 items-center justify-between rounded-full flex "
                 >
                   <div className="flex items-center gap-2">
                     <Image
@@ -344,6 +347,7 @@ export default function Home() {
             </div>
           </div>
 
+          {console.log(liveMatches)}
           {/* match coverage  */}
           <div className="bg-white mt-5 border p-4 border-[#e6e6e6]">
             <h1 className="text-xl font-bold text-primary">Match Coverage</h1>
@@ -352,7 +356,9 @@ export default function Home() {
                 <div
                   key={i}
                   onClick={() => setSelectedMatch(i)}
-                  className="min-w-[7rem] text-center flex-shrink-0 focus:text-blue-500 cursor-pointer hover:text-blue-500 "
+                  className={`min-w-[7rem] text-center flex-shrink-0 ${
+                    selectedMatch === i ? "text-blue-500" : ""
+                  } focus:text-blue-500 cursor-pointer hover:text-blue-500 `}
                 >
                   <p className="font-bold">
                     {e?.matchInfo?.team1?.teamSName}{" "}
@@ -365,20 +371,24 @@ export default function Home() {
             </div>
             <div className="flex gap-10 mt-5">
               <div className="flex-1">
-                <img
-                  src="https://www.cricbuzz.com/a/img/v1/980x654/i1/c625512/brilliant-calm-composed.jpg"
-                  alt=""
-                  className="rounded"
-                />
-              </div>
-              <div className="flex-1">
-                <h1 className="text-3xl font-bold">
-                  {
-                    liveMatches[selectedMatch]?.commentary[0]?.commText?.split(
-                      "B0$"
-                    )[1]
-                  }
-                </h1>
+                <h1 className="text-3xl flex gap-4 items-center font-bold">
+                  {liveMatches &&
+                    liveMatches[
+                      selectedMatch
+                    ]?.commentary[0]?.commText?.replace("B0$", "")}
+                  <Image
+                    faceImageId={
+                      liveMatches[selectedMatch]?.matchInfo.team1.teamSName ===
+                      liveMatches[selectedMatch]?.matchInfo.stateTitle.split(
+                        " "
+                      )[0]
+                        ? liveMatches[selectedMatch]?.matchInfo.team1.imageId
+                        : liveMatches[selectedMatch]?.matchInfo.team2.imageId
+                    }
+                    className="h-12 w-12 rounded-full"
+                    resolution=""
+                  />
+                </h1>{" "}
                 <p className="flex my-3 bg-blue-100 px-2 p-1 items-center justify-between rounded">
                   <span className="flex gap-3 items-center">
                     <LiaTrophySolid className="text-blue-500" />

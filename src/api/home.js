@@ -1,15 +1,4 @@
-import axios from "axios";
-
-const API_HOST = import.meta.env.VITE_CRICBUZZ_API_HOST;
-const API_KEY = import.meta.env.VITE_CRICBUZZ_API_KEY;
-
-const apiClient = axios.create({
-  baseURL: `https://${API_HOST}`,
-  headers: {
-    "x-rapidapi-host": API_HOST,
-    "x-rapidapi-key": API_KEY,
-  },
-});
+import apiClient from "../utils/axios";
 
 // Fetch recent matches
 export const getRecentMatches = async () => {
@@ -148,5 +137,30 @@ export const getEditorPicks = async () => {
     return news.data.storyList.filter((e) => e.story);
   } catch (error) {
     console.error("Error Fetching News:", error);
+  }
+};
+
+export const getPlayerInfo = async (id) => {
+  try {
+    const endpoints = [
+      `/stats/v1/player/${id}`, // Player Info
+      `/stats/v1/player/${id}/batting`, // Batting Stats
+      `/stats/v1/player/${id}/bowling`, // Bowling Stats
+      `/stats/v1/player/${id}/career`, // Career Stats
+    ];
+
+    const [info, batting, bowling, career] = await Promise.all(
+      endpoints.map((endpoint) => apiClient.get(endpoint))
+    );
+
+    return {
+      info: info.data,
+      batting: batting.data,
+      bowling: bowling.data,
+      career: career.data,
+    };
+  } catch (error) {
+    console.error("Error Fetching Player Data", error);
+    return null; // Return null in case of an error
   }
 };
