@@ -7,6 +7,9 @@ import { Toaster } from "react-hot-toast";
 import Footer from "./components/Footer";
 import Player from "./pages/Player";
 import Schedules from "./pages/Schedules";
+import ScrollToTop from "./utils/ScrollToTop";
+import PointsTable from "./pages/PointsTable";
+import Match from "./pages/Match";
 
 export default function App() {
   return (
@@ -14,13 +17,15 @@ export default function App() {
       <Toaster />
       <Router>
         <Navbar />
-
+        <ScrollToTop />
         <div className="px-24 py-8">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/stats" element={<Stats />} />
             <Route path="/player/:id" element={<Player />} />
             <Route path="/schedules" element={<Schedules />} />
+            <Route path="/points-table" element={<PointsTable />} />
+            <Route path="/match" element={<Match />} />
           </Routes>
         </div>
       </Router>

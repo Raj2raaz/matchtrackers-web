@@ -20,14 +20,16 @@ export default function Navbar() {
     setNavLinks(data);
   };
 
-  console.log(navLinks);
-
   const toggleDropdown = (menu) => {
     if (openDropdown === menu) {
       setOpenDropdown(null);
     } else {
       setOpenDropdown(menu);
     }
+  };
+
+  const closeDropdown = () => {
+    setOpenDropdown(null);
   };
 
   return (
@@ -74,6 +76,7 @@ export default function Navbar() {
                         key={index}
                         to="/matches/upcoming"
                         className="block px-4 py-2 hover:bg-gray-100"
+                        onClick={closeDropdown} // Close dropdown on link click
                       >
                         {matchTitle !== " -  vs "
                           ? matchTitle
@@ -106,12 +109,14 @@ export default function Navbar() {
                 <Link
                   to="/matches/upcoming"
                   className="block px-4 py-2 hover:bg-gray-100"
+                  onClick={closeDropdown} // Close dropdown on link click
                 >
                   Recent
                 </Link>
                 <Link
                   to="/matches/live"
                   className="block px-4 py-2 hover:bg-gray-100"
+                  onClick={closeDropdown} // Close dropdown on link click
                 >
                   Live
                 </Link>
@@ -119,6 +124,7 @@ export default function Navbar() {
                 <Link
                   to="/matches/series"
                   className="block px-4 py-2 hover:bg-gray-100"
+                  onClick={closeDropdown} // Close dropdown on link click
                 >
                   Upcoming
                 </Link>
@@ -140,8 +146,10 @@ export default function Navbar() {
               <div className="absolute top-full -left-10 mt-2 w-48 bg-white text-secondary rounded shadow-lg">
                 {data.IndianPlayers.slice(0, 6).map((e, i) => (
                   <Link
+                    key={i}
                     to={"/player/" + e.profileId}
                     className="flex items-center p-2 text-sm gap-2"
+                    onClick={closeDropdown} // Close dropdown on link click
                   >
                     <img
                       src={e.imageLink}
@@ -172,6 +180,7 @@ export default function Navbar() {
                     key={i}
                     to={"/news"}
                     className="block px-4 py-2 hover:bg-gray-100"
+                    onClick={closeDropdown} // Close dropdown on link click
                   >
                     <p className="line-clamp-2 text-sm font-medium">
                       {e.hline}
@@ -215,9 +224,10 @@ export default function Navbar() {
                         </div>
                         {matches.map((match, mIndex) => (
                           <Link
-                            key={`${index}-${mIndex}`}
+                            key={mIndex}
                             to={`/match/${match.matchId}`}
                             className="block mb-2 pb-2 border-b border-gray-100 last:border-0 hover:bg-gray-50"
+                            onClick={closeDropdown} // Close dropdown on link click
                           >
                             <div className="flex justify-between items-center">
                               <div className="text-xs text-gray-500">
