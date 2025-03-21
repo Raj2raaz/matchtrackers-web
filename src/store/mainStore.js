@@ -6,6 +6,8 @@ import {
   getGalaryImages,
   getNews,
   getEditorPicks,
+  getSchedules,
+  getNavLinks,
 } from "../api/Home.js";
 
 const useCricbuzzStore = create((set) => ({
@@ -15,6 +17,8 @@ const useCricbuzzStore = create((set) => ({
   galleries: [],
   news: [],
   editorPicks: [],
+  schedules: [],
+  navLinks: [],
   loading: false,
   error: null,
 
@@ -22,15 +26,25 @@ const useCricbuzzStore = create((set) => ({
     set({ loading: true, error: null });
 
     try {
-      const [matches, players, live, imgs, news, editorPicks] =
-        await Promise.all([
-          getRecentMatches(),
-          getTrendingPlayers(),
-          getLiveMatches(),
-          getGalaryImages(),
-          getNews(),
-          getEditorPicks(),
-        ]);
+      const [
+        matches,
+        players,
+        live,
+        imgs,
+        news,
+        editorPicks,
+        schedules,
+        navLinks,
+      ] = await Promise.all([
+        getRecentMatches(),
+        getTrendingPlayers(),
+        getLiveMatches(),
+        getGalaryImages(),
+        getNews(),
+        getEditorPicks(),
+        getSchedules(),
+        getNavLinks(),
+      ]);
 
       set({
         recentMatches: matches || [],
@@ -38,7 +52,9 @@ const useCricbuzzStore = create((set) => ({
         liveMatches: live || [],
         news: news || [],
         galleries: imgs,
+        schedules: schedules,
         editorPicks: editorPicks,
+        navLinks: navLinks,
         loading: false,
       });
     } catch (error) {

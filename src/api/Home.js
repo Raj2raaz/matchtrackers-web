@@ -147,9 +147,10 @@ export const getPlayerInfo = async (id) => {
       `/stats/v1/player/${id}/batting`, // Batting Stats
       `/stats/v1/player/${id}/bowling`, // Bowling Stats
       `/stats/v1/player/${id}/career`, // Career Stats
+      `/news/v1/player/${id}`,
     ];
 
-    const [info, batting, bowling, career] = await Promise.all(
+    const [info, batting, bowling, career, news] = await Promise.all(
       endpoints.map((endpoint) => apiClient.get(endpoint))
     );
 
@@ -158,9 +159,51 @@ export const getPlayerInfo = async (id) => {
       batting: batting.data,
       bowling: bowling.data,
       career: career.data,
+      news: news?.data?.storyList?.filter((e) => e.story),
     };
   } catch (error) {
     console.error("Error Fetching Player Data", error);
     return null; // Return null in case of an error
+  }
+};
+
+export const getSchedules = async () => {
+  try {
+    const response = await apiClient.get("/schedule/v1/league");
+    return response.data;
+  } catch (error) {
+    console.error("Error Fetching Schedules:", error);
+  }
+};
+
+export const getNavLinks = async () => {
+  try {
+    // Get live matches (India priority)
+    const matches = await getLiveMatches();
+    const matchNames = matches.map(
+      (match) => match.matchInfo?.matchDesc || "Unknown Match"
+    );
+
+    // Get league schedules
+    const schedulesData = await getSchedules();
+    const schedules = schedulesData;
+
+    // Get teams (IPL Priority)
+    const teams = schedules; // Since league schedules and teams overlap
+
+    // Get news headlines
+    const newsData = await getNews();
+    const newsHeadlines = newsData.map((news) => news.story);
+    // console.log(matchNames, schedules, teams, newsHeadlines);
+
+    return {
+      matches: matchNames,
+      schedules,
+      teams,
+      news: newsHeadlines,
+    };
+  } catch (error) {
+    console.error("Error fetching names:", error);
+    return null;
   }
 };

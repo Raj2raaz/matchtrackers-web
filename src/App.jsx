@@ -6,6 +6,7 @@ import Stats from "./pages/Stats";
 import { Toaster } from "react-hot-toast";
 import Footer from "./components/Footer";
 import Player from "./pages/Player";
+import Schedules from "./pages/Schedules";
 
 export default function App() {
   return (
@@ -19,6 +20,7 @@ export default function App() {
             <Route path="/" element={<Home />} />
             <Route path="/stats" element={<Stats />} />
             <Route path="/player/:id" element={<Player />} />
+            <Route path="/schedules" element={<Schedules />} />
           </Routes>
         </div>
       </Router>

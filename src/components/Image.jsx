@@ -43,7 +43,7 @@ const Image = ({ faceImageId, className = "", resolution = "" }) => {
       timeoutId = setTimeout(() => {
         controller.abort();
         if (isMounted && retryAttempt < 3) {
-          console.log(`Request timed out (attempt ${retryAttempt + 1})`);
+          // console.log(`Request timed out (attempt ${retryAttempt + 1})`);
           // Retry with exponential backoff
           fetchImage(retryAttempt + 1);
         } else if (isMounted) {
@@ -56,7 +56,7 @@ const Image = ({ faceImageId, className = "", resolution = "" }) => {
         const url = `/img/v1/i1/c${faceImageId}/i.jpg${
           resolution ? `?p=${resolution}` : ""
         }`;
-        console.log(`Fetching image: ${url} (attempt ${retryAttempt + 1})`);
+        // console.log(`Fetching image: ${url} (attempt ${retryAttempt + 1})`);
 
         const response = await apiClient.get(url, {
           responseType: "blob",
@@ -95,7 +95,7 @@ const Image = ({ faceImageId, className = "", resolution = "" }) => {
         clearTimeout(timeoutId);
 
         if (err.name === "AbortError") {
-          console.log("Request was aborted");
+          // console.log("Request was aborted");
           return; // Already handled by timeout logic
         }
 
@@ -107,7 +107,7 @@ const Image = ({ faceImageId, className = "", resolution = "" }) => {
         if (isMounted && retryAttempt < 3) {
           // Retry with exponential backoff
           const delay = 1000 * Math.pow(2, retryAttempt);
-          console.log(`Retrying in ${delay}ms...`);
+          // console.log(`Retrying in ${delay}ms...`);
           setTimeout(() => fetchImage(retryAttempt + 1), delay);
         } else if (isMounted) {
           setError(true);

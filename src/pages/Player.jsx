@@ -67,32 +67,9 @@ const Player = () => {
     setInfo(data);
   };
 
-  console.log(info);
-
   return (
     <div className="bg-gray-100 min-h-screen font-sans">
-      {/* Navigation Tabs */}
-      <div className="bg-white shadow-sm">
-        <div className="container mx-auto">
-          <div className="flex overflow-x-auto">
-            {tabs.map((tab) => (
-              <button
-                key={tab.id}
-                className={`px-4 py-3 text-sm font-medium ${
-                  activeTab === tab.id
-                    ? "text-blue-600 border-b-2 border-blue-600"
-                    : "text-gray-700"
-                }`}
-                onClick={() => setActiveTab(tab.id)}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <div className="px-4 flex gap-4 py-6">
+      <div className="px-4 flex gap-4 pt-6">
         <div className="w-1/3  h-full">
           <Image
             faceImageId={info?.info?.faceImageId}
@@ -105,6 +82,7 @@ const Player = () => {
             className="h-full w-full"
             alt=""
           /> */}
+
           <div className="border border-gray-300 bg-white rounded shadow mt-4 p-4">
             <div className="flex items-center pb-3 gap-3 text font-medium">
               <img
@@ -135,7 +113,6 @@ const Player = () => {
             <div className="flex items-center pb-3 gap-3 text font-medium">
               Most Trending Players
             </div>
-            {console.log(trendingPlayers)}
             <div>
               {trendingPlayers?.player?.map((e, i) => (
                 <div
@@ -407,6 +384,36 @@ const Player = () => {
           </div>
         </div>
       </div>
+
+      {/* news  */}
+      {info?.info?.news && (
+        <div className="border shadow bg-white border-gray-200 p-5">
+          <h1 className="text-xl mb-3 font-semibold">
+            Top News - {info?.info?.name}
+          </h1>
+          <div className="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory p-2 no-scrollbar">
+            {info?.news?.slice(0, 6).map((e, i) => (
+              <div
+                key={i}
+                className="bg-black flex-shrink-0 w-[calc(100%/4.5)] text-white rounded-2xl snap-start"
+              >
+                <Image
+                  faceImageId={e?.story?.imageId}
+                  resolution="gthumb"
+                  className="w-full h-[15rem] rounded-2xl"
+                />
+                <div className="p-4">
+                  <h1 className="text-lg font-semibold">{e?.story?.hline}</h1>
+                  <p className="line-clamp-3 text-sm">{e?.story?.intro}</p>
+                  <p className="text-gray-200">
+                    Source: {e?.story.coverImage?.source}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -19,6 +19,9 @@ import Footer from "../components/Footer";
 import useCricbuzzStore from "../store/mainStore";
 import Image from "../components/Image";
 import { useNavigate } from "react-router-dom";
+import TrendingPlayers from "../components/TrendingPlayers";
+import EditorPicks from "../components/EditorPicks";
+import Gallery from "../components/Gallery";
 
 const sports = ["Cricket", "Football"];
 
@@ -325,29 +328,8 @@ export default function Home() {
       <div className="mt-5 flex gap-5">
         <div className="w-2/3">
           {/* trending players  */}
-          <div className="bg-white border p-4 border-[#e6e6e6]">
-            <p className="text-xl font-bold mb-3">Trending Players</p>
-            <div className="flex flex-wrap gap-3">
-              {trendingPlayers?.player?.map((e, i) => (
-                <div
-                  key={i}
-                  onClick={() => navigate("/player/" + e?.id)}
-                  className="pl-1 cursor-pointer hover:bg-gray-200 border-gray-300 border gap-4 pr-2 py-1 items-center justify-between rounded-full flex "
-                >
-                  <div className="flex items-center gap-2">
-                    <Image
-                      className="w-7 h-7 rounded-full"
-                      faceImageId={e?.faceImageId}
-                    />
-                    <p className="text-sm font-medium text-primary">{e.name}</p>
-                  </div>
-                  <FaChevronRight size={10} />
-                </div>
-              ))}
-            </div>
-          </div>
+          <TrendingPlayers />
 
-          {console.log(liveMatches)}
           {/* match coverage  */}
           <div className="bg-white mt-5 border p-4 border-[#e6e6e6]">
             <h1 className="text-xl font-bold text-primary">Match Coverage</h1>
@@ -423,59 +405,10 @@ export default function Home() {
       </div>
 
       {/* editors picks  */}
-      <div className="bg-white mt-5 border p-4 border-[#e6e6e6]">
-        <div className="flex justify-between w-full">
-          <h1 className="text-xl font-bold text-primary">Editors Picks</h1>
-          <p className="flex text-sm gap-2 items-center">
-            See All <FaChevronRight size={12} />
-          </p>
-        </div>
-        <div className="relative">
-          <div className="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory p-2 no-scrollbar">
-            {editorPicks.slice(0, 6).map((e, i) => (
-              <div
-                key={i}
-                className="bg-black flex-shrink-0 w-[calc(100%/3.5)] text-white rounded-2xl snap-start"
-              >
-                <Image
-                  faceImageId={e?.story?.imageId}
-                  resolution="gthumb"
-                  className="w-full h-[15rem] rounded-2xl"
-                />
-                <div className="p-4">
-                  <h1 className="text-lg font-semibold">{e?.story?.hline}</h1>
-                  <p className="line-clamp-3 text-sm">{e?.story?.intro}</p>
-                  <p className="text-gray-200">
-                    Source: {e?.story.coverImage?.source}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
+      <EditorPicks />
 
-      <div className="p-4 bg-white border mt-6 shadow border-[#e6e6e6]">
-        <div className="flex justify-between w-full">
-          <h1 className="text-xl font-bold text-primary">
-            {galleries[1]?.headline} Photos
-          </h1>
-          <p className="flex text-sm gap-2 items-center">
-            See All <FaChevronRight size={12} />
-          </p>
-        </div>
-        <div className="flex gap-4 mt-3 overflow-x-auto no-scrollbar whitespace-nowrap px-4">
-          {galleries[1]?.images.map((e, i) => (
-            <div key={i} className="shrink-0 w-[23vw]">
-              <Image
-                faceImageId={e}
-                className="w-full h-full"
-                resolution="gthumb"
-              />
-            </div>
-          ))}
-        </div>
-      </div>
+      {/* Gallery  */}
+      <Gallery />
     </div>
   );
 }
