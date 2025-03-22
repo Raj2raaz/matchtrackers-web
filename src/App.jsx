@@ -10,6 +10,8 @@ import Schedules from "./pages/Schedules";
 import ScrollToTop from "./utils/ScrollToTop";
 import PointsTable from "./pages/PointsTable";
 import Match from "./pages/Match";
+import MatchList from "./pages/MatchList";
+import CricketScoresDashboard from "./pages/MatchList";
 
 export default function App() {
   return (
@@ -23,9 +25,13 @@ export default function App() {
             <Route path="/" element={<Home />} />
             <Route path="/stats" element={<Stats />} />
             <Route path="/player/:id" element={<Player />} />
-            <Route path="/schedules" element={<Schedules />} />
+            <Route path="/schedules/:id" element={<Schedules />} />
             <Route path="/points-table" element={<PointsTable />} />
-            <Route path="/match" element={<Match />} />
+            <Route path="/match/:id" element={<Match />} />
+            <Route
+              path="/match-list/:type"
+              element={<CricketScoresDashboard />}
+            />
           </Routes>
         </div>
       </Router>

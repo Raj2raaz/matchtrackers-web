@@ -139,9 +139,9 @@ export default function Home() {
                       {e.matchInfo.team1.teamSName}
                     </div>
                     <p className="text-sm mt-0.5 text-primary">
-                      {e.matchScore.team1Score.inngs1.runs}/
-                      {e.matchScore.team1Score.inngs1.wickets} (
-                      {e.matchScore.team1Score.inngs1.overs})
+                      {e?.matchScore?.team1Score?.inngs1?.runs}/
+                      {e?.matchScore?.team1Score?.inngs1?.wickets} (
+                      {e?.matchScore?.team1Score?.inngs1?.overs})
                     </p>
                   </div>
                   <p className="font-bold text-gray-400 text-lg">vs</p>
@@ -154,9 +154,9 @@ export default function Home() {
                       {e.matchInfo.team2.teamSName}
                     </div>
                     <p className="text-sm mt-0.5 text-primary">
-                      {e.matchScore.team2Score.inngs1.runs}/
-                      {e.matchScore.team2Score.inngs1.wickets} (
-                      {e.matchScore.team2Score.inngs1.overs})
+                      {e?.matchScore?.team2Score?.inngs1?.runs}/
+                      {e?.matchScore?.team2Score?.inngs1?.wickets} (
+                      {e?.matchScore?.team2Score?.inngs1?.overs})
                     </p>
                   </div>
                 </div>

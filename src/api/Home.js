@@ -3,18 +3,37 @@ import apiClient from "../utils/axios";
 // Fetch recent matches
 export const getRecentMatches = async () => {
   try {
-    const response = await apiClient.get("/matches/v1/recent");
+    // Fetch recent and live matches concurrently
+    const [recentResponse, liveResponse] = await Promise.all([
+      apiClient.get("/matches/v1/recent"),
+
+      apiClient.get("/matches/v1/live"),
+    ]);
+
+    // console.log(recentResponse);
+
     const priority = ["League", "International", "Domestic", "Women"];
 
-    const sorted = priority.flatMap((type) =>
-      response.data.typeMatches
+    // Extract and sort recent matches
+    const recentMatches = priority.flatMap((type) =>
+      recentResponse.data.typeMatches
         .filter((e) => e.matchType === type)
         .flatMap((e) => e.seriesMatches)
     );
 
-    return sorted;
+    // Extract and sort live matches
+    const liveMatches = priority.flatMap((type) =>
+      liveResponse.data.typeMatches
+        .filter((e) => e.matchType === type)
+        .flatMap((e) => e.seriesMatches)
+    );
+
+    // Combine both recent and live matches
+    const allMatches = [...liveMatches, ...recentMatches];
+
+    return allMatches;
   } catch (error) {
-    console.error("Error fetching recent matches:", error);
+    console.error("Error fetching matches:", error);
     return null;
   }
 };
@@ -24,6 +43,7 @@ export const getLiveMatches = async () => {
     const matches = await getRecentMatches();
 
     // Filter matches where India is playing
+    // console.log(matches);
     const sorted = matches.flatMap((e) => {
       if (!e.seriesAdWrapper) return [];
 
@@ -31,19 +51,17 @@ export const getLiveMatches = async () => {
         const team1 = f.matchInfo?.team1?.teamName?.toLowerCase() || "";
         const team2 = f.matchInfo?.team2?.teamName?.toLowerCase() || "";
 
-        return team1.includes("india") || team2.includes("india");
+        return (
+          f.matchInfo.seriesName.toLowerCase().includes("india") ||
+          team1.includes("india") ||
+          team2.includes("india")
+        );
       });
     });
 
-    // Prioritize live matches first, then others
-    const finalSorted = [
-      ...sorted.filter((match) => match.matchInfo?.state === "Live"),
-      ...sorted.filter((match) => match.matchInfo?.state !== "Live"),
-    ].slice(0, 5); // Ensure we only get top 5 matches
-
     // Fetch commentary for each match
     const matchesWithCommentary = await Promise.all(
-      finalSorted.map(async (match) => {
+      sorted.map(async (match) => {
         try {
           const response = await apiClient.get(
             `/mcenter/v1/${match.matchInfo.matchId}/comm`
@@ -176,9 +194,25 @@ export const getSchedules = async () => {
   }
 };
 
+export const getSeries = async () => {
+  try {
+    const response = await apiClient.get("/series/v1/league");
+    return response.data;
+  } catch (error) {
+    console.log("Error Fetching Series", error);
+  }
+};
+
+export const getRankings = async () => {
+  try {
+    const response = await apiClient.get("/stats/v1/rankings/batsment");
+  } catch (error) {
+    console.log("Error Fetching Rankings:", error);
+  }
+};
+
 export const getNavLinks = async () => {
   try {
-    // Get live matches (India priority)
     const matches = await getLiveMatches();
     const matchNames = matches.map(
       (match) => match.matchInfo?.matchDesc || "Unknown Match"
@@ -189,7 +223,7 @@ export const getNavLinks = async () => {
     const schedules = schedulesData;
 
     // Get teams (IPL Priority)
-    const teams = schedules; // Since league schedules and teams overlap
+    const series = await getSeries(); // Since league schedules and teams overlap
 
     // Get news headlines
     const newsData = await getNews();
@@ -199,7 +233,7 @@ export const getNavLinks = async () => {
     return {
       matches: matchNames,
       schedules,
-      teams,
+      series: series,
       news: newsHeadlines,
     };
   } catch (error) {
