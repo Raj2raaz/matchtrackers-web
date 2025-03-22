@@ -11,7 +11,7 @@ import {
   Trophy,
   Search,
 } from "lucide-react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import apiClient from "../utils/axios";
 import Image from "../components/Image";
 
@@ -28,6 +28,7 @@ const Schedules = () => {
   const [venues, setVenues] = useState([]);
   const [teams, setTeams] = useState([]);
   const [matchesLength, setMatchesLength] = useState(4);
+  const navigate = useNavigate();
 
   const pointsTableData = [
     {
@@ -557,7 +558,14 @@ const Schedules = () => {
                                           Scorecard
                                         </button>
                                       )}
-                                      <button className="bg-blue-600 text-white px-3 py-1.5 rounded text-sm font-medium hover:bg-blue-700">
+                                      <button
+                                        onClick={() =>
+                                          navigate(
+                                            "/match/" + matchInfo.matchId
+                                          )
+                                        }
+                                        className="bg-blue-600 text-white px-3 py-1.5 rounded text-sm font-medium hover:bg-blue-700"
+                                      >
                                         Match Details
                                       </button>
                                     </div>

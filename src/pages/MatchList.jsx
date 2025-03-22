@@ -3,10 +3,11 @@ import { Trophy, Calendar, Globe, Users } from "lucide-react";
 import { FaCaretDown } from "react-icons/fa";
 import apiClient from "../utils/axios";
 import Image from "../components/Image";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const CricketScoresDashboard = ({}) => {
   const [activeTab, setActiveTab] = useState("League");
+  const navigate = useNavigate();
 
   const { type } = useParams();
 
@@ -124,7 +125,10 @@ const CricketScoresDashboard = ({}) => {
             <button className="bg-blue-600 text-white px-3 py-1.5 rounded text-sm font-medium hover:bg-blue-700">
               View Score Card
             </button>
-            <button className="bg-blue-600 text-white px-3 py-1.5 rounded text-sm font-medium hover:bg-blue-700">
+            <button
+              onClick={() => navigate("/match/" + matchInfo.matchId)}
+              className="bg-blue-600 text-white px-3 py-1.5 rounded text-sm font-medium hover:bg-blue-700"
+            >
               Match Details
             </button>
           </div>

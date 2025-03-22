@@ -8,11 +8,12 @@ import {
 import TrendingPlayers from "../components/TrendingPlayers";
 import volleyballPoster from "../assets/volleyballPoster.png";
 import TopNewsSeriesTable from "../components/TopNewsSeriesTable";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import apiClient from "../utils/axios";
 import Image from "../components/Image";
 
 const Match = () => {
+  const navigate = useNavigate();
   const newsArticles = [
     {
       category: "GAA Hurling",
@@ -272,26 +273,28 @@ const Match = () => {
               .map((player) => (
                 <div
                   key={player.id}
-                  className="border border-gray-200 rounded-lg p-3 bg-white shadow-sm"
+                  onClick={() => navigate("/player/" + player.id)}
+                  className="border cursor-pointer border-gray-200 rounded-lg p-3 bg-white shadow-sm"
                 >
-                  <div className="flex items-center mb-2">
+                  <div className="flex items-center gap-2 mb-2">
                     <Image
                       faceImageId={player?.faceImageId}
                       className="h-7 w-7 rounded-full"
                     />
-                    <div>
-                      <div className="font-medium">{player.fullName}</div>
-                      {player.captain && (
-                        <span className="text-xs bg-red-100 text-red-800 px-2 py-0.5 rounded mr-1">
-                          Captain
-                        </span>
-                      )}
-                      {player.keeper && (
-                        <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded">
-                          Keeper
-                        </span>
-                      )}
-                    </div>
+
+                    <div className="font-medium">{player.fullName}</div>
+                  </div>
+                  <div>
+                    {player.captain && (
+                      <span className="text-xs bg-red-100 text-red-800 px-2 py-0.5 rounded mr-1">
+                        Captain
+                      </span>
+                    )}
+                    {player.keeper && (
+                      <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded">
+                        Keeper
+                      </span>
+                    )}
                   </div>
                   <div className="text-xs flex flex-wrap gap-1">
                     <span
@@ -329,24 +332,29 @@ const Match = () => {
               .filter((player) => !player.isSupportStaff && !player.substitute)
               .map((player) => (
                 <div
+                  onClick={() => navigate("/player/" + player.id)}
                   key={`team2-${player.id}`}
-                  className="border border-gray-200 rounded-lg p-3 bg-white shadow-sm"
+                  className="border cursor-pointer border-gray-200 rounded-lg p-3 bg-white shadow-sm"
                 >
-                  <div className="flex items-center mb-2">
-                    <div className="w-10 h-10 bg-gray-200 rounded-full mr-3"></div>
-                    <div>
-                      <div className="font-medium">{player.fullName}</div>
-                      {player.captain && (
-                        <span className="text-xs bg-red-100 text-red-800 px-2 py-0.5 rounded mr-1">
-                          Captain
-                        </span>
-                      )}
-                      {player.keeper && (
-                        <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded">
-                          Keeper
-                        </span>
-                      )}
-                    </div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <Image
+                      faceImageId={player?.faceImageId}
+                      className="h-7 w-7 rounded-full"
+                    />
+
+                    <div className="font-medium">{player.fullName}</div>
+                  </div>
+                  <div>
+                    {player.captain && (
+                      <span className="text-xs bg-red-100 text-red-800 px-2 py-0.5 rounded mr-1">
+                        Captain
+                      </span>
+                    )}
+                    {player.keeper && (
+                      <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded">
+                        Keeper
+                      </span>
+                    )}
                   </div>
                   <div className="text-xs flex flex-wrap gap-1">
                     <span
@@ -382,7 +390,7 @@ const Match = () => {
   const renderInfoTab = () => {
     return (
       <>
-        <div className="p-4 border-b border-gray-200">
+        <div className="p-4 ">
           <div className="grid grid-cols-6 text-xs text-gray-500 mb-1">
             <div>Batter</div>
             <div className="text-center">R</div>
@@ -392,22 +400,23 @@ const Match = () => {
             <div className="text-center">SR</div>
           </div>
 
-          {getBatters(score?.scorecard[1]).map((batter, index) => (
-            <div
-              key={index}
-              className="grid border-b border-gray-200 grid-cols-6 text-sm py-2"
-            >
-              <div className="w-[6rem] truncate">{batter.name}</div>
-              <div className="text-center">{batter.runs}</div>
-              <div className="text-center">{batter.balls}</div>
-              <div className="text-center">{batter.fours}</div>
-              <div className="text-center">{batter.sixes || 0}</div>
-              <div className="text-center">{batter.strkRate}</div>
-            </div>
-          ))}
+          {score?.scorecard?.length > 0 &&
+            getBatters(score?.scorecard[1]).map((batter, index) => (
+              <div
+                key={index}
+                className="grid border-b border-gray-200 grid-cols-6 text-sm py-2"
+              >
+                <div className="w-[6rem] truncate">{batter.name}</div>
+                <div className="text-center">{batter.runs}</div>
+                <div className="text-center">{batter.balls}</div>
+                <div className="text-center">{batter.fours}</div>
+                <div className="text-center">{batter.sixes || 0}</div>
+                <div className="text-center">{batter.strkRate}</div>
+              </div>
+            ))}
         </div>
 
-        <div className="p-4 border-b border-gray-200">
+        <div className="p-4 ">
           <div className="grid grid-cols-6 text-xs text-gray-500 mb-1">
             <div>Bowler</div>
             <div className="text-center">O</div>
@@ -417,44 +426,46 @@ const Match = () => {
             <div className="text-center">ECO</div>
           </div>
 
-          {getBowlers(score?.scorecard[0]).map((bowler, index) => (
-            <div
-              key={index}
-              className="grid border-b border-gray-200 grid-cols-6 text-sm py-2"
-            >
-              <div className="w-[6rem] truncate">{bowler.name}</div>
-              <div className="text-center">{bowler.overs}</div>
-              <div className="text-center">{bowler.maidens || 0}</div>
-              <div className="text-center">{bowler.runs}</div>
-              <div className="text-center">{bowler.wickets}</div>
-              <div className="text-center">{bowler.economy}</div>
-            </div>
-          ))}
+          {score?.scorecard?.length > 0 &&
+            getBowlers(score?.scorecard[0]).map((bowler, index) => (
+              <div
+                key={index}
+                className="grid border-b border-gray-200 grid-cols-6 text-sm py-2"
+              >
+                <div className="w-[6rem] truncate">{bowler.name}</div>
+                <div className="text-center">{bowler.overs}</div>
+                <div className="text-center">{bowler.maidens || 0}</div>
+                <div className="text-center">{bowler.runs}</div>
+                <div className="text-center">{bowler.wickets}</div>
+                <div className="text-center">{bowler.economy}</div>
+              </div>
+            ))}
         </div>
 
         <div className="p-4">
-          {getBallCommentary(score?.scorecard[0]).map((ball, index) => (
-            <div
-              key={index}
-              className={`pb-3 ${
-                index < getBallCommentary(score?.scorecard[0]).length - 1
-                  ? "border-b border-gray-200 mb-3"
-                  : ""
-              }`}
-            >
-              <div className="text-sm font-medium">
-                {ball.over} {ball.batsman} to {ball.bowler}
-                <span
-                  className={`${
-                    ball.result === "SIX" ? "text-blue-600 ml-1" : "ml-1"
-                  }`}
-                >
-                  {ball.result}
-                </span>
+          {score?.scorecard?.length > 0 &&
+            getBallCommentary(score?.scorecard[0]).map((ball, index) => (
+              <div
+                key={index}
+                className={`pb-3 ${
+                  index < getBallCommentary(score?.scorecard[0]).length - 1
+                    ? "border-b border-gray-200 mb-3"
+                    : ""
+                }`}
+              >
+                <div className="text-sm font-medium">
+                  {ball.over} {ball.batsman} to {ball.bowler}
+                  <span
+                    className={`${
+                      ball.result === "SIX" ? "text-blue-600 ml-1" : "ml-1"
+                    }`}
+                  >
+                    {ball.result}
+                  </span>
+                </div>
+                <div className="text-sm mt-1">{ball.commentary}</div>
               </div>
-              <div className="text-sm mt-1">{ball.commentary}</div>
-            </div>
-          ))}
+            ))}
         </div>
       </>
     );

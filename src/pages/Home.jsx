@@ -119,9 +119,10 @@ export default function Home() {
                     {e.matchInfo.matchFormat} Match //{" "}
                     {e.matchInfo.venueInfo.ground}
                   </p>
+
                   <p
                     className={`px-3 py-0.5 flex items-center  font-medium rounded-full ${
-                      e.status === "Live"
+                      e.matchInfo.state === "In Progress"
                         ? "bg-red-500 text-white"
                         : "bg-gray-200"
                     }`}
@@ -161,16 +162,27 @@ export default function Home() {
                   </div>
                 </div>
 
-                {e.status === "Live" ? (
-                  <button className="bg-primary text-white py-1 rounded mt-2.5 font-semibold text-center w-full">
+                {e.matchInfo.state === "In Progress" ? (
+                  <button
+                    onClick={() => navigate("/match/" + e.matchInfo.matchId)}
+                    className="bg-primary text-white py-1 rounded mt-2.5 font-semibold text-center w-full"
+                  >
                     See live updates
                   </button>
                 ) : (
                   <div className="flex justify-between pt-1 mt-2.5 border-t border-dashed border-gray-400">
-                    <button className="flex items-center cursor-pointer gap-2">
+                    <button
+                      onClick={() => navigate("/match/" + e.matchInfo.matchId)}
+                      className="flex items-center cursor-pointer gap-2"
+                    >
                       See Updates <FaChevronRight size={10} />
                     </button>
-                    <button className="flex items-center cursor-pointer gap-2">
+                    <button
+                      onClick={() =>
+                        navigate("/schedules/" + e.matchInfo.seriesId)
+                      }
+                      className="flex items-center cursor-pointer gap-2"
+                    >
                       View Series <FaChevronRight size={10} />{" "}
                     </button>
                   </div>
@@ -353,11 +365,11 @@ export default function Home() {
             </div>
             <div className="flex gap-10 mt-5">
               <div className="flex-1">
-                <h1 className="text-3xl flex gap-4 items-center font-bold">
+                <h1 className="text-3xl flex w-[50rem] line-clamp-1 truncate gap-4 items-center font-bold">
                   {liveMatches &&
                     liveMatches[
                       selectedMatch
-                    ]?.commentary[0]?.commText?.replace("B0$", "")}
+                    ]?.commentary[1]?.commText?.replace("B0$", "")}
                   <Image
                     faceImageId={
                       liveMatches[selectedMatch]?.matchInfo.team1.teamSName ===
@@ -383,12 +395,12 @@ export default function Home() {
                   </span>
                   <FaChevronRight className="text-blue-500" size={12} />
                 </p>
-                {liveMatches[selectedMatch]?.commentary?.slice(1, 6).map(
+                {liveMatches[selectedMatch]?.commentary?.slice(2, 6).map(
                   (e, i) =>
                     e?.commText.length > 5 && (
                       <p
                         key={i}
-                        className="flex py-1 font-medium items-center gap-2"
+                        className="flex w-[36rem] truncate  py-1 font-medium items-center gap-2"
                       >
                         <FaChevronRight className="text-blue-400 " size={13} />{" "}
                         {e?.commText.replace("B0$", "")}
