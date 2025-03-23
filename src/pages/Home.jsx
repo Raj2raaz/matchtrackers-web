@@ -112,7 +112,7 @@ export default function Home() {
           </div>
 
           <div className="mt-5">
-            {liveMatches?.map((e, i) => (
+            {liveMatches?.slice(0, 5).map((e, i) => (
               <div
                 key={i}
                 className=" bg-white shadow-lg mt-4 rounded-lg border border-[#E6E6E6] p-5"

@@ -4,6 +4,7 @@ import { FaCaretDown } from "react-icons/fa";
 import apiClient from "../utils/axios";
 import Image from "../components/Image";
 import { useNavigate, useParams } from "react-router-dom";
+import TopNews from "../components/TopNews";
 
 const CricketScoresDashboard = ({}) => {
   const [activeTab, setActiveTab] = useState("League");

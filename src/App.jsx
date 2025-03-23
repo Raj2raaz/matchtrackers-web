@@ -12,6 +12,7 @@ import PointsTable from "./pages/PointsTable";
 import Match from "./pages/Match";
 import MatchList from "./pages/MatchList";
 import CricketScoresDashboard from "./pages/MatchList";
+import Rankings from "./pages/Rankings";
 
 export default function App() {
   return (
@@ -32,6 +33,7 @@ export default function App() {
               path="/match-list/:type"
               element={<CricketScoresDashboard />}
             />
+            <Route path="/rankings/:type" element={<Rankings />} />
           </Routes>
         </div>
       </Router>

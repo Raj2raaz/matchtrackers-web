@@ -441,23 +441,23 @@ const Match = () => {
                 <div>
                   <div className="flex items-center">
                     <span className="text-sm">
-                      {commentary?.miniscore.bowlerNonStriker.bowlName}
+                      {commentary?.miniscore?.bowlerNonStriker?.bowlName}
                     </span>
                   </div>
                   <div className="flex mt-1 items-end">
                     <span className="text-lg font-bold mr-2">
-                      {commentary?.miniscore.bowlerNonStriker.bowlWkts}
+                      {commentary?.miniscore?.bowlerNonStriker.bowlWkts}
                     </span>
                     <span className="text-xs text-gray-500">
-                      /{commentary?.miniscore.bowlerNonStriker.bowlRuns}
+                      /{commentary?.miniscore?.bowlerNonStriker.bowlRuns}
                     </span>
                   </div>
                   <div className="flex text-xs text-gray-600 mt-1 space-x-2">
                     <span>
-                      Ovs: {commentary?.miniscore.bowlerNonStriker.bowlOvs}
+                      Ovs: {commentary?.miniscore?.bowlerNonStriker.bowlOvs}
                     </span>
                     <span>
-                      Econ: {commentary?.miniscore.bowlerNonStriker.bowlEcon}
+                      Econ: {commentary?.miniscore?.bowlerNonStriker.bowlEcon}
                     </span>
                   </div>
                 </div>
@@ -471,10 +471,10 @@ const Match = () => {
               <div className="w-2 h-2 bg-red-500 rounded-full mr-1 animate-pulse"></div>
               LIVE COMMENTARY
             </h2>
-            <div className=" overflow-y-auto">
+            <div className="h-[30rem] overflow-y-auto">
               {commentary?.commentaryList?.slice(0, 5).map((e, i) => (
                 <div
-                  className={`text-sm py-2 h-36 overflow-auto ${
+                  className={`text-sm py-2  overflow-auto ${
                     i !== 0 ? "border-t border-gray-200" : ""
                   }`}
                   key={i}
