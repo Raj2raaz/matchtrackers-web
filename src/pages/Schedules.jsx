@@ -11,9 +11,11 @@ import {
   Trophy,
   Search,
 } from "lucide-react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import apiClient from "../utils/axios";
 import Image from "../components/Image";
+import useCricbuzzStore from "../store/mainStore";
+import { formatTimeAgo } from "../utils/util";
 
 const Schedules = () => {
   const { id } = useParams();
@@ -29,6 +31,8 @@ const Schedules = () => {
   const [teams, setTeams] = useState([]);
   const [matchesLength, setMatchesLength] = useState(4);
   const navigate = useNavigate();
+  const { news } = useCricbuzzStore();
+  const [pointTable, setPointTable] = useState();
 
   const pointsTableData = [
     {
@@ -88,46 +92,6 @@ const Schedules = () => {
     },
   ];
 
-  const newsItems = [
-    {
-      id: 1,
-      title:
-        "Rohit Sharma likely to be rested for the upcoming match against CSK",
-      image: "/api/placeholder/400/200",
-      time: "2 hours ago",
-    },
-    {
-      id: 2,
-      title: "Maxwell's form a concern for RCB ahead of crucial playoffs race",
-      image: "/api/placeholder/400/200",
-      time: "5 hours ago",
-    },
-    {
-      id: 3,
-      title: "ICC Champions Trophy 2025: India's schedule announced",
-      image: "/api/placeholder/400/200",
-      time: "8 hours ago",
-    },
-    {
-      id: 4,
-      title: "Auction strategy: Teams looking to strengthen bowling attacks",
-      image: "/api/placeholder/400/200",
-      time: "10 hours ago",
-    },
-    {
-      id: 5,
-      title: "MS Dhoni hints at playing one more season after IPL 2025",
-      image: "/api/placeholder/400/200",
-      time: "15 hours ago",
-    },
-    {
-      id: 6,
-      title: "Young talent shines: Top 5 uncapped players this season",
-      image: "/api/placeholder/400/200",
-      time: "1 day ago",
-    },
-  ];
-
   const extractVenuesAndTeams = (matchDetails) => {
     const venuesMap = new Map(); // Using Map to store venue objects by ID
     const teamsMap = new Map(); // Using Map to store team objects by ID
@@ -181,6 +145,11 @@ const Schedules = () => {
         setLoading(true);
 
         const response = await apiClient.get(`/series/v1/${id}`);
+        const pointTableResponse = await apiClient.get(
+          `/stats/v1/series/${id}/points-table`
+        );
+
+        setPointTable(pointTableResponse.data.pointsTable[0].pointsTableInfo);
 
         if (response.data && response.data.matchDetails) {
           setMatchDetails(response.data.matchDetails);
@@ -553,11 +522,6 @@ const Schedules = () => {
                                     </div>
 
                                     <div className="flex gap-2 mt-4">
-                                      {isCompleted && (
-                                        <button className="bg-blue-50 text-blue-700 px-3 py-1.5 rounded text-sm font-medium hover:bg-blue-100">
-                                          Scorecard
-                                        </button>
-                                      )}
                                       <button
                                         onClick={() =>
                                           navigate(
@@ -647,13 +611,22 @@ const Schedules = () => {
           {/* Sidebar section - 1/3 width */}
           <div>
             {/* Points Table Section */}
+
             <div className="bg-white rounded-lg shadow p-4 mb-6">
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-bold text-gray-800">
-                  IPL 2025 Points Table
+                <h2 className="text w-[15rem] truncate font-bold text-gray-800">
+                  {
+                    matchDetails[0]?.matchDetailsMap?.match[0]?.matchInfo
+                      ?.seriesName
+                  }{" "}
+                  Points Table
                 </h2>
-                <a
-                  href="/points-table"
+                <Link
+                  to={
+                    "/points-table/" +
+                    matchDetails[0]?.matchDetailsMap?.match[0]?.matchInfo
+                      ?.seriesId
+                  }
                   className="text-blue-600 text-sm flex items-center gap-1 hover:underline"
                 >
                   View Full Table
@@ -671,7 +644,7 @@ const Schedules = () => {
                       d="M9 5l7 7-7 7"
                     ></path>
                   </svg>
-                </a>
+                </Link>
               </div>
 
               <div className="overflow-x-auto">
@@ -693,46 +666,39 @@ const Schedules = () => {
                       <th className="p-2 text-xs font-medium text-gray-500 text-right">
                         L
                       </th>
-                      <th className="p-2 text-xs font-medium text-gray-500 text-right">
-                        NRR
-                      </th>
-                      <th className="p-2 text-xs font-medium text-gray-500 text-right">
-                        PTS
-                      </th>
                     </tr>
                   </thead>
                   <tbody>
-                    {pointsTableData.map((team, index) => (
-                      <tr
-                        key={team.id}
-                        className="border-b border-gray-100 last:border-b-0"
-                      >
-                        <td className="p-2 text-sm text-gray-500">
-                          {index + 1}
-                        </td>
-                        <td className="p-2">
-                          <div className="flex items-center gap-2">
-                            <span>{team.flag}</span>
-                            <span className="text-sm font-medium">
-                              {team.team}
-                            </span>
-                          </div>
-                        </td>
-                        <td className="p-2 text-sm text-right">
-                          {team.matches}
-                        </td>
-                        <td className="p-2 text-sm text-right">{team.wins}</td>
-                        <td className="p-2 text-sm text-right">
-                          {team.losses}
-                        </td>
-                        <td className="p-2 text-sm text-right">{team.nrr}</td>
-                        <td className="p-2 text-sm font-medium text-right">
-                          {team.points}
-                        </td>
-                      </tr>
-                    ))}
+                    {pointTable &&
+                      pointTable.slice(0, 4).map((team, index) => (
+                        <tr
+                          key={team.teamId}
+                          className="border-b border-gray-100 last:border-b-0"
+                        >
+                          <td className="p-2 text-sm text-gray-500">
+                            {index + 1}
+                          </td>
+                          <td className="p-2">
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm font-medium">
+                                {team.teamFullName} ({team.teamName})
+                              </span>
+                            </div>
+                          </td>
+                          <td className="p-2 text-sm text-right">
+                            {team.matchesPlayed}
+                          </td>
+                          <td className="p-2 text-sm text-right">
+                            {team.matchesWon}
+                          </td>
+                          <td className="p-2 text-sm text-right">
+                            {team.matchesLost || 0}
+                          </td>
+                        </tr>
+                      ))}
                   </tbody>
                 </table>
+                <div className="flex justify-center w-full ">•••</div>
               </div>
             </div>
 
@@ -763,23 +729,26 @@ const Schedules = () => {
               </div>
 
               <div className="space-y-4">
-                {newsItems.slice(0, 3).map((item) => (
+                {news.slice(0, 5).map((item, i) => (
                   <div
-                    key={item.id}
+                    key={i}
                     className="flex gap-3 pb-3 border-b border-gray-100 last:border-b-0 last:pb-0"
                   >
-                    <img
-                      src={item.image}
-                      alt={item.title}
-                      className="w-20 h-20 object-cover rounded"
+                    <Image
+                      faceImageId={item.story?.imageId}
+                      className="h-26"
+                      resolution="gthumb"
                     />
                     <div>
                       <h3 className="text-gray-800 font-medium text-sm line-clamp-2">
-                        {item.title}
+                        {item.story.hline}
                       </h3>
+                      <p className="overflow-hidden text-xs mt-2 w-56 line-clamp-2">
+                        {item.story.intro}
+                      </p>
                       <div className="flex items-center mt-2 text-xs text-gray-500">
                         <Clock size={12} className="mr-1" />
-                        {item.time}
+                        {formatTimeAgo(Number(item.story.pubTime))}
                       </div>
                     </div>
                   </div>

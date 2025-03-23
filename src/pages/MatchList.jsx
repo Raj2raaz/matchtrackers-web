@@ -325,7 +325,7 @@ const CricketScoresDashboard = ({}) => {
             </div>
           </div>
           {/* Top News Series Table Component */}
-          {/* <TopNewsSeriesTable /> */}
+          <TopNews />
         </div>
       </div>
     </div>

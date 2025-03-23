@@ -78,8 +78,11 @@ export default function Home() {
               {recentMatches.slice(0, noOfRecentMatches).map((e, i) =>
                 e.seriesAdWrapper ? (
                   <div
+                    onClick={() =>
+                      navigate("/schedules/" + e.seriesAdWrapper.seriesId)
+                    }
                     key={i}
-                    className="bg-gray-200 items-center flex justify-between mt-2 pl-3 pr-1.5 py-1.5 rounded-full"
+                    className="bg-gray-200 hover:bg-gray-300 cursor-pointer items-center flex justify-between mt-2 pl-3 pr-1.5 py-1.5 rounded-full"
                   >
                     <p className="truncate max-w-[14rem] overflow-hidden whitespace-nowrap">
                       {e.seriesAdWrapper.seriesName}
@@ -365,11 +368,7 @@ export default function Home() {
             </div>
             <div className="flex gap-10 mt-5">
               <div className="flex-1">
-                <h1 className="text-3xl flex w-[50rem] line-clamp-1 truncate gap-4 items-center font-bold">
-                  {liveMatches &&
-                    liveMatches[
-                      selectedMatch
-                    ]?.commentary[1]?.commText?.replace("B0$", "")}
+                <h1 className="text-2xl flex  gap-4 items-center font-bold">
                   <Image
                     faceImageId={
                       liveMatches[selectedMatch]?.matchInfo.team1.teamSName ===
@@ -382,7 +381,13 @@ export default function Home() {
                     className="h-12 w-12 rounded-full"
                     resolution=""
                   />
-                </h1>{" "}
+
+                  <span className=" block w-full">
+                    {liveMatches &&
+                      liveMatches[selectedMatch]?.commentary?.miniscore
+                        ?.lastWicket}
+                  </span>
+                </h1>
                 <p className="flex my-3 bg-blue-100 px-2 p-1 items-center justify-between rounded">
                   <span className="flex gap-3 items-center">
                     <LiaTrophySolid className="text-blue-500" />
@@ -395,18 +400,25 @@ export default function Home() {
                   </span>
                   <FaChevronRight className="text-blue-500" size={12} />
                 </p>
-                {liveMatches[selectedMatch]?.commentary?.slice(2, 6).map(
-                  (e, i) =>
-                    e?.commText.length > 5 && (
-                      <p
-                        key={i}
-                        className="flex w-[36rem] truncate  py-1 font-medium items-center gap-2"
-                      >
-                        <FaChevronRight className="text-blue-400 " size={13} />{" "}
-                        {e?.commText.replace("B0$", "")}
-                      </p>
-                    )
-                )}
+                {liveMatches[selectedMatch]?.commentary?.commentaryList
+                  ?.slice(2, 6)
+                  .map(
+                    (e, i) =>
+                      e?.commText.length > 5 && (
+                        <p
+                          key={i}
+                          className="flex  py-1 font-medium items-center gap-2"
+                        >
+                          <FaChevronRight
+                            className="text-blue-400 "
+                            size={13}
+                          />{" "}
+                          <span className="truncate overflow-hidden text-ellipsis whitespace-nowrap w-[50rem]">
+                            {e?.commText.replace("B0$", "")}
+                          </span>
+                        </p>
+                      )
+                  )}
               </div>
             </div>
           </div>

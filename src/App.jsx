@@ -26,7 +26,7 @@ export default function App() {
             <Route path="/stats" element={<Stats />} />
             <Route path="/player/:id" element={<Player />} />
             <Route path="/schedules/:id" element={<Schedules />} />
-            <Route path="/points-table" element={<PointsTable />} />
+            <Route path="/points-table/:id" element={<PointsTable />} />
             <Route path="/match/:id" element={<Match />} />
             <Route
               path="/match-list/:type"

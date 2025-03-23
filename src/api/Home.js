@@ -41,9 +41,6 @@ export const getRecentMatches = async () => {
 export const getLiveMatches = async () => {
   try {
     const matches = await getRecentMatches();
-
-    // Filter matches where India is playing
-    // console.log(matches);
     const sorted = matches.flatMap((e) => {
       if (!e.seriesAdWrapper) return [];
 
@@ -69,7 +66,7 @@ export const getLiveMatches = async () => {
 
           return {
             ...match,
-            commentary: response.data.commentaryList,
+            commentary: response.data,
 
             // Add commentary to match data
           };

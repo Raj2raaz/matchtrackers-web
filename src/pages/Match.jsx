@@ -7,7 +7,7 @@ import {
 } from "react-icons/fa";
 import TrendingPlayers from "../components/TrendingPlayers";
 import volleyballPoster from "../assets/volleyballPoster.png";
-import TopNewsSeriesTable from "../components/TopNewsSeriesTable";
+import TopNews from "../components/TopNews";
 import { useNavigate, useParams } from "react-router-dom";
 import apiClient from "../utils/axios";
 import Image from "../components/Image";
@@ -45,67 +45,21 @@ const Match = () => {
   const { id } = useParams();
   const [data, setData] = useState(null);
   const [score, setScore] = useState(null);
+  const [commentary, setCommentary] = useState(null);
   const [activeTab, setActiveTab] = useState("Info");
-  const [venueInfo, setVenueInfo] = useState({
-    id: 31,
-    name: "Eden Gardens",
-    city: "Kolkata",
-    country: "India",
-    timezone: "+05:30",
-    latitude: "22.564527",
-    longitude: "88.343247",
-  });
-  const [teamSquads, setTeamSquads] = useState({
-    team1: null,
-    team2: null,
-  });
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [matchResponse, scoreResponse] = await Promise.all([
+        const [matchResponse, scoreResponse, commResponse] = await Promise.all([
           apiClient.get(`/mcenter/v1/${id}`),
           apiClient.get(`/mcenter/v1/${id}/scard`),
+          apiClient.get(`/mcenter/v1/${id}/comm`),
         ]);
 
         setData(matchResponse.data);
         setScore(scoreResponse.data);
-
-        // In a real app, you would fetch venue data here
-        // For now, we're using the static venue data you provided
-
-        // Fetch team squads - in a real app, you'd need to call the proper API endpoints
-        // Here we're using the squad data you provided as an example for KKR
-        const kkrSquad = {
-          id: 63,
-          name: "Kolkata Knight Riders",
-          playerDetails: [
-            {
-              id: 8520,
-              name: "de Kock",
-              fullName: "Quinton de Kock",
-              nickName: "de Kock",
-              captain: false,
-              role: "WK-Batsman",
-              keeper: true,
-              substitute: false,
-              teamId: 63,
-              battingStyle: "LEFT",
-              bowlingStyle: "",
-              teamName: "KKR",
-              faceImageId: 594326,
-              isOverseas: true,
-            },
-            // ... more players would be here
-          ],
-        };
-
-        // For demo purposes, we're setting both teams to KKR
-        // In a real implementation, you'd fetch both teams' data
-        setTeamSquads({
-          team1: kkrSquad,
-          team2: kkrSquad,
-        });
+        setCommentary(commResponse.data);
       } catch (error) {
         console.log(error);
       }
@@ -158,109 +112,6 @@ const Match = () => {
 
   // Render squads tab content
   const renderSquadsTab = () => {
-    // Using the KKR squad data from your provided JSON for both teams as an example
-    // In a real app, you would have proper data for both teams
-
-    const squad = {
-      id: 63,
-      name: "Kolkata Knight Riders",
-      playerDetails: [
-        {
-          id: 8520,
-          name: "de Kock",
-          fullName: "Quinton de Kock",
-          nickName: "de Kock",
-          captain: false,
-          role: "WK-Batsman",
-          keeper: true,
-          substitute: false,
-          teamId: 63,
-          battingStyle: "LEFT",
-          bowlingStyle: "",
-          teamName: "KKR",
-          faceImageId: 594326,
-          isOverseas: true,
-        },
-        {
-          id: 10917,
-          name: "Venkatesh Iyer",
-          fullName: "Venkatesh Iyer",
-          nickName: "Venkatesh Iyer",
-          captain: false,
-          role: "Batting Allrounder",
-          keeper: false,
-          substitute: false,
-          teamId: 63,
-          battingStyle: "LEFT",
-          bowlingStyle: "Right Arm medium",
-          teamName: "KKR",
-          faceImageId: 226278,
-        },
-        {
-          id: 1447,
-          name: "Ajinkya Rahane",
-          fullName: "Ajinkya Rahane",
-          nickName: "Rahane",
-          captain: true,
-          role: "Batsman",
-          keeper: false,
-          substitute: false,
-          teamId: 63,
-          battingStyle: "RIGHT",
-          bowlingStyle: "Right Arm medium",
-          teamName: "KKR",
-          faceImageId: 332892,
-        },
-        {
-          id: 10896,
-          name: "Rinku Singh",
-          fullName: "Rinku Singh",
-          nickName: "Rinku Singh",
-          captain: false,
-          role: "Batsman",
-          keeper: false,
-          substitute: false,
-          teamId: 63,
-          battingStyle: "LEFT",
-          bowlingStyle: "Right Arm off break",
-          teamName: "KKR",
-          faceImageId: 279125,
-        },
-        {
-          id: 2276,
-          name: "Narine",
-          fullName: "Sunil Narine",
-          nickName: "Narine",
-          captain: false,
-          role: "Bowling Allrounder",
-          keeper: false,
-          substitute: false,
-          teamId: 63,
-          battingStyle: "LEFT",
-          bowlingStyle: "Right Arm off break",
-          teamName: "KKR",
-          faceImageId: 152654,
-          isOverseas: true,
-        },
-        {
-          id: 7736,
-          name: "Russell",
-          fullName: "Andre Russell",
-          nickName: "Russell",
-          captain: false,
-          role: "Bowling Allrounder",
-          keeper: false,
-          substitute: false,
-          teamId: 63,
-          battingStyle: "RIGHT",
-          bowlingStyle: "Right Arm fast",
-          teamName: "KKR",
-          faceImageId: 170821,
-          isOverseas: true,
-        },
-      ],
-    };
-
     return (
       <div className="p-4">
         <div className="mb-6">
@@ -441,32 +292,6 @@ const Match = () => {
               </div>
             ))}
         </div>
-
-        <div className="p-4">
-          {score?.scorecard?.length > 0 &&
-            getBallCommentary(score?.scorecard[0]).map((ball, index) => (
-              <div
-                key={index}
-                className={`pb-3 ${
-                  index < getBallCommentary(score?.scorecard[0]).length - 1
-                    ? "border-b border-gray-200 mb-3"
-                    : ""
-                }`}
-              >
-                <div className="text-sm font-medium">
-                  {ball.over} {ball.batsman} to {ball.bowler}
-                  <span
-                    className={`${
-                      ball.result === "SIX" ? "text-blue-600 ml-1" : "ml-1"
-                    }`}
-                  >
-                    {ball.result}
-                  </span>
-                </div>
-                <div className="text-sm mt-1">{ball.commentary}</div>
-              </div>
-            ))}
-        </div>
       </>
     );
   };
@@ -474,45 +299,189 @@ const Match = () => {
   return (
     <div className="mx-auto font-sans text-gray-800">
       <div className="flex gap-6">
-        <div className="w-1/3 relative shadow-lg bg-white p-4 border border-gray-200 rounded-lg">
-          <div className="bg-white">
-            <div className="flex justify-between items-center px-2 py-1 text-xs">
-              <button>
-                <FaChevronLeft />
-              </button>
-              <span className="text-xs">18.4 H Pandya to V Kohli</span>
-              <button>
-                <FaChevronRight />
-              </button>
+        <div className="w-1/3 bg-white rounded-xl shadow-lg overflow-hidden">
+          {/* Header with team score */}
+          <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white p-4">
+            <div className="flex justify-between items-center">
+              <h1 className="text-xl font-bold">
+                {commentary?.miniscore?.batTeam?.teamScore}/
+                {commentary?.miniscore?.batTeam?.teamWkts}
+              </h1>
+              <span className="text-sm bg-blue-900 px-2 py-1 rounded-full">
+                {commentary?.miniscore?.matchStatus}
+              </span>
             </div>
+          </div>
 
-            <div className="bg-blue-600 text-white font-bold py-1 px-2 text-center text-sm">
-              It's a SIX
+          {/* Recent Balls - Visual timeline */}
+          <div className="bg-gray-50 px-4 py-3">
+            <div className="flex items-center mb-1">
+              <span className="text-xs text-gray-500 mr-2">RECENT</span>
+              <div className="flex space-x-1">
+                {commentary?.miniscore?.recentOvsStats
+                  .trim()
+                  .split(/\s+/)
+                  .slice(-8)
+                  .map((ball, index) => (
+                    <div
+                      key={index}
+                      className={`w-6 h-6 flex items-center justify-center rounded-full text-xs font-medium 
+                ${ball === "6" ? "bg-blue-600 text-white" : ""} 
+                ${ball === "4" ? "bg-green-500 text-white" : ""}
+                ${ball === "W" ? "bg-red-600 text-white font-bold" : ""} 
+                ${ball === "|" ? "border-none" : ""}
+                ${!["6", "4", "W", "|"].includes(ball) ? "bg-gray-200" : ""}`}
+                    >
+                      {ball === "|" ? "•" : ball}
+                    </div>
+                  ))}
+              </div>
             </div>
+          </div>
 
-            <div className="bg-gray-100 text-xs p-2">
-              The pressure is released. Legbreak spinning and right in the arc
+          {/* Active players section */}
+          <div className="p-4">
+            <div className="flex justify-between mb-4">
+              <div className="w-1/2 pr-2">
+                <h2 className="text-xs uppercase text-gray-500 mb-2">
+                  BATTING
+                </h2>
+
+                {/* Striker */}
+                <div className="mb-3">
+                  <div className="flex items-center">
+                    <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                    <span className="font-semibold text-sm">
+                      {commentary?.miniscore?.batsmanStriker.batName}
+                    </span>
+                  </div>
+                  <div className="flex mt-1">
+                    <span className="text-xl font-bold mr-2">
+                      {commentary?.miniscore?.batsmanStriker.batRuns}
+                    </span>
+                    <span className="text-xs text-gray-500 self-end mb-1">
+                      ({commentary?.miniscore?.batsmanStriker.batBalls})
+                    </span>
+                  </div>
+                  <div className="flex text-xs text-gray-600 mt-1 space-x-2">
+                    <span>
+                      4s: {commentary?.miniscore?.batsmanStriker.batFours}
+                    </span>
+                    <span>
+                      6s: {commentary?.miniscore?.batsmanStriker.batSixes}
+                    </span>
+                    <span>
+                      SR: {commentary?.miniscore?.batsmanStriker.batStrikeRate}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Non-Striker */}
+                <div>
+                  <div className="flex items-center">
+                    <span className="text-sm">
+                      {commentary?.miniscore?.batsmanNonStriker.batName}
+                    </span>
+                  </div>
+                  <div className="flex mt-1">
+                    <span className="text-xl font-bold mr-2">
+                      {commentary?.miniscore?.batsmanNonStriker.batRuns}
+                    </span>
+                    <span className="text-xs text-gray-500 self-end mb-1">
+                      ({commentary?.miniscore?.batsmanNonStriker.batBalls})
+                    </span>
+                  </div>
+                  <div className="flex text-xs text-gray-600 mt-1 space-x-2">
+                    <span>
+                      4s: {commentary?.miniscore?.batsmanNonStriker.batFours}
+                    </span>
+                    <span>
+                      6s: {commentary?.miniscore?.batsmanNonStriker.batSixes}
+                    </span>
+                    <span>
+                      SR:{" "}
+                      {commentary?.miniscore?.batsmanNonStriker.batStrikeRate}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="w-1/2 pl-2 border-l border-gray-200">
+                <h2 className="text-xs uppercase text-gray-500 mb-2">
+                  BOWLING
+                </h2>
+
+                {/* Current Bowler */}
+                <div className="mb-3">
+                  <div className="flex items-center">
+                    <div className="w-2 h-2 bg-red-500 rounded-full mr-2"></div>
+                    <span className="font-semibold text-sm">
+                      {commentary?.miniscore?.bowlerStriker.bowlName}
+                    </span>
+                  </div>
+                  <div className="flex mt-1 items-end">
+                    <span className="text-lg font-bold mr-2">
+                      {commentary?.miniscore?.bowlerStriker.bowlWkts}
+                    </span>
+                    <span className="text-xs text-gray-500">
+                      /{commentary?.miniscore?.bowlerStriker.bowlRuns}
+                    </span>
+                  </div>
+                  <div className="flex text-xs text-gray-600 mt-1 space-x-2">
+                    <span>
+                      Ovs: {commentary?.miniscore?.bowlerStriker.bowlOvs}
+                    </span>
+                    <span>
+                      Econ: {commentary?.miniscore?.bowlerStriker.bowlEcon}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Other Bowler */}
+                <div>
+                  <div className="flex items-center">
+                    <span className="text-sm">
+                      {commentary?.miniscore.bowlerNonStriker.bowlName}
+                    </span>
+                  </div>
+                  <div className="flex mt-1 items-end">
+                    <span className="text-lg font-bold mr-2">
+                      {commentary?.miniscore.bowlerNonStriker.bowlWkts}
+                    </span>
+                    <span className="text-xs text-gray-500">
+                      /{commentary?.miniscore.bowlerNonStriker.bowlRuns}
+                    </span>
+                  </div>
+                  <div className="flex text-xs text-gray-600 mt-1 space-x-2">
+                    <span>
+                      Ovs: {commentary?.miniscore.bowlerNonStriker.bowlOvs}
+                    </span>
+                    <span>
+                      Econ: {commentary?.miniscore.bowlerNonStriker.bowlEcon}
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
+          </div>
 
-            <div className="flex justify-center py-1 space-x-1 bg-white">
-              <div className="w-6 h-6 border flex items-center justify-center text-xs font-medium">
-                1
-              </div>
-              <div className="w-6 h-6 border flex items-center justify-center text-xs">
-                W
-              </div>
-              <div className="w-6 h-6 border flex items-center justify-center text-xs">
-                2
-              </div>
-              <div className="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-xs">
-                6
-              </div>
-              <div className="w-6 h-6 border flex items-center justify-center text-xs opacity-50">
-                •
-              </div>
-              <div className="w-6 h-6 border flex items-center justify-center text-xs opacity-50">
-                •
-              </div>
+          {/* Commentary section */}
+          <div className="bg-gray-50 p-4 border-t border-gray-200">
+            <h2 className="text-xs uppercase text-gray-500 mb-2 flex items-center">
+              <div className="w-2 h-2 bg-red-500 rounded-full mr-1 animate-pulse"></div>
+              LIVE COMMENTARY
+            </h2>
+            <div className=" overflow-y-auto">
+              {commentary?.commentaryList?.slice(0, 5).map((e, i) => (
+                <div
+                  className={`text-sm py-2 h-36 overflow-auto ${
+                    i !== 0 ? "border-t border-gray-200" : ""
+                  }`}
+                  key={i}
+                >
+                  {e?.commText}
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -520,17 +489,20 @@ const Match = () => {
         {data?.matchInfo && (
           <div className="w-2/3 border bg-white rounded-lg shadow-lg border-gray-200">
             <div className="p-4 border-b border-gray-200">
-              <div className="text-xs text-gray-500 mb-3">
-                {data?.matchInfo?.series?.name} -{" "}
-                {data?.matchInfo?.matchDescription}
-              </div>
-
-              {/* Venue information */}
-              <div className="flex items-center mb-3 text-xs text-gray-600">
-                <FaMapMarkerAlt className="mr-1" />
-                <span>
-                  {venueInfo.name}, {venueInfo.city}, {venueInfo.country}
-                </span>
+              <div className="flex justify-between items-center">
+                <div className="text-xs text-gray-500 mb-3">
+                  {commentary?.matchHeader?.seriesName} -{" "}
+                  {commentary?.matchHeader?.matchDescription}
+                </div>
+                {/* Venue information */}
+                <div className="flex items-center mb-3 text-xs text-gray-600">
+                  <FaMapMarkerAlt className="mr-1" />
+                  <span>
+                    {data?.matchInfo?.venue?.name},{" "}
+                    {data?.mathcInfo?.venue?.city},{" "}
+                    {data?.matchInfo?.venue?.country}
+                  </span>
+                </div>
               </div>
 
               <div className="flex justify-between items-center mb-2">
@@ -573,8 +545,12 @@ const Match = () => {
                   ) : null}
                 </span>
               </div>
-              <div className="text-xs mb-1">{data.matchInfo.status}</div>
-              <div className="text-xs mb-1">{data.matchInfo.shortStatus}</div>
+              <div className="flex justify-between items-end">
+                <div className="text-xs mb-1">{data.matchInfo.status}</div>
+                <div className=" text-green-500 font-medium text-lg mb-1">
+                  {data.matchInfo.shortStatus}
+                </div>
+              </div>
             </div>
 
             <div className="border-b border-gray-200">
@@ -599,7 +575,9 @@ const Match = () => {
           </div>
         )}
 
-        <TopNewsSeriesTable />
+        <div className="w-1/4">
+          <TopNews />
+        </div>
       </div>
 
       <div className="p-4 bg-white border border-gray-200 rounded-lg shadow-lg mt-6">

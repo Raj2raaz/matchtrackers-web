@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FaCaretDown, FaAngleDown } from "react-icons/fa";
-import TopNewsSeriesTable from "../components/TopNewsSeriesTable";
+import TopNews from "../components/TopNews";
 import { useParams } from "react-router-dom";
 import apiClient from "../utils/axios";
 
@@ -156,7 +156,7 @@ const PointsTable = () => {
           </>
         </div>
         <div>
-          <TopNewsSeriesTable />
+          <TopNews />
         </div>
       </div>
     </div>
