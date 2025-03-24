@@ -2,7 +2,9 @@ import React, { useEffect, useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaAngleDown, FaAngleUp, FaBars, FaTimes } from "react-icons/fa";
 import navLogo from "../assets/navLogo.svg";
+import favicon from "../assets/favicon.svg";
 import { getNavLinks } from "../api/Home";
+import Cookies from "js-cookie";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -230,7 +232,7 @@ const Navbar = () => {
         {/* Added relative positioning */}
         <img
           onClick={() => navigate("/")}
-          className="h-8 md:h-12 cursor-pointer transition-transform hover:scale-105"
+          className="h-8 md:h-8 cursor-pointer transition-transform hover:scale-105"
           src={navLogo}
           alt="Logo"
         />
@@ -359,11 +361,14 @@ const Navbar = () => {
           <button
             className="px-4 py-2 rounded-full bg-primary text-white font-medium text-sm hover:bg-primary/90 transition-colors shadow-sm hover:shadow z-10 relative" // Added z-index and relative
             onClick={() => {
-              // Handle login/signup, for example:
-              // navigate('/login');
+              if (Cookies.get("token")) {
+                Cookies.remove("token");
+              } else {
+                navigate("/auth");
+              }
             }}
           >
-            Login or Signup
+            {Cookies.get("token") ? "Logout" : "Login or Signup"}
           </button>
         </div>
       </div>

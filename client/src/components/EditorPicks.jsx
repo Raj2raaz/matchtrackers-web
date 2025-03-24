@@ -25,7 +25,7 @@ export default function EditorPicks() {
               <div
                 key={i}
                 className="bg-black flex-shrink-0 w-full sm:w-[calc(100%/2.2)] md:w-[calc(100%/2.5)] lg:w-[calc(100%/3.5)] text-white rounded-lg md:rounded-2xl snap-start cursor-pointer"
-                onClick={() => navigate(`/article/${e?.story?.id}`)}
+                onClick={() => navigate(`/news/${e?.story?.id}`)}
               >
                 <Image
                   faceImageId={e?.story?.imageId}

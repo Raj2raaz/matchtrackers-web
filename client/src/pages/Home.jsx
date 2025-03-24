@@ -429,7 +429,8 @@ export default function Home() {
                 e.story ? (
                   <div
                     key={i}
-                    className="flex flex-col sm:flex-row items-start sm:items-center gap-5"
+                    onClick={() => navigate("/news/" + e.story?.id)}
+                    className="flex cursor-pointer flex-col sm:flex-row items-start sm:items-center gap-5"
                   >
                     <Image
                       faceImageId={e?.story?.imageId}
@@ -464,7 +465,10 @@ export default function Home() {
               <p className="text-gray-500 italic">No blog posts available</p>
             )}
           </div>
-          <div className="w-full lg:w-1/2 mt-6 lg:mt-0">
+          <div
+            onClick={() => navigate("/news/" + news[4]?.story.id)}
+            className="w-full cursor-pointer lg:w-1/2 mt-6 lg:mt-0"
+          >
             {isLoading ? (
               <>
                 <Placeholder type="image" />
