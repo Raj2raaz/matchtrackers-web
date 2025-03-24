@@ -4,6 +4,8 @@ import {
   FaChevronRight,
   FaTrophy,
   FaMapMarkerAlt,
+  FaPlay,
+  FaTimes,
 } from "react-icons/fa";
 import TrendingPlayers from "../components/TrendingPlayers";
 import volleyballPoster from "../assets/volleyballPoster.png";
@@ -11,36 +13,10 @@ import TopNews from "../components/TopNews";
 import { useNavigate, useParams } from "react-router-dom";
 import apiClient from "../utils/axios";
 import Image from "../components/Image";
+import MatchVideosSection from "../components/MatchVideosSection";
 
 const Match = () => {
   const navigate = useNavigate();
-  const newsArticles = [
-    {
-      category: "GAA Hurling",
-      readTime: "5 min read",
-      title: "Sam Mele, Major League Player, Manager and Scout, Dies at 95",
-      content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    },
-    {
-      category: "American Football",
-      readTime: "5 min read",
-      title: "Isaiah Thomas Scores 53 Points as Celtics Top Wizards",
-      content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    },
-    {
-      category: "Basketball",
-      readTime: "5 min read",
-      title:
-        "Mets' Noah Syndergaard Out Indefinitely With Torn Muscle in Torso",
-      content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    },
-    {
-      category: "Horse Racing",
-      readTime: "5 min read",
-      title: "Wins Over Depression Encouraging Others Not to Debilitate",
-      content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    },
-  ];
 
   const { id } = useParams();
   const [data, setData] = useState(null);
@@ -76,29 +52,6 @@ const Match = () => {
 
   const getBowlers = (scorecard) => {
     return scorecard?.bowler.filter((bowler) => bowler.overs) || [];
-  };
-
-  const getBallCommentary = (scorecard) => {
-    if (!scorecard) return [];
-    // Assuming you have a way to access ball by ball commentary from API, replace this with your actual data fetching.
-    return [
-      {
-        over: "3.6",
-        batsman: "Kohli",
-        bowler: "Narine",
-        result: "1 run",
-        commentary:
-          "Quicker and just outside off, Kohli punches it to long-off for a single.",
-      },
-      {
-        over: "3.5",
-        batsman: "Salt",
-        bowler: "Narine",
-        result: "SIX",
-        commentary:
-          "Tossed up on middle, Salt comes down the track and smashes it over long-on for a maximum!",
-      },
-    ];
   };
 
   // Get player role color
@@ -580,58 +533,9 @@ const Match = () => {
         </div>
       </div>
 
-      <div className="p-4 bg-white border border-gray-200 rounded-lg shadow-lg mt-6">
-        <div className="flex justify-between items-center mb-3">
-          <h2 className="text-lg font-bold">Match Highlights</h2>
-          <button className="border border-gray-300 rounded px-3 py-1 text-xs">
-            View all
-          </button>
-        </div>
-
-        <p className="text-sm text-gray-600 mb-6">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-        </p>
-
-        <div className="grid grid-cols-4 gap-4">
-          {newsArticles.map((article, index) => (
-            <div key={index} className="mb-4">
-              <div className="mb-2">
-                <img
-                  src="/api/placeholder/220/150"
-                  alt={article.title}
-                  className="w-full h-28 object-cover"
-                />
-              </div>
-              <div className="flex justify-between text-xs text-gray-500 mb-1">
-                <span>{article.category}</span>
-                <span>{article.readTime}</span>
-              </div>
-              <h3 className="font-bold text-sm mb-1">{article.title}</h3>
-              <p className="text-xs text-gray-600 mb-2">{article.content}</p>
-              <button className="text-xs flex items-center text-gray-600">
-                Read more <FaChevronRight className="ml-1 text-xs" />
-              </button>
-            </div>
-          ))}
-        </div>
-
-        <div className="flex justify-center space-x-1 mt-6 mb-4">
-          <span className="text-xl text-gray-500">•</span>
-          <span className="text-xl text-gray-300">•</span>
-          <span className="text-xl text-gray-300">•</span>
-          <span className="text-xl text-gray-300">•</span>
-          <span className="text-xl text-gray-300">•</span>
-        </div>
-
-        <div className="flex justify-center space-x-4 mt-4">
-          <button className="w-8 h-8 border border-gray-300 rounded-full flex items-center justify-center">
-            <FaChevronLeft className="text-gray-500 text-xs" />
-          </button>
-          <button className="w-8 h-8 border border-gray-300 rounded-full flex items-center justify-center">
-            <FaChevronRight className="text-gray-500 text-xs" />
-          </button>
-        </div>
-      </div>
+      {commentary?.matchVideos && (
+        <MatchVideosSection commentary={commentary} />
+      )}
 
       <div className="mt-5 flex gap-5">
         <div className="w-2/3">

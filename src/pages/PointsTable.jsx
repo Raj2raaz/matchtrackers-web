@@ -3,6 +3,8 @@ import { FaCaretDown, FaAngleDown } from "react-icons/fa";
 import TopNews from "../components/TopNews";
 import { useParams } from "react-router-dom";
 import apiClient from "../utils/axios";
+import EditorPicks from "../components/EditorPicks";
+import Gallery from "../components/Gallery";
 
 const PointsTable = () => {
   const [season, setSeason] = useState("2021-22 Season");
@@ -155,10 +157,12 @@ const PointsTable = () => {
             </div>
           </>
         </div>
-        <div>
+        <div className="w-1/3">
           <TopNews />
         </div>
       </div>
+      <EditorPicks />
+      <Gallery id={3} />
     </div>
   );
 };

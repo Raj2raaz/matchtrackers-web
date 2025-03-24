@@ -123,9 +123,6 @@ const CricketScoresDashboard = ({}) => {
             {status}
           </div>
           <div className="flex gap-5 text-sm text-white">
-            <button className="bg-blue-600 text-white px-3 py-1.5 rounded text-sm font-medium hover:bg-blue-700">
-              View Score Card
-            </button>
             <button
               onClick={() => navigate("/match/" + matchInfo.matchId)}
               className="bg-blue-600 text-white px-3 py-1.5 rounded text-sm font-medium hover:bg-blue-700"
@@ -281,52 +278,8 @@ const CricketScoresDashboard = ({}) => {
 
         {/* Right Side News and Series Table */}
         <div className="w-1/3">
-          <div className="bg-white border border-gray-300 rounded-lg shadow-lg p-4">
-            {/* ICC Women's T20 World Cup Section */}
-            <div className="border-b border-gray-200 mb-4">
-              <h2 className="text-xl font-bold text-gray-800">
-                ICC Women's T20 World Cup Points Table
-              </h2>
-              <p className="text-gray-600 mt-2">
-                The highly-anticipated ICC Women's T20 World Cup 2024 is
-                scheduled to be played from 3 October to 20 October in the
-                United Arab Emirates....
-              </p>
-              <button className="text-blue-600 font-semibold mt-2">
-                Read More
-              </button>
-            </div>
-
-            {/* Footer with legend */}
-            <div className="p-4 mt-2 text-sm text-gray-600">
-              <span className="mr-3">
-                <strong>M:</strong> Matches,
-              </span>
-              <span className="mr-3">
-                <strong>W:</strong> Won,
-              </span>
-              <span className="mr-3">
-                <strong>L:</strong> Lost,
-              </span>
-              <span className="mr-3">
-                <strong>T:</strong> Tie,
-              </span>
-              <span className="mr-3">
-                <strong>N/R:</strong> No Result,
-              </span>
-              <span className="mr-3">
-                <strong>PTS:</strong> Points,
-              </span>
-              <span className="mr-3">
-                <strong>Net RR:</strong> Net run rate,
-              </span>
-              <span>
-                <strong>Q:</strong> Qualified
-              </span>
-            </div>
-          </div>
           {/* Top News Series Table Component */}
-          <TopNews />
+          <TopNews length={8} />
         </div>
       </div>
     </div>

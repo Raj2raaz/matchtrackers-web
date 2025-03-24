@@ -144,19 +144,21 @@ const Schedules = () => {
       try {
         setLoading(true);
 
-        const response = await apiClient.get(`/series/v1/${id}`);
-        const pointTableResponse = await apiClient.get(
-          `/stats/v1/series/${id}/points-table`
-        );
+        const [seriesResponse, pointsTableResponse] = await Promise.all([
+          apiClient.get(`/series/v1/${id}`),
+          apiClient.get(`/stats/v1/series/${id}/points-table`),
+        ]);
 
-        setPointTable(pointTableResponse.data.pointsTable[0].pointsTableInfo);
+        if (pointsTableResponse.data?.pointsTable?.[0]?.pointsTableInfo) {
+          setPointTable(
+            pointsTableResponse.data.pointsTable[0].pointsTableInfo
+          );
+        }
 
-        if (response.data && response.data.matchDetails) {
-          setMatchDetails(response.data.matchDetails);
-
-          // Extract venues and teams when data is received
+        if (seriesResponse.data?.matchDetails) {
+          setMatchDetails(seriesResponse.data.matchDetails);
           const { venues, teams } = extractVenuesAndTeams(
-            response.data.matchDetails
+            seriesResponse.data.matchDetails
           );
           setVenues(venues);
           setTeams(teams);

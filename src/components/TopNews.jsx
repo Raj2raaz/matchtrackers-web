@@ -5,13 +5,7 @@ import Image from "./Image";
 import { formatTimeAgo } from "../utils/util";
 import { Clock } from "lucide-react";
 
-export default function TopNews() {
-  const iplTable = [
-    { position: 1, team: "RCB*", matches: 10, points: 30, nrr: "+2.225" },
-    { position: 2, team: "GT*", matches: 10, points: 27, nrr: "+2.054" },
-    { position: 3, team: "CSK", matches: 10, points: 24, nrr: "+1.345" },
-  ];
-
+export default function TopNews({ length = 5 }) {
   const { news } = useCricbuzzStore();
 
   return (
@@ -19,9 +13,7 @@ export default function TopNews() {
       {/* Top News section */}
       <div className="border-t border bg-white rounded-lg shadow-lg border-gray-200">
         <div className="p-4 flex flex-col gap-3">
-          <h2 className="text-lg font-bold">Top News</h2>
-
-          {news.slice(0, 5).map((item, i) => (
+          {news.slice(0, length).map((item, i) => (
             <div
               key={i}
               className="flex gap-3 pb-3 border-b border-gray-100 last:border-b-0 last:pb-0"

@@ -13,6 +13,7 @@ import Match from "./pages/Match";
 import MatchList from "./pages/MatchList";
 import CricketScoresDashboard from "./pages/MatchList";
 import Rankings from "./pages/Rankings";
+import NewsPage from "./pages/News";
 
 export default function App() {
   return (
@@ -21,7 +22,7 @@ export default function App() {
       <Router>
         <Navbar />
         <ScrollToTop />
-        <div className="px-24 py-8">
+        <div className="px-2 md:px-24 md:py-8">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/stats" element={<Stats />} />
@@ -34,6 +35,7 @@ export default function App() {
               element={<CricketScoresDashboard />}
             />
             <Route path="/rankings/:type" element={<Rankings />} />
+            <Route path="/news/:id" element={<NewsPage />} />
           </Routes>
         </div>
       </Router>
