@@ -14,7 +14,7 @@ const MatchVideosSection = ({ commentary }) => {
   const videoRef = useRef(null);
   const scrollContainerRef = useRef(null);
   const videosPerPage = 4;
-  const totalPages = Math.ceil(commentary.matchVideos.length / videosPerPage);
+  const totalPages = Math.ceil(commentary?.matchVideos?.length / videosPerPage);
 
   useEffect(() => {
     if (selectedVideo && selectedVideo.videoUrl && videoRef.current) {
@@ -137,7 +137,7 @@ const MatchVideosSection = ({ commentary }) => {
           className="flex space-x-4 overflow-x-auto scroll-smooth no-scrollbar"
           style={{ scrollBehavior: "smooth" }}
         >
-          {commentary.matchVideos.map((video, index) => (
+          {commentary?.matchVideos?.map((video, index) => (
             <div
               key={index}
               className="min-w-[250px] cursor-pointer"

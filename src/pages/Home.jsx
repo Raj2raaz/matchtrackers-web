@@ -641,7 +641,7 @@ export default function Home() {
       <EditorPicks isLoading={isLoading} />
 
       {/* Gallery */}
-      <Gallery id={2} isLoading={isLoading} />
+      <Gallery id={1} isLoading={isLoading} />
     </div>
   );
 }

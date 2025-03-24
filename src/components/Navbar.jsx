@@ -1,11 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
-import navLogo from "../assets/navLogo.svg";
 import { Link, useNavigate } from "react-router-dom";
 import { FaAngleDown, FaAngleUp, FaBars, FaTimes } from "react-icons/fa";
-import useCricbuzzStore from "../store/mainStore";
+import navLogo from "../assets/navLogo.svg";
 import { getNavLinks } from "../api/Home";
 
-export default function Navbar() {
+const Navbar = () => {
   const navigate = useNavigate();
   const [navLinks, setNavLinks] = useState();
   const [openDropdown, setOpenDropdown] = useState(null);
@@ -17,55 +16,45 @@ export default function Navbar() {
     getData();
 
     // Close dropdown when clicking outside
-    const handleClickOutside = (event) => {
-      if (
-        openDropdown &&
-        dropdownRefs.current[openDropdown] &&
-        !dropdownRefs.current[openDropdown].contains(event.target)
-      ) {
-        setOpenDropdown(null);
-      }
-
-      // Close mobile menu when clicking outside
-      if (
-        mobileMenuOpen &&
-        mobileMenuRef.current &&
-        !mobileMenuRef.current.contains(event.target)
-      ) {
-        setMobileMenuOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [openDropdown, mobileMenuOpen]);
 
   const getData = async () => {
-    const data = await getNavLinks();
-    setNavLinks(data);
-  };
-
-  const toggleDropdown = (menu) => {
-    if (openDropdown === menu) {
-      setOpenDropdown(null);
-    } else {
-      setOpenDropdown(menu);
+    try {
+      const data = await getNavLinks();
+      setNavLinks(data);
+    } catch (error) {
+      console.error("Failed to fetch nav links:", error);
+      // Consider setting an error state to display a message to the user
     }
   };
 
+  const toggleDropdown = (menu, event) => {
+    event.stopPropagation(); // Prevent click from propagating to document
+    console.log(`Toggling dropdown: ${menu}`);
+    setOpenDropdown((prev) => (prev === menu ? null : menu));
+  };
+
   const closeDropdown = () => {
+    console.log("Closing dropdown");
     setOpenDropdown(null);
+    setMobileMenuOpen(false); // Ensure mobile menu also closes
+  };
+
+  const handleNavLinkClick = (e, path) => {
+    e.preventDefault(); // Prevent default link behavior
+    console.log(`Navigating to: ${path}`);
+    navigate(path);
+    closeDropdown(); // Close dropdown after navigation
   };
 
   const toggleMobileMenu = () => {
-    setMobileMenuOpen(!mobileMenuOpen);
-    // Close any open dropdown when toggling mobile menu
-    setOpenDropdown(null);
+    console.log(`Toggling mobile menu: ${mobileMenuOpen ? "close" : "open"}`);
+    setMobileMenuOpen((prev) => !prev);
   };
 
   // Shared dropdown content components
   const SeriesDropdown = () => (
-    <div className="max-h-96 overflow-y-auto py-2">
+    <div className="max-h-96 overflow-y-auto py-2 text-black bg-white rounded-md ">
       {navLinks?.series?.seriesMapProto?.length > 0 ? (
         navLinks?.series?.seriesMapProto.flatMap((month) => (
           <React.Fragment key={month.date}>
@@ -77,7 +66,7 @@ export default function Navbar() {
                 key={index}
                 to={`/schedules/${match.id}`}
                 className="block px-4 py-2 hover:bg-blue-50 transition-colors duration-150 text-sm"
-                onClick={closeDropdown}
+                onClick={(e) => handleNavLinkClick(e, `/schedules/${match.id}`)} // Use handleNavLinkClick
               >
                 {match.name}
               </Link>
@@ -93,25 +82,25 @@ export default function Navbar() {
   );
 
   const MatchesDropdown = () => (
-    <div className="py-2">
+    <div className="py-2 bg-white rounded-md text-black ">
       <Link
         to="/match-list/recent"
         className="block px-4 py-2 hover:bg-blue-50 transition-colors duration-150 text-sm"
-        onClick={closeDropdown}
+        onClick={(e) => handleNavLinkClick(e, "/match-list/recent")} // Use handleNavLinkClick
       >
         Recent
       </Link>
       <Link
         to="/match-list/live"
         className="block px-4 py-2 hover:bg-blue-50 transition-colors duration-150 text-sm"
-        onClick={closeDropdown}
+        onClick={(e) => handleNavLinkClick(e, "/match-list/live")} // Use handleNavLinkClick
       >
         Live
       </Link>
       <Link
         to="/match-list/upcoming"
         className="block px-4 py-2 hover:bg-blue-50 transition-colors duration-150 text-sm"
-        onClick={closeDropdown}
+        onClick={(e) => handleNavLinkClick(e, "/match-list/upcoming")} // Use handleNavLinkClick
       >
         Upcoming
       </Link>
@@ -119,25 +108,25 @@ export default function Navbar() {
   );
 
   const RankingsDropdown = () => (
-    <div className="py-2">
+    <div className="py-2 bg-white rounded-md text-black ">
       <Link
         to="/rankings/odi"
         className="block px-4 py-2 hover:bg-blue-50 transition-colors duration-150 text-sm"
-        onClick={closeDropdown}
+        onClick={(e) => handleNavLinkClick(e, "/rankings/odi")} // Use handleNavLinkClick
       >
         ODI
       </Link>
       <Link
         to="/rankings/test"
         className="block px-4 py-2 hover:bg-blue-50 transition-colors duration-150 text-sm"
-        onClick={closeDropdown}
+        onClick={(e) => handleNavLinkClick(e, "/rankings/test")} // Use handleNavLinkClick
       >
         Test
       </Link>
       <Link
         to="/rankings/t20"
         className="block px-4 py-2 hover:bg-blue-50 transition-colors duration-150 text-sm"
-        onClick={closeDropdown}
+        onClick={(e) => handleNavLinkClick(e, "/rankings/t20")} // Use handleNavLinkClick
       >
         T20
       </Link>
@@ -145,13 +134,13 @@ export default function Navbar() {
   );
 
   const NewsDropdown = () => (
-    <div className="py-2 max-h-96 overflow-y-auto">
+    <div className="py-2 max-h-96 overflow-y-auto text-black bg-white rounded-md ">
       {navLinks?.news?.slice(0, 7).map((e, i) => (
         <Link
           key={i}
           to={`/news/${e.id}`}
           className="block px-4 py-3 hover:bg-blue-50 transition-colors duration-150 border-b border-gray-100 last:border-0"
-          onClick={closeDropdown}
+          onClick={(event) => handleNavLinkClick(event, `/news/${e.id}`)} // Use handleNavLinkClick
         >
           <p className="line-clamp-2 text-sm">{e.hline}</p>
           <p className="text-xs text-gray-500 mt-1">{e.date || "Recent"}</p>
@@ -164,7 +153,7 @@ export default function Navbar() {
         <Link
           to="/news"
           className="block px-4 py-2 text-center text-primary text-sm font-medium hover:bg-blue-50"
-          onClick={closeDropdown}
+          onClick={(e) => handleNavLinkClick(e, "/news")} // Use handleNavLinkClick
         >
           View All News
         </Link>
@@ -173,7 +162,7 @@ export default function Navbar() {
   );
 
   const SchedulesDropdown = () => (
-    <div className="py-2 max-h-96 overflow-y-auto">
+    <div className="py-2 max-h-96 overflow-y-auto text-black bg-white rounded-md ">
       {navLinks?.schedules?.matchScheduleMap
         ?.filter((item) => item.scheduleAdWrapper)
         .slice(0, 6)
@@ -192,7 +181,9 @@ export default function Navbar() {
                   key={mIndex}
                   to={`/match/${match.matchId}`}
                   className="block px-4 py-3 hover:bg-blue-50 transition-colors duration-150"
-                  onClick={closeDropdown}
+                  onClick={(e) =>
+                    handleNavLinkClick(e, `/match/${match.matchId}`)
+                  } // Use handleNavLinkClick
                 >
                   <div className="flex justify-between items-center">
                     <div className="text-xs text-gray-500">
@@ -225,7 +216,7 @@ export default function Navbar() {
       <Link
         to="/schedules"
         className="block px-4 py-2 text-center text-primary text-sm font-medium hover:bg-blue-50"
-        onClick={closeDropdown}
+        onClick={(e) => handleNavLinkClick(e, "/schedules")} // Use handleNavLinkClick
       >
         View Full Schedule
       </Link>
@@ -233,26 +224,26 @@ export default function Navbar() {
   );
 
   return (
-    <div className="sticky z-50 top-0 w-full left-0 shadow-md">
-      <div className="bg-gradient-to-r from-secondary to-secondary/90 px-4 md:px-12 lg:px-24 py-3 text-white flex w-full justify-between items-center">
+    <div className="sticky z-40 top-0 w-full left-0 shadow-md">
+      <div className="bg-gradient-to-r from-secondary to-secondary/90 px-4 md:px-12 lg:px-24 py-3 text-white flex w-full justify-between items-center relative">
+        {" "}
+        {/* Added relative positioning */}
         <img
           onClick={() => navigate("/")}
           className="h-8 md:h-12 cursor-pointer transition-transform hover:scale-105"
           src={navLogo}
           alt="Logo"
         />
-
         {/* Mobile Menu Button */}
         <div className="md:hidden">
           <button
             onClick={toggleMobileMenu}
-            className="text-white focus:outline-none"
+            className="text-white focus:outline-none z-50 relative" // Increased z-index and relative
             aria-label={mobileMenuOpen ? "Close Menu" : "Open Menu"}
           >
             {mobileMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
           </button>
         </div>
-
         {/* Desktop Navigation */}
         <div className="hidden md:flex gap-6 md:gap-8 font-medium items-center">
           {/* Series Dropdown */}
@@ -261,8 +252,8 @@ export default function Navbar() {
             ref={(el) => (dropdownRefs.current.series = el)}
           >
             <div
-              className="capitalize flex gap-1 items-center cursor-pointer py-2 px-1 hover:text-primary transition-colors duration-200"
-              onClick={() => toggleDropdown("series")}
+              className="capitalize flex gap-1 items-center cursor-pointer py-2 px-1 hover:text-primary transition-colors duration-200 z-10 relative" // Added z-index and relative
+              onClick={(event) => toggleDropdown("series", event)} // Added event argument
             >
               <span>Series</span>
               <span className="transition-transform duration-200">
@@ -271,7 +262,7 @@ export default function Navbar() {
             </div>
 
             {openDropdown === "series" && (
-              <div className="absolute top-full right-0 mt-1 w-64 bg-white text-secondary rounded-lg shadow-xl overflow-hidden transition-all duration-200 ease-in-out opacity-100 scale-100 origin-top-right">
+              <div className="absolute top-full right-0 mt-1 w-64 origin-top-right z-50">
                 <SeriesDropdown />
               </div>
             )}
@@ -283,8 +274,8 @@ export default function Navbar() {
             ref={(el) => (dropdownRefs.current.matches = el)}
           >
             <div
-              className="capitalize flex gap-1 items-center cursor-pointer py-2 px-1 hover:text-primary transition-colors duration-200"
-              onClick={() => toggleDropdown("matches")}
+              className="capitalize flex gap-1 items-center cursor-pointer py-2 px-1 hover:text-primary transition-colors duration-200 z-10 relative" // Added z-index and relative
+              onClick={(event) => toggleDropdown("matches", event)} // Added event argument
             >
               <span>Matches</span>
               <span className="transition-transform duration-200">
@@ -293,7 +284,7 @@ export default function Navbar() {
             </div>
 
             {openDropdown === "matches" && (
-              <div className="absolute top-full right-0 mt-1 w-40 bg-white text-secondary rounded-lg shadow-xl overflow-hidden transition-all duration-200 ease-in-out opacity-100 scale-100 origin-top-right">
+              <div className="absolute top-full right-0 mt-1 w-40 origin-top-right z-50">
                 <MatchesDropdown />
               </div>
             )}
@@ -305,8 +296,8 @@ export default function Navbar() {
             ref={(el) => (dropdownRefs.current.players = el)}
           >
             <div
-              className="capitalize flex gap-1 items-center cursor-pointer py-2 px-1 hover:text-primary transition-colors duration-200"
-              onClick={() => toggleDropdown("players")}
+              className="capitalize flex gap-1 items-center cursor-pointer py-2 px-1 hover:text-primary transition-colors duration-200 z-10 relative" // Added z-index and relative
+              onClick={(event) => toggleDropdown("players", event)} // Added event argument
             >
               <span>Rankings</span>
               <span className="transition-transform duration-200">
@@ -315,7 +306,7 @@ export default function Navbar() {
             </div>
 
             {openDropdown === "players" && (
-              <div className="absolute top-full right-0 mt-1 w-40 bg-white text-secondary rounded-lg shadow-xl overflow-hidden transition-all duration-200 ease-in-out opacity-100 scale-100 origin-top-right">
+              <div className="absolute top-full right-0 mt-1 w-40 origin-top-right z-50">
                 <RankingsDropdown />
               </div>
             )}
@@ -327,8 +318,8 @@ export default function Navbar() {
             ref={(el) => (dropdownRefs.current.news = el)}
           >
             <div
-              className="capitalize flex gap-1 items-center cursor-pointer py-2 px-1 hover:text-primary transition-colors duration-200"
-              onClick={() => toggleDropdown("news")}
+              className="capitalize flex gap-1 items-center cursor-pointer py-2 px-1 hover:text-primary transition-colors duration-200 z-10 relative" // Added z-index and relative
+              onClick={(event) => toggleDropdown("news", event)} // Added event argument
             >
               <span>News</span>
               <span className="transition-transform duration-200">
@@ -337,7 +328,7 @@ export default function Navbar() {
             </div>
 
             {openDropdown === "news" && (
-              <div className="absolute top-full right-0 mt-1 w-72 bg-white text-secondary rounded-lg shadow-xl overflow-hidden transition-all duration-200 ease-in-out opacity-100 scale-100 origin-top-right">
+              <div className="absolute top-full right-0 mt-1 w-72 origin-top-right z-50">
                 <NewsDropdown />
               </div>
             )}
@@ -349,8 +340,8 @@ export default function Navbar() {
             ref={(el) => (dropdownRefs.current.schedules = el)}
           >
             <div
-              className="capitalize flex gap-1 items-center cursor-pointer py-2 px-1 hover:text-primary transition-colors duration-200"
-              onClick={() => toggleDropdown("schedules")}
+              className="capitalize flex gap-1 items-center cursor-pointer py-2 px-1 hover:text-primary transition-colors duration-200 z-10 relative" // Added z-index and relative
+              onClick={(event) => toggleDropdown("schedules", event)} // Added event argument
             >
               <span>Schedules</span>
               <span className="transition-transform duration-200">
@@ -359,13 +350,19 @@ export default function Navbar() {
             </div>
 
             {openDropdown === "schedules" && (
-              <div className="absolute top-full right-0 mt-1 w-80 bg-white text-secondary rounded-lg shadow-xl overflow-hidden transition-all duration-200 ease-in-out opacity-100 scale-100 origin-top-right">
+              <div className="absolute top-full right-0 mt-1 w-80 origin-top-right z-50">
                 <SchedulesDropdown />
               </div>
             )}
           </div>
 
-          <button className="px-4 py-2 rounded-full bg-primary text-white font-medium text-sm hover:bg-primary/90 transition-colors shadow-sm hover:shadow">
+          <button
+            className="px-4 py-2 rounded-full bg-primary text-white font-medium text-sm hover:bg-primary/90 transition-colors shadow-sm hover:shadow z-10 relative" // Added z-index and relative
+            onClick={() => {
+              // Handle login/signup, for example:
+              // navigate('/login');
+            }}
+          >
             Login or Signup
           </button>
         </div>
@@ -376,7 +373,7 @@ export default function Navbar() {
         <div className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden">
           <div
             ref={mobileMenuRef}
-            className="bg-white h-full w-4/5 max-w-sm overflow-y-auto shadow-xl animate-slide-in-right"
+            className="bg-white h-full max-w-sm overflow-y-auto shadow-xl animate-slide-in-right z-50 relative" // Increased z-index and relative
           >
             <div className="py-4 px-6 bg-secondary text-white flex justify-between items-center">
               <img
@@ -388,8 +385,12 @@ export default function Navbar() {
                 src={navLogo}
                 alt="Logo"
               />
-              <button onClick={toggleMobileMenu} aria-label="Close Menu">
-                <FaTimes size={20} />
+              <button
+                onClick={toggleMobileMenu}
+                aria-label="Close Menu"
+                className="z-50 relative"
+              >
+                {" "}
               </button>
             </div>
 
@@ -397,8 +398,8 @@ export default function Navbar() {
               {/* Mobile Accordion Menus */}
               <div className="border-b border-gray-200">
                 <div
-                  className="flex justify-between items-center py-3 px-6 font-medium"
-                  onClick={() => toggleDropdown("series")}
+                  className="flex justify-between items-center py-3 px-6 font-medium cursor-pointer"
+                  onClick={(event) => toggleDropdown("series", event)} // Added event argument
                 >
                   <span>Series</span>
                   <span>
@@ -410,7 +411,9 @@ export default function Navbar() {
                   </span>
                 </div>
                 {openDropdown === "series" && (
-                  <div className="bg-gray-50 border-t border-gray-100">
+                  <div className="bg-gray-50 border-t border-gray-100 relative z-50">
+                    {" "}
+                    {/* Increased z-index and relative */}
                     <SeriesDropdown />
                   </div>
                 )}
@@ -418,8 +421,8 @@ export default function Navbar() {
 
               <div className="border-b border-gray-200">
                 <div
-                  className="flex justify-between items-center py-3 px-6 font-medium"
-                  onClick={() => toggleDropdown("matches")}
+                  className="flex justify-between items-center py-3 px-6 font-medium cursor-pointer"
+                  onClick={(event) => toggleDropdown("matches", event)} // Added event argument
                 >
                   <span>Matches</span>
                   <span>
@@ -431,7 +434,9 @@ export default function Navbar() {
                   </span>
                 </div>
                 {openDropdown === "matches" && (
-                  <div className="bg-gray-50 border-t border-gray-100">
+                  <div className="bg-gray-50 border-t border-gray-100 relative z-50">
+                    {" "}
+                    {/* Increased z-index and relative */}
                     <MatchesDropdown />
                   </div>
                 )}
@@ -439,8 +444,8 @@ export default function Navbar() {
 
               <div className="border-b border-gray-200">
                 <div
-                  className="flex justify-between items-center py-3 px-6 font-medium"
-                  onClick={() => toggleDropdown("players")}
+                  className="flex justify-between items-center py-3 px-6 font-medium cursor-pointer"
+                  onClick={(event) => toggleDropdown("players", event)} // Added event argument
                 >
                   <span>Rankings</span>
                   <span>
@@ -452,7 +457,9 @@ export default function Navbar() {
                   </span>
                 </div>
                 {openDropdown === "players" && (
-                  <div className="bg-gray-50 border-t border-gray-100">
+                  <div className="bg-gray-50 border-t border-gray-100 relative z-50">
+                    {" "}
+                    {/* Increased z-index and relative */}
                     <RankingsDropdown />
                   </div>
                 )}
@@ -460,8 +467,8 @@ export default function Navbar() {
 
               <div className="border-b border-gray-200">
                 <div
-                  className="flex justify-between items-center py-3 px-6 font-medium"
-                  onClick={() => toggleDropdown("news")}
+                  className="flex justify-between items-center py-3 px-6 font-medium cursor-pointer"
+                  onClick={(event) => toggleDropdown("news", event)} // Added event argument
                 >
                   <span>News</span>
                   <span>
@@ -469,7 +476,9 @@ export default function Navbar() {
                   </span>
                 </div>
                 {openDropdown === "news" && (
-                  <div className="bg-gray-50 border-t border-gray-100">
+                  <div className="bg-gray-50 border-t border-gray-100 relative z-50">
+                    {" "}
+                    {/* Increased z-index and relative */}
                     <NewsDropdown />
                   </div>
                 )}
@@ -477,8 +486,8 @@ export default function Navbar() {
 
               <div className="border-b border-gray-200">
                 <div
-                  className="flex justify-between items-center py-3 px-6 font-medium"
-                  onClick={() => toggleDropdown("schedules")}
+                  className="flex justify-between items-center py-3 px-6 font-medium cursor-pointer"
+                  onClick={(event) => toggleDropdown("schedules", event)} // Added event argument
                 >
                   <span>Schedules</span>
                   <span>
@@ -490,14 +499,23 @@ export default function Navbar() {
                   </span>
                 </div>
                 {openDropdown === "schedules" && (
-                  <div className="bg-gray-50 border-t border-gray-100">
+                  <div className="bg-gray-50 border-t border-gray-100 relative z-50">
+                    {" "}
+                    {/* Increased z-index and relative */}
                     <SchedulesDropdown />
                   </div>
                 )}
               </div>
 
               <div className="px-6 mt-6">
-                <button className="w-full py-3 rounded-full bg-primary text-white font-medium hover:bg-primary/90 transition-colors shadow-sm hover:shadow">
+                <button
+                  className="w-full py-3 rounded-full bg-primary text-white font-medium hover:bg-primary/90 transition-colors shadow-sm hover:shadow z-10 relative" // Increased z-index and relative
+                  onClick={() => {
+                    // Handle login/signup, for example
+                    // navigate('/login');
+                    setMobileMenuOpen(false); // Close menu after actio
+                  }}
+                >
                   Login or Signup
                 </button>
               </div>
@@ -507,4 +525,6 @@ export default function Navbar() {
       )}
     </div>
   );
-}
+};
+
+export default Navbar;

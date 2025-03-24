@@ -10,6 +10,8 @@ const Player = () => {
   const [activeTab, setActiveTab] = useState("overview");
   const [info, setInfo] = useState({});
   const { trendingPlayers } = useCricbuzzStore();
+  const [expandeBio, setExpandedBio] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   const tabs = [
     { id: "overview", label: "OVERVIEW" },
@@ -55,11 +57,22 @@ const Player = () => {
   };
 
   const { id } = useParams();
-  const [expandeBio, setExpandedBio] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchData();
+
+    // Handle responsive layout
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    handleResize(); // Set initial state
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, [id]);
 
   const fetchData = async () => {
@@ -69,73 +82,122 @@ const Player = () => {
 
   return (
     <div className="bg-gray-100 min-h-screen font-sans">
-      <div className="px-4 flex gap-4 pt-6">
-        <div className="w-1/3  h-full">
-          <Image
-            faceImageId={info?.info?.faceImageId}
-            className="h-full w-full"
-            key={id}
-            resolution="thumb"
-          />
-          {/* <img
-            src={data?.IndianPlayers[0].imageLink}
-            className="h-full w-full"
-            alt=""
-          /> */}
+      {/* Tabs section - only visible on mobile */}
+      {isMobile && (
+        <div className="bg-white py-2 px-2 sticky top-0 z-10 shadow-md">
+          <div className="overflow-x-auto whitespace-nowrap no-scrollbar">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`px-3 py-2 text-xs font-medium mx-1 ${
+                  activeTab === tab.id
+                    ? "text-blue-600 border-b-2 border-blue-600"
+                    : "text-gray-600"
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <div className={`px-4 flex flex-col md:flex-row gap-4 pt-6`}>
+        {/* Left column - changes to top on mobile */}
+        <div className={`md:w-1/3 w-full ${isMobile ? "order-1" : ""}`}>
+          <div className="md:flex items-center hidden  gap-4">
+            <Image
+              faceImageId={info?.info?.faceImageId}
+              className="h-32 w-32 md:h-full md:w-full rounded-full md:rounded-none"
+              key={id}
+              resolution="thumb"
+            />
+            {isMobile && (
+              <div>
+                <h1 className="text-xl font-bold">{info?.info?.name}</h1>
+                <p className="text-sm text-gray-600">{info?.info?.role}</p>
+              </div>
+            )}
+          </div>
 
           <div className="border border-gray-300 bg-white rounded shadow mt-4 p-4">
             <div className="flex items-center pb-3 gap-3 text font-medium">
               <img
                 src="https://upload.wikimedia.org/wikipedia/en/4/41/Flag_of_India.svg"
                 alt=""
-                className="h-5 "
+                className="h-5"
               />
               Most Viewed Players
             </div>
-            <div>
-              {data?.IndianPlayers.slice(0, 10).map((e, i) => (
+            <div className="grid grid-cols-2 md:grid-cols-1 gap-2">
+              {data?.IndianPlayers.slice(0, isMobile ? 6 : 10).map((e, i) => (
                 <div
                   key={i}
                   onClick={() => navigate("/player/" + e.profileId)}
-                  className="flex cursor-pointer gap-3 items-center my-3"
+                  className="flex cursor-pointer gap-3 items-center my-2 md:my-3"
                 >
                   <img
                     src={e.imageLink}
                     className="h-8 w-8 rounded-full"
                     alt=""
                   />
-                  <p className="font-medium">{e.name}</p>
+                  <p className="font-medium text-sm md:text-base">{e.name}</p>
                 </div>
               ))}
             </div>
           </div>
+
           <div className="border border-gray-300 bg-white rounded shadow mt-4 p-4">
             <div className="flex items-center pb-3 gap-3 text font-medium">
               Most Trending Players
             </div>
-            <div>
-              {trendingPlayers?.player?.map((e, i) => (
-                <div
-                  key={i}
-                  onClick={() => navigate("/player/" + e.id)}
-                  className="flex cursor-pointer gap-3 items-center my-3"
-                >
-                  <Image
-                    faceImageId={e.faceImageId}
-                    className="h-7 w-7 rounded-full"
-                  />
-                  <p className="font-medium">{e.name}</p>
-                </div>
-              ))}
+            <div className="grid grid-cols-2 md:grid-cols-1 gap-2">
+              {trendingPlayers?.player
+                ?.slice(0, isMobile ? 6 : undefined)
+                .map((e, i) => (
+                  <div
+                    key={i}
+                    onClick={() => navigate("/player/" + e.id)}
+                    className="flex cursor-pointer gap-3 items-center my-2 md:my-3"
+                  >
+                    <Image
+                      faceImageId={e.faceImageId}
+                      className="h-7 w-7 rounded-full"
+                    />
+                    <p className="font-medium text-sm md:text-base">{e.name}</p>
+                  </div>
+                ))}
             </div>
           </div>
         </div>
+
+        {/* Right column / main content */}
         <div className="w-full">
-          <div className="md:w-full">
+          <div className="w-full">
+            <div className="flex mb-4 items-center md:hidden  gap-4">
+              <Image
+                faceImageId={info?.info?.faceImageId}
+                className="h-32 w-32 md:h-full md:w-full rounded-full md:rounded-none"
+                key={id}
+                resolution="thumb"
+              />
+              {isMobile && (
+                <div>
+                  <h1 className="text-xl font-bold">{info?.info?.name}</h1>
+                  <p className="text-sm text-gray-600">{info?.info?.role}</p>
+                </div>
+              )}
+            </div>
             <div className="bg-white rounded shadow mb-6">
               {/* Player Info */}
+              {!isMobile && (
+                <div className="px-4 py-3 border-b border-gray-200">
+                  <h2 className="text-lg font-bold">{info?.info?.name}</h2>
+                </div>
+              )}
               <div className="p-4">
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                   <div className="mb-3">
                     <p className="text-xs text-gray-500">Full Name</p>
                     <p className="text-sm font-semibold">{info?.info?.name}</p>
@@ -149,31 +211,39 @@ const Player = () => {
                   <div className="mb-3">
                     <p className="text-xs text-gray-500">AGE</p>
                     <p className="text-sm font-semibold">
-                      ({info?.info?.DoB?.split("(")[1]}
+                      {info?.info?.DoB?.split("(")[1]
+                        ? `(${info?.info?.DoB?.split("(")[1]}`
+                        : "-"}
                     </p>
                   </div>
                   <div className="mb-3">
                     <p className="text-xs text-gray-500">BATTING STYLE</p>
-                    <p className="text-sm font-semibold">{info?.info?.bat}</p>
+                    <p className="text-sm font-semibold">
+                      {info?.info?.bat || "-"}
+                    </p>
                   </div>
                   <div className="mb-3">
                     <p className="text-xs text-gray-500">BOWLING STYLE</p>
-                    <p className="text-sm font-semibold">{info?.info?.bowl}</p>
+                    <p className="text-sm font-semibold">
+                      {info?.info?.bowl || "-"}
+                    </p>
                   </div>
                   <div className="mb-3">
                     <p className="text-xs text-gray-500">PLAYING ROLE</p>
-                    <p className="text-sm font-semibold">{info?.info?.role}</p>
+                    <p className="text-sm font-semibold">
+                      {info?.info?.role || "-"}
+                    </p>
                   </div>
                 </div>
 
                 {/* Teams */}
                 <div className="mt-4">
                   <p className="text-xs text-gray-500 mb-2">TEAMS</p>
-                  <div className="grid grid-cols-3 gap-x-4 gap-y-2">
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-x-2 md:gap-x-4 gap-y-2">
                     {info?.info?.teamNameIds?.map((team, index) => (
                       <div
                         key={index}
-                        className="flex items-center text-sm font-medium bg-gray-100 rounded px-2 py-1"
+                        className="flex items-center text-xs md:text-sm font-medium bg-gray-100 rounded px-2 py-1"
                       >
                         <span className="mr-1">{team.teamName}</span>
                         <span className="text-xs">{team.country}</span>
@@ -215,100 +285,104 @@ const Player = () => {
               </div>
               <div className="overflow-x-auto">
                 <p className="mx-4 font-medium text-sm py-1">BATTING CAREER</p>
-                <table className="min-w-full border border-gray-200">
-                  {/* Table Header */}
-                  <thead>
-                    <tr className="bg-gray-100">
-                      <th className="px-3 py-2 text-xs text-gray-600 text-left ">
-                        Format
-                      </th>
-                      {info?.batting?.values?.map((header, idx) => (
-                        <th
-                          key={idx}
-                          className="px-3 py-2 text-xs text-gray-600 text-left "
-                        >
-                          {cricketStatShortforms(header.values[0])}
+                <div className="min-w-max">
+                  <table className="w-full border border-gray-200">
+                    {/* Table Header */}
+                    <thead>
+                      <tr className="bg-gray-100">
+                        <th className="px-3 py-2 text-xs text-gray-600 text-left ">
+                          Format
                         </th>
-                      ))}
-                    </tr>
-                  </thead>
+                        {info?.batting?.values?.map((header, idx) => (
+                          <th
+                            key={idx}
+                            className="px-3 py-2 text-xs text-gray-600 text-left "
+                          >
+                            {cricketStatShortforms(header.values[0])}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
 
-                  {/* Table Body */}
-                  <tbody>
-                    {info?.batting?.headers
-                      ?.slice(1)
-                      ?.map((format, formatIdx) => (
-                        <tr
-                          key={formatIdx}
-                          className={
-                            formatIdx % 2 === 0 ? "bg-white" : "bg-gray-50"
-                          }
-                        >
-                          {/* Format Name Column */}
-                          <td className="px-3 py-2 text-xs font-bold text-left ">
-                            {format}
-                          </td>
-
-                          {/* Player Stats */}
-                          {info?.batting?.values?.map((row, rowIdx) => (
-                            <td key={rowIdx} className="px-3 py-2 text-xs ">
-                              {row.values[formatIdx + 1]}{" "}
-                              {/* +1 to skip "Matches" row header */}
+                    {/* Table Body */}
+                    <tbody>
+                      {info?.batting?.headers
+                        ?.slice(1)
+                        ?.map((format, formatIdx) => (
+                          <tr
+                            key={formatIdx}
+                            className={
+                              formatIdx % 2 === 0 ? "bg-white" : "bg-gray-50"
+                            }
+                          >
+                            {/* Format Name Column */}
+                            <td className="px-3 py-2 text-xs font-bold text-left ">
+                              {format}
                             </td>
-                          ))}
-                        </tr>
-                      ))}
-                  </tbody>
-                </table>
+
+                            {/* Player Stats */}
+                            {info?.batting?.values?.map((row, rowIdx) => (
+                              <td key={rowIdx} className="px-3 py-2 text-xs ">
+                                {row.values[formatIdx + 1]}{" "}
+                                {/* +1 to skip "Matches" row header */}
+                              </td>
+                            ))}
+                          </tr>
+                        ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
 
               <div className="overflow-x-auto mt-5">
                 <p className="mx-4 font-medium text-sm py-1">BOWLING CAREER</p>
-                <table className="min-w-full border border-gray-200">
-                  {/* Table Header */}
-                  <thead>
-                    <tr className="bg-gray-100">
-                      <th className="px-3 py-2 text-xs text-gray-600 text-left ">
-                        Format
-                      </th>
-                      {info?.bowling?.values?.map((header, idx) => (
-                        <th
-                          key={idx}
-                          className="px-3 py-2 text-xs text-gray-600 text-left "
-                        >
-                          {cricketStatShortforms(header.values[0])}
+                <div className="min-w-max">
+                  <table className="w-full border border-gray-200">
+                    {/* Table Header */}
+                    <thead>
+                      <tr className="bg-gray-100">
+                        <th className="px-3 py-2 text-xs text-gray-600 text-left ">
+                          Format
                         </th>
-                      ))}
-                    </tr>
-                  </thead>
+                        {info?.bowling?.values?.map((header, idx) => (
+                          <th
+                            key={idx}
+                            className="px-3 py-2 text-xs text-gray-600 text-left "
+                          >
+                            {cricketStatShortforms(header.values[0])}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
 
-                  {/* Table Body */}
-                  <tbody>
-                    {info?.bowling?.headers
-                      ?.slice(1)
-                      ?.map((format, formatIdx) => (
-                        <tr
-                          key={formatIdx}
-                          className={
-                            formatIdx % 2 === 0 ? "bg-white" : "bg-gray-50"
-                          }
-                        >
-                          {/* Format Name Column */}
-                          <td className="px-3 py-2 text-xs font-bold text-left ">
-                            {format}
-                          </td>
-
-                          {/* Player Stats */}
-                          {info?.bowling?.values?.map((row, rowIdx) => (
-                            <td key={rowIdx} className="px-3 py-2 text-xs ">
-                              {row.values[formatIdx + 1]}{" "}
-                              {/* +1 to skip "Matches" row header */}
+                    {/* Table Body */}
+                    <tbody>
+                      {info?.bowling?.headers
+                        ?.slice(1)
+                        ?.map((format, formatIdx) => (
+                          <tr
+                            key={formatIdx}
+                            className={
+                              formatIdx % 2 === 0 ? "bg-white" : "bg-gray-50"
+                            }
+                          >
+                            {/* Format Name Column */}
+                            <td className="px-3 py-2 text-xs font-bold text-left ">
+                              {format}
                             </td>
-                          ))}
-                        </tr>
-                      ))}
-                  </tbody>
-                </table>
+
+                            {/* Player Stats */}
+                            {info?.bowling?.values?.map((row, rowIdx) => (
+                              <td key={rowIdx} className="px-3 py-2 text-xs ">
+                                {row.values[formatIdx + 1]}{" "}
+                                {/* +1 to skip "Matches" row header */}
+                              </td>
+                            ))}
+                          </tr>
+                        ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </div>
@@ -330,7 +404,7 @@ const Player = () => {
                         : "All-rounder"}
                     </h3>
 
-                    <ul className="grid grid-cols-5 gap-2">
+                    <ul className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2">
                       {ranks &&
                         Object.entries(ranks).map(([key, value]) => (
                           <li key={key} className="text-sm text-gray-700">
@@ -364,16 +438,18 @@ const Player = () => {
                 <table className="min-w-full border border-gray-200">
                   <tbody>
                     <tr className="border-b border-gray-200">
-                      <td className="px-4 py-2 text-gray-500">Debut</td>
-                      <td className="px-4 py-2 font-medium">
+                      <td className="px-4 py-2 text-gray-500 w-24 md:w-[14rem]">
+                        Debut
+                      </td>
+                      <td className="px-4 py-2 font-medium text-sm md:text-base">
                         {category?.debut || "N/A"}
                       </td>
                     </tr>
                     <tr className="">
-                      <td className="px-4 py-2 w-[14rem] text-gray-500">
+                      <td className="px-4 py-2 text-gray-500 w-24 md:w-[14rem]">
                         Last Played
                       </td>
-                      <td className="px-4  py-2 font-medium">
+                      <td className="px-4 py-2 font-medium text-sm md:text-base">
                         {category?.lastPlayed || "N/A"}
                       </td>
                     </tr>
@@ -387,25 +463,29 @@ const Player = () => {
 
       {/* news  */}
       {info?.info?.news && (
-        <div className="border shadow bg-white border-gray-200 p-5">
+        <div className="border shadow bg-white border-gray-200 p-4 md:p-5">
           <h1 className="text-xl mb-3 font-semibold">
             Top News - {info?.info?.name}
           </h1>
-          <div className="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory p-2 no-scrollbar">
+          <div className="flex gap-3 md:gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory p-2 no-scrollbar">
             {info?.news?.slice(0, 6).map((e, i) => (
               <div
                 key={i}
-                className="bg-black flex-shrink-0 w-[calc(100%/4.5)] text-white rounded-2xl snap-start"
+                className="bg-black flex-shrink-0 w-[85%] sm:w-[45%] md:w-[calc(100%/3)] lg:w-[calc(100%/4.5)] text-white rounded-2xl snap-start"
               >
                 <Image
                   faceImageId={e?.story?.imageId}
                   resolution="gthumb"
-                  className="w-full h-[15rem] rounded-2xl"
+                  className="w-full h-40 md:h-[15rem] rounded-t-2xl"
                 />
-                <div className="p-4">
-                  <h1 className="text-lg font-semibold">{e?.story?.hline}</h1>
-                  <p className="line-clamp-3 text-sm">{e?.story?.intro}</p>
-                  <p className="text-gray-200">
+                <div className="p-3 md:p-4">
+                  <h1 className="text-base md:text-lg font-semibold">
+                    {e?.story?.hline}
+                  </h1>
+                  <p className="line-clamp-2 md:line-clamp-3 text-xs md:text-sm">
+                    {e?.story?.intro}
+                  </p>
+                  <p className="text-gray-200 text-xs">
                     Source: {e?.story.coverImage?.source}
                   </p>
                 </div>

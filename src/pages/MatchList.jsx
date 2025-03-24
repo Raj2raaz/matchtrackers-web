@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Trophy, Calendar, Globe, Users } from "lucide-react";
-import { FaCaretDown } from "react-icons/fa";
 import apiClient from "../utils/axios";
 import Image from "../components/Image";
 import { useNavigate, useParams } from "react-router-dom";
@@ -9,8 +8,8 @@ import TopNews from "../components/TopNews";
 const CricketScoresDashboard = ({}) => {
   const [activeTab, setActiveTab] = useState("League");
   const navigate = useNavigate();
-
   const { type } = useParams();
+  const [data, setData] = useState();
 
   const formatDate = (timestamp) => {
     const date = new Date(parseInt(timestamp));
@@ -22,8 +21,6 @@ const CricketScoresDashboard = ({}) => {
     });
   };
 
-  const [data, setData] = useState();
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -33,24 +30,16 @@ const CricketScoresDashboard = ({}) => {
         console.log(error);
       }
     };
-
     fetchData();
   }, [type]);
 
   const formatOvers = (overs) => {
     if (!overs && overs !== 0) return "-";
-
-    // Handle floating-point precision issues
     const fullOvers = Math.floor(overs);
-
-    // Calculate balls, then round to avoid floating-point errors
     const balls = Math.round((overs - fullOvers) * 10);
-
-    // Handle the case where balls = 10 (should roll over to next over)
     if (balls === 10) {
       return `${fullOvers + 1}.0`;
     }
-
     return `${fullOvers}.${balls}`;
   };
 
@@ -66,25 +55,26 @@ const CricketScoresDashboard = ({}) => {
     const { matchInfo, matchScore } = match;
     const { team1, team2, status, venueInfo, matchFormat, state } = matchInfo;
 
-    // console.log(match);
     return (
       <div
         key={matchInfo.matchId}
         className="bg-white border border-gray-200 rounded-lg shadow-lg p-4 mb-4"
       >
-        <div className="flex gap-4 items-center justify-between mb-2">
-          <div className="flex gap-4 items-center">
-            <div className="text-sm text-gray-600">{matchInfo.seriesName}</div>-
-            <div className="text-xs px-2 py-1 rounded-full">{matchFormat}</div>
+        <div className="flex flex-wrap gap-4 items-center justify-between mb-2">
+          <div className="flex flex-wrap gap-2 items-center text-sm text-gray-600">
+            {matchInfo.seriesName} -
+            <span className="text-xs px-2 py-1 rounded-full border border-gray-400">
+              {matchFormat}
+            </span>
           </div>
-          <div className="text-xs text-gray-500  flex items-center">
-            <Calendar className="w-3 h-3 mr-1" />{" "}
+          <div className="text-xs text-gray-500 flex items-center">
+            <Calendar className="w-3 h-3 mr-1" />
             {formatDate(matchInfo.startDate)}
           </div>
         </div>
-        <div className="flex items-start justify-between">
-          <div className="flex flex-col gap-3 justify-between ">
-            <div className="flex gap-4 items-center ">
+        <div className="flex flex-col sm:flex-row items-start justify-between">
+          <div className="flex flex-col gap-3 justify-between w-full sm:w-auto">
+            <div className="flex gap-4 items-center">
               <div className="font-semibold flex gap-3 items-center text-lg">
                 <Image
                   faceImageId={team1.imageId}
@@ -96,7 +86,7 @@ const CricketScoresDashboard = ({}) => {
                 {getScoreDisplay(matchScore?.team1Score)}
               </div>
             </div>
-            <div className="flex gap-5 items-center ">
+            <div className="flex gap-4 items-center">
               <div className="font-semibold flex gap-3 items-center text-lg">
                 <Image
                   faceImageId={team2.imageId}
@@ -109,12 +99,12 @@ const CricketScoresDashboard = ({}) => {
               </div>
             </div>
           </div>
-          <div className="text-xs text-gray-500 mt-1 flex items-center">
-            <Globe className="w-3 h-3 mr-1" /> {venueInfo.ground},{" "}
-            {venueInfo.city}
+          <div className="text-xs text-gray-500 mt-2 sm:mt-1 flex items-center">
+            <Globe className="w-3 h-3 mr-1" />
+            {venueInfo.ground}, {venueInfo.city}
           </div>
         </div>
-        <div className="items-end flex justify-between">
+        <div className="mt-4 flex flex-col sm:flex-row items-end justify-between">
           <div
             className={`font-medium text-sm ${
               state === "Complete" ? "text-green-600" : "text-blue-600"
@@ -122,7 +112,7 @@ const CricketScoresDashboard = ({}) => {
           >
             {status}
           </div>
-          <div className="flex gap-5 text-sm text-white">
+          <div className="mt-2 sm:mt-0">
             <button
               onClick={() => navigate("/match/" + matchInfo.matchId)}
               className="bg-blue-600 text-white px-3 py-1.5 rounded text-sm font-medium hover:bg-blue-700"
@@ -145,7 +135,6 @@ const CricketScoresDashboard = ({}) => {
         <h3 className="text-lg font-semibold mb-3 border-b pb-2">
           {seriesMatch.seriesAdWrapper.seriesName}
         </h3>
-
         {seriesMatch.seriesAdWrapper.matches.length > 0 ? (
           <div>
             {seriesMatch.seriesAdWrapper.matches.map((match) =>
@@ -181,25 +170,6 @@ const CricketScoresDashboard = ({}) => {
     }
   };
 
-  // Function to check if a tab has matches
-  const hasMatches = (matchType) => {
-    if (!data || !data.typeMatches) return false;
-
-    const matchTypeData = data.typeMatches.find(
-      (typeMatch) => typeMatch.matchType === matchType
-    );
-
-    if (!matchTypeData) return false;
-
-    return matchTypeData.seriesMatches.some(
-      (match) =>
-        match.seriesAdWrapper &&
-        match.seriesAdWrapper.matches &&
-        match.seriesAdWrapper.matches.length > 0
-    );
-  };
-
-  // Function to render empty state
   const renderEmptyState = (matchType) => {
     return (
       <div className="flex flex-col items-center justify-center bg-gray-50 rounded-lg p-8 my-4">
@@ -216,22 +186,21 @@ const CricketScoresDashboard = ({}) => {
   };
 
   return (
-    <div className=" mx-auto p-4">
-      <header className="mb-3 ">
+    <div className="mx-auto p-4">
+      <header className="mb-3">
         <h1 className="text-2xl capitalize font-bold mb-2">
           {type} Cricket Matches
         </h1>
-        <p className="text-gray-500 ">
+        <p className="text-gray-500">
           Stay updated with the latest cricket matches from around the world
         </p>
       </header>
 
-      {/* Navigation tabs */}
       <div className="flex gap-2 py-4 overflow-x-auto">
         {data?.filters.matchType.map((type) => (
           <button
             key={type}
-            className={`py-2 px-4 text-sm rounded-md ${
+            className={`py-2 px-4 text-sm rounded-md whitespace-nowrap ${
               activeTab === type
                 ? "bg-blue-900 text-white"
                 : "border border-gray-300 text-gray-800"
@@ -243,42 +212,49 @@ const CricketScoresDashboard = ({}) => {
         ))}
       </div>
 
-      <div className="flex gap-6">
-        <div className="bg-white border border-gray-300 rounded-lg shadow-lg w-2/3">
-          {/* Main Content Area */}
-          <div className="p-4">
-            {data?.typeMatches.map((typeMatch) => (
-              <div
-                key={typeMatch.matchType}
-                className={`${
-                  activeTab === typeMatch.matchType ? "block" : "hidden"
-                }`}
-              >
-                <h2 className="text-xl font-bold mb-4">
-                  {typeMatch.matchType} Matches
-                </h2>
-                {typeMatch.seriesMatches
-                  .filter((match) => match.seriesAdWrapper)
-                  .map((seriesMatch) => renderSeries(seriesMatch))}
-                {typeMatch.seriesMatches.filter(
-                  (match) =>
-                    match.seriesAdWrapper &&
-                    match.seriesAdWrapper.matches &&
-                    match.seriesAdWrapper.matches.length > 0
-                ).length === 0 && renderEmptyState(typeMatch.matchType)}
-              </div>
-            ))}
-
-            {/* Handle case where the active tab doesn't exist in typeMatches at all */}
-            {data &&
-              !data.typeMatches.some((type) => type.matchType === activeTab) &&
-              renderEmptyState(activeTab)}
+      <div className="flex flex-col lg:flex-row gap-6">
+        <div className="w-full lg:w-2/3">
+          <div className="bg-white border border-gray-300 rounded-lg shadow-lg">
+            <div className="p-4">
+              {data?.typeMatches.map((typeMatch) => (
+                <div
+                  key={typeMatch.matchType}
+                  className={
+                    activeTab === typeMatch.matchType ? "block" : "hidden"
+                  }
+                >
+                  <h2 className="text-xl font-bold mb-4">
+                    {typeMatch.matchType} Matches
+                  </h2>
+                  {typeMatch.seriesMatches
+                    .filter((match) => match.seriesAdWrapper)
+                    .map((seriesMatch) => renderSeries(seriesMatch))}
+                  {data &&
+                    data.typeMatches &&
+                    data.typeMatches.length > 0 &&
+                    data.typeMatches.filter((tm) => tm.matchType === activeTab)
+                      .length > 0 &&
+                    data.typeMatches
+                      .filter((tm) => tm.matchType === activeTab)[0]
+                      .seriesMatches.filter(
+                        (match) =>
+                          match.seriesAdWrapper &&
+                          match.seriesAdWrapper.matches &&
+                          match.seriesAdWrapper.matches.length > 0
+                      ).length === 0 &&
+                    renderEmptyState(typeMatch.matchType)}
+                </div>
+              ))}
+              {data &&
+                !data.typeMatches.some(
+                  (type) => type.matchType === activeTab
+                ) &&
+                renderEmptyState(activeTab)}
+            </div>
           </div>
         </div>
 
-        {/* Right Side News and Series Table */}
-        <div className="w-1/3">
-          {/* Top News Series Table Component */}
+        <div className="w-full lg:w-1/3">
           <TopNews length={8} />
         </div>
       </div>

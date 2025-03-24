@@ -4,22 +4,42 @@ import { useParams } from "react-router-dom";
 import Image from "../components/Image";
 import TopNews from "../components/TopNews";
 
-const NewsPage = ({}) => {
-  const [newsData, setNewData] = useState(null);
+const NewsPage = () => {
+  const [newsData, setNewsData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   const { id } = useParams();
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await apiClient.get(
-        "/news/v1/detail/" + (id || "122025")
-      );
-      setNewData(response.data);
+      setIsLoading(true);
+      try {
+        const response = await apiClient.get(
+          `/news/v1/detail/${id || "122025"}`
+        );
+        setNewsData(response.data);
+      } catch (error) {
+        console.error("Error fetching news:", error);
+      } finally {
+        setIsLoading(false);
+      }
     };
     fetchData();
   }, [id]);
 
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen p-4">
+        <div className="text-lg font-medium text-gray-600">Loading news...</div>
+      </div>
+    );
+  }
+
   if (!newsData) {
-    return <div className="p-4">Loading...</div>;
+    return (
+      <div className="flex items-center justify-center min-h-screen p-4">
+        <div className="text-lg font-medium text-gray-600">News not found</div>
+      </div>
+    );
   }
 
   const {
@@ -28,7 +48,6 @@ const NewsPage = ({}) => {
     content,
     authors,
     tags,
-    seoTitle,
     webURL,
     intro,
     source,
@@ -43,77 +62,96 @@ const NewsPage = ({}) => {
       day: "numeric",
       hour: "numeric",
       minute: "numeric",
-      second: "numeric",
     });
   };
 
   return (
-    <div className="flex gap-10">
-      <div className=" w-3/2 p-4">
-        <h1 className="text-3xl font-bold mb-4">{headline}</h1>
-        <p className="text-sm text-gray-600 mb-2">
-          {formatDate(publishTime)} | Source: {source}
-        </p>
-        {coverImage && coverImage.source && (
-          <div className="mb-4">
-            <Image
-              faceImageId={coverImage.id}
-              className="h-full w-full"
-              resolution="de"
-            />
-            <p className="text-xs text-gray-500 mt-1">{coverImage.caption}</p>
-          </div>
-        )}
-        {intro && <p className="italic mb-4">{intro}</p>}
-        {content &&
-          content.map((item, index) => {
-            if (item.content && item.content.contentValue) {
-              return (
-                <p key={index} className="mb-4">
-                  {item.content.contentValue}
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="flex flex-col lg:flex-row gap-6 lg:gap-10">
+        {/* Main content area */}
+        <div className="w-full lg:w-2/3">
+          <h1 className="text-2xl sm:text-3xl font-bold mb-2 leading-tight">
+            {headline}
+          </h1>
+          <p className="text-sm text-gray-600 mb-4">
+            {formatDate(publishTime)} | Source: {source}
+          </p>
+
+          {coverImage && coverImage.source && (
+            <div className="mb-6 rounded-lg overflow-hidden shadow-sm">
+              <Image
+                faceImageId={coverImage.id}
+                className="w-full h-auto object-cover"
+                resolution="de"
+              />
+              {coverImage.caption && (
+                <p className="text-xs text-gray-500 mt-2 px-1">
+                  {coverImage.caption}
                 </p>
-              );
-            }
-            return null;
-          })}
-        {tags && tags.length > 0 && (
-          <div className="mt-6">
-            <strong className="block mb-2">Tags:</strong>
-            <div className="flex flex-wrap gap-2">
-              {tags.map((tag, index) => (
-                <span
-                  key={index}
-                  className="bg-gray-200 px-3 py-1 rounded-full text-sm"
-                >
-                  {tag.itemName}
-                </span>
-              ))}
+              )}
             </div>
+          )}
+
+          {intro && (
+            <p className="italic mb-6 text-gray-700 text-lg leading-relaxed">
+              {intro}
+            </p>
+          )}
+
+          <div className="prose max-w-none">
+            {content &&
+              content.map((item, index) => {
+                if (item.content && item.content.contentValue) {
+                  return (
+                    <p key={index} className="mb-4 leading-relaxed">
+                      {item.content.contentValue}
+                    </p>
+                  );
+                }
+                return null;
+              })}
           </div>
-        )}
-        {authors && authors.length > 0 && (
-          <div className="mt-4">
-            <strong className="block mb-2">Authors:</strong>
-            <div className="flex flex-wrap gap-2">
-              {authors.map((author, index) => (
-                <span key={index} className="text-sm">
-                  {author.name}
-                </span>
-              ))}
-            </div>
+
+          <div className="mt-8 space-y-4">
+            {tags && tags.length > 0 && (
+              <div>
+                <strong className="text-gray-800 block mb-2">Topics</strong>
+                <div className="flex flex-wrap gap-2">
+                  {tags.map((tag, index) => (
+                    <span
+                      key={index}
+                      className="bg-gray-100 hover:bg-gray-200 transition-colors px-3 py-1 rounded-full text-sm"
+                    >
+                      {tag.itemName}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {authors && authors.length > 0 && (
+              <div>
+                <strong className="text-gray-800 block mb-2">By</strong>
+                <div className="flex flex-wrap gap-2">
+                  {authors.map((author, index) => (
+                    <span key={index} className="text-sm text-gray-700">
+                      {author.name}
+                      {index < authors.length - 1 ? ", " : ""}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
-        )}
-        <a
-          href={webURL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="block mt-6 text-blue-600 hover:underline"
-        >
-          Read more on Cricbuzz.com
-        </a>
-      </div>
-      <div className="w-1/2">
-        <TopNews />
+        </div>
+
+        {/* Sidebar */}
+        <div className="w-full lg:w-1/3 mt-8 lg:mt-0">
+          <div className="sticky top-4">
+            <h2 className="text-xl font-bold mb-4">More News</h2>
+            <TopNews />
+          </div>
+        </div>
       </div>
     </div>
   );
