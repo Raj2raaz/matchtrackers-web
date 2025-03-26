@@ -98,11 +98,13 @@ export const getGalaryImages = async () => {
 
     if (photoGalleries.length === 0) return [];
 
-    const galleries = photoGalleries.slice(0, 2).map((gallery) => ({
-      headline: gallery.photoGalleryInfo.headline,
-      galleryId: gallery.photoGalleryInfo.galleryId,
-      images: [],
-    }));
+    const galleries = photoGalleries
+      .filter((e) => e.photoGalleryInfo)
+      .map((gallery) => ({
+        headline: gallery.photoGalleryInfo.headline,
+        galleryId: gallery.photoGalleryInfo.galleryId,
+        images: [],
+      }));
 
     // Fetch images for each gallery
     await Promise.all(

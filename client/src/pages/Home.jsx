@@ -17,6 +17,43 @@ import EditorPicks from "../components/EditorPicks";
 import Gallery from "../components/Gallery";
 import useFootballStore from "../store/football";
 import { getFixtures, getLeagues } from "../api/Football";
+import ipl from "../assets/ipl.jpg";
+
+function generateMatchSummary(matchData) {
+  /**
+   * Generates a short paragraph summarizing the cricket match.
+   *
+   * @param {object} matchData - A dictionary containing match information.
+   * @returns {string} - A string containing the match summary.
+   */
+
+  const matchInfo = matchData.matchInfo;
+  const matchScore = matchData.matchScore;
+  const commentary = matchData.commentary.commentaryList;
+
+  const team1Name = matchInfo.team1.teamName;
+  const team2Name = matchInfo.team2.teamName;
+  const team1Score = matchScore.team1Score.inngs1.runs;
+  const team2Score = matchScore.team2Score.inngs1.runs;
+  const team1Wickets = matchScore.team1Score.inngs1.wickets;
+  const team2Wickets = matchScore.team2Score.inngs1.wickets;
+  const team1Overs = matchScore.team1Score.inngs1.overs;
+  const team2Overs = matchScore.team2Score.inngs1.overs;
+
+  const venue = matchInfo.venueInfo.ground;
+  const city = matchInfo.venueInfo.city;
+  const status = matchInfo.status;
+  const playerOfTheMatch =
+    matchData.commentary.matchHeader.playersOfTheMatch[0].name;
+
+  let summary = `In a thrilling T20 encounter at ${venue}, ${city}, the ${matchInfo.seriesName} witnessed a high-scoring clash between ${team1Name} and ${team2Name}. `;
+  summary += `${team1Name} posted a formidable total of ${team1Score}/${team1Wickets} in ${team1Overs} overs. `;
+  summary += `${team2Name} fought valiantly, chasing the target, and managed to score ${team2Score}/${team2Wickets} in ${team2Overs} overs. `;
+  summary += `Ultimately, ${team1Name} emerged victorious, winning by 11 runs. `;
+  summary += `The match saw some crucial moments, including ${playerOfTheMatch}'s outstanding performance, earning him the Player of the Match award. ${status}. `;
+
+  return summary;
+}
 
 const sports = ["Cricket", "Football"];
 
@@ -220,7 +257,7 @@ export default function Home() {
               </>
             ) : content === "cricket" ? (
               liveMatches && liveMatches.length > 0 ? (
-                liveMatches.slice(0, 5).map((e, i) => (
+                liveMatches.map((e, i) => (
                   <div
                     key={i}
                     className="bg-white shadow-lg mt-4 rounded-lg border border-[#E6E6E6] p-5"
@@ -378,17 +415,17 @@ export default function Home() {
           </div>
         </div>
         <div className="w-full lg:w-[63%] mt-6 lg:mt-0">
-          <div className="flex justify-between">
-            <p className="text-lg font-bold">Trending Now in Sports</p>
-            <p className="flex text-sm gap-2 items-center cursor-pointer">
-              See All <FaChevronRight size={12} />
-            </p>
-          </div>
           <div>
             {isLoading ? (
               <Placeholder type="image" />
             ) : (
-              <img src={team} className="mt-2 w-full object-cover" alt="Team" />
+              <div className="relative w-full  overflow-hidden rounded-lg">
+                <img
+                  src={ipl}
+                  className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
+                  alt="Team"
+                />
+              </div>
             )}
           </div>
           <div className="mt-3 p-3 shadow-lg rounded-lg border-[#E6E6E6] bg-white">
@@ -399,26 +436,36 @@ export default function Home() {
               </>
             ) : (
               <>
-                <img
-                  src={headingPost}
-                  alt="Heading Post"
-                  className="w-full object-cover"
+                <Image
+                  faceImageId={liveMatches[0].commentary.matchVideos[0].imageId}
+                  resolution="de"
+                  className="h-[20rem] w-full "
                 />
-                <div className="mt-2 px-2">
-                  <h1 className="font-bold text-xl text-primary">
-                    Heading about the Highlighted Post goes here
+                <div className="space-y-3 p-2">
+                  <h1 className="text-2xl font-bold text-primary tracking-tight">
+                    {liveMatches[0].matchInfo.seriesName} (
+                    {liveMatches[0].matchInfo.team1.teamName} -
+                    {liveMatches[0].matchInfo.team2.teamName})
                   </h1>
-                  <div className="flex flex-col md:flex-row md:gap-10 items-start md:items-end">
-                    <p className="mt-1 font-medium text-gray-400">
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Enim qui quidem distinctio minima, ea maxime quod ipsum ut
-                      ex laudantium laboriosam rerum nisi culpa doloremque iusto
-                      modi placeat sed perferendis. Lorem, ipsum dolor sit amet
-                      consectetur adipisicing elit. Laudantium minima
-                      accusantium
+                  <div className="flex flex-col space-y-3 md:space-y-0">
+                    <p className="text-sm text-gray-600 leading-relaxed">
+                      {generateMatchSummary(liveMatches[0])}
                     </p>
-                    <button className="mt-3 md:mt-0 text-nowrap px-3 py-1 items-center font-medium bg-primary rounded flex gap-6 text-white">
-                      View Match Higlights <FaChevronRight />{" "}
+                    <button
+                      onClick={() =>
+                        navigate("/match/" + liveMatches[0].matchInfo.matchId)
+                      }
+                      className="flex items-center  w-fit mt-2 justify-center 
+          text-white bg-primary 
+          px-4 py-2 
+          rounded-lg 
+          hover:bg-opacity-90 
+          transition-colors 
+          space-x-2
+          self-start md:self-auto"
+                    >
+                      <span>View Match Highlights</span>
+                      <FaChevronRight className="w-4 h-4" />
                     </button>
                   </div>
                 </div>
@@ -433,26 +480,37 @@ export default function Home() {
               </>
             ) : (
               <>
-                <img
-                  src={headingPost2}
-                  alt="Heading Post 2"
-                  className="w-full object-cover"
+                <Image
+                  faceImageId={liveMatches[1].commentary.matchVideos[0].imageId}
+                  resolution="de"
+                  className="h-[20rem] w-full "
                 />
-                <div className="mt-2 px-2">
-                  <h1 className="font-bold text-xl text-primary">
-                    Heading about the Highlighted Post goes here
+
+                <div className="space-y-3 p-2">
+                  <h1 className="text-2xl font-bold text-primary tracking-tight">
+                    {liveMatches[1].matchInfo.seriesName} (
+                    {liveMatches[1].matchInfo.team1.teamName} -
+                    {liveMatches[1].matchInfo.team2.teamName})
                   </h1>
-                  <div className="flex flex-col md:flex-row md:gap-10 items-start md:items-end">
-                    <p className="mt-1 font-medium text-gray-400">
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Enim qui quidem distinctio minima, ea maxime quod ipsum ut
-                      ex laudantium laboriosam rerum nisi culpa doloremque iusto
-                      modi placeat sed perferendis. Lorem, ipsum dolor sit amet
-                      consectetur adipisicing elit. Laudantium minima
-                      accusantium
+                  <div className="flex flex-col space-y-3 md:space-y-0">
+                    <p className="text-sm text-gray-600 leading-relaxed">
+                      {generateMatchSummary(liveMatches[1])}
                     </p>
-                    <button className="mt-3 md:mt-0 text-nowrap px-3 py-1 items-center font-medium bg-primary rounded flex gap-6 text-white">
-                      View Match Higlights <FaChevronRight />{" "}
+                    <button
+                      onClick={() =>
+                        navigate("/match/" + liveMatches[1].matchInfo.matchId)
+                      }
+                      className="flex items-center  w-fit mt-2 justify-center 
+          text-white bg-primary 
+          px-4 py-2 
+          rounded-lg 
+          hover:bg-opacity-90 
+          transition-colors 
+          space-x-2
+          self-start md:self-auto"
+                    >
+                      <span>View Match Highlights</span>
+                      <FaChevronRight className="w-4 h-4" />
                     </button>
                   </div>
                 </div>
@@ -472,7 +530,10 @@ export default function Home() {
               ? galleries[0]?.headline + " Photos"
               : "Gallery Photos"}
           </h1>
-          <p className="flex text-sm gap-2 items-center cursor-pointer">
+          <p
+            onClick={() => navigate("/gallery")}
+            className="flex text-sm gap-2 items-center cursor-pointer"
+          >
             See All <FaChevronRight size={12} />
           </p>
         </div>
@@ -510,8 +571,11 @@ export default function Home() {
       {/* blogs section */}
       <div className="p-4 bg-white border mt-6 shadow border-[#e6e6e6]">
         <div className="flex justify-between w-full">
-          <h1 className="text-xl font-bold text-primary">Blogs</h1>
-          <p className="flex text-sm gap-2 items-center cursor-pointer">
+          <h1 className="text-xl font-bold text-primary">LATEST NEWS</h1>
+          <p
+            onClick={() => navigate("/all-news")}
+            className="flex text-sm gap-2 items-center cursor-pointer"
+          >
             See All <FaChevronRight size={12} />
           </p>
         </div>

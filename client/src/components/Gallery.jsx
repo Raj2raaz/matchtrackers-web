@@ -14,7 +14,10 @@ export default function Gallery({ id = 0 }) {
           <h1 className="text-xl font-bold text-primary">
             {galleries[id]?.headline} Photos
           </h1>
-          <p className="flex text-sm gap-2 items-center">
+          <p
+            onClick={() => navigate("/gallery")}
+            className="flex cursor-pointer text-sm gap-2 items-center"
+          >
             See All <FaChevronRight size={12} />
           </p>
         </div>

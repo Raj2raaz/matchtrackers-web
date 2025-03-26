@@ -10,7 +10,7 @@ export default function EditorPicks() {
 
   return (
     <div>
-      <div className="bg-white mt-5 border p-4 border-[#e6e6e6]">
+      <div className="bg-white mt-5 border rounded-lg p-4 border-[#e6e6e6]">
         <div className="flex justify-between w-full items-center">
           <h1 className="text-lg md:text-xl font-bold text-primary">
             Editors Picks
