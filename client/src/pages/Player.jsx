@@ -5,13 +5,19 @@ import { useNavigate, useParams } from "react-router-dom";
 import Image from "../components/Image";
 import data from "../data.json";
 import useCricbuzzStore from "../store/cricket";
+import { getFBPlayerInfo } from "../api/Football";
+import PlayerStatisticsDetail from "../components/StatDetails";
+import TrendingPlayers from "../components/TrendingPlayers";
+import useMainStore from "../store/MainStore";
 
 const Player = () => {
   const [activeTab, setActiveTab] = useState("overview");
   const [info, setInfo] = useState({});
+  const [error, setError] = useState(null);
   const { trendingPlayers } = useCricbuzzStore();
   const [expandeBio, setExpandedBio] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const { content } = useMainStore();
 
   const tabs = [
     { id: "overview", label: "OVERVIEW" },
@@ -73,14 +79,72 @@ const Player = () => {
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [id]);
+  }, [id, content]);
 
   const fetchData = async () => {
-    const data = await getPlayerInfo(id);
-    setInfo(data);
+    try {
+      if (content === "cricket") {
+        const data = await getPlayerInfo(id);
+        if (!data || Object.keys(data).length === 0) {
+          throw new Error("No player data found");
+        }
+        setInfo(data);
+        setError(null);
+      } else {
+        const data = await getFBPlayerInfo(id);
+        if (!data || data.length === 0) {
+          throw new Error("No player data found");
+        }
+        setInfo(data[0]);
+        setError(null);
+      }
+    } catch (err) {
+      console.error("Error fetching player data:", err);
+      setError(err.message || "Unable to fetch player information");
+      setInfo({});
+    }
   };
 
-  return (
+  // Error rendering component
+  const ErrorDisplay = () => (
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+      <div className="bg-white shadow-md rounded-lg p-8 text-center max-w-md">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-16 w-16 mx-auto mb-4 text-red-500"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+          />
+        </svg>
+        <h2 className="text-2xl font-bold text-gray-800 mb-3">
+          Player Not Found
+        </h2>
+        <p className="text-gray-600 mb-4">
+          {error || "The requested player information could not be retrieved."}
+        </p>
+        <button
+          onClick={() => window.history.back()}
+          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+        >
+          Go Back
+        </button>
+      </div>
+    </div>
+  );
+
+  // If there's an error, render the error component
+  if (error) {
+    return <ErrorDisplay />;
+  }
+
+  return content === "cricket" ? (
     <div className="bg-gray-100 min-h-screen font-sans">
       {/* Tabs section - only visible on mobile */}
       {isMobile && (
@@ -131,7 +195,7 @@ const Player = () => {
               Most Viewed Players
             </div>
             <div className="grid grid-cols-2 md:grid-cols-1 gap-2">
-              {data?.IndianPlayers.slice(0, isMobile ? 6 : 10).map((e, i) => (
+              {data?.IndianPlayers?.slice(0, isMobile ? 6 : 10).map((e, i) => (
                 <div
                   key={i}
                   onClick={() => navigate("/player/" + e.profileId)}
@@ -494,6 +558,54 @@ const Player = () => {
           </div>
         </div>
       )}
+    </div>
+  ) : (
+    <div className="container mx-auto p-6 bg-gray-100 min-h-screen">
+      <div className="flex gap-6">
+        {/* Player Basic Info */}
+        <div className="w-1/3">
+          <div className=" bg-white shadow-lg rounded-lg p-6 text-center">
+            <img
+              src={info?.player?.photo || "/default-avatar.png"}
+              alt={info?.player?.name || "Player"}
+              className="w-48 h-48 object-cover rounded-full mx-auto mb-4 border-4 border-blue-500"
+            />
+            <h1 className="text-2xl font-bold text-gray-800">
+              {info?.player?.name || "Player Name"}
+            </h1>
+            <p className="text-gray-600">
+              {info?.statistics?.[0]?.games?.position || "Position"}
+            </p>
+            {/* Personal Details */}
+            <div className="mt-4 space-y-2">
+              <p>
+                <strong>Full Name:</strong> {info?.player?.firstname || ""}{" "}
+                {info?.player?.lastname || ""}
+              </p>
+              <p>
+                <strong>Age:</strong> {info?.player?.age || "N/A"}
+              </p>
+              <p>
+                <strong>Country Born in:</strong>{" "}
+                {info?.player?.birth?.country || "N/A"}
+              </p>
+              <p>
+                <strong>Height:</strong> {info?.player?.height || "N/A"}
+              </p>
+              <p>
+                <strong>Weight:</strong> {info?.player?.weight || "N/A"}
+              </p>
+            </div>
+          </div>
+          <div className="mt-5">
+            <TrendingPlayers />
+          </div>
+        </div>
+
+        <div className="w-3/4">
+          <PlayerStatisticsDetail stats={info?.statistics} />
+        </div>
+      </div>
     </div>
   );
 };

@@ -16,8 +16,9 @@ import TrendingPlayers from "../components/TrendingPlayers";
 import EditorPicks from "../components/EditorPicks";
 import Gallery from "../components/Gallery";
 import useFootballStore from "../store/football";
-import { getFixtures, getLeagues } from "../api/Football";
+import { getFixtures, getLeagues, getPlayers } from "../api/Football";
 import ipl from "../assets/ipl.jpg";
+import useMainStore from "../store/MainStore";
 
 function generateMatchSummary(matchData) {
   /**
@@ -27,26 +28,29 @@ function generateMatchSummary(matchData) {
    * @returns {string} - A string containing the match summary.
    */
 
-  const matchInfo = matchData.matchInfo;
-  const matchScore = matchData.matchScore;
-  const commentary = matchData.commentary.commentaryList;
+  const matchInfo = matchData?.matchInfo || {};
+  const matchScore = matchData?.matchScore || {};
+  const commentary = matchData?.commentary?.commentaryList || [];
 
-  const team1Name = matchInfo.team1.teamName;
-  const team2Name = matchInfo.team2.teamName;
-  const team1Score = matchScore.team1Score.inngs1.runs;
-  const team2Score = matchScore.team2Score.inngs1.runs;
-  const team1Wickets = matchScore.team1Score.inngs1.wickets;
-  const team2Wickets = matchScore.team2Score.inngs1.wickets;
-  const team1Overs = matchScore.team1Score.inngs1.overs;
-  const team2Overs = matchScore.team2Score.inngs1.overs;
+  const team1Name = matchInfo?.team1?.teamName || "Team 1";
+  const team2Name = matchInfo?.team2?.teamName || "Team 2";
+  const team1Score = matchScore?.team1Score?.inngs1?.runs ?? "N/A";
+  const team2Score = matchScore?.team2Score?.inngs1?.runs ?? "N/A";
+  const team1Wickets = matchScore?.team1Score?.inngs1?.wickets ?? "N/A";
+  const team2Wickets = matchScore?.team2Score?.inngs1?.wickets ?? "N/A";
+  const team1Overs = matchScore?.team1Score?.inngs1?.overs ?? "N/A";
+  const team2Overs = matchScore?.team2Score?.inngs1?.overs ?? "N/A";
 
-  const venue = matchInfo.venueInfo.ground;
-  const city = matchInfo.venueInfo.city;
-  const status = matchInfo.status;
+  const venue = matchInfo?.venueInfo?.ground || "Unknown Venue";
+  const city = matchInfo?.venueInfo?.city || "Unknown City";
+  const status = matchInfo?.status || "Match status unavailable";
   const playerOfTheMatch =
-    matchData.commentary.matchHeader.playersOfTheMatch[0].name;
+    matchData?.commentary?.matchHeader?.playersOfTheMatch?.[0]?.name ||
+    "Unknown Player";
 
-  let summary = `In a thrilling T20 encounter at ${venue}, ${city}, the ${matchInfo.seriesName} witnessed a high-scoring clash between ${team1Name} and ${team2Name}. `;
+  let summary = `In a thrilling T20 encounter at ${venue}, ${city}, the ${
+    matchInfo?.seriesName || "Unknown Series"
+  } witnessed a high-scoring clash between ${team1Name} and ${team2Name}. `;
   summary += `${team1Name} posted a formidable total of ${team1Score}/${team1Wickets} in ${team1Overs} overs. `;
   summary += `${team2Name} fought valiantly, chasing the target, and managed to score ${team2Score}/${team2Wickets} in ${team2Overs} overs. `;
   summary += `Ultimately, ${team1Name} emerged victorious, winning by 11 runs. `;
@@ -54,8 +58,6 @@ function generateMatchSummary(matchData) {
 
   return summary;
 }
-
-const sports = ["Cricket", "Football"];
 
 // Placeholder component for different UI elements
 const Placeholder = ({ type, count = 1 }) => {
@@ -117,9 +119,10 @@ export default function Home() {
   const [selectedMatch, setSelectedMatch] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
-  const [content, setContent] = useState("cricket");
+
   const [fbLeagues, setfbLeagues] = useState([]);
   const [fbFixtures, setFixtures] = useState([]);
+  const { content } = useMainStore();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -146,7 +149,7 @@ export default function Home() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       {/* search section */}
-      <div className="flex flex-col sm:flex-row gap-3 mt-4">
+      {/* <div className="flex flex-col sm:flex-row gap-3 mt-4">
         <div className="flex flex-wrap items-center gap-2 sm:gap-5 mt-2 sm:mt-0">
           {sports.map((e, i) => (
             <p
@@ -169,8 +172,8 @@ export default function Home() {
             className="outline-none w-full"
           />
           <CiSearch size={23} className="text-gray-400" />
-        </div> */}
-      </div>
+        </div> 
+      </div>*/}
 
       {/* main Section */}
       <div className="flex flex-col lg:flex-row items-start mt-7 gap-6 h-full">
@@ -215,7 +218,7 @@ export default function Home() {
                     <p className="truncate flex items-center gap-4 max-w-[14rem] overflow-hidden whitespace-nowrap">
                       <img
                         src={e.league.logo}
-                        className="h-8 w-8 rounded-full object-cover"
+                        className="h-5 w-5 rounded-full object-cover"
                         alt=""
                       />
                       {e.league.name}
@@ -449,20 +452,15 @@ export default function Home() {
                   </h1>
                   <div className="flex flex-col space-y-3 md:space-y-0">
                     <p className="text-sm text-gray-600 leading-relaxed">
-                      {generateMatchSummary(liveMatches[0])}
+                      {liveMatches[0]
+                        ? generateMatchSummary(liveMatches[0])
+                        : null}
                     </p>
                     <button
                       onClick={() =>
                         navigate("/match/" + liveMatches[0].matchInfo.matchId)
                       }
-                      className="flex items-center  w-fit mt-2 justify-center 
-          text-white bg-primary 
-          px-4 py-2 
-          rounded-lg 
-          hover:bg-opacity-90 
-          transition-colors 
-          space-x-2
-          self-start md:self-auto"
+                      className="flex items-center  w-fit mt-2 justify-center text-white bg-primary px-4 py-2 rounded-lg hover:bg-opacity-90 transition-colors space-x-2self-start md:self-auto"
                     >
                       <span>View Match Highlights</span>
                       <FaChevronRight className="w-4 h-4" />
@@ -521,164 +519,170 @@ export default function Home() {
       </div>
 
       {/* videos section */}
-      <div className="p-4 bg-white border mt-6 shadow border-[#e6e6e6]">
-        <div className="flex justify-between w-full">
-          <h1 className="text-xl font-bold text-primary">
-            {isLoading
-              ? "Gallery Photos"
-              : galleries && galleries[0]?.headline
-              ? galleries[0]?.headline + " Photos"
-              : "Gallery Photos"}
-          </h1>
-          <p
-            onClick={() => navigate("/gallery")}
-            className="flex text-sm gap-2 items-center cursor-pointer"
-          >
-            See All <FaChevronRight size={12} />
-          </p>
-        </div>
-        <div className="flex gap-4 mt-3 overflow-x-auto no-scrollbar whitespace-nowrap px-4">
-          {isLoading ? (
-            <>
-              <div className="shrink-0 w-[300px] sm:w-[23vw]">
-                <Placeholder type="image" />
-              </div>
-              <div className="shrink-0 w-[300px] sm:w-[23vw]">
-                <Placeholder type="image" />
-              </div>
-              <div className="shrink-0 w-[300px] sm:w-[23vw]">
-                <Placeholder type="image" />
-              </div>
-            </>
-          ) : galleries &&
-            galleries[0]?.images &&
-            galleries[0]?.images.length > 0 ? (
-            galleries[0]?.images.map((e, i) => (
-              <div key={i} className="shrink-0 w-[300px] sm:w-[23vw]">
-                <Image
-                  faceImageId={e}
-                  className="w-full h-full"
-                  resolution="de"
-                />
-              </div>
-            ))
-          ) : (
-            <p className="text-gray-500 italic">No gallery images available</p>
-          )}
-        </div>
-      </div>
-
-      {/* blogs section */}
-      <div className="p-4 bg-white border mt-6 shadow border-[#e6e6e6]">
-        <div className="flex justify-between w-full">
-          <h1 className="text-xl font-bold text-primary">LATEST NEWS</h1>
-          <p
-            onClick={() => navigate("/all-news")}
-            className="flex text-sm gap-2 items-center cursor-pointer"
-          >
-            See All <FaChevronRight size={12} />
-          </p>
-        </div>
-        <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 mt-5">
-          <div className="w-full lg:w-1/2 flex flex-col gap-10">
-            {isLoading ? (
-              <>
-                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
-                  <Placeholder type="image" />
-                  <div className="mt-3 sm:mt-0 w-full">
-                    <Placeholder type="line" count={4} />
-                  </div>
-                </div>
-                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
-                  <Placeholder type="image" />
-                  <div className="mt-3 sm:mt-0 w-full">
-                    <Placeholder type="line" count={4} />
-                  </div>
-                </div>
-              </>
-            ) : news && news.length > 0 ? (
-              news.slice(0, 3).map((e, i) =>
-                e.story ? (
-                  <div
-                    key={i}
-                    onClick={() => navigate("/news/" + e.story?.id)}
-                    className="flex cursor-pointer flex-col sm:flex-row items-start sm:items-center gap-5"
-                  >
-                    <Image
-                      faceImageId={e?.story?.imageId}
-                      className="h-auto w-full sm:h-54 sm:w-72"
-                      resolution="de"
-                    />
-                    <div className="mt-3 sm:mt-0">
-                      <p className="text-xl sm:text-2xl font-bold ">
-                        {e?.story?.hline}
-                      </p>
-                      <p className="line-clamp-3 overflow-hidden text-ellipsis">
-                        {e?.story?.intro}
-                      </p>
-                      <div className="flex mt-2 items-center gap-2 flex-wrap">
-                        <p>By {e?.story?.coverImage?.source || "Unknown"}</p>
-                        <div className="h-1.5 w-1.5 rounded-full bg-gray-400"></div>
-                        <p className="text-gray-400">
-                          {new Date(
-                            Number(e?.story?.pubTime || Date.now())
-                          ).toLocaleDateString("en-US", {
-                            day: "numeric",
-                            month: "long",
-                            year: "numeric",
-                          })}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                ) : null
-              )
-            ) : (
-              <p className="text-gray-500 italic">No blog posts available</p>
-            )}
+      {content === "cricket" && (
+        <div className="p-4 bg-white border mt-6 shadow border-[#e6e6e6]">
+          <div className="flex justify-between w-full">
+            <h1 className="text-xl font-bold text-primary">
+              {isLoading
+                ? "Gallery Photos"
+                : galleries && galleries[0]?.headline
+                ? galleries[0]?.headline + " Photos"
+                : "Gallery Photos"}
+            </h1>
+            <p
+              onClick={() => navigate("/gallery")}
+              className="flex text-sm gap-2 items-center cursor-pointer"
+            >
+              See All <FaChevronRight size={12} />
+            </p>
           </div>
-          <div
-            onClick={() => navigate("/news/" + news[4]?.story.id)}
-            className="w-full cursor-pointer lg:w-1/2 mt-6 lg:mt-0"
-          >
+          <div className="flex gap-4 mt-3 overflow-x-auto no-scrollbar whitespace-nowrap px-4">
             {isLoading ? (
               <>
-                <Placeholder type="image" />
-                <Placeholder type="line" count={4} />
-              </>
-            ) : news && news.length > 4 && news[4]?.story ? (
-              <>
-                <Image
-                  faceImageId={news[4]?.story?.imageId}
-                  className="w-full"
-                  resolution="de"
-                />
-                <p className="text-2xl sm:text-4xl px-3 mt-2 font-bold">
-                  {news[4]?.story?.hline}
-                </p>
-                <p className="px-3 mt-2">{news[4]?.story?.intro}</p>
-                <div className="flex mt-2 mx-3 items-center gap-2 flex-wrap">
-                  <p>By {news[4]?.story?.coverImage?.source || "Unknown"}</p>
-                  <div className="h-1.5 w-1.5 rounded-full bg-gray-400"></div>
-                  <p className="text-gray-400">
-                    {new Date(
-                      Number(news[4]?.story?.pubTime || Date.now())
-                    ).toLocaleDateString("en-US", {
-                      day: "numeric",
-                      month: "long",
-                      year: "numeric",
-                    })}
-                  </p>
+                <div className="shrink-0 w-[300px] sm:w-[23vw]">
+                  <Placeholder type="image" />
+                </div>
+                <div className="shrink-0 w-[300px] sm:w-[23vw]">
+                  <Placeholder type="image" />
+                </div>
+                <div className="shrink-0 w-[300px] sm:w-[23vw]">
+                  <Placeholder type="image" />
                 </div>
               </>
+            ) : galleries &&
+              galleries[0]?.images &&
+              galleries[0]?.images.length > 0 ? (
+              galleries[0]?.images.map((e, i) => (
+                <div key={i} className="shrink-0 w-[300px] sm:w-[23vw]">
+                  <Image
+                    faceImageId={e}
+                    className="w-full h-full"
+                    resolution="de"
+                  />
+                </div>
+              ))
             ) : (
               <p className="text-gray-500 italic">
-                Featured blog post not available
+                No gallery images available
               </p>
             )}
           </div>
         </div>
-      </div>
+      )}
+
+      {/* blogs section */}
+      {content === "cricket" && (
+        <div className="p-4 bg-white border mt-6 shadow border-[#e6e6e6]">
+          <div className="flex justify-between w-full">
+            <h1 className="text-xl font-bold text-primary">LATEST NEWS</h1>
+            <p
+              onClick={() => navigate("/all-news")}
+              className="flex text-sm gap-2 items-center cursor-pointer"
+            >
+              See All <FaChevronRight size={12} />
+            </p>
+          </div>
+          <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 mt-5">
+            <div className="w-full lg:w-1/2 flex flex-col gap-10">
+              {isLoading ? (
+                <>
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
+                    <Placeholder type="image" />
+                    <div className="mt-3 sm:mt-0 w-full">
+                      <Placeholder type="line" count={4} />
+                    </div>
+                  </div>
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
+                    <Placeholder type="image" />
+                    <div className="mt-3 sm:mt-0 w-full">
+                      <Placeholder type="line" count={4} />
+                    </div>
+                  </div>
+                </>
+              ) : news && news.length > 0 ? (
+                news.slice(0, 3).map((e, i) =>
+                  e.story ? (
+                    <div
+                      key={i}
+                      onClick={() => navigate("/news/" + e.story?.id)}
+                      className="flex cursor-pointer flex-col sm:flex-row items-start sm:items-center gap-5"
+                    >
+                      <Image
+                        faceImageId={e?.story?.imageId}
+                        className="h-auto w-full sm:h-54 sm:w-72"
+                        resolution="de"
+                      />
+                      <div className="mt-3 sm:mt-0">
+                        <p className="text-xl sm:text-2xl font-bold ">
+                          {e?.story?.hline}
+                        </p>
+                        <p className="line-clamp-3 overflow-hidden text-ellipsis">
+                          {e?.story?.intro}
+                        </p>
+                        <div className="flex mt-2 items-center gap-2 flex-wrap">
+                          <p>By {e?.story?.coverImage?.source || "Unknown"}</p>
+                          <div className="h-1.5 w-1.5 rounded-full bg-gray-400"></div>
+                          <p className="text-gray-400">
+                            {new Date(
+                              Number(e?.story?.pubTime || Date.now())
+                            ).toLocaleDateString("en-US", {
+                              day: "numeric",
+                              month: "long",
+                              year: "numeric",
+                            })}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ) : null
+                )
+              ) : (
+                <p className="text-gray-500 italic">No blog posts available</p>
+              )}
+            </div>
+            <div
+              onClick={() => navigate("/news/" + news[4]?.story.id)}
+              className="w-full cursor-pointer lg:w-1/2 mt-6 lg:mt-0"
+            >
+              {isLoading ? (
+                <>
+                  <Placeholder type="image" />
+                  <Placeholder type="line" count={4} />
+                </>
+              ) : news && news.length > 4 && news[4]?.story ? (
+                <>
+                  <Image
+                    faceImageId={news[4]?.story?.imageId}
+                    className="w-full"
+                    resolution="de"
+                  />
+                  <p className="text-2xl sm:text-4xl px-3 mt-2 font-bold">
+                    {news[4]?.story?.hline}
+                  </p>
+                  <p className="px-3 mt-2">{news[4]?.story?.intro}</p>
+                  <div className="flex mt-2 mx-3 items-center gap-2 flex-wrap">
+                    <p>By {news[4]?.story?.coverImage?.source || "Unknown"}</p>
+                    <div className="h-1.5 w-1.5 rounded-full bg-gray-400"></div>
+                    <p className="text-gray-400">
+                      {new Date(
+                        Number(news[4]?.story?.pubTime || Date.now())
+                      ).toLocaleDateString("en-US", {
+                        day: "numeric",
+                        month: "long",
+                        year: "numeric",
+                      })}
+                    </p>
+                  </div>
+                </>
+              ) : (
+                <p className="text-gray-500 italic">
+                  Featured blog post not available
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="mt-5 flex flex-col lg:flex-row gap-5">
         <div className="w-full lg:w-2/3">
@@ -686,119 +690,121 @@ export default function Home() {
           <TrendingPlayers isLoading={isLoading} />
 
           {/* match coverage */}
-          <div className="bg-white mt-5 border p-4 border-[#e6e6e6] w-full max-w-full overflow-hidden">
-            <h1 className="text-xl md:text-2xl font-bold text-primary">
-              Match Coverage
-            </h1>
-            {isLoading ? (
-              <>
-                <Placeholder type="line" />
-                <div className="flex flex-col md:flex-row gap-5 md:gap-10 mt-5">
-                  <div className="w-full">
-                    <Placeholder type="line" count={6} />
-                  </div>
-                </div>
-              </>
-            ) : liveMatches && liveMatches.length > 0 ? (
-              <>
-                <div className="flex gap-4 sm:gap-6 md:gap-10 items-center whitespace-nowrap border-b border-gray-200 mt-4 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-gray-300">
-                  {liveMatches.map((e, i) => (
-                    <div
-                      key={i}
-                      onClick={() => setSelectedMatch(i)}
-                      className={`min-w-[6rem] sm:min-w-[7rem] text-center flex-shrink-0 ${
-                        selectedMatch === i ? "text-blue-500" : ""
-                      } focus:text-blue-500 cursor-pointer hover:text-blue-500 transition-colors duration-200`}
-                    >
-                      <p className="font-bold text-sm sm:text-base">
-                        {e?.matchInfo?.team1?.teamSName}{" "}
-                        <span className="text-xs">VS</span>{" "}
-                        {e?.matchInfo?.team2?.teamSName}
-                      </p>
-                      <p className="text-xs sm:text-sm">
-                        {e?.matchInfo.matchFormat}
-                      </p>
+          {content === "cricket" && (
+            <div className="bg-white mt-5 border p-4 border-[#e6e6e6] w-full max-w-full overflow-hidden">
+              <h1 className="text-xl md:text-2xl font-bold text-primary">
+                Match Coverage
+              </h1>
+              {isLoading ? (
+                <>
+                  <Placeholder type="line" />
+                  <div className="flex flex-col md:flex-row gap-5 md:gap-10 mt-5">
+                    <div className="w-full">
+                      <Placeholder type="line" count={6} />
                     </div>
-                  ))}
-                </div>
-                <div className="flex flex-col md:flex-row gap-5 md:gap-10 mt-5">
-                  <div className="w-full">
-                    <h1 className="text-lg sm:text-xl md:text-2xl flex flex-wrap gap-4 items-center font-bold">
-                      {liveMatches[selectedMatch]?.matchInfo.team1 && (
-                        <Image
-                          faceImageId={
-                            liveMatches[selectedMatch]?.matchInfo.team1
-                              .teamSName ===
-                            liveMatches[
-                              selectedMatch
-                            ]?.matchInfo.stateTitle?.split(" ")[0]
-                              ? liveMatches[selectedMatch]?.matchInfo.team1
-                                  .imageId
-                              : liveMatches[selectedMatch]?.matchInfo.team2
-                                  .imageId
-                          }
-                          className="h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 rounded-full"
-                          resolution=""
-                        />
-                      )}
-                      <span className="block w-full md:w-auto text-sm sm:text-base md:text-lg line-clamp-2">
-                        {liveMatches &&
-                          liveMatches[selectedMatch]?.commentary?.miniscore
-                            ?.lastWicket}
-                      </span>
-                    </h1>
-                    <p className="flex my-3 bg-blue-100 px-2 p-1 items-center justify-between rounded text-sm sm:text-base">
-                      <span className="flex gap-2 sm:gap-3 items-center overflow-hidden">
-                        <LiaTrophySolid className="text-blue-500 flex-shrink-0" />
-                        <p className="font-bold truncate">
-                          {
-                            liveMatches[selectedMatch]?.matchInfo?.team1
-                              ?.teamSName
-                          }{" "}
-                          <span className="text-xs">VS</span>{" "}
-                          {
-                            liveMatches[selectedMatch]?.matchInfo?.team2
-                              ?.teamSName
-                          }
-                        </p>{" "}
-                        <span className="truncate">
-                          {liveMatches[selectedMatch]?.matchInfo?.status}
-                        </span>
-                      </span>
-                      <FaChevronRight
-                        className="text-blue-500 flex-shrink-0"
-                        size={12}
-                      />
-                    </p>
-                    {liveMatches[selectedMatch]?.commentary?.commentaryList
-                      ?.slice(2, 6)
-                      .map(
-                        (e, i) =>
-                          e?.commText &&
-                          e?.commText.length > 5 && (
-                            <p
-                              key={i}
-                              className="flex py-1 font-medium items-start gap-2 text-sm sm:text-base"
-                            >
-                              <FaChevronRight
-                                className="text-blue-400 flex-shrink-0 mt-1"
-                                size={13}
-                              />{" "}
-                              <span className="line-clamp-2">
-                                {e?.commText.replace("B0$", "")}
-                              </span>
-                            </p>
-                          )
-                      )}
                   </div>
-                </div>
-              </>
-            ) : (
-              <p className="text-gray-500 italic mt-3">
-                No match coverage available
-              </p>
-            )}
-          </div>
+                </>
+              ) : liveMatches && liveMatches.length > 0 ? (
+                <>
+                  <div className="flex gap-4 sm:gap-6 md:gap-10 items-center whitespace-nowrap border-b border-gray-200 mt-4 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-gray-300">
+                    {liveMatches.map((e, i) => (
+                      <div
+                        key={i}
+                        onClick={() => setSelectedMatch(i)}
+                        className={`min-w-[6rem] sm:min-w-[7rem] text-center flex-shrink-0 ${
+                          selectedMatch === i ? "text-blue-500" : ""
+                        } focus:text-blue-500 cursor-pointer hover:text-blue-500 transition-colors duration-200`}
+                      >
+                        <p className="font-bold text-sm sm:text-base">
+                          {e?.matchInfo?.team1?.teamSName}{" "}
+                          <span className="text-xs">VS</span>{" "}
+                          {e?.matchInfo?.team2?.teamSName}
+                        </p>
+                        <p className="text-xs sm:text-sm">
+                          {e?.matchInfo.matchFormat}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="flex flex-col md:flex-row gap-5 md:gap-10 mt-5">
+                    <div className="w-full">
+                      <h1 className="text-lg sm:text-xl md:text-2xl flex flex-wrap gap-4 items-center font-bold">
+                        {liveMatches[selectedMatch]?.matchInfo.team1 && (
+                          <Image
+                            faceImageId={
+                              liveMatches[selectedMatch]?.matchInfo.team1
+                                .teamSName ===
+                              liveMatches[
+                                selectedMatch
+                              ]?.matchInfo.stateTitle?.split(" ")[0]
+                                ? liveMatches[selectedMatch]?.matchInfo.team1
+                                    .imageId
+                                : liveMatches[selectedMatch]?.matchInfo.team2
+                                    .imageId
+                            }
+                            className="h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 rounded-full"
+                            resolution=""
+                          />
+                        )}
+                        <span className="block w-full md:w-auto text-sm sm:text-base md:text-lg line-clamp-2">
+                          {liveMatches &&
+                            liveMatches[selectedMatch]?.commentary?.miniscore
+                              ?.lastWicket}
+                        </span>
+                      </h1>
+                      <p className="flex my-3 bg-blue-100 px-2 p-1 items-center justify-between rounded text-sm sm:text-base">
+                        <span className="flex gap-2 sm:gap-3 items-center overflow-hidden">
+                          <LiaTrophySolid className="text-blue-500 flex-shrink-0" />
+                          <p className="font-bold truncate">
+                            {
+                              liveMatches[selectedMatch]?.matchInfo?.team1
+                                ?.teamSName
+                            }{" "}
+                            <span className="text-xs">VS</span>{" "}
+                            {
+                              liveMatches[selectedMatch]?.matchInfo?.team2
+                                ?.teamSName
+                            }
+                          </p>{" "}
+                          <span className="truncate">
+                            {liveMatches[selectedMatch]?.matchInfo?.status}
+                          </span>
+                        </span>
+                        <FaChevronRight
+                          className="text-blue-500 flex-shrink-0"
+                          size={12}
+                        />
+                      </p>
+                      {liveMatches[selectedMatch]?.commentary?.commentaryList
+                        ?.slice(2, 6)
+                        .map(
+                          (e, i) =>
+                            e?.commText &&
+                            e?.commText.length > 5 && (
+                              <p
+                                key={i}
+                                className="flex py-1 font-medium items-start gap-2 text-sm sm:text-base"
+                              >
+                                <FaChevronRight
+                                  className="text-blue-400 flex-shrink-0 mt-1"
+                                  size={13}
+                                />{" "}
+                                <span className="line-clamp-2">
+                                  {e?.commText.replace("B0$", "")}
+                                </span>
+                              </p>
+                            )
+                        )}
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <p className="text-gray-500 italic mt-3">
+                  No match coverage available
+                </p>
+              )}
+            </div>
+          )}
         </div>
         <div className="w-full lg:w-1/3 mt-5 lg:mt-0">
           {isLoading ? (
@@ -817,7 +823,7 @@ export default function Home() {
       <EditorPicks isLoading={isLoading} />
 
       {/* Gallery */}
-      <Gallery id={1} isLoading={isLoading} />
+      {content === "cricket" && <Gallery id={1} isLoading={isLoading} />}
     </div>
   );
 }

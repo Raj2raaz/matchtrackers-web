@@ -15,9 +15,31 @@ export const getLeagues = async () => {
 export const getFixtures = async () => {
   try {
     const response = await apiClient.get("/v3/fixtures?last=5");
-    console.log(response.data);
+
     return response.data.response;
   } catch (error) {
     console.log("error fetching fixtures", error);
+  }
+};
+
+export const getPlayers = async () => {
+  try {
+    const response = await apiClient.get(
+      "/v3/players/topscorers?league=39&season=2024"
+    );
+
+    return response.data.response.slice(0, 11);
+  } catch (error) {
+    console.log("error fetching players", error);
+  }
+};
+
+export const getFBPlayerInfo = async (id) => {
+  try {
+    const response = await apiClient.get("/v3/players/?season=2024&id=" + id);
+
+    return response.data.response;
+  } catch (error) {
+    console.log("error fetching info", error);
   }
 };

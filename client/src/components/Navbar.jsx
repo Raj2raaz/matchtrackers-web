@@ -5,12 +5,15 @@ import navLogo from "../assets/navLogo.svg";
 import favicon from "../assets/favicon.svg";
 import { getNavLinks } from "../api/Home";
 import Cookies from "js-cookie";
+import useMainStore from "../store/MainStore";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const [navLinks, setNavLinks] = useState();
   const [openDropdown, setOpenDropdown] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [selectedSport, setSelectedSport] = useState("cricket");
+  const { content, setContent } = useMainStore();
   const dropdownRefs = useRef({});
   const mobileMenuRef = useRef();
 
@@ -237,6 +240,24 @@ const Navbar = () => {
           alt="Logo"
         />
         {/* Mobile Menu Button */}
+        <div className="flex items-center bg-white/20 rounded-full px-1 py-1">
+          <button
+            className={`px-4 py-1 rounded-full text-sm transition-all duration-300 ${
+              content === "cricket" ? "bg-white text-secondary" : "text-white"
+            }`}
+            onClick={() => setContent("cricket")}
+          >
+            Cricket
+          </button>
+          <button
+            className={`px-4 py-1 rounded-full text-sm transition-all duration-300 ${
+              content === "football" ? "bg-white text-secondary" : "text-white"
+            }`}
+            onClick={() => setContent("football")}
+          >
+            Football
+          </button>
+        </div>
         <div className="md:hidden">
           <button
             onClick={toggleMobileMenu}

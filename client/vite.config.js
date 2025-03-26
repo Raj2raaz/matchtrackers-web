@@ -12,6 +12,11 @@ export default defineConfig({
       "/api": {
         target: "http://localhost:3000",
       },
+      "/cricbuzz-img": {
+        target: "https://cricbuzz-cricket.p.rapidapi.com",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/cricbuzz-img/, ""),
+      },
     },
   },
 });
