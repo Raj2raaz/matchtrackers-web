@@ -52,7 +52,7 @@ const Gallery = () => {
         </h1>
 
         <div className="space-y-8">
-          {gallery.map((item) => (
+          {gallery.slice(0, 5).map((item) => (
             <div
               key={item.galleryId}
               className=" rounded-xl shadow-md overflow-hidden transition-transform duration-300"
