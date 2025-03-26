@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import useCricbuzzStore from "../store/mainStore";
+import useCricbuzzStore from "../store/cricket";
 import { FaChevronRight } from "react-icons/fa";
 import Image from "./Image";
 

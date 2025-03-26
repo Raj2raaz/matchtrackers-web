@@ -1,6 +1,6 @@
 import React from "react";
 import { FaTrophy } from "react-icons/fa";
-import useCricbuzzStore from "../store/mainStore";
+import useCricbuzzStore from "../store/cricket";
 import Image from "./Image";
 import { formatTimeAgo } from "../utils/util";
 import { Clock } from "lucide-react";

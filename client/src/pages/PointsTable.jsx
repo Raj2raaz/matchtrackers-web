@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import apiClient from "../utils/axios";
+import { cricApiClient as apiClient } from "../utils/axios";
 import TopNews from "../components/TopNews";
 import EditorPicks from "../components/EditorPicks";
 import Gallery from "../components/Gallery";

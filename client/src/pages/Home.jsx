@@ -7,21 +7,16 @@ import { FaChevronRight } from "react-icons/fa";
 import team from "../assets/team.png";
 import headingPost from "../assets/headingpost.png";
 import headingPost2 from "../assets/headingpost2.png";
-import featuredVid1 from "../assets/featuredVid1.png";
-import featuredVid2 from "../assets/featuredVid2.png";
-import blogs1 from "../assets/blogs1.png";
-import blogs2 from "../assets/blogs2.png";
-import blogs3 from "../assets/blogs3.png";
-import blogs4 from "../assets/blogs4.png";
 import volleyballPoster from "../assets/volleyballPoster.png";
 import { LiaTrophySolid } from "react-icons/lia";
-import Footer from "../components/Footer";
-import useCricbuzzStore from "../store/mainStore";
+import useCricbuzzStore from "../store/cricket";
 import Image from "../components/Image";
 import { useNavigate } from "react-router-dom";
 import TrendingPlayers from "../components/TrendingPlayers";
 import EditorPicks from "../components/EditorPicks";
 import Gallery from "../components/Gallery";
+import useFootballStore from "../store/football";
+import { getFixtures, getLeagues } from "../api/Football";
 
 const sports = ["Cricket", "Football"];
 
@@ -85,6 +80,21 @@ export default function Home() {
   const [selectedMatch, setSelectedMatch] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
+  const [content, setContent] = useState("cricket");
+  const [fbLeagues, setfbLeagues] = useState([]);
+  const [fbFixtures, setFixtures] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const leagues = await getLeagues();
+      const fixtures = await getFixtures();
+
+      setfbLeagues(leagues);
+      setFixtures(fixtures);
+    };
+
+    fetchData();
+  }, []);
 
   useEffect(() => {
     const loadData = async () => {
@@ -100,6 +110,21 @@ export default function Home() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       {/* search section */}
       <div className="flex flex-col sm:flex-row gap-3 mt-4">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-5 mt-2 sm:mt-0">
+          {sports.map((e, i) => (
+            <p
+              key={i}
+              onClick={() => setContent(e.toLowerCase())}
+              className={`px-3 py-0.5 text-sm border-2 ${
+                content === e.toLowerCase()
+                  ? "bg-primary text-white"
+                  : "bg-none"
+              } font-medium cursor-pointer border-primary rounded`}
+            >
+              {e}
+            </p>
+          ))}
+        </div>
         <div className="w-full md:w-auto flex-grow border bg-white border-gray-400 rounded flex gap-2 items-center px-2 py-2">
           <input
             type="text"
@@ -107,16 +132,6 @@ export default function Home() {
             className="outline-none w-full"
           />
           <CiSearch size={23} className="text-gray-400" />
-        </div>
-        <div className="flex flex-wrap items-center gap-2 sm:gap-5 mt-2 sm:mt-0">
-          {sports.map((e, i) => (
-            <p
-              key={i}
-              className="px-3 py-0.5 text-sm border-2 font-medium border-primary rounded"
-            >
-              {e}
-            </p>
-          ))}
         </div>
       </div>
 
@@ -130,25 +145,49 @@ export default function Home() {
             <div className="text-sm mt-4 text-primary">
               {isLoading ? (
                 <Placeholder type="line" count={5} />
-              ) : recentMatches && recentMatches.length > 0 ? (
-                recentMatches.slice(0, noOfRecentMatches).map((e, i) =>
-                  e.seriesAdWrapper ? (
-                    <div
-                      onClick={() =>
-                        navigate("/schedules/" + e.seriesAdWrapper.seriesId)
-                      }
-                      key={i}
-                      className="bg-gray-200 hover:bg-gray-300 cursor-pointer items-center flex justify-between mt-2 pl-3 pr-1.5 py-1.5 rounded-full"
-                    >
-                      <p className="truncate max-w-[14rem] overflow-hidden whitespace-nowrap">
-                        {e.seriesAdWrapper.seriesName}
-                      </p>
-                      <IoMdArrowDroprightCircle size={26} />
-                    </div>
-                  ) : null
+              ) : content === "cricket" ? (
+                recentMatches && recentMatches.length > 0 ? (
+                  recentMatches.slice(0, noOfRecentMatches).map((e, i) =>
+                    e.seriesAdWrapper ? (
+                      <div
+                        onClick={() =>
+                          navigate("/schedules/" + e.seriesAdWrapper.seriesId)
+                        }
+                        key={i}
+                        className="bg-gray-200 hover:bg-gray-300 cursor-pointer items-center flex justify-between mt-2 pl-3 pr-1.5 py-1.5 rounded-full"
+                      >
+                        <p className="truncate max-w-[14rem] overflow-hidden whitespace-nowrap">
+                          {e.seriesAdWrapper.seriesName}
+                        </p>
+                        <IoMdArrowDroprightCircle size={26} />
+                      </div>
+                    ) : null
+                  )
+                ) : (
+                  <p className="text-gray-500 italic">
+                    No recent matches available
+                  </p>
                 )
+              ) : fbLeagues && fbLeagues.length > 0 ? (
+                fbLeagues.slice(0, noOfRecentMatches).map((e, i) => (
+                  <div
+                    key={i}
+                    onClick={() => navigate("/leagues/" + e.id)}
+                    className="bg-gray-200 hover:bg-gray-300 cursor-pointer items-center flex justify-between mt-2 pl-3 pr-1.5 py-1.5 rounded-full"
+                  >
+                    <p className="truncate flex items-center gap-4 max-w-[14rem] overflow-hidden whitespace-nowrap">
+                      <img
+                        src={e.league.logo}
+                        className="h-8 w-8 rounded-full object-cover"
+                        alt=""
+                      />
+                      {e.league.name}
+                    </p>
+                    <IoMdArrowDroprightCircle size={26} />
+                  </div>
+                ))
               ) : (
-                <p className="text-gray-500 italic">No matches available</p>
+                <p className="text-gray-500 italic">No leagues available</p>
               )}
             </div>
             {!isLoading && recentMatches && recentMatches.length > 0 && (
@@ -179,87 +218,156 @@ export default function Home() {
                 <Placeholder type="matchCard" />
                 <Placeholder type="matchCard" />
               </>
-            ) : liveMatches && liveMatches.length > 0 ? (
-              liveMatches.slice(0, 5).map((e, i) => (
+            ) : content === "cricket" ? (
+              liveMatches && liveMatches.length > 0 ? (
+                liveMatches.slice(0, 5).map((e, i) => (
+                  <div
+                    key={i}
+                    className="bg-white shadow-lg mt-4 rounded-lg border border-[#E6E6E6] p-5"
+                  >
+                    <div className="flex text-sm justify-between">
+                      <p className="font-semibold max-w-[13rem] truncate text-sub">
+                        {e.matchInfo.matchFormat} Match //{" "}
+                        {e.matchInfo.venueInfo.ground}
+                      </p>
+                      <p
+                        className={`px-3 py-0.5 flex items-center font-medium rounded-full ${
+                          e.matchInfo.state === "In Progress"
+                            ? "bg-red-500 text-white"
+                            : "bg-gray-200"
+                        }`}
+                      >
+                        {e.matchInfo.state}
+                      </p>
+                    </div>
+                    <div className="flex justify-between items-center mt-3">
+                      <div className="flex flex-col items-start">
+                        <div className="flex items-center font-bold text-lg gap-1">
+                          <Image
+                            faceImageId={e.matchInfo.team1.imageId}
+                            className="w-7 h-7 rounded-full"
+                          />
+                          {e.matchInfo.team1.teamSName}
+                        </div>
+                        <p className="text-sm mt-0.5 text-primary">
+                          {e?.matchScore?.team1Score?.inngs1?.runs || 0}/
+                          {e?.matchScore?.team1Score?.inngs1?.wickets || 0} (
+                          {e?.matchScore?.team1Score?.inngs1?.overs || 0})
+                        </p>
+                      </div>
+                      <p className="font-bold text-gray-400 text-lg">vs</p>
+                      <div className="flex flex-col items-end">
+                        <div className="flex items-center font-bold text-lg gap-1">
+                          <Image
+                            faceImageId={e.matchInfo.team2.imageId}
+                            className="w-7 h-7 rounded-full"
+                          />
+                          {e.matchInfo.team2.teamSName}
+                        </div>
+                        <p className="text-sm mt-0.5 text-primary">
+                          {e?.matchScore?.team2Score?.inngs1?.runs || 0}/
+                          {e?.matchScore?.team2Score?.inngs1?.wickets || 0} (
+                          {e?.matchScore?.team2Score?.inngs1?.overs || 0})
+                        </p>
+                      </div>
+                    </div>
+                    {e.matchInfo.state === "In Progress" ? (
+                      <button
+                        onClick={() =>
+                          navigate("/match/" + e.matchInfo.matchId)
+                        }
+                        className="bg-primary text-white py-1 rounded mt-2.5 font-semibold text-center w-full"
+                      >
+                        See live updates
+                      </button>
+                    ) : (
+                      <div className="flex justify-between pt-1 mt-2.5 border-t border-dashed border-gray-400">
+                        <button
+                          onClick={() =>
+                            navigate("/match/" + e.matchInfo.matchId)
+                          }
+                          className="flex items-center cursor-pointer gap-2"
+                        >
+                          See Updates <FaChevronRight size={10} />
+                        </button>
+                        <button
+                          onClick={() =>
+                            navigate("/schedules/" + e.matchInfo.seriesId)
+                          }
+                          className="flex items-center cursor-pointer gap-2"
+                        >
+                          View Series <FaChevronRight size={10} />
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                ))
+              ) : (
+                <p className="text-gray-500 italic text-center mt-4">
+                  No live cricket matches available
+                </p>
+              )
+            ) : fbFixtures.length > 0 ? (
+              fbFixtures.map((e, i) => (
                 <div
                   key={i}
                   className="bg-white shadow-lg mt-4 rounded-lg border border-[#E6E6E6] p-5"
                 >
                   <div className="flex text-sm justify-between">
                     <p className="font-semibold max-w-[13rem] truncate text-sub">
-                      {e.matchInfo.matchFormat} Match //{" "}
-                      {e.matchInfo.venueInfo.ground}
+                      {e.league.name} Match // {e.fixture.venue.name}
                     </p>
-
                     <p
                       className={`px-3 py-0.5 flex items-center font-medium rounded-full ${
-                        e.matchInfo.state === "In Progress"
+                        ["1H", "2H", "ET", "PEN"].includes(
+                          e.fixture.status.short
+                        ) && e.fixture.status.elapsed > 0
                           ? "bg-red-500 text-white"
                           : "bg-gray-200"
                       }`}
                     >
-                      {e.matchInfo.state}
+                      {["1H", "2H", "ET", "PEN"].includes(
+                        e.fixture.status.short
+                      ) && e.fixture.status.elapsed > 0
+                        ? "Live"
+                        : new Date(e.fixture.date).toLocaleDateString()}
                     </p>
                   </div>
                   <div className="flex justify-between items-center mt-3">
                     <div className="flex flex-col items-start">
                       <div className="flex items-center font-bold text-lg gap-1">
-                        <Image
-                          faceImageId={e.matchInfo.team1.imageId}
-                          className="w-7 h-7 rounded-full"
+                        <img
+                          src={e.teams.home.logo}
+                          className="h-7 w-7 rounded-full object-contain"
+                          alt=""
                         />
-                        {e.matchInfo.team1.teamSName}
+                        {e.teams.home.name}
                       </div>
-                      <p className="text-sm mt-0.5 text-primary">
-                        {e?.matchScore?.team1Score?.inngs1?.runs || 0}/
-                        {e?.matchScore?.team1Score?.inngs1?.wickets || 0} (
-                        {e?.matchScore?.team1Score?.inngs1?.overs || 0})
+                      <p className="text-xl font-bold ml-4 mt-0.5 text-primary">
+                        {e.goals.home}
                       </p>
                     </div>
                     <p className="font-bold text-gray-400 text-lg">vs</p>
                     <div className="flex flex-col items-end">
                       <div className="flex items-center font-bold text-lg gap-1">
-                        <Image
-                          faceImageId={e.matchInfo.team2.imageId}
-                          className="w-7 h-7 rounded-full"
+                        <img
+                          src={e.teams.away.logo}
+                          className="h-7 w-7 rounded-full object-contain"
+                          alt=""
                         />
-                        {e.matchInfo.team2.teamSName}
+                        {e.teams.away.name}
                       </div>
-                      <p className="text-sm mt-0.5 text-primary">
-                        {e?.matchScore?.team2Score?.inngs1?.runs || 0}/
-                        {e?.matchScore?.team2Score?.inngs1?.wickets || 0} (
-                        {e?.matchScore?.team2Score?.inngs1?.overs || 0})
+                      <p className="text-xl font-bold mr-4 mt-0.5 text-primary">
+                        {e.goals.away}
                       </p>
                     </div>
                   </div>
-
-                  {e.matchInfo.state === "In Progress" ? (
-                    <button
-                      onClick={() => navigate("/match/" + e.matchInfo.matchId)}
-                      className="bg-primary text-white py-1 rounded mt-2.5 font-semibold text-center w-full"
-                    >
-                      See live updates
-                    </button>
-                  ) : (
-                    <div className="flex justify-between pt-1 mt-2.5 border-t border-dashed border-gray-400">
-                      <button
-                        onClick={() =>
-                          navigate("/match/" + e.matchInfo.matchId)
-                        }
-                        className="flex items-center cursor-pointer gap-2"
-                      >
-                        See Updates <FaChevronRight size={10} />
-                      </button>
-                      <button
-                        onClick={() =>
-                          navigate("/schedules/" + e.matchInfo.seriesId)
-                        }
-                        className="flex items-center cursor-pointer gap-2"
-                      >
-                        View Series <FaChevronRight size={10} />{" "}
-                      </button>
-                    </div>
-                  )}
+                  <button
+                    onClick={() => navigate("/match/" + e.matchInfo.matchId)}
+                    className="bg-primary text-white py-1 rounded mt-2.5 font-semibold text-center w-full"
+                  >
+                    See live updates
+                  </button>
                 </div>
               ))
             ) : (

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Trophy, Calendar, Globe, Users } from "lucide-react";
-import apiClient from "../utils/axios";
+import { cricApiClient as apiClient } from "../utils/axios";
 import Image from "../components/Image";
 import { useNavigate, useParams } from "react-router-dom";
 import TopNews from "../components/TopNews";

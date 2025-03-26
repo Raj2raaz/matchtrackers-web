@@ -15,6 +15,7 @@ import CricketScoresDashboard from "./pages/MatchList";
 import Rankings from "./pages/Rankings";
 import NewsPage from "./pages/News";
 import AuthForm from "./pages/Auth";
+import ComingSoon from "./pages/ComingSoon";
 
 export default function App() {
   return (
@@ -38,6 +39,7 @@ export default function App() {
             <Route path="/rankings/:type" element={<Rankings />} />
             <Route path="/news/:id" element={<NewsPage />} />
             <Route path="/auth" element={<AuthForm />} />
+            <Route path="/analytics" element={<ComingSoon />} />
           </Routes>
         </div>
       </Router>

@@ -1,4 +1,4 @@
-import apiClient from "../utils/axios";
+import { cricApiClient as apiClient } from "../utils/axios";
 
 // Reusable error handler
 const handleApiError = (functionName, error) => {

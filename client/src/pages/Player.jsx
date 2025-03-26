@@ -4,7 +4,7 @@ import { getPlayerInfo } from "../api/Home";
 import { useNavigate, useParams } from "react-router-dom";
 import Image from "../components/Image";
 import data from "../data.json";
-import useCricbuzzStore from "../store/mainStore";
+import useCricbuzzStore from "../store/cricket";
 
 const Player = () => {
   const [activeTab, setActiveTab] = useState("overview");

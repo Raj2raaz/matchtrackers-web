@@ -358,6 +358,16 @@ const Navbar = () => {
             )}
           </div>
 
+          <div className="">
+            <div
+              className="flex justify-between items-center py-3 px-6 font-medium cursor-pointer"
+              // Added event argument
+              onClick={() => navigate("/analytics")}
+            >
+              <span>Analytics</span>
+            </div>
+          </div>
+
           <button
             className="px-4 py-2 rounded-full bg-primary text-white font-medium text-sm hover:bg-primary/90 transition-colors shadow-sm hover:shadow z-10 relative" // Added z-index and relative
             onClick={() => {
@@ -510,6 +520,16 @@ const Navbar = () => {
                     <SchedulesDropdown />
                   </div>
                 )}
+              </div>
+
+              <div className="border-b border-gray-200">
+                <div
+                  className="flex justify-between items-center py-3 px-6 font-medium cursor-pointer"
+                  // Added event argument
+                  onClick={() => navigate("/analytics")}
+                >
+                  <span>Analytics</span>
+                </div>
               </div>
 
               <div className="px-6 mt-6">

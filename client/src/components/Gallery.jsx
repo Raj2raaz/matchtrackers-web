@@ -1,7 +1,7 @@
 import React from "react";
 import { FaChevronRight } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import useCricbuzzStore from "../store/mainStore";
+import useCricbuzzStore from "../store/cricket";
 import Image from "./Image";
 
 export default function Gallery({ id = 0 }) {

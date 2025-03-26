@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import apiClient from "../utils/axios";
+import { cricApiClient as apiClient } from "../utils/axios";
 import Image from "../components/Image";
 
 const Rankings = () => {

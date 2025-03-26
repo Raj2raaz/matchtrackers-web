@@ -12,9 +12,9 @@ import {
   Search,
 } from "lucide-react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import apiClient from "../utils/axios";
+import { cricApiClient as apiClient } from "../utils/axios";
 import Image from "../components/Image";
-import useCricbuzzStore from "../store/mainStore";
+import useCricbuzzStore from "../store/cricket";
 import { formatTimeAgo } from "../utils/util";
 
 const Schedules = () => {

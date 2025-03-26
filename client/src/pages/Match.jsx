@@ -15,7 +15,7 @@ import TrendingPlayers from "../components/TrendingPlayers";
 import volleyballPoster from "../assets/volleyballPoster.png";
 import TopNews from "../components/TopNews";
 import { useNavigate, useParams } from "react-router-dom";
-import apiClient from "../utils/axios";
+import { cricApiClient as apiClient } from "../utils/axios";
 import Image from "../components/Image";
 import MatchVideosSection from "../components/MatchVideosSection";
 
