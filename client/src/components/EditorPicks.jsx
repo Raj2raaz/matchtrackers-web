@@ -15,13 +15,16 @@ export default function EditorPicks() {
           <h1 className="text-lg md:text-xl font-bold text-primary">
             Editors Picks
           </h1>
-          <p className="flex text-xs md:text-sm gap-1 md:gap-2 items-center cursor-pointer">
+          <p
+            onClick={() => navigate("/all-news")}
+            className="flex text-xs md:text-sm gap-1 md:gap-2 items-center cursor-pointer"
+          >
             See All <FaChevronRight size={12} />
           </p>
         </div>
         <div className="relative">
           <div className="flex gap-2 md:gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory p-2 no-scrollbar">
-            {editorPicks.slice(0, 6).map((e, i) => (
+            {editorPicks?.slice(0, 6).map((e, i) => (
               <div
                 key={i}
                 className="bg-black flex-shrink-0 w-full sm:w-[calc(100%/2.2)] md:w-[calc(100%/2.5)] lg:w-[calc(100%/3.5)] text-white rounded-lg md:rounded-2xl snap-start cursor-pointer"

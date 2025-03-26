@@ -162,14 +162,14 @@ export default function Home() {
             </p>
           ))}
         </div>
-        <div className="w-full md:w-auto flex-grow border bg-white border-gray-400 rounded flex gap-2 items-center px-2 py-2">
+        {/* <div className="w-full md:w-auto flex-grow border bg-white border-gray-400 rounded flex gap-2 items-center px-2 py-2">
           <input
             type="text"
             placeholder="Search for Sports"
             className="outline-none w-full"
           />
           <CiSearch size={23} className="text-gray-400" />
-        </div>
+        </div> */}
       </div>
 
       {/* main Section */}
