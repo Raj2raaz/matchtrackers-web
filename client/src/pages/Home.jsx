@@ -19,6 +19,7 @@ import useFootballStore from "../store/football";
 import { getFixtures, getLeagues, getPlayers } from "../api/Football";
 import ipl from "../assets/ipl.jpg";
 import useMainStore from "../store/MainStore";
+import YtShorts from "../components/YtShorts";
 
 function generateMatchSummary(matchData) {
   /**
@@ -147,7 +148,7 @@ export default function Home() {
   }, [fetchData]);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className=" mx-auto px-4 sm:px-6 lg:px-8">
       {/* search section */}
       {/* <div className="flex flex-col sm:flex-row gap-3 mt-4">
         <div className="flex flex-wrap items-center gap-2 sm:gap-5 mt-2 sm:mt-0">
@@ -520,7 +521,7 @@ export default function Home() {
 
       {/* videos section */}
       {content === "cricket" && (
-        <div className="p-4 bg-white border mt-6 shadow border-[#e6e6e6]">
+        <div className="p-4 bg-white border rounded-lg mt-6 shadow border-[#e6e6e6]">
           <div className="flex justify-between w-full">
             <h1 className="text-xl font-bold text-primary">
               {isLoading
@@ -569,6 +570,10 @@ export default function Home() {
           </div>
         </div>
       )}
+
+      <div className="mt-6">
+        <YtShorts />
+      </div>
 
       {/* blogs section */}
       {content === "cricket" && (

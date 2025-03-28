@@ -18,6 +18,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { cricApiClient as apiClient } from "../utils/axios";
 import Image from "../components/Image";
 import MatchVideosSection from "../components/MatchVideosSection";
+import YtShorts from "../components/YtShorts";
 
 const Match = () => {
   const navigate = useNavigate();
@@ -716,26 +717,22 @@ const Match = () => {
                     </div>
                                      {" "}
                   </button>
-                ))}
-                             {" "}
+                ))}{" "}
               </div>
-                            {/* Tab Content */}             {" "}
-              {activeTab === "Info" && renderInfoTab()}             {" "}
-              {activeTab === "Squads" && renderSquadsTab()}           {" "}
-            </div>
-                     {" "}
+              {/* Tab Content */} {activeTab === "Info" && renderInfoTab()}{" "}
+              {activeTab === "Squads" && renderSquadsTab()}{" "}
+            </div>{" "}
           </div>
         )}
-                {/* Trending Players (Desktop Only) */}       {" "}
+        {/* Trending Players (Desktop Only) */}{" "}
         <div className="w-full lg:w-1/3 order-3">
-                   {" "}
+          {" "}
           <div className="hidden lg:block">
-                        <TrendingPlayers />         {" "}
-          </div>
-                 {" "}
+            <TrendingPlayers />{" "}
+          </div>{" "}
         </div>
       </div>
-          <MatchVideosSection commentary={commentary} />     {" "}
+      <MatchVideosSection commentary={commentary} />
     </div>
   );
 };

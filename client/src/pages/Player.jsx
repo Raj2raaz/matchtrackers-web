@@ -9,6 +9,7 @@ import { getFBPlayerInfo } from "../api/Football";
 import PlayerStatisticsDetail from "../components/StatDetails";
 import TrendingPlayers from "../components/TrendingPlayers";
 import useMainStore from "../store/MainStore";
+import YtShorts from "../components/YtShorts";
 
 const Player = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -558,6 +559,8 @@ const Player = () => {
           </div>
         </div>
       )}
+
+      <YtShorts />
     </div>
   ) : (
     <div className="container mx-auto p-6 bg-gray-100 min-h-screen">

@@ -230,7 +230,7 @@ const Navbar = () => {
 
   return (
     <div className="sticky z-40 top-0 w-full left-0 shadow-md">
-      <div className="bg-gradient-to-r from-secondary to-secondary/90 px-4 md:px-12 lg:px-24 py-3 text-white flex w-full justify-between items-center relative">
+      <div className="bg-gradient-to-r from-blue-600 to-blue-800 px-4 md:px-12 lg:px-24 py-3 text-white flex w-full justify-between items-center relative">
         {" "}
         {/* Added relative positioning */}
         <img
