@@ -33,64 +33,19 @@ const Schedules = () => {
   const navigate = useNavigate();
   const { news } = useCricbuzzStore();
   const [pointTable, setPointTable] = useState();
+  const [sortedMatches, setSortedMatches] = useState({});
 
-  const pointsTableData = [
-    {
-      id: 1,
-      team: "MI",
-      teamName: "Mumbai Indians",
-      flag: "🇮🇳",
-      matches: 5,
-      wins: 4,
-      losses: 1,
-      nrr: "+0.587",
-      points: 8,
-    },
-    {
-      id: 2,
-      team: "CSK",
-      teamName: "Chennai Super Kings",
-      flag: "🇮🇳",
-      matches: 5,
-      wins: 4,
-      losses: 1,
-      nrr: "+0.486",
-      points: 8,
-    },
-    {
-      id: 3,
-      team: "RCB",
-      teamName: "Royal Challengers Bangalore",
-      flag: "🇮🇳",
-      matches: 5,
-      wins: 3,
-      losses: 2,
-      nrr: "+0.234",
-      points: 6,
-    },
-    {
-      id: 4,
-      team: "KKR",
-      teamName: "Kolkata Knight Riders",
-      flag: "🇮🇳",
-      matches: 5,
-      wins: 3,
-      losses: 2,
-      nrr: "+0.112",
-      points: 6,
-    },
-    {
-      id: 5,
-      team: "DC",
-      teamName: "Delhi Capitals",
-      flag: "🇮🇳",
-      matches: 5,
-      wins: 2,
-      losses: 3,
-      nrr: "-0.089",
-      points: 4,
-    },
-  ];
+  // Function to sort matches by proximity to current date
+  function sortMatchesByProximity(matches) {
+    const currentTime = Date.now(); // Get current timestamp
+
+    // Sort all matches by their proximity to current time
+    return matches.sort((a, b) => {
+      const diffA = Math.abs(a?.matchInfo.startDate - currentTime);
+      const diffB = Math.abs(b?.matchInfo.startDate - currentTime);
+      return diffA - diffB;
+    });
+  }
 
   const extractVenuesAndTeams = (matchDetails) => {
     const venuesMap = new Map(); // Using Map to store venue objects by ID
@@ -157,6 +112,7 @@ const Schedules = () => {
 
         if (seriesResponse.data?.matchDetails) {
           setMatchDetails(seriesResponse.data.matchDetails);
+
           const { venues, teams } = extractVenuesAndTeams(
             seriesResponse.data.matchDetails
           );
@@ -176,56 +132,58 @@ const Schedules = () => {
     fetchMatchDetails();
   }, [id]);
 
-  const processMatchesByDate = () => {
-    const matchesByDate = {};
+  // Process and sort matches whenever matchDetails, selectedTeam, or selectedVenue changes
+  useEffect(() => {
+    if (matchDetails.length > 0) {
+      const processedMatches = processMatchesByProximity();
+      setSortedMatches(processedMatches);
+    }
+  }, [matchDetails, selectedTeam, selectedVenue]);
+
+  // Process matches by proximity instead of date
+  const processMatchesByProximity = () => {
+    // Collect all matches into a flat array
+    let allMatches = [];
 
     matchDetails.forEach((detail) => {
       if (detail.matchDetailsMap && detail.matchDetailsMap.match) {
-        const key = detail.matchDetailsMap.key; // Date string
         const matches = detail.matchDetailsMap.match;
-
-        if (!matchesByDate[key]) {
-          matchesByDate[key] = [];
-        }
-
-        matchesByDate[key] = [...matchesByDate[key], ...matches];
+        allMatches = [...allMatches, ...matches];
       }
     });
 
-    // Filter matches by team if a team is selected
+    // Apply team filter if selected
     if (selectedTeam) {
-      Object.keys(matchesByDate).forEach((date) => {
-        matchesByDate[date] = matchesByDate[date].filter(
-          (match) =>
-            match.matchInfo.team1.teamName.includes(selectedTeam.teamName) ||
-            match.matchInfo.team2.teamName.includes(selectedTeam.teamName)
-        );
-
-        // Remove date key if no matches for this team on this date
-        if (matchesByDate[date].length === 0) {
-          delete matchesByDate[date];
-        }
-      });
+      allMatches = allMatches.filter(
+        (match) =>
+          match.matchInfo.team1.teamName.includes(selectedTeam.teamName) ||
+          match.matchInfo.team2.teamName.includes(selectedTeam.teamName)
+      );
     }
 
-    // Filter matches by venue if a venue is selected
+    // Apply venue filter if selected
     if (selectedVenue) {
-      Object.keys(matchesByDate).forEach((date) => {
-        matchesByDate[date] = matchesByDate[date].filter((match) =>
-          match.matchInfo.venueInfo?.ground.includes(selectedVenue.ground)
-        );
-
-        // Remove date key if no matches at this venue on this date
-        if (matchesByDate[date].length === 0) {
-          delete matchesByDate[date];
-        }
-      });
+      allMatches = allMatches.filter((match) =>
+        match.matchInfo.venueInfo?.ground.includes(selectedVenue.ground)
+      );
     }
+
+    // Sort all matches by proximity to current time
+    const sortedAllMatches = sortMatchesByProximity(allMatches);
+
+    // Group sorted matches by their date for display
+    const matchesByDate = {};
+
+    sortedAllMatches.forEach((match) => {
+      const date = formatDate(match.matchInfo.startDate);
+      if (!matchesByDate[date]) {
+        matchesByDate[date] = [];
+      }
+      matchesByDate[date].push(match);
+    });
 
     return matchesByDate;
   };
-
-  const matchesByDate = processMatchesByDate();
 
   // Format timestamp to readable date
   const formatDate = (timestamp) => {
@@ -259,7 +217,7 @@ const Schedules = () => {
 
   return (
     <div className="bg-gray-100 min-h-screen py-6">
-      <div className=" mx-auto ">
+      <div className="mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Main content section - 2/3 width */}
           <div className="lg:col-span-2">
@@ -406,10 +364,10 @@ const Schedules = () => {
               </div>
             )}
 
-            {!loading && !error && Object.keys(matchesByDate).length > 0 && (
+            {!loading && !error && Object.keys(sortedMatches).length > 0 && (
               <div>
                 <div className="relative">
-                  {Object.keys(matchesByDate)
+                  {Object.keys(sortedMatches)
                     .slice(0, matchesLength)
                     .map((dateKey) => (
                       <div key={dateKey} className="mb-6">
@@ -420,7 +378,7 @@ const Schedules = () => {
                           </h3>
                         </div>
 
-                        {matchesByDate[dateKey].map((match) => {
+                        {sortedMatches[dateKey].map((match) => {
                           const { matchInfo } = match;
                           const isCompleted =
                             matchInfo.state.toLowerCase() === "complete" ||
@@ -544,19 +502,19 @@ const Schedules = () => {
                       </div>
                     ))}
 
-                  {matchesLength < Object.keys(matchesByDate).length && (
+                  {matchesLength < Object.keys(sortedMatches).length && (
                     <div className="absolute bottom-0 left-0 w-full h-16 bg-gradient-to-t from-white to-transparent pointer-events-none"></div>
                   )}
                 </div>
 
-                {matchesLength < Object.keys(matchesByDate).length ? (
+                {matchesLength < Object.keys(sortedMatches).length ? (
                   <button
                     className="text-blue-600 mx-auto w-full cursor-pointer text-sm font-medium mt-2 hover:text-blue-700"
                     onClick={() => {
                       // Add 4 more dates to display or show all if less than 4 remaining
                       const newLength = Math.min(
                         matchesLength + 4,
-                        Object.keys(matchesByDate).length
+                        Object.keys(sortedMatches).length
                       );
                       setMatchesLength(newLength);
                     }}
@@ -578,7 +536,7 @@ const Schedules = () => {
             )}
 
             {/* No matches found state */}
-            {!loading && !error && Object.keys(matchesByDate).length === 0 && (
+            {!loading && !error && Object.keys(sortedMatches).length === 0 && (
               <div className="bg-white rounded-lg shadow p-8 mb-6 text-center">
                 <div className="text-gray-500 mb-2">
                   <svg

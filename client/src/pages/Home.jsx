@@ -264,7 +264,8 @@ export default function Home() {
                 liveMatches.map((e, i) => (
                   <div
                     key={i}
-                    className="bg-white shadow-lg mt-4 rounded-lg border border-[#E6E6E6] p-5"
+                    onClick={() => navigate("/match/" + e.matchInfo.matchId)}
+                    className="bg-white cursor-pointer shadow-lg mt-4 rounded-lg border border-[#E6E6E6] p-5"
                   >
                     <div className="flex text-sm justify-between">
                       <p className="font-semibold max-w-[13rem] truncate text-sub">
@@ -322,15 +323,7 @@ export default function Home() {
                         See live updates
                       </button>
                     ) : (
-                      <div className="flex justify-between pt-1 mt-2.5 border-t border-dashed border-gray-400">
-                        <button
-                          onClick={() =>
-                            navigate("/match/" + e.matchInfo.matchId)
-                          }
-                          className="flex items-center cursor-pointer gap-2"
-                        >
-                          See Updates <FaChevronRight size={10} />
-                        </button>
+                      <div className="flex justify-start pt-1 mt-2.5 ">
                         <button
                           onClick={() =>
                             navigate("/schedules/" + e.matchInfo.seriesId)
