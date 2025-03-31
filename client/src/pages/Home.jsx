@@ -313,27 +313,6 @@ export default function Home() {
                         </p>
                       </div>
                     </div>
-                    {e.matchInfo.state === "In Progress" ? (
-                      <button
-                        onClick={() =>
-                          navigate("/match/" + e.matchInfo.matchId)
-                        }
-                        className="bg-primary text-white py-1 rounded mt-2.5 font-semibold text-center w-full"
-                      >
-                        See live updates
-                      </button>
-                    ) : (
-                      <div className="flex justify-start pt-1 mt-2.5 ">
-                        <button
-                          onClick={() =>
-                            navigate("/schedules/" + e.matchInfo.seriesId)
-                          }
-                          className="flex items-center cursor-pointer gap-2"
-                        >
-                          View Series <FaChevronRight size={10} />
-                        </button>
-                      </div>
-                    )}
                   </div>
                 ))
               ) : (
