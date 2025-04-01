@@ -1,5 +1,10 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import Stats from "./pages/Stats";
@@ -44,6 +49,7 @@ export default function App() {
             <Route path="/analytics" element={<ComingSoon />} />
             <Route path="/gallery" element={<Gallery />} />
             <Route path="/all-news" element={<AllNews />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </div>
       </Router>
