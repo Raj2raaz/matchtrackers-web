@@ -58,4 +58,15 @@ footballApiClient.interceptors.response.use(
   }
 );
 
-export { cricApiClient, footballApiClient };
+const sofaScoreApi = axios.create({
+  baseURL: "https://sofascore.p.rapidapi.com",
+  headers: {
+    "x-rapidapi-host": "sofascore.p.rapidapi.com",
+    "x-rapidapi-key": API_KEY,
+    "Access-Control-Allow-Origin": "*", // Allow all origins
+    "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+    "Access-Control-Allow-Headers":
+      "Origin, X-Requested-With, Content-Type, Accept, x-rapidapi-host, x-rapidapi-key",
+  },
+});
+export { cricApiClient, footballApiClient, sofaScoreApi };
