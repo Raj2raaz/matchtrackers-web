@@ -10,6 +10,8 @@ const CricketScoresDashboard = ({}) => {
   const navigate = useNavigate();
   const { type } = useParams();
   const [data, setData] = useState();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   const formatDate = (timestamp) => {
     const date = new Date(parseInt(timestamp));
@@ -23,11 +25,30 @@ const CricketScoresDashboard = ({}) => {
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
+      setError(false);
       try {
         const response = await apiClient.get(`/matches/v1/${type}`);
-        setData(response.data);
+        // Handle the case where response.data is empty or doesn't have the expected structure
+        if (
+          !response.data ||
+          !response.data.typeMatches ||
+          response.data.typeMatches.length === 0
+        ) {
+          setData({
+            filters: {
+              matchType: ["League", "International", "Domestic", "Women"],
+            },
+            typeMatches: [],
+          });
+        } else {
+          setData(response.data);
+        }
       } catch (error) {
         console.log(error);
+        setError(true);
+      } finally {
+        setLoading(false);
       }
     };
     fetchData();
@@ -185,6 +206,81 @@ const CricketScoresDashboard = ({}) => {
     );
   };
 
+  const renderNoMatchesForType = () => {
+    return (
+      <div className="flex flex-col items-center justify-center bg-gray-50 rounded-lg p-8 my-4">
+        <div className="text-gray-400 mb-4">
+          <Calendar className="w-8 h-8" />
+        </div>
+        <h3 className="text-xl font-semibold text-gray-700 mb-2">
+          No {type.toUpperCase()} Matches Available
+        </h3>
+        <p className="text-gray-500 text-center max-w-md">
+          There are currently no {type.toLowerCase()} cricket matches available.
+          Try checking other match types or come back later.
+        </p>
+      </div>
+    );
+  };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="mx-auto p-4 text-center">
+        <div className="bg-red-50 border border-red-200 rounded-lg shadow-lg p-8">
+          <h2 className="text-xl font-bold text-red-600 mb-2">
+            Unable to Load Matches
+          </h2>
+          <p className="text-gray-700 mb-4">
+            We encountered an error while loading the cricket matches. Please
+            try again later.
+          </p>
+          <button
+            onClick={() => window.location.reload()}
+            className="bg-blue-600 text-white px-4 py-2 rounded font-medium hover:bg-blue-700"
+          >
+            Refresh Page
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Handle case when data is empty or there are no matches for the current type
+  if (!data || !data.typeMatches || data.typeMatches.length === 0) {
+    return (
+      <div className="mx-auto p-4">
+        <header className="mb-3">
+          <h1 className="text-2xl capitalize font-bold mb-2">
+            {type} Cricket Matches
+          </h1>
+          <p className="text-gray-500">
+            Stay updated with the latest cricket matches from around the world
+          </p>
+        </header>
+
+        <div className="flex flex-col lg:flex-row gap-6">
+          <div className="w-full lg:w-2/3">
+            <div className="bg-white border border-gray-300 rounded-lg shadow-lg">
+              <div className="p-4">{renderNoMatchesForType()}</div>
+            </div>
+          </div>
+
+          <div className="w-full lg:w-1/3">
+            <TopNews length={8} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="mx-auto p-4">
       <header className="mb-3">
@@ -197,7 +293,7 @@ const CricketScoresDashboard = ({}) => {
       </header>
 
       <div className="flex gap-2 py-4 overflow-x-auto">
-        {data?.filters.matchType.map((type) => (
+        {data?.filters?.matchType?.map((type) => (
           <button
             key={type}
             className={`py-2 px-4 text-sm rounded-md whitespace-nowrap ${
@@ -216,7 +312,7 @@ const CricketScoresDashboard = ({}) => {
         <div className="w-full lg:w-2/3">
           <div className="bg-white border border-gray-300 rounded-lg shadow-lg">
             <div className="p-4">
-              {data?.typeMatches.map((typeMatch) => (
+              {data?.typeMatches?.map((typeMatch) => (
                 <div
                   key={typeMatch.matchType}
                   className={

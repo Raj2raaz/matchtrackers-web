@@ -7,6 +7,7 @@ import {
   BsStarFill,
   BsStar,
 } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
 import { FaChevronDown, FaChevronRight } from "react-icons/fa";
 import { CgChevronDoubleDown, CgChevronDoubleUp } from "react-icons/cg";
 import { Star } from "lucide-react";
@@ -35,7 +36,7 @@ const Analytics = () => {
   const [matchData, setMatchData] = useState([]);
   const [selectedMatchId, setSelectedMatchId] = useState(null);
   const [isOddsLoading, setIsOddsLoading] = useState(false);
-
+  const navigate = useNavigate();
   // Fetch data based on match type
   useEffect(() => {
     setIsLoading(true);
@@ -101,7 +102,8 @@ const Analytics = () => {
       const oddsData = await findTournamentIdAndFetchOdds(
         match.matchInfo.team1.teamSName,
         match.matchInfo.team2.teamSName,
-        match.matchInfo.startDate
+        match.matchInfo.startDate,
+        0
       );
 
       setMatchOdds({
@@ -193,7 +195,7 @@ const Analytics = () => {
 
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Left column */}
-          <div className="w-full lg:w-1/4">
+          <div className="w-full order-3 md:order-1 lg:w-1/4">
             {/* Recent Highlights */}
             <div className="bg-white shadow-md rounded-lg mb-6 border border-gray-200 p-5">
               <h2 className="text-lg font-semibold text-gray-800 mb-4">
@@ -301,7 +303,7 @@ const Analytics = () => {
           </div>
 
           {/* Middle column - Match listings */}
-          <div className="w-full lg:w-2/5">
+          <div className="w-full order-1 md:order-2 lg:w-2/5">
             <div className="bg-white rounded-lg shadow-md">
               {/* Tabs and filters */}
               <div className="px-4 py-3 border-b border-gray-200">
@@ -326,35 +328,6 @@ const Analytics = () => {
                   >
                     Favourites
                   </button>
-                  <div className="ml-auto flex items-center">
-                    <label
-                      htmlFor="odds"
-                      className="flex items-center cursor-pointer"
-                    >
-                      <div className="relative">
-                        <input
-                          type="checkbox"
-                          id="odds"
-                          checked={showOdds}
-                          onChange={() => setShowOdds(!showOdds)}
-                          className="sr-only"
-                        />
-                        <div
-                          className={`w-10 h-5 rounded-full transition-colors ${
-                            showOdds ? "bg-blue-600" : "bg-gray-300"
-                          }`}
-                        ></div>
-                        <div
-                          className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full transition-transform ${
-                            showOdds ? "translate-x-5" : ""
-                          }`}
-                        ></div>
-                      </div>
-                      <span className="ml-2 text-sm font-medium text-gray-700">
-                        Odds
-                      </span>
-                    </label>
-                  </div>
                 </div>
 
                 {/* Section filters */}
@@ -400,7 +373,7 @@ const Analytics = () => {
                   </button>
                   <button
                     className={`px-5 py-1.5 rounded-full transition-colors mx-1 ${
-                      matchType === "Upcoming"
+                      matchType === "upcoming"
                         ? "bg-gray-100 text-gray-700 font-medium"
                         : "text-gray-600 hover:bg-gray-100"
                     }`}
@@ -455,8 +428,21 @@ const Analytics = () => {
                         }`}
                         onClick={() => handleMatchSelect(match, id)}
                       >
-                        <div className="text-xs text-gray-500 mb-2 font-medium">
-                          {seriesName}
+                        <div className="text-xs flex justify-between items-center text-gray-500 mb-2 font-medium">
+                          <p>{seriesName}</p>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation(); // Prevents the click from reaching the parent
+                              console.log(matchData);
+                              navigate(
+                                "/analytics/match/" +
+                                  matchData.match.matchInfo.matchId
+                              );
+                            }}
+                            className="bg-secondary z-50 relative cursor-pointer text-base text-white px-3 py-0.5 rounded"
+                          >
+                            View Match
+                          </button>
                         </div>
 
                         <div className="text-xs text-gray-500 mb-3">
@@ -575,7 +561,7 @@ const Analytics = () => {
           </div>
 
           {/* Right column - Featured match */}
-          <div className="w-full lg:w-1/3 mt-6 lg:mt-0">
+          <div className="w-full lg:w-1/3 mt-6 lg:mt-0 order-2 md:order-3 ">
             <div className="bg-white rounded-lg shadow-md overflow-hidden">
               <div className="p-4 border-b border-gray-200">
                 <h2 className="font-bold text-lg text-gray-800">

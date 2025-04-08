@@ -179,8 +179,8 @@ export default function Home() {
       {/* main Section */}
       <div className="flex flex-col lg:flex-row items-start mt-7 gap-6 h-full">
         <div className="w-full lg:w-[37%]">
-          <div className="bg-white shadow-lg rounded-lg border border-[#E6E6E6] p-5">
-            <h1 className="text-sub font-semibold text-xl">
+          <div className="bg-gradient-to-r from-blue-600 to-blue-800 shadow-lg rounded-lg border border-[#E6E6E6] p-5">
+            <h1 className="text-white font-semibold text-xl">
               Recent Highlights
             </h1>
             <div className="text-sm mt-4 text-primary">
@@ -195,7 +195,7 @@ export default function Home() {
                           navigate("/schedules/" + e.seriesAdWrapper.seriesId)
                         }
                         key={i}
-                        className="bg-gray-200 hover:bg-gray-300 cursor-pointer items-center flex justify-between mt-2 pl-3 pr-1.5 py-1.5 rounded-full"
+                        className="bg-white hover:bg-gray-300 cursor-pointer items-center flex justify-between mt-2 pl-3 pr-1.5 py-1.5 rounded-full"
                       >
                         <p className="truncate max-w-[14rem] overflow-hidden whitespace-nowrap">
                           {e.seriesAdWrapper.seriesName}
@@ -205,7 +205,7 @@ export default function Home() {
                     ) : null
                   )
                 ) : (
-                  <p className="text-gray-500 italic">
+                  <p className="text-white italic">
                     No recent matches available
                   </p>
                 )
@@ -228,7 +228,7 @@ export default function Home() {
                   </div>
                 ))
               ) : (
-                <p className="text-gray-500 italic">No leagues available</p>
+                <p className="text-white italic">No leagues available</p>
               )}
             </div>
             {!isLoading && recentMatches && recentMatches.length > 0 && (
@@ -238,7 +238,7 @@ export default function Home() {
                     setNoOfRecentMatches(noOfRecentMatches + 5);
                   } else setNoOfRecentMatches(7);
                 }}
-                className="flex cursor-pointer mx-auto mt-2 text-sm font-medium items-end"
+                className="flex text-white cursor-pointer mx-auto mt-2 text-sm font-medium items-end"
               >
                 {noOfRecentMatches >= recentMatches.length
                   ? "See Less"
@@ -404,6 +404,9 @@ export default function Home() {
               </div>
             )}
           </div>
+          <div className="mt-6">
+            <YtShorts />
+          </div>
           <div className="mt-3 p-3 shadow-lg rounded-lg border-[#E6E6E6] bg-white">
             {isLoading ? (
               <>
@@ -434,51 +437,6 @@ export default function Home() {
                         navigate("/match/" + liveMatches[0].matchInfo.matchId)
                       }
                       className="flex items-center  w-fit mt-2 justify-center text-white bg-primary px-4 py-2 rounded-lg hover:bg-opacity-90 transition-colors space-x-2self-start md:self-auto"
-                    >
-                      <span>View Match Highlights</span>
-                      <FaChevronRight className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
-              </>
-            )}
-          </div>
-          <div className="mt-3 p-3 shadow-lg rounded-lg border-[#E6E6E6] bg-white">
-            {isLoading ? (
-              <>
-                <Placeholder type="image" />
-                <Placeholder type="line" count={3} />
-              </>
-            ) : (
-              <>
-                <Image
-                  faceImageId={liveMatches[1].commentary.matchVideos[0].imageId}
-                  resolution="de"
-                  className="h-[20rem] w-full "
-                />
-
-                <div className="space-y-3 p-2">
-                  <h1 className="text-2xl font-bold text-primary tracking-tight">
-                    {liveMatches[1].matchInfo.seriesName} (
-                    {liveMatches[1].matchInfo.team1.teamName} -
-                    {liveMatches[1].matchInfo.team2.teamName})
-                  </h1>
-                  <div className="flex flex-col space-y-3 md:space-y-0">
-                    <p className="text-sm text-gray-600 leading-relaxed">
-                      {generateMatchSummary(liveMatches[1])}
-                    </p>
-                    <button
-                      onClick={() =>
-                        navigate("/match/" + liveMatches[1].matchInfo.matchId)
-                      }
-                      className="flex items-center  w-fit mt-2 justify-center 
-          text-white bg-primary 
-          px-4 py-2 
-          rounded-lg 
-          hover:bg-opacity-90 
-          transition-colors 
-          space-x-2
-          self-start md:self-auto"
                     >
                       <span>View Match Highlights</span>
                       <FaChevronRight className="w-4 h-4" />
@@ -543,13 +501,9 @@ export default function Home() {
         </div>
       )}
 
-      <div className="mt-6">
-        <YtShorts />
-      </div>
-
       {/* blogs section */}
       {content === "cricket" && (
-        <div className="p-4 bg-white border mt-6 shadow border-[#e6e6e6]">
+        <div className="p-4 bg-white border rounded-lg mt-6 shadow border-[#e6e6e6]">
           <div className="flex justify-between w-full">
             <h1 className="text-xl font-bold text-primary">LATEST NEWS</h1>
             <p
@@ -582,7 +536,7 @@ export default function Home() {
                     <div
                       key={i}
                       onClick={() => navigate("/news/" + e.story?.id)}
-                      className="flex cursor-pointer flex-col sm:flex-row items-start sm:items-center gap-5"
+                      className="flex cursor-pointer flex-col sm:flex-row items-start sm:items-start gap-5"
                     >
                       <Image
                         faceImageId={e?.story?.imageId}
@@ -590,10 +544,10 @@ export default function Home() {
                         resolution="de"
                       />
                       <div className="mt-3 sm:mt-0">
-                        <p className="text-xl sm:text-2xl font-bold ">
+                        <p className="text-xl line-clamp-2 overflow-hidden text-ellipsis sm:text-2xl font-bold ">
                           {e?.story?.hline}
                         </p>
-                        <p className="line-clamp-3 overflow-hidden text-ellipsis">
+                        <p className="line-clamp-2 overflow-hidden text-ellipsis">
                           {e?.story?.intro}
                         </p>
                         <div className="flex mt-2 items-center gap-2 flex-wrap">

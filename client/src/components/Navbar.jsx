@@ -240,7 +240,7 @@ const Navbar = () => {
           alt="Logo"
         />
         {/* Mobile Menu Button */}
-        <div className="flex items-center bg-white/20 rounded-full px-1 py-1">
+        {/* <div className="flex items-center bg-white/20 rounded-full px-1 py-1">
           <button
             className={`px-4 py-1 rounded-full text-sm transition-all duration-300 ${
               content === "cricket" ? "bg-white text-secondary" : "text-white"
@@ -257,7 +257,7 @@ const Navbar = () => {
           >
             Football
           </button>
-        </div>
+        </div> */}
         <div className="md:hidden">
           <button
             onClick={toggleMobileMenu}
@@ -406,12 +406,12 @@ const Navbar = () => {
 
       {/* Mobile Menu - Full screen overlay */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden">
+        <div className="fixed inset-0 bg-[#0004] bg-opacity-50 z-[80] md:hidden">
           <div
             ref={mobileMenuRef}
-            className="bg-white h-full max-w-sm overflow-y-auto shadow-xl animate-slide-in-right z-50 relative" // Increased z-index and relative
+            className="bg-white h-full w-full overflow-y-auto shadow-xl animate-slide-in-right z-[80]" // Increased z-index and relative
           >
-            <div className="py-4 px-6 bg-secondary text-white flex justify-between items-center">
+            <div className="py-4 px-6 bg-secondary relative  z-70 text-white flex justify-between items-center">
               <img
                 onClick={() => {
                   navigate("/");

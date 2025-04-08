@@ -572,9 +572,9 @@ const Schedules = () => {
           <div>
             {/* Points Table Section */}
 
-            <div className="bg-white rounded-lg shadow p-4 mb-6">
+            <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white rounded-lg shadow p-4 mb-6">
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text w-[15rem] truncate font-bold text-gray-800">
+                <h2 className="text w-[15rem] truncate font-bold ">
                   {
                     matchDetails[0]?.matchDetailsMap?.match[0]?.matchInfo
                       ?.seriesName
@@ -587,7 +587,7 @@ const Schedules = () => {
                     matchDetails[0]?.matchDetailsMap?.match[0]?.matchInfo
                       ?.seriesId
                   }
-                  className="text-blue-600 text-sm flex items-center gap-1 hover:underline"
+                  className=" text-sm flex items-center gap-1 hover:underline"
                 >
                   View Full Table
                   <svg
@@ -608,9 +608,9 @@ const Schedules = () => {
               </div>
 
               <div className="overflow-x-auto">
-                <table className="min-w-full">
-                  <thead>
-                    <tr className="bg-gray-50 text-left">
+                <table className="min-w-full ">
+                  <thead className="">
+                    <tr className="bg-gray-50 text-left ">
                       <th className="p-2 text-xs font-medium text-gray-500">
                         #
                       </th>
@@ -635,7 +635,7 @@ const Schedules = () => {
                           key={team.teamId}
                           className="border-b border-gray-100 last:border-b-0"
                         >
-                          <td className="p-2 text-sm text-gray-500">
+                          <td className="p-2 text-sm text-white">
                             {index + 1}
                           </td>
                           <td className="p-2">

@@ -24,6 +24,7 @@ import ComingSoon from "./pages/ComingSoon";
 import Gallery from "./pages/Gallery";
 import AllNews from "./pages/AllNews";
 import Analytics from "./pages/Analytics";
+import AnalyticsRouter from "./components/AnalyticsRouter";
 
 export default function App() {
   return (
@@ -47,7 +48,7 @@ export default function App() {
             <Route path="/rankings/:type" element={<Rankings />} />
             <Route path="/news/:id" element={<NewsPage />} />
             <Route path="/auth" element={<AuthForm />} />
-            <Route path="/analytics" element={<Analytics />} />
+            <Route path="/analytics/*" element={<AnalyticsRouter />} />
             <Route path="/gallery" element={<Gallery />} />
             <Route path="/all-news" element={<AllNews />} />
             <Route path="*" element={<Navigate to="/" replace />} />
