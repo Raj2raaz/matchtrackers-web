@@ -261,7 +261,7 @@ const Navbar = () => {
         <div className="md:hidden">
           <button
             onClick={toggleMobileMenu}
-            className="text-white focus:outline-none z-50 relative" // Increased z-index and relative
+            className="text-white focus:outline-none outline z-70 relative" // Increased z-index and relative
             aria-label={mobileMenuOpen ? "Close Menu" : "Open Menu"}
           >
             {mobileMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
@@ -381,9 +381,11 @@ const Navbar = () => {
 
           <div className="">
             <div
-              className="flex justify-between items-center py-3 px-6 font-medium cursor-pointer"
-              // Added event argument
-              onClick={() => navigate("/analytics")}
+              className="flex justify-between items-center py-3 z-60 px-6 font-medium cursor-pointer"
+              onClick={() => {
+                navigate("/analytics");
+                closeDropdown(); // Added to close menu after navigation
+              }}
             >
               <span>Analytics</span>
             </div>
@@ -411,7 +413,7 @@ const Navbar = () => {
             ref={mobileMenuRef}
             className="bg-white h-full w-full overflow-y-auto shadow-xl animate-slide-in-right z-[80]" // Increased z-index and relative
           >
-            <div className="py-4 px-6 bg-secondary relative  z-70 text-white flex justify-between items-center">
+            <div className="py-4 px-6 bg-secondary relative z-70 text-white flex justify-between items-center">
               <img
                 onClick={() => {
                   navigate("/");
@@ -424,9 +426,9 @@ const Navbar = () => {
               <button
                 onClick={toggleMobileMenu}
                 aria-label="Close Menu"
-                className="z-50 relative"
+                className="text-white focus:outline-none z-50 relative"
               >
-                {" "}
+                <FaTimes size={24} /> {/* Added FaTimes icon explicitly */}
               </button>
             </div>
 
@@ -546,8 +548,10 @@ const Navbar = () => {
               <div className="border-b border-gray-200">
                 <div
                   className="flex justify-between items-center py-3 px-6 font-medium cursor-pointer"
-                  // Added event argument
-                  onClick={() => navigate("/analytics")}
+                  onClick={() => {
+                    navigate("/analytics");
+                    setMobileMenuOpen(false); // Fixed: Added this line to close mobile menu when Analytics is clicked
+                  }}
                 >
                   <span>Analytics</span>
                 </div>
@@ -557,12 +561,15 @@ const Navbar = () => {
                 <button
                   className="w-full py-3 rounded-full bg-primary text-white font-medium hover:bg-primary/90 transition-colors shadow-sm hover:shadow z-10 relative" // Increased z-index and relative
                   onClick={() => {
-                    // Handle login/signup, for example
-                    // navigate('/login');
-                    setMobileMenuOpen(false); // Close menu after actio
+                    if (Cookies.get("token")) {
+                      Cookies.remove("token");
+                    } else {
+                      navigate("/auth");
+                    }
+                    setMobileMenuOpen(false); // Close menu after action
                   }}
                 >
-                  Login or Signup
+                  {Cookies.get("token") ? "Logout" : "Login or Signup"}
                 </button>
               </div>
             </div>
