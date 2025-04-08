@@ -28,7 +28,7 @@ import AnalyticsRouter from "./components/AnalyticsRouter";
 
 export default function App() {
   return (
-    <div className="font-red-hat bg-[#F5F5F5] h-full w-full">
+    <div className="font-inter bg-[#F5F5F5] h-full w-full">
       <Toaster />
       <Router>
         <Navbar />

@@ -185,6 +185,12 @@ const Analytics = () => {
 
   return (
     <div className="">
+      {/* <div className="fixed z-60 flex justify-center h-screen w-screen backdrop-blur-xs left-0 top-20">
+        <div className="bg-white p-5 h-fit mt-30">
+          <h1>Login to View More</h1>
+          <button>Login</button>
+        </div>
+      </div> */}
       <div className="mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-2xl font-bold text-gray-800">
@@ -428,7 +434,7 @@ const Analytics = () => {
                         }`}
                         onClick={() => handleMatchSelect(match, id)}
                       >
-                        <div className="text-xs flex justify-between items-center text-gray-500 mb-2 font-medium">
+                        <div className="text-xs flex justify-between items-center text-gray-500 mb-2 font-medium relative">
                           <p>{seriesName}</p>
                           <button
                             onClick={(e) => {
@@ -439,7 +445,7 @@ const Analytics = () => {
                                   matchData.match.matchInfo.matchId
                               );
                             }}
-                            className="bg-secondary z-50 relative cursor-pointer text-base text-white px-3 py-0.5 rounded"
+                            className="bg-secondary text-base text-white px-3 py-0.5 rounded"
                           >
                             View Match
                           </button>

@@ -131,58 +131,64 @@ const MatchVideosSection = ({ commentary }) => {
         </div>
       )}
 
-      <div className="relative">
-        <div
-          ref={scrollContainerRef}
-          className="flex space-x-4 overflow-x-auto scroll-smooth no-scrollbar"
-          style={{ scrollBehavior: "smooth" }}
-        >
-          {commentary?.matchVideos?.map((video, index) => (
-            <div
-              key={index}
-              className="min-w-[250px] cursor-pointer"
-              onClick={() => handleVideoSelect(video)}
-            >
-              <div className="mb-2 relative overflow-hidden rounded">
-                <Image
-                  faceImageId={video.imageId}
-                  className="w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                  resolution="de"
-                />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="bg-black bg-opacity-40 rounded-full p-2 group-hover:bg-blue-600 transition-colors">
-                    <FaPlay className="text-white" />
+      {commentary?.matchVideos?.length > 0 ? (
+        <div className="relative">
+          <div
+            ref={scrollContainerRef}
+            className="flex space-x-4 overflow-x-auto scroll-smooth no-scrollbar"
+            style={{ scrollBehavior: "smooth" }}
+          >
+            {commentary?.matchVideos?.map((video, index) => (
+              <div
+                key={index}
+                className="min-w-[250px] cursor-pointer"
+                onClick={() => handleVideoSelect(video)}
+              >
+                <div className="mb-2 relative overflow-hidden rounded">
+                  <Image
+                    faceImageId={video.imageId}
+                    className="w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    resolution="de"
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="bg-black bg-opacity-40 rounded-full p-2 group-hover:bg-blue-600 transition-colors">
+                      <FaPlay className="text-white" />
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="flex justify-between text-xs text-gray-500 mb-1">
-                <span>{video.videoType}</span>
-                <span>
-                  {new Date(parseInt(video.commTimestamp)).toLocaleDateString()}
-                </span>
-              </div>
-              <h3 className="font-bold text-sm mb-1 line-clamp-2">
-                {video.headline}
-              </h3>
-              {video.tags && (
-                <div className="flex flex-wrap gap-1 mb-2">
-                  {video.tags.slice(0, 2).map((tag, tagIndex) => (
-                    <span
-                      key={tagIndex}
-                      className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded"
-                    >
-                      {tag.name}
-                    </span>
-                  ))}
+                <div className="flex justify-between text-xs text-gray-500 mb-1">
+                  <span>{video.videoType}</span>
+                  <span>
+                    {new Date(
+                      parseInt(video.commTimestamp)
+                    ).toLocaleDateString()}
+                  </span>
                 </div>
-              )}
-              <button className="text-xs flex items-center text-blue-600 hover:text-blue-800 transition-colors">
-                Watch now <FaChevronRight className="ml-1 text-xs" />
-              </button>
-            </div>
-          ))}
+                <h3 className="font-bold text-sm mb-1 line-clamp-2">
+                  {video.headline}
+                </h3>
+                {video.tags && (
+                  <div className="flex flex-wrap gap-1 mb-2">
+                    {video.tags.slice(0, 2).map((tag, tagIndex) => (
+                      <span
+                        key={tagIndex}
+                        className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded"
+                      >
+                        {tag.name}
+                      </span>
+                    ))}
+                  </div>
+                )}
+                <button className="text-xs flex items-center text-blue-600 hover:text-blue-800 transition-colors">
+                  Watch now <FaChevronRight className="ml-1 text-xs" />
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      ) : (
+        <p>No Match Videos for this match</p>
+      )}
 
       <div className="flex justify-center space-x-4 mt-4">
         <button

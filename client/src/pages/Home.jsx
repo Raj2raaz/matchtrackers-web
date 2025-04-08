@@ -20,6 +20,7 @@ import { getFixtures, getLeagues, getPlayers } from "../api/Football";
 import ipl from "../assets/ipl.jpg";
 import useMainStore from "../store/MainStore";
 import YtShorts from "../components/YtShorts";
+import InterestingFactsCarousel from "../components/Facts";
 
 function generateMatchSummary(matchData) {
   /**
@@ -622,7 +623,7 @@ export default function Home() {
 
           {/* match coverage */}
           {content === "cricket" && (
-            <div className="bg-white mt-5 border p-4 border-[#e6e6e6] w-full max-w-full overflow-hidden">
+            <div className="bg-white rounded-lg mt-5 border p-4 border-[#e6e6e6] w-full max-w-full overflow-hidden">
               <h1 className="text-xl md:text-2xl font-bold text-primary">
                 Match Coverage
               </h1>
@@ -738,15 +739,7 @@ export default function Home() {
           )}
         </div>
         <div className="w-full lg:w-1/3 mt-5 lg:mt-0">
-          {isLoading ? (
-            <Placeholder type="image" />
-          ) : (
-            <img
-              src={volleyballPoster}
-              alt="Volleyball Poster"
-              className="w-full"
-            />
-          )}
+          <InterestingFactsCarousel />
         </div>
       </div>
 
