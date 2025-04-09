@@ -245,10 +245,8 @@ const Analytics = () => {
 
   useEffect(() => {
     if (!Cookies.get("token")) {
-      setShow(true); // Show something
-
       const timer = setTimeout(() => {
-        setShow(false); // Hide it after 5 sec
+        setShow(true); // Hide it after 5 sec
       }, 5000);
 
       return () => clearTimeout(timer); // Cleanup timer
@@ -257,7 +255,7 @@ const Analytics = () => {
 
   return (
     <div className="">
-      {!show && (
+      {show && (
         <div className="fixed inset-0 top-20 z-40 flex items-center justify-center backdrop-blur-xs">
           <div className="bg-blue-600 p-6 rounded-lg shadow-lg text-center">
             <h2 className="text-white text-xl font-medium mb-4">
@@ -680,8 +678,8 @@ const Analytics = () => {
                           <div className="text-xs flex justify-between items-center text-gray-500 mb-2 font-medium relative">
                             <p>{match?.seriesName}</p>
                             <button
-                              onClick={(e) => {
-                                e.stopPropagation(); // Prevents the click from reaching the parent
+                              onClick={(el) => {
+                                el.stopPropagation(); // Prevents the click from reaching the parent
                                 navigate("/analytics/match/" + e.matchId);
                               }}
                               className="bg-secondary text-base text-white px-3 py-0.5 rounded"
