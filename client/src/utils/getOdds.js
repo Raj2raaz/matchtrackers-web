@@ -20,7 +20,6 @@ async function findTournamentIdAndFetchOdds(
       matchTime === Math.floor(startTime / 1000)
     ) {
       const matchId = match?.id;
-      console.log("Match ID found:", matchId);
 
       if (method === 0) {
         try {

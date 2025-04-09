@@ -15,7 +15,6 @@ export default function TrendingPlayers() {
   useEffect(() => {
     const getData = async () => {
       const data = await getPlayers();
-      console.log(data);
       setFbPlayers(data);
     };
 

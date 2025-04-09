@@ -51,7 +51,7 @@ export default function App() {
             <Route path="/analytics/*" element={<AnalyticsRouter />} />
             <Route path="/gallery" element={<Gallery />} />
             <Route path="/all-news" element={<AllNews />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
+            <Route path="/football" element={<Navigate to="/" replace />} />
           </Routes>
         </div>
       </Router>

@@ -10,7 +10,7 @@ export default defineConfig({
     port: 80,
     proxy: {
       "/api": {
-        target: "http://localhost:3000",
+        target: "http://localhost:5000",
       },
       "/cricbuzz-img": {
         target: "https://cricbuzz-cricket.p.rapidapi.com",

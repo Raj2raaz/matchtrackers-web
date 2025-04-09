@@ -1,6 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FaAngleDown, FaAngleUp, FaBars, FaTimes } from "react-icons/fa";
+import {
+  FaAngleDown,
+  FaAngleUp,
+  FaBars,
+  FaTimes,
+  FaUser,
+} from "react-icons/fa";
 import navLogo from "../assets/navLogo.svg";
 import favicon from "../assets/favicon.svg";
 import { getNavLinks } from "../api/Home";
@@ -13,7 +19,7 @@ const Navbar = () => {
   const [openDropdown, setOpenDropdown] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [selectedSport, setSelectedSport] = useState("cricket");
-  const { content, setContent } = useMainStore();
+  const { content, setContent, refresh, refreshNow } = useMainStore();
   const dropdownRefs = useRef({});
   const mobileMenuRef = useRef();
 
@@ -35,31 +41,27 @@ const Navbar = () => {
 
   const toggleDropdown = (menu, event) => {
     event.stopPropagation(); // Prevent click from propagating to document
-    console.log(`Toggling dropdown: ${menu}`);
     setOpenDropdown((prev) => (prev === menu ? null : menu));
   };
 
   const closeDropdown = () => {
-    console.log("Closing dropdown");
     setOpenDropdown(null);
     setMobileMenuOpen(false); // Ensure mobile menu also closes
   };
 
   const handleNavLinkClick = (e, path) => {
     e.preventDefault(); // Prevent default link behavior
-    console.log(`Navigating to: ${path}`);
     navigate(path);
     closeDropdown(); // Close dropdown after navigation
   };
 
   const toggleMobileMenu = () => {
-    console.log(`Toggling mobile menu: ${mobileMenuOpen ? "close" : "open"}`);
     setMobileMenuOpen((prev) => !prev);
   };
 
   // Shared dropdown content components
   const SeriesDropdown = () => (
-    <div className="max-h-96 overflow-y-auto py-2 text-black bg-white rounded-md ">
+    <div className="max-h-96 overflow-y-auto z-70 py-2 text-black bg-white rounded-md ">
       {navLinks?.series?.seriesMapProto?.length > 0 ? (
         navLinks?.series?.seriesMapProto.flatMap((month) => (
           <React.Fragment key={month.date}>
@@ -87,7 +89,7 @@ const Navbar = () => {
   );
 
   const MatchesDropdown = () => (
-    <div className="py-2 bg-white rounded-md text-black ">
+    <div className="py-2 bg-white z-70 rounded-md text-black ">
       <Link
         to="/match-list/recent"
         className="block px-4 py-2 hover:bg-blue-50 transition-colors duration-150 text-sm"
@@ -113,7 +115,7 @@ const Navbar = () => {
   );
 
   const RankingsDropdown = () => (
-    <div className="py-2 bg-white rounded-md text-black ">
+    <div className="py-2 bg-white z-70 rounded-md text-black ">
       <Link
         to="/rankings/odi"
         className="block px-4 py-2 hover:bg-blue-50 transition-colors duration-150 text-sm"
@@ -139,7 +141,7 @@ const Navbar = () => {
   );
 
   const NewsDropdown = () => (
-    <div className="py-2 max-h-96 overflow-y-auto text-black bg-white rounded-md ">
+    <div className="py-2 max-h-96 z-70 overflow-y-auto text-black bg-white rounded-md ">
       {navLinks?.news?.slice(0, 7).map((e, i) => (
         <Link
           key={i}
@@ -167,7 +169,7 @@ const Navbar = () => {
   );
 
   const SchedulesDropdown = () => (
-    <div className="py-2 max-h-96 overflow-y-auto text-black bg-white rounded-md ">
+    <div className="py-2 max-h-96 z-70 overflow-y-auto text-black bg-white rounded-md ">
       {navLinks?.schedules?.matchScheduleMap
         ?.filter((item) => item.scheduleAdWrapper)
         .slice(0, 6)
@@ -229,7 +231,7 @@ const Navbar = () => {
   );
 
   return (
-    <div className="sticky z-40 top-0 w-full left-0 shadow-md">
+    <div className="sticky z-50 top-0 w-full left-0 shadow-md">
       <div className="bg-gradient-to-r from-blue-600 to-blue-800 px-4 md:px-12 lg:px-24 py-3 text-white flex w-full justify-between items-center relative">
         {" "}
         {/* Added relative positioning */}
@@ -285,7 +287,7 @@ const Navbar = () => {
             </div>
 
             {openDropdown === "series" && (
-              <div className="absolute top-full right-0 mt-1 w-64 origin-top-right z-50">
+              <div className="absolute top-full right-0 mt-1 w-64 origin-top-right z-70">
                 <SeriesDropdown />
               </div>
             )}
@@ -307,7 +309,7 @@ const Navbar = () => {
             </div>
 
             {openDropdown === "matches" && (
-              <div className="absolute top-full right-0 mt-1 w-40 origin-top-right z-50">
+              <div className="absolute top-full right-0 mt-1 w-40 origin-top-right z-70">
                 <MatchesDropdown />
               </div>
             )}
@@ -329,7 +331,7 @@ const Navbar = () => {
             </div>
 
             {openDropdown === "players" && (
-              <div className="absolute top-full right-0 mt-1 w-40 origin-top-right z-50">
+              <div className="absolute top-full right-0 mt-1 w-40 origin-top-right z-70">
                 <RankingsDropdown />
               </div>
             )}
@@ -351,7 +353,7 @@ const Navbar = () => {
             </div>
 
             {openDropdown === "news" && (
-              <div className="absolute top-full right-0 mt-1 w-72 origin-top-right z-50">
+              <div className="absolute top-full right-0 mt-1 w-72 origin-top-right z-70">
                 <NewsDropdown />
               </div>
             )}
@@ -373,7 +375,7 @@ const Navbar = () => {
             </div>
 
             {openDropdown === "schedules" && (
-              <div className="absolute top-full right-0 mt-1 w-80 origin-top-right z-50">
+              <div className="absolute top-full right-0 mt-1 w-80 origin-top-right z-70">
                 <SchedulesDropdown />
               </div>
             )}
@@ -392,16 +394,23 @@ const Navbar = () => {
           </div>
 
           <button
-            className="px-4 py-2 rounded-full bg-primary text-white font-medium text-sm hover:bg-primary/90 transition-colors shadow-sm hover:shadow z-10 relative" // Added z-index and relative
+            className="px-4 py-2 rounded-full bg-primary text-white font-medium text-sm hover:bg-primary/90 transition-colors shadow-sm hover:shadow z-10 relative flex items-center gap-2"
             onClick={() => {
               if (Cookies.get("token")) {
                 Cookies.remove("token");
+                navigate("/");
+                refreshNow();
               } else {
                 navigate("/auth");
               }
             }}
+            key={refresh}
           >
-            {Cookies.get("token") ? "Logout" : "Login or Signup"}
+            {Cookies.get("token") ? (
+              <FaUser className="text-lg" />
+            ) : (
+              "Login or Signup"
+            )}
           </button>
         </div>
       </div>
@@ -426,7 +435,7 @@ const Navbar = () => {
               <button
                 onClick={toggleMobileMenu}
                 aria-label="Close Menu"
-                className="text-white focus:outline-none z-50 relative"
+                className="text-white focus:outline-none z-60 relative"
               >
                 <FaTimes size={24} /> {/* Added FaTimes icon explicitly */}
               </button>
@@ -449,7 +458,7 @@ const Navbar = () => {
                   </span>
                 </div>
                 {openDropdown === "series" && (
-                  <div className="bg-gray-50 border-t border-gray-100 relative z-50">
+                  <div className="bg-gray-50 border-t border-gray-100 relative z-60">
                     {" "}
                     {/* Increased z-index and relative */}
                     <SeriesDropdown />
@@ -472,7 +481,7 @@ const Navbar = () => {
                   </span>
                 </div>
                 {openDropdown === "matches" && (
-                  <div className="bg-gray-50 border-t border-gray-100 relative z-50">
+                  <div className="bg-gray-50 border-t border-gray-100 relative z-60">
                     {" "}
                     {/* Increased z-index and relative */}
                     <MatchesDropdown />
@@ -495,7 +504,7 @@ const Navbar = () => {
                   </span>
                 </div>
                 {openDropdown === "players" && (
-                  <div className="bg-gray-50 border-t border-gray-100 relative z-50">
+                  <div className="bg-gray-50 border-t border-gray-100 relative z-60">
                     {" "}
                     {/* Increased z-index and relative */}
                     <RankingsDropdown />
@@ -514,7 +523,7 @@ const Navbar = () => {
                   </span>
                 </div>
                 {openDropdown === "news" && (
-                  <div className="bg-gray-50 border-t border-gray-100 relative z-50">
+                  <div className="bg-gray-50 border-t border-gray-100 relative z-60">
                     {" "}
                     {/* Increased z-index and relative */}
                     <NewsDropdown />
@@ -537,7 +546,7 @@ const Navbar = () => {
                   </span>
                 </div>
                 {openDropdown === "schedules" && (
-                  <div className="bg-gray-50 border-t border-gray-100 relative z-50">
+                  <div className="bg-gray-50 border-t border-gray-100 relative z-60">
                     {" "}
                     {/* Increased z-index and relative */}
                     <SchedulesDropdown />
@@ -559,17 +568,22 @@ const Navbar = () => {
 
               <div className="px-6 mt-6">
                 <button
-                  className="w-full py-3 rounded-full bg-primary text-white font-medium hover:bg-primary/90 transition-colors shadow-sm hover:shadow z-10 relative" // Increased z-index and relative
+                  className="px-4 py-2 rounded-full bg-primary text-white font-medium text-sm hover:bg-primary/90 transition-colors shadow-sm hover:shadow z-10 relative flex items-center gap-2"
                   onClick={() => {
                     if (Cookies.get("token")) {
                       Cookies.remove("token");
+                      refreshNow();
                     } else {
                       navigate("/auth");
                     }
-                    setMobileMenuOpen(false); // Close menu after action
                   }}
+                  key={refresh}
                 >
-                  {Cookies.get("token") ? "Logout" : "Login or Signup"}
+                  {Cookies.get("token") ? (
+                    <FaUser className="text-lg" />
+                  ) : (
+                    "Login or Signup"
+                  )}
                 </button>
               </div>
             </div>

@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useMemo, useEffect } from "react";
+import axios from "axios";
 import {
   BsChevronRight,
   BsSearch,
@@ -15,6 +16,7 @@ import Image from "../components/Image";
 import findTournamentIdAndFetchOdds from "../utils/getOdds";
 import TimeDisplay from "../components/TimeDisplay";
 import useCricbuzzStore from "../store/cricket";
+import Cookies from "js-cookie";
 import useMainStore from "../store/MainStore";
 import data from "../data.json";
 import { cricApiClient as apiClient } from "../utils/axios"; // Make sure this is imported correctly
@@ -32,10 +34,11 @@ const Analytics = () => {
   const [matchOdds, setMatchOdds] = useState(null);
   const [searchFilter, setSearchFilter] = useState("");
   const [visibleMatches, setVisibleMatches] = useState(8);
-  const { content } = useMainStore();
+  const { content, refresh, refreshNow } = useMainStore();
   const [matchData, setMatchData] = useState([]);
   const [selectedMatchId, setSelectedMatchId] = useState(null);
   const [isOddsLoading, setIsOddsLoading] = useState(false);
+  const [userData, setUserData] = useState({});
   const navigate = useNavigate();
   // Fetch data based on match type
   useEffect(() => {
@@ -46,7 +49,6 @@ const Analytics = () => {
           `/matches/v1/${matchType.toLowerCase()}`
         );
         setMatchData(response.data);
-        console.log(response.data);
       } catch (error) {
         console.log(error);
         // Fallback to static data if API fails
@@ -57,6 +59,62 @@ const Analytics = () => {
     };
     fetchData();
   }, [matchType]);
+
+  const addMatchToFavorites = async (matchId, data) => {
+    try {
+      const token = Cookies.get("token");
+      if (!token) {
+        toast.error("Please login to manage favorites");
+        return;
+      }
+
+      const isFavorited = userData?.favorites?.matches?.some(
+        (match) => match.matchId === matchId
+      );
+
+      if (isFavorited) {
+        // Call DELETE to remove from favorites
+        await axios.delete(`/api/favorites/match/${matchId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        toast.success("Match removed from favorites!");
+      } else {
+        // Call POST to add to favorites
+        await axios.post(
+          "/api/favorites/match",
+          { matchId: matchId, data: JSON.stringify(data) },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        toast.success("Match added to favorites!");
+      }
+    } catch (error) {
+      console.error("Error toggling favorite match:", error);
+      toast.error(
+        error?.response?.data?.error || "Failed to toggle favorite match"
+      );
+    } finally {
+      refreshNow();
+    }
+  };
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const token = Cookies.get("token");
+        const response = await axios.get("/api/users/me", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setUserData(response.data);
+      } catch (error) {
+        console.log(error);
+        // toast.error("Error fetching user try again");
+      }
+    };
+
+    fetchUser();
+  }, [refresh]);
 
   // Filter competitions based on search
   const filteredCompetitions = useMemo(() => {
@@ -183,14 +241,37 @@ const Analytics = () => {
     [fetchMatchOdds]
   );
 
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    if (!Cookies.get("token")) {
+      setShow(true); // Show something
+
+      const timer = setTimeout(() => {
+        setShow(false); // Hide it after 5 sec
+      }, 5000);
+
+      return () => clearTimeout(timer); // Cleanup timer
+    }
+  }, []);
+
   return (
     <div className="">
-      {/* <div className="fixed z-60 flex justify-center h-screen w-screen backdrop-blur-xs left-0 top-20">
-        <div className="bg-white p-5 h-fit mt-30">
-          <h1>Login to View More</h1>
-          <button>Login</button>
+      {!show && (
+        <div className="fixed inset-0 top-20 z-40 flex items-center justify-center backdrop-blur-xs">
+          <div className="bg-blue-600 p-6 rounded-lg shadow-lg text-center">
+            <h2 className="text-white text-xl font-medium mb-4">
+              Login to View More
+            </h2>
+            <button
+              className="bg-white cursor-pointer text-blue-600 py-2 px-6 rounded font-medium hover:bg-blue-50 transition-colors"
+              onClick={() => navigate("/auth")}
+            >
+              Go to Login
+            </button>
+          </div>
         </div>
-      </div> */}
+      )}
       <div className="mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-2xl font-bold text-gray-800">
@@ -312,8 +393,8 @@ const Analytics = () => {
           <div className="w-full order-1 md:order-2 lg:w-2/5">
             <div className="bg-white rounded-lg shadow-md">
               {/* Tabs and filters */}
-              <div className="px-4 py-3 border-b border-gray-200">
-                <div className="flex items-center border-b border-gray-200 pb-2">
+              <div className="">
+                <div className="flex items-center border-b border-gray-200 px-2 pt-2">
                   <button
                     className={`px-4 py-2 ${
                       activeTab === "All"
@@ -335,234 +416,325 @@ const Analytics = () => {
                     Favourites
                   </button>
                 </div>
-
-                {/* Section filters */}
-                <div className="flex flex-wrap gap-2 mt-4">
-                  {["league", "international", "domestic", "women"].map(
-                    (section) => (
-                      <button
-                        key={section}
-                        className={`py-2 px-4 text-sm rounded-md transition-colors ${
-                          activeSection === section
-                            ? "bg-blue-800 text-white"
-                            : "border border-gray-300 text-gray-700 hover:bg-gray-100"
-                        }`}
-                        onClick={() => handleSectionChange(section)}
-                      >
-                        {section.toUpperCase()}
-                      </button>
-                    )
-                  )}
-                </div>
-
-                {/* Match type filters */}
-                <div className="flex mt-4">
-                  <button
-                    className={`px-5 py-1.5 rounded-full transition-colors mx-1 ${
-                      matchType === "Live"
-                        ? "bg-red-100 text-red-600 font-medium"
-                        : "text-gray-600 hover:bg-gray-100"
-                    }`}
-                    onClick={() => handleMatchTypeChange("Live")}
-                  >
-                    Live
-                  </button>
-                  <button
-                    className={`px-5 py-1.5 rounded-full transition-colors mx-1 ${
-                      matchType === "Recent"
-                        ? "bg-gray-100 text-gray-700 font-medium"
-                        : "text-gray-600 hover:bg-gray-100"
-                    }`}
-                    onClick={() => handleMatchTypeChange("Recent")}
-                  >
-                    Recent
-                  </button>
-                  <button
-                    className={`px-5 py-1.5 rounded-full transition-colors mx-1 ${
-                      matchType === "upcoming"
-                        ? "bg-gray-100 text-gray-700 font-medium"
-                        : "text-gray-600 hover:bg-gray-100"
-                    }`}
-                    onClick={() => handleMatchTypeChange("Upcoming")}
-                  >
-                    Upcoming
-                  </button>
-                </div>
               </div>
 
-              {/* Match listings */}
-              <div className="divide-y divide-gray-100">
-                {isLoading ? (
-                  // Loading state
-                  <div className="p-4">
-                    <div className="animate-pulse space-y-4">
-                      {[...Array(5)].map((_, i) => (
-                        <div key={i} className="space-y-2">
-                          <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                          <div className="h-3 bg-gray-200 rounded w-1/2"></div>
-                          <div className="space-y-2">
-                            <div className="flex justify-between items-center">
-                              <div className="flex items-center gap-2">
-                                <div className="h-8 w-8 bg-gray-200 rounded-full"></div>
-                                <div className="h-4 bg-gray-200 rounded w-24"></div>
-                              </div>
-                              <div className="h-4 bg-gray-200 rounded w-16"></div>
-                            </div>
-                            <div className="flex justify-between items-center">
-                              <div className="flex items-center gap-2">
-                                <div className="h-8 w-8 bg-gray-200 rounded-full"></div>
-                                <div className="h-4 bg-gray-200 rounded w-24"></div>
-                              </div>
-                              <div className="h-4 bg-gray-200 rounded w-16"></div>
-                            </div>
-                          </div>
-                          <div className="h-6 bg-gray-200 rounded w-full"></div>
-                        </div>
-                      ))}
+              {/* Section filters */}
+              {activeTab === "All" ? (
+                <div>
+                  <div className="px-4 pb-3 border-b border-gray-200">
+                    <div className="flex flex-wrap gap-2 mt-4">
+                      {["league", "international", "domestic", "women"].map(
+                        (section) => (
+                          <button
+                            key={section}
+                            className={`py-2 px-4 text-sm rounded-md transition-colors ${
+                              activeSection === section
+                                ? "bg-blue-800 text-white"
+                                : "border border-gray-300 text-gray-700 hover:bg-gray-100"
+                            }`}
+                            onClick={() => handleSectionChange(section)}
+                          >
+                            {section.toUpperCase()}
+                          </button>
+                        )
+                      )}
+                    </div>
+                    <div className="flex mt-4">
+                      <button
+                        className={`px-5 py-1.5 rounded-full transition-colors mx-1 ${
+                          matchType === "Live"
+                            ? "bg-red-100 text-red-600 font-medium"
+                            : "text-gray-600 hover:bg-gray-100"
+                        }`}
+                        onClick={() => handleMatchTypeChange("Live")}
+                      >
+                        Live
+                      </button>
+                      <button
+                        className={`px-5 py-1.5 rounded-full transition-colors mx-1 ${
+                          matchType === "Recent"
+                            ? "bg-gray-100 text-gray-700 font-medium"
+                            : "text-gray-600 hover:bg-gray-100"
+                        }`}
+                        onClick={() => handleMatchTypeChange("Recent")}
+                      >
+                        Recent
+                      </button>
+                      <button
+                        className={`px-5 py-1.5 rounded-full transition-colors mx-1 ${
+                          matchType === "upcoming"
+                            ? "bg-gray-100 text-gray-700 font-medium"
+                            : "text-gray-600 hover:bg-gray-100"
+                        }`}
+                        onClick={() => handleMatchTypeChange("Upcoming")}
+                      >
+                        Upcoming
+                      </button>
                     </div>
                   </div>
-                ) : getVisibleMatches.length > 0 ? (
-                  getVisibleMatches.map((matchData, idx) => {
-                    const { match, seriesName, id } = matchData;
-                    const isSelected = selectedMatchId === id;
-
-                    return (
-                      <div
-                        key={`match-${id}`}
-                        className={`p-4 hover:bg-blue-50 transition-colors cursor-pointer ${
-                          isSelected ? "bg-blue-50" : ""
-                        }`}
-                        onClick={() => handleMatchSelect(match, id)}
-                      >
-                        <div className="text-xs flex justify-between items-center text-gray-500 mb-2 font-medium relative">
-                          <p>{seriesName}</p>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation(); // Prevents the click from reaching the parent
-                              console.log(matchData);
-                              navigate(
-                                "/analytics/match/" +
-                                  matchData.match.matchInfo.matchId
-                              );
-                            }}
-                            className="bg-secondary text-base text-white px-3 py-0.5 rounded"
-                          >
-                            View Match
-                          </button>
-                        </div>
-
-                        <div className="text-xs text-gray-500 mb-3">
-                          {match.matchInfo.matchDesc} •{" "}
-                          {match.matchInfo.venueInfo.ground},{" "}
-                          {match.matchInfo.venueInfo.city}
-                        </div>
-
-                        <div className="space-y-4">
-                          {/* Team 1 */}
-                          <div className="flex justify-between items-center">
-                            <div className="font-medium flex items-center gap-3">
-                              <Image
-                                faceImageId={match.matchInfo.team1.imageId}
-                                className="rounded-full h-8 w-8 object-cover shadow-sm"
-                              />
-                              <span>{match.matchInfo.team1.teamName}</span>
-                            </div>
-                            {match.matchScore?.team1Score?.inngs1 ? (
-                              <div className="font-medium">
-                                {match.matchScore.team1Score.inngs1.runs}-
-                                {match.matchScore.team1Score.inngs1.wickets}
-                                <span className="text-gray-500 text-sm ml-1">
-                                  ({match.matchScore.team1Score.inngs1.overs}{" "}
-                                  ov)
-                                </span>
+                  {/* Match listings */}
+                  <div className="divide-y divide-gray-100">
+                    {isLoading ? (
+                      // Loading state
+                      <div className="p-4">
+                        <div className="animate-pulse space-y-4">
+                          {[...Array(5)].map((_, i) => (
+                            <div key={i} className="space-y-2">
+                              <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                              <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                              <div className="space-y-2">
+                                <div className="flex justify-between items-center">
+                                  <div className="flex items-center gap-2">
+                                    <div className="h-8 w-8 bg-gray-200 rounded-full"></div>
+                                    <div className="h-4 bg-gray-200 rounded w-24"></div>
+                                  </div>
+                                  <div className="h-4 bg-gray-200 rounded w-16"></div>
+                                </div>
+                                <div className="flex justify-between items-center">
+                                  <div className="flex items-center gap-2">
+                                    <div className="h-8 w-8 bg-gray-200 rounded-full"></div>
+                                    <div className="h-4 bg-gray-200 rounded w-24"></div>
+                                  </div>
+                                  <div className="h-4 bg-gray-200 rounded w-16"></div>
+                                </div>
                               </div>
-                            ) : (
-                              <span className="text-gray-400">-</span>
-                            )}
-                          </div>
-
-                          {/* Team 2 */}
-                          <div className="flex justify-between items-center">
-                            <div className="font-medium flex items-center gap-3">
-                              <Image
-                                faceImageId={match.matchInfo.team2.imageId}
-                                className="rounded-full h-8 w-8 object-cover shadow-sm"
-                              />
-                              <span>{match.matchInfo.team2.teamName}</span>
+                              <div className="h-6 bg-gray-200 rounded w-full"></div>
                             </div>
-                            {match.matchScore?.team2Score?.inngs1 ? (
-                              <div className="font-medium">
-                                {match.matchScore.team2Score.inngs1.runs}-
-                                {match.matchScore.team2Score.inngs1.wickets}
-                                <span className="text-gray-500 text-sm ml-1">
-                                  ({match.matchScore.team2Score.inngs1.overs}{" "}
-                                  ov)
-                                </span>
-                              </div>
-                            ) : (
-                              <span className="text-gray-400">-</span>
-                            )}
-                          </div>
-                        </div>
-
-                        <div className="mt-4 flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <span
-                              className={`px-2 py-1 rounded-full text-xs font-medium ${
-                                match.matchInfo.state === "In Progress"
-                                  ? "bg-red-100 text-red-600"
-                                  : match.matchInfo.state === "Rain"
-                                  ? "bg-blue-100 text-blue-600"
-                                  : "bg-gray-100 text-gray-600"
-                              }`}
-                            >
-                              {match.matchInfo.state}
-                            </span>
-                            <span className="text-gray-600 text-sm">
-                              {match.matchInfo.status}
-                            </span>
-                          </div>
-
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleMatchSelect(match, id);
-                            }}
-                            className={`p-2 transition-colors ${
-                              isSelected
-                                ? "text-yellow-500"
-                                : "text-gray-400 hover:text-yellow-500"
-                            }`}
-                            aria-label="Show match odds"
-                          >
-                            {isSelected ? (
-                              <BsStarFill size={18} />
-                            ) : (
-                              <Star size={18} />
-                            )}
-                          </button>
+                          ))}
                         </div>
                       </div>
-                    );
-                  })
-                ) : (
-                  <div className="p-8 text-center">
-                    <p className="text-gray-500">No matches available</p>
+                    ) : getVisibleMatches.length > 0 ? (
+                      getVisibleMatches.map((matchData, idx) => {
+                        const { match, seriesName, id } = matchData;
+                        const isSelected = selectedMatchId === id;
+                        return (
+                          <div
+                            key={`match-${id}`}
+                            className={`p-4 hover:bg-blue-50 transition-colors cursor-pointer ${
+                              isSelected ? "bg-blue-50" : ""
+                            }`}
+                            onClick={() => handleMatchSelect(match, id)}
+                          >
+                            <div className="text-xs flex justify-between items-center text-gray-500 mb-2 font-medium relative">
+                              <p>{seriesName}</p>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation(); // Prevents the click from reaching the parent
+                                  navigate(
+                                    "/analytics/match/" +
+                                      matchData.match.matchInfo.matchId
+                                  );
+                                }}
+                                className="bg-secondary text-base text-white px-3 py-0.5 rounded"
+                              >
+                                View Match
+                              </button>
+                            </div>
+                            <div className="text-xs text-gray-500 mb-3">
+                              {match.matchInfo.matchDesc} •{" "}
+                              {match.matchInfo.venueInfo.ground},{" "}
+                              {match.matchInfo.venueInfo.city}
+                            </div>
+                            <div className="space-y-4">
+                              {/* Team 1 */}
+                              <div className="flex justify-between items-center">
+                                <div className="font-medium flex items-center gap-3">
+                                  <Image
+                                    faceImageId={match.matchInfo.team1.imageId}
+                                    className="rounded-full h-8 w-8 object-cover shadow-sm"
+                                  />
+                                  <span>{match.matchInfo.team1.teamName}</span>
+                                </div>
+                                {match.matchScore?.team1Score?.inngs1 ? (
+                                  <div className="font-medium">
+                                    {match.matchScore.team1Score.inngs1.runs}-
+                                    {match.matchScore.team1Score.inngs1.wickets}
+                                    <span className="text-gray-500 text-sm ml-1">
+                                      (
+                                      {match.matchScore.team1Score.inngs1.overs}{" "}
+                                      ov)
+                                    </span>
+                                  </div>
+                                ) : (
+                                  <span className="text-gray-400">-</span>
+                                )}
+                              </div>
+                              {/* Team 2 */}
+                              <div className="flex justify-between items-center">
+                                <div className="font-medium flex items-center gap-3">
+                                  <Image
+                                    faceImageId={match.matchInfo.team2.imageId}
+                                    className="rounded-full h-8 w-8 object-cover shadow-sm"
+                                  />
+                                  <span>{match.matchInfo.team2.teamName}</span>
+                                </div>
+                                {match.matchScore?.team2Score?.inngs1 ? (
+                                  <div className="font-medium">
+                                    {match.matchScore.team2Score.inngs1.runs}-
+                                    {match.matchScore.team2Score.inngs1.wickets}
+                                    <span className="text-gray-500 text-sm ml-1">
+                                      (
+                                      {match.matchScore.team2Score.inngs1.overs}{" "}
+                                      ov)
+                                    </span>
+                                  </div>
+                                ) : (
+                                  <span className="text-gray-400">-</span>
+                                )}
+                              </div>
+                            </div>
+                            <div className="mt-4 flex items-center justify-between">
+                              <div className="flex items-center gap-2">
+                                <span
+                                  className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                    match.matchInfo.state === "In Progress"
+                                      ? "bg-red-100 text-red-600"
+                                      : match.matchInfo.state === "Rain"
+                                      ? "bg-blue-100 text-blue-600"
+                                      : "bg-gray-100 text-gray-600"
+                                  }`}
+                                >
+                                  {match.matchInfo.state}
+                                </span>
+                                <span className="text-gray-600 text-sm">
+                                  {match.matchInfo.status}
+                                </span>
+                              </div>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  addMatchToFavorites(
+                                    match?.matchInfo?.matchId,
+                                    {
+                                      seriesName: seriesName,
+                                      desc: match.matchInfo.matchDesc,
+                                      ground: match.matchInfo.venueInfo.ground,
+                                      city: match.matchInfo.venueInfo.city,
+                                      status: match.matchInfo.status,
+                                      state: match.matchInfo.state,
+                                      team1Name: match.matchInfo.team1.teamName,
+                                      team2Name: match.matchInfo.team2.teamName,
+                                      imgs: [
+                                        match.matchInfo.team1.imageId,
+                                        match.matchInfo.team2.imageId,
+                                      ],
+                                    }
+                                  );
+                                }}
+                                className={`p-2 cursor-pointer transition-colors ${
+                                  userData?.favorites?.matches?.some(
+                                    (fmatch) =>
+                                      fmatch.matchId ===
+                                      match?.matchInfo?.matchId
+                                  )
+                                    ? "text-yellow-500"
+                                    : "text-gray-400 hover:text-yellow-500"
+                                }`}
+                                aria-label="Show match odds"
+                              >
+                                {userData?.favorites?.matches?.some(
+                                  (fmatch) =>
+                                    fmatch.matchId === match?.matchInfo?.matchId
+                                ) ? (
+                                  <BsStarFill size={18} />
+                                ) : (
+                                  <Star size={18} />
+                                )}
+                              </button>
+                            </div>
+                          </div>
+                        );
+                      })
+                    ) : (
+                      <div className="p-8 text-center">
+                        <p className="text-gray-500">No matches available</p>
+                      </div>
+                    )}
+                    {/* See more button */}
+                    {hasMoreMatches && (
+                      <div className="p-4 flex justify-center">
+                        <button
+                          onClick={loadMoreMatches}
+                          className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors flex items-center gap-2"
+                        >
+                          See More <CgChevronDoubleDown size={16} />
+                        </button>
+                      </div>
+                    )}
                   </div>
-                )}
+                </div>
+              ) : (
+                <div className="h-[30rem] divide-y divide-gray-300  ">
+                  {userData?.favorites?.matches?.length > 0 ? (
+                    userData?.favorites?.matches?.map((e, i) => {
+                      const match = JSON.parse(e.matchData);
 
-                {/* See more button */}
-                {hasMoreMatches && (
-                  <div className="p-4 flex justify-center">
-                    <button
-                      onClick={loadMoreMatches}
-                      className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors flex items-center gap-2"
-                    >
-                      See More <CgChevronDoubleDown size={16} />
-                    </button>
-                  </div>
-                )}
-              </div>
+                      return (
+                        <div
+                          key={`match-${i}`}
+                          className={`p-4 hover:bg-blue-50 transition-colors cursor-pointer ${
+                            false ? "bg-blue-50" : ""
+                          }`}
+                          // onClick={() => handleMatchSelect(match, id)}
+                        >
+                          <div className="text-xs flex justify-between items-center text-gray-500 mb-2 font-medium relative">
+                            <p>{match?.seriesName}</p>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation(); // Prevents the click from reaching the parent
+                                navigate("/analytics/match/" + e.matchId);
+                              }}
+                              className="bg-secondary text-base text-white px-3 py-0.5 rounded"
+                            >
+                              View Match
+                            </button>
+                          </div>
+                          <div className="text-xs text-gray-500 mb-3">
+                            {match?.desc} • {match?.ground}, {match?.city}
+                          </div>
+                          <div className="space-y-4">
+                            {/* Team 1 */}
+                            <div className="flex justify-between items-center">
+                              <div className="font-medium flex items-center gap-3">
+                                <Image
+                                  faceImageId={match?.imgs[0]}
+                                  className="rounded-full h-8 w-8 object-cover shadow-sm"
+                                />
+                                <span>{match?.team1Name}</span>
+                              </div>
+
+                              <span className="text-gray-400">-</span>
+                            </div>
+                            {/* Team 2 */}
+                            <div className="flex justify-between items-center">
+                              <div className="font-medium flex items-center gap-3">
+                                <Image
+                                  faceImageId={match?.imgs[1]}
+                                  className="rounded-full h-8 w-8 object-cover shadow-sm"
+                                />
+                                <span>{match?.team2Name}</span>
+                              </div>
+
+                              <span className="text-gray-400">-</span>
+                            </div>
+                          </div>
+                          <div className="mt-4 flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                              <span className="text-gray-600 text-sm">
+                                {match?.status}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <p className="text-center my-10 text-gray-500">
+                      No Matches Found
+                    </p>
+                  )}
+                </div>
+              )}
             </div>
           </div>
 
