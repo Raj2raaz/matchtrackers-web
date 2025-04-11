@@ -40,8 +40,14 @@ function generateMatchSummary(matchData) {
   const team2Score = matchScore?.team2Score?.inngs1?.runs ?? "N/A";
   const team1Wickets = matchScore?.team1Score?.inngs1?.wickets ?? "N/A";
   const team2Wickets = matchScore?.team2Score?.inngs1?.wickets ?? "N/A";
-  const team1Overs = matchScore?.team1Score?.inngs1?.overs ?? "N/A";
-  const team2Overs = matchScore?.team2Score?.inngs1?.overs ?? "N/A";
+  const team1Overs =
+    matchScore?.team1Score?.inngs1?.overs === 19.6
+      ? 20
+      : matchScore?.team1Score?.inngs1?.overs ?? "N/A";
+  const team2Overs =
+    matchScore?.team2Score?.inngs1?.overs === 19.6
+      ? 20
+      : matchScore?.team2Score?.inngs1?.overs ?? "N/A";
 
   const venue = matchInfo?.venueInfo?.ground || "Unknown Venue";
   const city = matchInfo?.venueInfo?.city || "Unknown City";
@@ -179,7 +185,7 @@ export default function Home() {
 
       {/* main Section */}
       <div className="flex flex-col lg:flex-row items-start mt-7 gap-6 h-full">
-        <div className="w-full lg:w-[37%]">
+        <div className="w-full lg:w-[30%]">
           <div className="bg-gradient-to-r from-blue-600 to-blue-800 shadow-lg rounded-lg border border-[#E6E6E6] p-5">
             <h1 className="text-white font-semibold text-xl">
               Recent Highlights
@@ -274,9 +280,11 @@ export default function Home() {
                         {e.matchInfo.venueInfo.ground}
                       </p>
                       <p
-                        className={`px-3 py-0.5 flex items-center font-medium rounded-full ${
+                        className={`px-3 py-0.5 text-nowrap flex items-center font-medium rounded-full ${
                           e.matchInfo.state === "In Progress"
                             ? "bg-red-500 text-white"
+                            : e.matchInfo.state === "Complete"
+                            ? "bg-green-600 text-white"
                             : "bg-gray-200"
                         }`}
                       >
@@ -295,7 +303,10 @@ export default function Home() {
                         <p className="text-sm mt-0.5 text-primary">
                           {e?.matchScore?.team1Score?.inngs1?.runs || 0}/
                           {e?.matchScore?.team1Score?.inngs1?.wickets || 0} (
-                          {e?.matchScore?.team1Score?.inngs1?.overs || 0})
+                          {e?.matchScore?.team1Score?.inngs1?.overs === 19.6
+                            ? 20
+                            : e?.matchScore?.team1Score?.inngs1?.overs || 0}
+                          )
                         </p>
                       </div>
                       <p className="font-bold text-gray-400 text-lg">vs</p>
@@ -310,7 +321,10 @@ export default function Home() {
                         <p className="text-sm mt-0.5 text-primary">
                           {e?.matchScore?.team2Score?.inngs1?.runs || 0}/
                           {e?.matchScore?.team2Score?.inngs1?.wickets || 0} (
-                          {e?.matchScore?.team2Score?.inngs1?.overs || 0})
+                          {e?.matchScore?.team2Score?.inngs1?.overs === 19.6
+                            ? 20
+                            : e?.matchScore?.team2Score?.inngs1?.overs || 0}
+                          )
                         </p>
                       </div>
                     </div>
@@ -405,8 +419,13 @@ export default function Home() {
               </div>
             )}
           </div>
-          <div className="mt-6">
-            <YtShorts />
+          <div className="mt-6 items-start flex gap-5">
+            <div className="w-1/2 flex-1">
+              <YtShorts />
+            </div>
+            <div className="w-1/2 flex-1">
+              <InterestingFactsCarousel />
+            </div>
           </div>
           <div className="mt-3 p-3 shadow-lg rounded-lg border-[#E6E6E6] bg-white">
             {isLoading ? (

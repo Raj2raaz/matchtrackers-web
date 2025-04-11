@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import { GoogleLogin } from "@react-oauth/google";
 
 const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -151,6 +152,47 @@ const AuthForm = () => {
     }
   };
 
+  // Handle successful Google login
+  const handleGoogleLoginSuccess = async (credentialResponse) => {
+    setLoading(true);
+    setError("");
+
+    try {
+      // Send the credential token to your backend
+      const response = await fetch("/api/auth/google", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          credential: credentialResponse.credential,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Google authentication failed");
+      }
+
+      // Store token returned from your backend
+      Cookies.set("token", data.token);
+
+      // Show success message and redirect
+      setMessage("Google login successful! Redirecting...");
+      setTimeout(() => navigate("/"), 1500);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Handle Google login failure
+  const handleGoogleLoginError = () => {
+    setError("Google login failed. Please try again or use email login.");
+  };
+
   const renderVerificationForm = () => (
     <div className="p-6">
       <h1 className="text-xl font-semibold text-gray-800 mb-4">
@@ -231,6 +273,32 @@ const AuthForm = () => {
       {error && (
         <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">{error}</div>
       )}
+
+      {/* Google Sign-In Button */}
+      <div className="mb-4 flex justify-center">
+        <GoogleLogin
+          onSuccess={handleGoogleLoginSuccess}
+          onError={handleGoogleLoginError}
+          useOneTap
+          theme="outline"
+          size="large"
+          text={isLogin ? "signin_with" : "signup_with"}
+          shape="rectangular"
+          locale="en"
+          width="100%"
+        />
+      </div>
+
+      <div className="relative mb-4">
+        <div className="absolute inset-0 flex items-center">
+          <div className="w-full border-t border-gray-300"></div>
+        </div>
+        <div className="relative flex justify-center text-sm">
+          <span className="px-2 bg-white text-gray-500">
+            Or continue with email
+          </span>
+        </div>
+      </div>
 
       <form onSubmit={handleSubmit}>
         {!isLogin && (

@@ -5,9 +5,11 @@ const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 require("dotenv").config();
 const path = require("path");
+const { OAuth2Client } = require("google-auth-library");
 
 const prisma = new PrismaClient();
 const app = express();
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 app.use(express.json());
 
@@ -246,6 +248,89 @@ app.post("/api/auth/login", async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: "Login error" });
     console.log(error);
+  }
+});
+
+app.post("/api/auth/google", async (req, res) => {
+  try {
+    const { credential } = req.body;
+
+    // Verify the Google token
+    const ticket = await client.verifyIdToken({
+      idToken: credential,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    // Get user payload from verified token
+    const payload = ticket.getPayload();
+
+    // Extract user information
+    const { email, name, picture, sub: googleId } = payload;
+
+    // Check if user already exists
+    let user = await prisma.user.findUnique({
+      where: { email },
+    });
+
+    if (user) {
+      // User exists - handle login
+
+      // Update googleId if it doesn't exist yet
+      if (!user.googleId) {
+        user = await prisma.user.update({
+          where: { id: user.id },
+          data: { googleId },
+        });
+      }
+
+      // Check if user's email is verified
+      if (!user.isVerified) {
+        // Auto-verify users logging in with Google
+        user = await prisma.user.update({
+          where: { id: user.id },
+          data: { isVerified: true },
+        });
+      }
+    } else {
+      // User doesn't exist - handle signup
+
+      // Generate a random password since we won't use it
+      // (user will always login via Google)
+      const randomPassword = Math.random().toString(36).slice(-8);
+      const hashedPassword = await bcrypt.hash(randomPassword, 10);
+
+      // Create new user
+      user = await prisma.user.create({
+        data: {
+          name,
+          email,
+          googleId,
+          password: hashedPassword,
+          isVerified: true, // Auto-verify Google users
+          profilePicture: picture || null,
+        },
+      });
+    }
+
+    // Generate JWT token
+    const token = jwt.sign({ id: user.id, email: user.email }, SECRET_KEY, {
+      expiresIn: "7d",
+    });
+
+    // Return success response
+    res.json({
+      message: "Google authentication successful",
+      token,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        profilePicture: user.profilePicture,
+      },
+    });
+  } catch (error) {
+    console.error("Google auth error:", error);
+    res.status(500).json({ error: "Authentication failed" });
   }
 });
 
