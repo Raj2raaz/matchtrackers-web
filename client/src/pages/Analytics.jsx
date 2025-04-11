@@ -21,6 +21,7 @@ import useMainStore from "../store/MainStore";
 import data from "../data.json";
 import { cricApiClient as apiClient } from "../utils/axios"; // Make sure this is imported correctly
 import toast from "react-hot-toast";
+import { Helmet } from "react-helmet-async";
 
 const Analytics = () => {
   // State management
@@ -255,6 +256,45 @@ const Analytics = () => {
 
   return (
     <div className="">
+      <Helmet>
+        <title>Match Trackers | Live Scores, Stats & News</title>
+        <meta
+          name="description"
+          content="Track live matches, player stats, rankings, and news across all formats and leagues at Match Trackers."
+        />
+
+        {/* Open Graph (Facebook, WhatsApp, etc.) */}
+        <meta
+          property="og:title"
+          content="Match Trackers | Live Scores, Stats & News"
+        />
+        <meta
+          property="og:description"
+          content="Track live matches, player stats, rankings, and news across all formats and leagues."
+        />
+        <meta
+          property="og:image"
+          content="https://matchtrackers.com/favicon.svg"
+        />
+        <meta property="og:url" content="https://matchtrackers.com" />
+        <meta property="og:type" content="website" />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          name="twitter:title"
+          content="Match Trackers | Live Scores, Stats & News"
+        />
+        <meta
+          name="twitter:description"
+          content="Get updated with the latest scores, rankings and sports news."
+        />
+        <meta
+          name="twitter:image"
+          content="https://matchtrackers.com/favicon.svg"
+        />
+      </Helmet>
+
       {show && (
         <div className="fixed inset-0 top-20 z-40 flex items-center justify-center backdrop-blur-xs">
           <div className="bg-blue-600 p-6 rounded-lg shadow-lg text-center">

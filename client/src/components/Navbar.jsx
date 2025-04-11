@@ -263,7 +263,7 @@ const Navbar = () => {
         <div className="md:hidden">
           <button
             onClick={toggleMobileMenu}
-            className="text-white focus:outline-none outline z-70 relative" // Increased z-index and relative
+            className="text-white focus:outline-none  z-70 relative" // Increased z-index and relative
             aria-label={mobileMenuOpen ? "Close Menu" : "Open Menu"}
           >
             {mobileMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}

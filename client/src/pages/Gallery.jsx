@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Image from "../components/Image";
 import { getGalaryImages } from "../api/Home";
+import { Helmet } from "react-helmet-async";
 
 const Gallery = () => {
   const [gallery, setGallery] = useState([]);
@@ -46,6 +47,45 @@ const Gallery = () => {
 
   return (
     <div className="min-h-screen  ">
+      <Helmet>
+        <title>Match Trackers | Live Scores, Stats & News</title>
+        <meta
+          name="description"
+          content="Track live matches, player stats, rankings, and news across all formats and leagues at Match Trackers."
+        />
+
+        {/* Open Graph (Facebook, WhatsApp, etc.) */}
+        <meta
+          property="og:title"
+          content="Match Trackers | Live Scores, Stats & News"
+        />
+        <meta
+          property="og:description"
+          content="Track live matches, player stats, rankings, and news across all formats and leagues."
+        />
+        <meta
+          property="og:image"
+          content="https://matchtrackers.com/favicon.svg"
+        />
+        <meta property="og:url" content="https://matchtrackers.com" />
+        <meta property="og:type" content="website" />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          name="twitter:title"
+          content="Match Trackers | Live Scores, Stats & News"
+        />
+        <meta
+          name="twitter:description"
+          content="Get updated with the latest scores, rankings and sports news."
+        />
+        <meta
+          name="twitter:image"
+          content="https://matchtrackers.com/favicon.svg"
+        />
+      </Helmet>
+
       <div className="container mx-auto px-4">
         <h1 className="text-4xl font-bold text-center mb-10 tracking-tight ">
           Cricket Moments Gallery

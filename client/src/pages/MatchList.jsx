@@ -4,6 +4,7 @@ import { cricApiClient as apiClient } from "../utils/axios";
 import Image from "../components/Image";
 import { useNavigate, useParams } from "react-router-dom";
 import TopNews from "../components/TopNews";
+import { Helmet } from "react-helmet-async";
 
 const CricketScoresDashboard = ({}) => {
   const [activeTab, setActiveTab] = useState("League");
@@ -81,6 +82,43 @@ const CricketScoresDashboard = ({}) => {
         key={matchInfo.matchId}
         className="bg-white border border-gray-200 rounded-lg shadow-lg p-4 mb-4"
       >
+        <Helmet>
+          <title>Match Trackers | Live Scores, Stats & News</title>
+          <meta
+            name="description"
+            content="Track live matches, player stats, rankings, and news across all formats and leagues at Match Trackers."
+          />
+
+          <meta
+            property="og:title"
+            content="Match Trackers | Live Scores, Stats & News"
+          />
+          <meta
+            property="og:description"
+            content="Track live matches, player stats, rankings, and news across all formats and leagues."
+          />
+          <meta
+            property="og:image"
+            content="https://matchtrackers.com/favicon.svg"
+          />
+          <meta property="og:url" content="https://matchtrackers.com" />
+          <meta property="og:type" content="website" />
+
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta
+            name="twitter:title"
+            content="Match Trackers | Live Scores, Stats & News"
+          />
+          <meta
+            name="twitter:description"
+            content="Get updated with the latest scores, rankings and sports news."
+          />
+          <meta
+            name="twitter:image"
+            content="https://matchtrackers.com/favicon.svg"
+          />
+        </Helmet>
+
         <div className="flex flex-wrap gap-4 items-center justify-between mb-2">
           <div className="flex flex-wrap gap-2 items-center text-sm text-gray-600">
             {matchInfo.seriesName} -

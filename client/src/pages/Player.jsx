@@ -10,6 +10,7 @@ import PlayerStatisticsDetail from "../components/StatDetails";
 import TrendingPlayers from "../components/TrendingPlayers";
 import useMainStore from "../store/MainStore";
 import YtShorts from "../components/YtShorts";
+import { Helmet } from "react-helmet-async";
 
 const Player = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -166,6 +167,37 @@ const Player = () => {
             ))}
           </div>
         </div>
+      )}
+
+      {info?.info && (
+        <Helmet>
+          <title>Player Info | {info?.info?.name}</title>
+          <meta name="description" content="Player Info with Latest Stats" />
+          <meta property="og:title" content="Player Info | Match Trackers" />
+          <meta
+            property="og:description"
+            content="Player Info with Latest Stats"
+          />
+          <meta
+            property="og:image"
+            content="https://matchtrackers.com/favicon.svg"
+          />
+          <meta property="og:url" content="https://matchtrackers.com/" />
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta
+            name="twitter:title"
+            content="Match Trackers | Live Scores, Stats & News"
+          />
+          <meta
+            name="twitter:description"
+            content="Get updated with the latest scores, rankings and sports news."
+          />
+          <meta
+            name="twitter:image"
+            content="https://matchtrackers.com/favicon.svg"
+          />
+        </Helmet>
       )}
 
       <div className={`px-4 flex flex-col md:flex-row gap-4 pt-6`}>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { cricApiClient as apiClient } from "../utils/axios";
 import Image from "../components/Image";
+import { Helmet } from "react-helmet-async";
 
 const Rankings = () => {
   const [sortField, setSortField] = useState("rank");
@@ -72,6 +73,43 @@ const Rankings = () => {
 
   return (
     <div className=" mx-auto p-3 sm:p-4">
+      <Helmet>
+        <title>Match Trackers | Live Scores, Stats & News</title>
+        <meta
+          name="description"
+          content="Track live matches, player stats, rankings, and news across all formats and leagues at Match Trackers."
+        />
+
+        <meta
+          property="og:title"
+          content="Match Trackers | Live Scores, Stats & News"
+        />
+        <meta
+          property="og:description"
+          content="Track live matches, player stats, rankings, and news across all formats and leagues."
+        />
+        <meta
+          property="og:image"
+          content="https://matchtrackers.com/favicon.svg"
+        />
+        <meta property="og:url" content="https://matchtrackers.com" />
+        <meta property="og:type" content="website" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          name="twitter:title"
+          content="Match Trackers | Live Scores, Stats & News"
+        />
+        <meta
+          name="twitter:description"
+          content="Get updated with the latest scores, rankings and sports news."
+        />
+        <meta
+          name="twitter:image"
+          content="https://matchtrackers.com/favicon.svg"
+        />
+      </Helmet>
+
       <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100">
         <div className="p-5 sm:p-6 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-white">
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">

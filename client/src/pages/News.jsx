@@ -3,6 +3,7 @@ import { cricApiClient as apiClient } from "../utils/axios";
 import { useParams } from "react-router-dom";
 import Image from "../components/Image";
 import TopNews from "../components/TopNews";
+import { Helmet } from "react-helmet-async";
 
 const NewsPage = () => {
   const [newsData, setNewsData] = useState(null);
@@ -67,6 +68,43 @@ const NewsPage = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <Helmet>
+        <title>Match Trackers | Live Scores, Stats & News</title>
+        <meta
+          name="description"
+          content="Track live matches, player stats, rankings, and news across all formats and leagues at Match Trackers."
+        />
+
+        <meta
+          property="og:title"
+          content="Match Trackers | Live Scores, Stats & News"
+        />
+        <meta
+          property="og:description"
+          content="Track live matches, player stats, rankings, and news across all formats and leagues."
+        />
+        <meta
+          property="og:image"
+          content="https://matchtrackers.com/favicon.svg"
+        />
+        <meta property="og:url" content="https://matchtrackers.com" />
+        <meta property="og:type" content="website" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          name="twitter:title"
+          content="Match Trackers | Live Scores, Stats & News"
+        />
+        <meta
+          name="twitter:description"
+          content="Get updated with the latest scores, rankings and sports news."
+        />
+        <meta
+          name="twitter:image"
+          content="https://matchtrackers.com/favicon.svg"
+        />
+      </Helmet>
+
       <div className="flex flex-col lg:flex-row gap-6 lg:gap-10">
         {/* Main content area */}
         <div className="w-full lg:w-2/3">

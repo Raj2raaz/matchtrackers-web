@@ -36,7 +36,6 @@ export default function App() {
         <div className="px-2 md:px-24 md:py-8">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/stats" element={<Stats />} />
             <Route path="/player/:id" element={<Player />} />
             <Route path="/schedules/:id" element={<Schedules />} />
             <Route path="/points-table/:id" element={<PointsTable />} />

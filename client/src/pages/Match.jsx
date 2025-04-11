@@ -19,6 +19,7 @@ import { cricApiClient as apiClient } from "../utils/axios";
 import Image from "../components/Image";
 import MatchVideosSection from "../components/MatchVideosSection";
 import YtShorts from "../components/YtShorts";
+import { Helmet } from "react-helmet-async";
 
 const Match = () => {
   const navigate = useNavigate();
@@ -404,6 +405,33 @@ const Match = () => {
           </div>
         </div>
       )}
+
+      <Helmet>
+        <title>Match Info | Match Trackers</title>
+        <meta name="description" content="Match Info " />
+        <meta property="og:title" content="Match Info | Match Trackers" />
+        <meta property="og:description" content="Match Info | Match Trackers" />
+        <meta
+          property="og:image"
+          content="https://matchtrackers.com/favicon.svg"
+        />
+        <meta property="og:url" content="https://matchtrackers.com/" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          name="twitter:title"
+          content="Match Trackers | Live Scores, Stats & News"
+        />
+        <meta
+          name="twitter:description"
+          content="Get updated with the latest scores, rankings and sports news."
+        />
+        <meta
+          name="twitter:image"
+          content="https://matchtrackers.com/favicon.svg"
+        />
+      </Helmet>
+
       <div className="flex flex-col lg:flex-row gap-4">
         {/* Live Score Card */}
         <div className="w-full lg:w-1/3 order-2 lg:order-1">
@@ -697,9 +725,9 @@ const Match = () => {
                 </div>
                              {" "}
               </div>
-                            {/* Tab Navigation */}             {" "}
+                            {/* Tab Navigation */}         
               <div className="flex border-b border-gray-200">
-                               {" "}
+                           
                 {tabs.map((tab) => (
                   <button
                     key={tab.id}
@@ -710,26 +738,25 @@ const Match = () => {
                         : "text-gray-600 hover:text-blue-600 hover:border-b-2 hover:border-blue-600/50"
                     }`}
                   >
-                                       {" "}
+                                       
                     <div className="flex items-center">
-                                            {tab.icon}                     {" "}
-                      {tab.label}                   {" "}
+                                            {tab.icon}                 
+                      {tab.label}                 
                     </div>
-                                     {" "}
+                                   
                   </button>
-                ))}{" "}
+                ))}
               </div>
-              {/* Tab Content */} {activeTab === "Info" && renderInfoTab()}{" "}
-              {activeTab === "Squads" && renderSquadsTab()}{" "}
-            </div>{" "}
+              {/* Tab Content */} {activeTab === "Info" && renderInfoTab()}
+              {activeTab === "Squads" && renderSquadsTab()}
+            </div>
           </div>
         )}
-        {/* Trending Players (Desktop Only) */}{" "}
+        {/* Trending Players (Desktop Only) */}
         <div className="w-full lg:w-1/3 order-3">
-          {" "}
           <div className="hidden lg:block">
-            <TrendingPlayers />{" "}
-          </div>{" "}
+            <TrendingPlayers />
+          </div>
         </div>
       </div>
       <MatchVideosSection commentary={commentary} />

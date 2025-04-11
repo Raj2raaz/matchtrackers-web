@@ -4,6 +4,7 @@ import { cricApiClient as apiClient } from "../utils/axios";
 import TopNews from "../components/TopNews";
 import EditorPicks from "../components/EditorPicks";
 import Gallery from "../components/Gallery";
+import { Helmet } from "react-helmet-async";
 
 const PointsTable = () => {
   const [data, setData] = useState([]);
@@ -59,6 +60,31 @@ const PointsTable = () => {
           <h2 className="text-base sm:text-lg font-bold text-gray-800 p-3">
             {data?.appIndex?.seoTitle?.split("|")[0] || "Points Table"}
           </h2>
+          <Helmet>
+            <title>POint Table</title>
+            <meta name="description" content="Point table of series" />
+            <meta property="og:title" content="Point Table | Match Trackers" />
+            <meta property="og:description" content="Point Table Stats" />
+            <meta
+              property="og:image"
+              content="https://matchtrackers.com/favicon.svg"
+            />
+            <meta property="og:url" content="https://matchtrackers.com/" />
+            <meta name="twitter:card" content="summary_large_image" />
+            <meta name="twitter:card" content="summary_large_image" />
+            <meta
+              name="twitter:title"
+              content="Match Trackers | Live Scores, Stats & News"
+            />
+            <meta
+              name="twitter:description"
+              content="Get updated with the latest scores, rankings and sports news."
+            />
+            <meta
+              name="twitter:image"
+              content="https://matchtrackers.com/favicon.svg"
+            />
+          </Helmet>
 
           {/* Desktop version - Full table */}
           <div className="hidden sm:block px-3 pb-3">

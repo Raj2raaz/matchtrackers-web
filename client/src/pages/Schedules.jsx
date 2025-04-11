@@ -16,6 +16,7 @@ import { cricApiClient as apiClient } from "../utils/axios";
 import Image from "../components/Image";
 import useCricbuzzStore from "../store/cricket";
 import { formatTimeAgo } from "../utils/util";
+import { Helmet } from "react-helmet-async";
 
 const Schedules = () => {
   const { id } = useParams();
@@ -217,6 +218,36 @@ const Schedules = () => {
 
   return (
     <div className="bg-gray-100 min-h-screen py-6">
+      {!loading && (
+        <Helmet>
+          <title>Match Schedules</title>
+          <meta name="description" content="Match Schedules of Latest Series" />
+          <meta
+            property="og:title"
+            content="Match Schedules | Match Trackers"
+          />
+          <meta property="og:description" content="Match Schedules" />
+          <meta
+            property="og:image"
+            content="https://matchtrackers.com/favicon.svg"
+          />
+          <meta property="og:url" content="https://matchtrackers.com/" />
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta
+            name="twitter:title"
+            content="Match Trackers | Live Scores, Stats & News"
+          />
+          <meta
+            name="twitter:description"
+            content="Get updated with the latest scores, rankings and sports news."
+          />
+          <meta
+            name="twitter:image"
+            content="https://matchtrackers.com/favicon.svg"
+          />
+        </Helmet>
+      )}
       <div className="mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Main content section - 2/3 width */}

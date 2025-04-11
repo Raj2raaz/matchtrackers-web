@@ -4,10 +4,6 @@ import { CiSearch } from "react-icons/ci";
 import { IoMdArrowDroprightCircle } from "react-icons/io";
 import { CgChevronDoubleDown, CgChevronDoubleUp } from "react-icons/cg";
 import { FaChevronRight } from "react-icons/fa";
-import team from "../assets/team.png";
-import headingPost from "../assets/headingpost.png";
-import headingPost2 from "../assets/headingpost2.png";
-import volleyballPoster from "../assets/volleyballPoster.png";
 import { LiaTrophySolid } from "react-icons/lia";
 import useCricbuzzStore from "../store/cricket";
 import Image from "../components/Image";
@@ -21,6 +17,7 @@ import ipl from "../assets/ipl.jpg";
 import useMainStore from "../store/MainStore";
 import YtShorts from "../components/YtShorts";
 import InterestingFactsCarousel from "../components/Facts";
+import { Helmet } from "react-helmet-async";
 
 function generateMatchSummary(matchData) {
   /**
@@ -155,9 +152,40 @@ export default function Home() {
   }, [fetchData]);
 
   return (
-    <div className=" mx-auto px-4 sm:px-6 lg:px-8">
-      {/* search section */}
-      {/* <div className="flex flex-col sm:flex-row gap-3 mt-4">
+    <>
+      <Helmet>
+        <title>Home | Match Trackers</title>
+        <meta
+          name="description"
+          content="Latest cricket news, stats, and schedules."
+        />
+        <meta property="og:title" content="Home | Match Trackers" />
+        <meta
+          property="og:description"
+          content="Get the latest cricket stats and updates."
+        />
+        <meta
+          property="og:image"
+          content="https://matchtrackers.com/favicon.svg"
+        />
+        <meta property="og:url" content="https://matchtrackers.com/" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          name="twitter:title"
+          content="Match Trackers | Live Scores, Stats & News"
+        />
+        <meta
+          name="twitter:description"
+          content="Get updated with the latest scores, rankings and sports news."
+        />
+        <meta
+          name="twitter:image"
+          content="https://matchtrackers.com/favicon.svg"
+        />
+      </Helmet>
+      <div className=" mx-auto px-4 sm:px-6 lg:px-8">
+        {/* search section */}
+        {/* <div className="flex flex-col sm:flex-row gap-3 mt-4">
         <div className="flex flex-wrap items-center gap-2 sm:gap-5 mt-2 sm:mt-0">
           {sports.map((e, i) => (
             <p
@@ -183,590 +211,599 @@ export default function Home() {
         </div> 
       </div>*/}
 
-      {/* main Section */}
-      <div className="flex flex-col lg:flex-row items-start mt-7 gap-6 h-full">
-        <div className="w-full lg:w-[30%]">
-          <div className="bg-gradient-to-r from-blue-600 to-blue-800 shadow-lg rounded-lg border border-[#E6E6E6] p-5">
-            <h1 className="text-white font-semibold text-xl">
-              Recent Highlights
-            </h1>
-            <div className="text-sm mt-4 text-primary">
-              {isLoading ? (
-                <Placeholder type="line" count={5} />
-              ) : content === "cricket" ? (
-                recentMatches && recentMatches.length > 0 ? (
-                  recentMatches.slice(0, noOfRecentMatches).map((e, i) =>
-                    e.seriesAdWrapper ? (
-                      <div
-                        onClick={() =>
-                          navigate("/schedules/" + e.seriesAdWrapper.seriesId)
-                        }
-                        key={i}
-                        className="bg-white hover:bg-gray-300 cursor-pointer items-center flex justify-between mt-2 pl-3 pr-1.5 py-1.5 rounded-full"
-                      >
-                        <p className="truncate max-w-[14rem] overflow-hidden whitespace-nowrap">
-                          {e.seriesAdWrapper.seriesName}
-                        </p>
-                        <IoMdArrowDroprightCircle size={26} />
-                      </div>
-                    ) : null
-                  )
-                ) : (
-                  <p className="text-white italic">
-                    No recent matches available
-                  </p>
-                )
-              ) : fbLeagues && fbLeagues.length > 0 ? (
-                fbLeagues.slice(0, noOfRecentMatches).map((e, i) => (
-                  <div
-                    key={i}
-                    onClick={() => navigate("/leagues/" + e.id)}
-                    className="bg-gray-200 hover:bg-gray-300 cursor-pointer items-center flex justify-between mt-2 pl-3 pr-1.5 py-1.5 rounded-full"
-                  >
-                    <p className="truncate flex items-center gap-4 max-w-[14rem] overflow-hidden whitespace-nowrap">
-                      <img
-                        src={e.league.logo}
-                        className="h-5 w-5 rounded-full object-cover"
-                        alt=""
-                      />
-                      {e.league.name}
+        {/* main Section */}
+        <div className="flex flex-col lg:flex-row items-start mt-7 gap-6 h-full">
+          <div className="w-full lg:w-[30%]">
+            <div className="bg-gradient-to-r from-blue-600 to-blue-800 shadow-lg rounded-lg border border-[#E6E6E6] p-5">
+              <h1 className="text-white font-semibold text-xl">
+                Recent Highlights
+              </h1>
+              <div className="text-sm mt-4 text-primary">
+                {isLoading ? (
+                  <Placeholder type="line" count={5} />
+                ) : content === "cricket" ? (
+                  recentMatches && recentMatches.length > 0 ? (
+                    recentMatches.slice(0, noOfRecentMatches).map((e, i) =>
+                      e.seriesAdWrapper ? (
+                        <div
+                          onClick={() =>
+                            navigate("/schedules/" + e.seriesAdWrapper.seriesId)
+                          }
+                          key={i}
+                          className="bg-white hover:bg-gray-300 cursor-pointer items-center flex justify-between mt-2 pl-3 pr-1.5 py-1.5 rounded-full"
+                        >
+                          <p className="truncate max-w-[14rem] overflow-hidden whitespace-nowrap">
+                            {e.seriesAdWrapper.seriesName}
+                          </p>
+                          <IoMdArrowDroprightCircle size={26} />
+                        </div>
+                      ) : null
+                    )
+                  ) : (
+                    <p className="text-white italic">
+                      No recent matches available
                     </p>
-                    <IoMdArrowDroprightCircle size={26} />
-                  </div>
-                ))
-              ) : (
-                <p className="text-white italic">No leagues available</p>
+                  )
+                ) : fbLeagues && fbLeagues.length > 0 ? (
+                  fbLeagues.slice(0, noOfRecentMatches).map((e, i) => (
+                    <div
+                      key={i}
+                      onClick={() => navigate("/leagues/" + e.id)}
+                      className="bg-gray-200 hover:bg-gray-300 cursor-pointer items-center flex justify-between mt-2 pl-3 pr-1.5 py-1.5 rounded-full"
+                    >
+                      <p className="truncate flex items-center gap-4 max-w-[14rem] overflow-hidden whitespace-nowrap">
+                        <img
+                          src={e.league.logo}
+                          className="h-5 w-5 rounded-full object-cover"
+                          alt=""
+                        />
+                        {e.league.name}
+                      </p>
+                      <IoMdArrowDroprightCircle size={26} />
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-white italic">No leagues available</p>
+                )}
+              </div>
+              {!isLoading && recentMatches && recentMatches.length > 0 && (
+                <button
+                  onClick={() => {
+                    if (noOfRecentMatches < recentMatches.length) {
+                      setNoOfRecentMatches(noOfRecentMatches + 5);
+                    } else setNoOfRecentMatches(7);
+                  }}
+                  className="flex text-white cursor-pointer mx-auto mt-2 text-sm font-medium items-end"
+                >
+                  {noOfRecentMatches >= recentMatches.length
+                    ? "See Less"
+                    : "See More"}{" "}
+                  {noOfRecentMatches >= recentMatches.length ? (
+                    <CgChevronDoubleUp size={15} />
+                  ) : (
+                    <CgChevronDoubleDown size={15} />
+                  )}
+                </button>
               )}
             </div>
-            {!isLoading && recentMatches && recentMatches.length > 0 && (
-              <button
-                onClick={() => {
-                  if (noOfRecentMatches < recentMatches.length) {
-                    setNoOfRecentMatches(noOfRecentMatches + 5);
-                  } else setNoOfRecentMatches(7);
-                }}
-                className="flex text-white cursor-pointer mx-auto mt-2 text-sm font-medium items-end"
-              >
-                {noOfRecentMatches >= recentMatches.length
-                  ? "See Less"
-                  : "See More"}{" "}
-                {noOfRecentMatches >= recentMatches.length ? (
-                  <CgChevronDoubleUp size={15} />
-                ) : (
-                  <CgChevronDoubleDown size={15} />
-                )}
-              </button>
-            )}
-          </div>
 
-          <div className="mt-5">
-            {isLoading ? (
-              <>
-                <Placeholder type="matchCard" />
-                <Placeholder type="matchCard" />
-                <Placeholder type="matchCard" />
-              </>
-            ) : content === "cricket" ? (
-              liveMatches && liveMatches.length > 0 ? (
-                liveMatches.map((e, i) => (
+            <div className="mt-5">
+              {isLoading ? (
+                <>
+                  <Placeholder type="matchCard" />
+                  <Placeholder type="matchCard" />
+                  <Placeholder type="matchCard" />
+                </>
+              ) : content === "cricket" ? (
+                liveMatches && liveMatches.length > 0 ? (
+                  liveMatches.map((e, i) => (
+                    <div
+                      key={i}
+                      onClick={() => navigate("/match/" + e.matchInfo.matchId)}
+                      className="bg-white cursor-pointer shadow-lg mt-4 rounded-lg border border-[#E6E6E6] p-5"
+                    >
+                      <div className="flex text-sm justify-between">
+                        <p className="font-semibold max-w-[13rem] truncate text-sub">
+                          {e.matchInfo.matchFormat} Match //{" "}
+                          {e.matchInfo.venueInfo.ground}
+                        </p>
+                        <p
+                          className={`px-3 py-0.5 text-nowrap flex items-center font-medium rounded-full ${
+                            e.matchInfo.state === "In Progress"
+                              ? "bg-red-500 text-white"
+                              : e.matchInfo.state === "Complete"
+                              ? "bg-green-600 text-white"
+                              : "bg-gray-200"
+                          }`}
+                        >
+                          {e.matchInfo.state}
+                        </p>
+                      </div>
+                      <div className="flex justify-between items-center mt-3">
+                        <div className="flex flex-col items-start">
+                          <div className="flex items-center font-bold text-lg gap-1">
+                            <Image
+                              faceImageId={e.matchInfo.team1.imageId}
+                              className="w-7 h-7 rounded-full"
+                            />
+                            {e.matchInfo.team1.teamSName}
+                          </div>
+                          <p className="text-sm mt-0.5 text-primary">
+                            {e?.matchScore?.team1Score?.inngs1?.runs || 0}/
+                            {e?.matchScore?.team1Score?.inngs1?.wickets || 0} (
+                            {e?.matchScore?.team1Score?.inngs1?.overs === 19.6
+                              ? 20
+                              : e?.matchScore?.team1Score?.inngs1?.overs || 0}
+                            )
+                          </p>
+                        </div>
+                        <p className="font-bold text-gray-400 text-lg">vs</p>
+                        <div className="flex flex-col items-end">
+                          <div className="flex items-center font-bold text-lg gap-1">
+                            <Image
+                              faceImageId={e.matchInfo.team2.imageId}
+                              className="w-7 h-7 rounded-full"
+                            />
+                            {e.matchInfo.team2.teamSName}
+                          </div>
+                          <p className="text-sm mt-0.5 text-primary">
+                            {e?.matchScore?.team2Score?.inngs1?.runs || 0}/
+                            {e?.matchScore?.team2Score?.inngs1?.wickets || 0} (
+                            {e?.matchScore?.team2Score?.inngs1?.overs === 19.6
+                              ? 20
+                              : e?.matchScore?.team2Score?.inngs1?.overs || 0}
+                            )
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-gray-500 italic text-center mt-4">
+                    No live cricket matches available
+                  </p>
+                )
+              ) : fbFixtures.length > 0 ? (
+                fbFixtures.map((e, i) => (
                   <div
                     key={i}
-                    onClick={() => navigate("/match/" + e.matchInfo.matchId)}
-                    className="bg-white cursor-pointer shadow-lg mt-4 rounded-lg border border-[#E6E6E6] p-5"
+                    className="bg-white shadow-lg mt-4 rounded-lg border border-[#E6E6E6] p-5"
                   >
                     <div className="flex text-sm justify-between">
                       <p className="font-semibold max-w-[13rem] truncate text-sub">
-                        {e.matchInfo.matchFormat} Match //{" "}
-                        {e.matchInfo.venueInfo.ground}
+                        {e.league.name} Match // {e.fixture.venue.name}
                       </p>
                       <p
-                        className={`px-3 py-0.5 text-nowrap flex items-center font-medium rounded-full ${
-                          e.matchInfo.state === "In Progress"
+                        className={`px-3 py-0.5 flex items-center font-medium rounded-full ${
+                          ["1H", "2H", "ET", "PEN"].includes(
+                            e.fixture.status.short
+                          ) && e.fixture.status.elapsed > 0
                             ? "bg-red-500 text-white"
-                            : e.matchInfo.state === "Complete"
-                            ? "bg-green-600 text-white"
                             : "bg-gray-200"
                         }`}
                       >
-                        {e.matchInfo.state}
+                        {["1H", "2H", "ET", "PEN"].includes(
+                          e.fixture.status.short
+                        ) && e.fixture.status.elapsed > 0
+                          ? "Live"
+                          : new Date(e.fixture.date).toLocaleDateString()}
                       </p>
                     </div>
                     <div className="flex justify-between items-center mt-3">
                       <div className="flex flex-col items-start">
                         <div className="flex items-center font-bold text-lg gap-1">
-                          <Image
-                            faceImageId={e.matchInfo.team1.imageId}
-                            className="w-7 h-7 rounded-full"
+                          <img
+                            src={e.teams.home.logo}
+                            className="h-7 w-7 rounded-full object-contain"
+                            alt=""
                           />
-                          {e.matchInfo.team1.teamSName}
+                          {e.teams.home.name}
                         </div>
-                        <p className="text-sm mt-0.5 text-primary">
-                          {e?.matchScore?.team1Score?.inngs1?.runs || 0}/
-                          {e?.matchScore?.team1Score?.inngs1?.wickets || 0} (
-                          {e?.matchScore?.team1Score?.inngs1?.overs === 19.6
-                            ? 20
-                            : e?.matchScore?.team1Score?.inngs1?.overs || 0}
-                          )
+                        <p className="text-xl font-bold ml-4 mt-0.5 text-primary">
+                          {e.goals.home}
                         </p>
                       </div>
                       <p className="font-bold text-gray-400 text-lg">vs</p>
                       <div className="flex flex-col items-end">
                         <div className="flex items-center font-bold text-lg gap-1">
-                          <Image
-                            faceImageId={e.matchInfo.team2.imageId}
-                            className="w-7 h-7 rounded-full"
+                          <img
+                            src={e.teams.away.logo}
+                            className="h-7 w-7 rounded-full object-contain"
+                            alt=""
                           />
-                          {e.matchInfo.team2.teamSName}
+                          {e.teams.away.name}
                         </div>
-                        <p className="text-sm mt-0.5 text-primary">
-                          {e?.matchScore?.team2Score?.inngs1?.runs || 0}/
-                          {e?.matchScore?.team2Score?.inngs1?.wickets || 0} (
-                          {e?.matchScore?.team2Score?.inngs1?.overs === 19.6
-                            ? 20
-                            : e?.matchScore?.team2Score?.inngs1?.overs || 0}
-                          )
+                        <p className="text-xl font-bold mr-4 mt-0.5 text-primary">
+                          {e.goals.away}
                         </p>
                       </div>
                     </div>
+                    <button
+                      onClick={() => navigate("/match/" + e.matchInfo.matchId)}
+                      className="bg-primary text-white py-1 rounded mt-2.5 font-semibold text-center w-full"
+                    >
+                      See live updates
+                    </button>
                   </div>
                 ))
               ) : (
                 <p className="text-gray-500 italic text-center mt-4">
-                  No live cricket matches available
+                  No live matches available
                 </p>
-              )
-            ) : fbFixtures.length > 0 ? (
-              fbFixtures.map((e, i) => (
-                <div
-                  key={i}
-                  className="bg-white shadow-lg mt-4 rounded-lg border border-[#E6E6E6] p-5"
-                >
-                  <div className="flex text-sm justify-between">
-                    <p className="font-semibold max-w-[13rem] truncate text-sub">
-                      {e.league.name} Match // {e.fixture.venue.name}
-                    </p>
-                    <p
-                      className={`px-3 py-0.5 flex items-center font-medium rounded-full ${
-                        ["1H", "2H", "ET", "PEN"].includes(
-                          e.fixture.status.short
-                        ) && e.fixture.status.elapsed > 0
-                          ? "bg-red-500 text-white"
-                          : "bg-gray-200"
-                      }`}
-                    >
-                      {["1H", "2H", "ET", "PEN"].includes(
-                        e.fixture.status.short
-                      ) && e.fixture.status.elapsed > 0
-                        ? "Live"
-                        : new Date(e.fixture.date).toLocaleDateString()}
-                    </p>
-                  </div>
-                  <div className="flex justify-between items-center mt-3">
-                    <div className="flex flex-col items-start">
-                      <div className="flex items-center font-bold text-lg gap-1">
-                        <img
-                          src={e.teams.home.logo}
-                          className="h-7 w-7 rounded-full object-contain"
-                          alt=""
-                        />
-                        {e.teams.home.name}
-                      </div>
-                      <p className="text-xl font-bold ml-4 mt-0.5 text-primary">
-                        {e.goals.home}
-                      </p>
-                    </div>
-                    <p className="font-bold text-gray-400 text-lg">vs</p>
-                    <div className="flex flex-col items-end">
-                      <div className="flex items-center font-bold text-lg gap-1">
-                        <img
-                          src={e.teams.away.logo}
-                          className="h-7 w-7 rounded-full object-contain"
-                          alt=""
-                        />
-                        {e.teams.away.name}
-                      </div>
-                      <p className="text-xl font-bold mr-4 mt-0.5 text-primary">
-                        {e.goals.away}
-                      </p>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => navigate("/match/" + e.matchInfo.matchId)}
-                    className="bg-primary text-white py-1 rounded mt-2.5 font-semibold text-center w-full"
-                  >
-                    See live updates
-                  </button>
+              )}
+            </div>
+          </div>
+          <div className="w-full lg:w-[63%] mt-6 lg:mt-0">
+            <div>
+              {isLoading ? (
+                <Placeholder type="image" />
+              ) : (
+                <div className="relative w-full  overflow-hidden rounded-lg">
+                  <img
+                    src={ipl}
+                    className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
+                    alt="Team"
+                  />
                 </div>
-              ))
-            ) : (
-              <p className="text-gray-500 italic text-center mt-4">
-                No live matches available
-              </p>
-            )}
+              )}
+            </div>
+            <div className="mt-6 items-start flex md:flex-row w-full flex-col gap-5">
+              <div className="md:w-1/2  flex-1">
+                <YtShorts />
+              </div>
+              <div className="md:w-1/2 flex-1">
+                <InterestingFactsCarousel />
+              </div>
+            </div>
+            <div className="mt-3 p-3 shadow-lg rounded-lg border-[#E6E6E6] bg-white">
+              {isLoading ? (
+                <>
+                  <Placeholder type="image" />
+                  <Placeholder type="line" count={3} />
+                </>
+              ) : (
+                <>
+                  <Image
+                    faceImageId={
+                      liveMatches[0].commentary.matchVideos[0].imageId
+                    }
+                    resolution="de"
+                    className="h-[20rem] w-full "
+                  />
+                  <div className="space-y-3 p-2">
+                    <h1 className="text-2xl font-bold text-primary tracking-tight">
+                      {liveMatches[0].matchInfo.seriesName} (
+                      {liveMatches[0].matchInfo.team1.teamName} -
+                      {liveMatches[0].matchInfo.team2.teamName})
+                    </h1>
+                    <div className="flex flex-col space-y-3 md:space-y-0">
+                      <p className="text-sm text-gray-600 leading-relaxed">
+                        {liveMatches[0]
+                          ? generateMatchSummary(liveMatches[0])
+                          : null}
+                      </p>
+                      <button
+                        onClick={() =>
+                          navigate("/match/" + liveMatches[0].matchInfo.matchId)
+                        }
+                        className="flex items-center  w-fit mt-2 justify-center text-white bg-primary px-4 py-2 rounded-lg hover:bg-opacity-90 transition-colors space-x-2self-start md:self-auto"
+                      >
+                        <span>View Match Highlights</span>
+                        <FaChevronRight className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         </div>
-        <div className="w-full lg:w-[63%] mt-6 lg:mt-0">
-          <div>
-            {isLoading ? (
-              <Placeholder type="image" />
-            ) : (
-              <div className="relative w-full  overflow-hidden rounded-lg">
-                <img
-                  src={ipl}
-                  className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
-                  alt="Team"
-                />
+
+        {/* videos section */}
+        {content === "cricket" && (
+          <div className="p-4 bg-white border rounded-lg mt-6 shadow border-[#e6e6e6]">
+            <div className="flex justify-between w-full">
+              <h1 className="text-xl font-bold text-primary">
+                {isLoading
+                  ? "Gallery Photos"
+                  : galleries && galleries[0]?.headline
+                  ? galleries[0]?.headline + " Photos"
+                  : "Gallery Photos"}
+              </h1>
+              <p
+                onClick={() => navigate("/gallery")}
+                className="flex text-sm gap-2 items-center cursor-pointer"
+              >
+                See All <FaChevronRight size={12} />
+              </p>
+            </div>
+            <div className="flex gap-4 mt-3 overflow-x-auto no-scrollbar whitespace-nowrap px-4">
+              {isLoading ? (
+                <>
+                  <div className="shrink-0 w-[300px] sm:w-[23vw]">
+                    <Placeholder type="image" />
+                  </div>
+                  <div className="shrink-0 w-[300px] sm:w-[23vw]">
+                    <Placeholder type="image" />
+                  </div>
+                  <div className="shrink-0 w-[300px] sm:w-[23vw]">
+                    <Placeholder type="image" />
+                  </div>
+                </>
+              ) : galleries &&
+                galleries[0]?.images &&
+                galleries[0]?.images.length > 0 ? (
+                galleries[0]?.images.map((e, i) => (
+                  <div key={i} className="shrink-0 w-[300px] sm:w-[23vw]">
+                    <Image
+                      faceImageId={e}
+                      className="w-full h-full"
+                      resolution="de"
+                    />
+                  </div>
+                ))
+              ) : (
+                <p className="text-gray-500 italic">
+                  No gallery images available
+                </p>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* blogs section */}
+        {content === "cricket" && (
+          <div className="p-4 bg-white border rounded-lg mt-6 shadow border-[#e6e6e6]">
+            <div className="flex justify-between w-full">
+              <h1 className="text-xl font-bold text-primary">LATEST NEWS</h1>
+              <p
+                onClick={() => navigate("/all-news")}
+                className="flex text-sm gap-2 items-center cursor-pointer"
+              >
+                See All <FaChevronRight size={12} />
+              </p>
+            </div>
+            <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 mt-5">
+              <div className="w-full lg:w-1/2 flex flex-col gap-10">
+                {isLoading ? (
+                  <>
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
+                      <Placeholder type="image" />
+                      <div className="mt-3 sm:mt-0 w-full">
+                        <Placeholder type="line" count={4} />
+                      </div>
+                    </div>
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
+                      <Placeholder type="image" />
+                      <div className="mt-3 sm:mt-0 w-full">
+                        <Placeholder type="line" count={4} />
+                      </div>
+                    </div>
+                  </>
+                ) : news && news.length > 0 ? (
+                  news.slice(0, 3).map((e, i) =>
+                    e.story ? (
+                      <div
+                        key={i}
+                        onClick={() => navigate("/news/" + e.story?.id)}
+                        className="flex cursor-pointer flex-col sm:flex-row items-start sm:items-start gap-5"
+                      >
+                        <Image
+                          faceImageId={e?.story?.imageId}
+                          className="h-auto w-full sm:h-54 sm:w-72"
+                          resolution="de"
+                        />
+                        <div className="mt-3 sm:mt-0">
+                          <p className="text-xl line-clamp-2 overflow-hidden text-ellipsis sm:text-2xl font-bold ">
+                            {e?.story?.hline}
+                          </p>
+                          <p className="line-clamp-2 overflow-hidden text-ellipsis">
+                            {e?.story?.intro}
+                          </p>
+                          <div className="flex mt-2 items-center gap-2 flex-wrap">
+                            <p>
+                              By {e?.story?.coverImage?.source || "Unknown"}
+                            </p>
+                            <div className="h-1.5 w-1.5 rounded-full bg-gray-400"></div>
+                            <p className="text-gray-400">
+                              {new Date(
+                                Number(e?.story?.pubTime || Date.now())
+                              ).toLocaleDateString("en-US", {
+                                day: "numeric",
+                                month: "long",
+                                year: "numeric",
+                              })}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    ) : null
+                  )
+                ) : (
+                  <p className="text-gray-500 italic">
+                    No blog posts available
+                  </p>
+                )}
+              </div>
+              <div
+                onClick={() => navigate("/news/" + news[4]?.story.id)}
+                className="w-full cursor-pointer lg:w-1/2 mt-6 lg:mt-0"
+              >
+                {isLoading ? (
+                  <>
+                    <Placeholder type="image" />
+                    <Placeholder type="line" count={4} />
+                  </>
+                ) : news && news.length > 4 && news[4]?.story ? (
+                  <>
+                    <Image
+                      faceImageId={news[4]?.story?.imageId}
+                      className="w-full"
+                      resolution="de"
+                    />
+                    <p className="text-2xl sm:text-4xl px-3 mt-2 font-bold">
+                      {news[4]?.story?.hline}
+                    </p>
+                    <p className="px-3 mt-2">{news[4]?.story?.intro}</p>
+                    <div className="flex mt-2 mx-3 items-center gap-2 flex-wrap">
+                      <p>
+                        By {news[4]?.story?.coverImage?.source || "Unknown"}
+                      </p>
+                      <div className="h-1.5 w-1.5 rounded-full bg-gray-400"></div>
+                      <p className="text-gray-400">
+                        {new Date(
+                          Number(news[4]?.story?.pubTime || Date.now())
+                        ).toLocaleDateString("en-US", {
+                          day: "numeric",
+                          month: "long",
+                          year: "numeric",
+                        })}
+                      </p>
+                    </div>
+                  </>
+                ) : (
+                  <p className="text-gray-500 italic">
+                    Featured blog post not available
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div className="mt-5 flex flex-col lg:flex-row gap-5">
+          <div className="w-full lg:w-2/3">
+            {/* trending players */}
+            <TrendingPlayers isLoading={isLoading} />
+
+            {/* match coverage */}
+            {content === "cricket" && (
+              <div className="bg-white rounded-lg mt-5 border p-4 border-[#e6e6e6] w-full max-w-full overflow-hidden">
+                <h1 className="text-xl md:text-2xl font-bold text-primary">
+                  Match Coverage
+                </h1>
+                {isLoading ? (
+                  <>
+                    <Placeholder type="line" />
+                    <div className="flex flex-col md:flex-row gap-5 md:gap-10 mt-5">
+                      <div className="w-full">
+                        <Placeholder type="line" count={6} />
+                      </div>
+                    </div>
+                  </>
+                ) : liveMatches && liveMatches.length > 0 ? (
+                  <>
+                    <div className="flex gap-4 sm:gap-6 md:gap-10 items-center whitespace-nowrap border-b border-gray-200 mt-4 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-gray-300">
+                      {liveMatches.map((e, i) => (
+                        <div
+                          key={i}
+                          onClick={() => setSelectedMatch(i)}
+                          className={`min-w-[6rem] sm:min-w-[7rem] text-center flex-shrink-0 ${
+                            selectedMatch === i ? "text-blue-500" : ""
+                          } focus:text-blue-500 cursor-pointer hover:text-blue-500 transition-colors duration-200`}
+                        >
+                          <p className="font-bold text-sm sm:text-base">
+                            {e?.matchInfo?.team1?.teamSName}{" "}
+                            <span className="text-xs">VS</span>{" "}
+                            {e?.matchInfo?.team2?.teamSName}
+                          </p>
+                          <p className="text-xs sm:text-sm">
+                            {e?.matchInfo.matchFormat}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="flex flex-col md:flex-row gap-5 md:gap-10 mt-5">
+                      <div className="w-full">
+                        <h1 className="text-lg sm:text-xl md:text-2xl flex flex-wrap gap-4 items-center font-bold">
+                          {liveMatches[selectedMatch]?.matchInfo.team1 && (
+                            <Image
+                              faceImageId={
+                                liveMatches[selectedMatch]?.matchInfo.team1
+                                  .teamSName ===
+                                liveMatches[
+                                  selectedMatch
+                                ]?.matchInfo.stateTitle?.split(" ")[0]
+                                  ? liveMatches[selectedMatch]?.matchInfo.team1
+                                      .imageId
+                                  : liveMatches[selectedMatch]?.matchInfo.team2
+                                      .imageId
+                              }
+                              className="h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 rounded-full"
+                              resolution=""
+                            />
+                          )}
+                          <span className="block w-full md:w-auto text-sm sm:text-base md:text-lg line-clamp-2">
+                            {liveMatches &&
+                              liveMatches[selectedMatch]?.commentary?.miniscore
+                                ?.lastWicket}
+                          </span>
+                        </h1>
+                        <p className="flex my-3 bg-blue-100 px-2 p-1 items-center justify-between rounded text-sm sm:text-base">
+                          <span className="flex gap-2 sm:gap-3 items-center overflow-hidden">
+                            <LiaTrophySolid className="text-blue-500 flex-shrink-0" />
+                            <p className="font-bold truncate">
+                              {
+                                liveMatches[selectedMatch]?.matchInfo?.team1
+                                  ?.teamSName
+                              }{" "}
+                              <span className="text-xs">VS</span>{" "}
+                              {
+                                liveMatches[selectedMatch]?.matchInfo?.team2
+                                  ?.teamSName
+                              }
+                            </p>{" "}
+                            <span className="truncate">
+                              {liveMatches[selectedMatch]?.matchInfo?.status}
+                            </span>
+                          </span>
+                          <FaChevronRight
+                            className="text-blue-500 flex-shrink-0"
+                            size={12}
+                          />
+                        </p>
+                        {liveMatches[selectedMatch]?.commentary?.commentaryList
+                          ?.slice(2, 6)
+                          .map(
+                            (e, i) =>
+                              e?.commText &&
+                              e?.commText.length > 5 && (
+                                <p
+                                  key={i}
+                                  className="flex py-1 font-medium items-start gap-2 text-sm sm:text-base"
+                                >
+                                  <FaChevronRight
+                                    className="text-blue-400 flex-shrink-0 mt-1"
+                                    size={13}
+                                  />{" "}
+                                  <span className="line-clamp-2">
+                                    {e?.commText.replace("B0$", "")}
+                                  </span>
+                                </p>
+                              )
+                          )}
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <p className="text-gray-500 italic mt-3">
+                    No match coverage available
+                  </p>
+                )}
               </div>
             )}
           </div>
-          <div className="mt-6 items-start flex gap-5">
-            <div className="w-1/2 flex-1">
-              <YtShorts />
-            </div>
-            <div className="w-1/2 flex-1">
-              <InterestingFactsCarousel />
-            </div>
-          </div>
-          <div className="mt-3 p-3 shadow-lg rounded-lg border-[#E6E6E6] bg-white">
-            {isLoading ? (
-              <>
-                <Placeholder type="image" />
-                <Placeholder type="line" count={3} />
-              </>
-            ) : (
-              <>
-                <Image
-                  faceImageId={liveMatches[0].commentary.matchVideos[0].imageId}
-                  resolution="de"
-                  className="h-[20rem] w-full "
-                />
-                <div className="space-y-3 p-2">
-                  <h1 className="text-2xl font-bold text-primary tracking-tight">
-                    {liveMatches[0].matchInfo.seriesName} (
-                    {liveMatches[0].matchInfo.team1.teamName} -
-                    {liveMatches[0].matchInfo.team2.teamName})
-                  </h1>
-                  <div className="flex flex-col space-y-3 md:space-y-0">
-                    <p className="text-sm text-gray-600 leading-relaxed">
-                      {liveMatches[0]
-                        ? generateMatchSummary(liveMatches[0])
-                        : null}
-                    </p>
-                    <button
-                      onClick={() =>
-                        navigate("/match/" + liveMatches[0].matchInfo.matchId)
-                      }
-                      className="flex items-center  w-fit mt-2 justify-center text-white bg-primary px-4 py-2 rounded-lg hover:bg-opacity-90 transition-colors space-x-2self-start md:self-auto"
-                    >
-                      <span>View Match Highlights</span>
-                      <FaChevronRight className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
-              </>
-            )}
+          <div className="w-full lg:w-1/3 mt-5 lg:mt-0">
+            <InterestingFactsCarousel />
           </div>
         </div>
+
+        {/* editors picks */}
+        <EditorPicks isLoading={isLoading} />
+
+        {/* Gallery */}
+        {content === "cricket" && <Gallery id={1} isLoading={isLoading} />}
       </div>
-
-      {/* videos section */}
-      {content === "cricket" && (
-        <div className="p-4 bg-white border rounded-lg mt-6 shadow border-[#e6e6e6]">
-          <div className="flex justify-between w-full">
-            <h1 className="text-xl font-bold text-primary">
-              {isLoading
-                ? "Gallery Photos"
-                : galleries && galleries[0]?.headline
-                ? galleries[0]?.headline + " Photos"
-                : "Gallery Photos"}
-            </h1>
-            <p
-              onClick={() => navigate("/gallery")}
-              className="flex text-sm gap-2 items-center cursor-pointer"
-            >
-              See All <FaChevronRight size={12} />
-            </p>
-          </div>
-          <div className="flex gap-4 mt-3 overflow-x-auto no-scrollbar whitespace-nowrap px-4">
-            {isLoading ? (
-              <>
-                <div className="shrink-0 w-[300px] sm:w-[23vw]">
-                  <Placeholder type="image" />
-                </div>
-                <div className="shrink-0 w-[300px] sm:w-[23vw]">
-                  <Placeholder type="image" />
-                </div>
-                <div className="shrink-0 w-[300px] sm:w-[23vw]">
-                  <Placeholder type="image" />
-                </div>
-              </>
-            ) : galleries &&
-              galleries[0]?.images &&
-              galleries[0]?.images.length > 0 ? (
-              galleries[0]?.images.map((e, i) => (
-                <div key={i} className="shrink-0 w-[300px] sm:w-[23vw]">
-                  <Image
-                    faceImageId={e}
-                    className="w-full h-full"
-                    resolution="de"
-                  />
-                </div>
-              ))
-            ) : (
-              <p className="text-gray-500 italic">
-                No gallery images available
-              </p>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* blogs section */}
-      {content === "cricket" && (
-        <div className="p-4 bg-white border rounded-lg mt-6 shadow border-[#e6e6e6]">
-          <div className="flex justify-between w-full">
-            <h1 className="text-xl font-bold text-primary">LATEST NEWS</h1>
-            <p
-              onClick={() => navigate("/all-news")}
-              className="flex text-sm gap-2 items-center cursor-pointer"
-            >
-              See All <FaChevronRight size={12} />
-            </p>
-          </div>
-          <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 mt-5">
-            <div className="w-full lg:w-1/2 flex flex-col gap-10">
-              {isLoading ? (
-                <>
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
-                    <Placeholder type="image" />
-                    <div className="mt-3 sm:mt-0 w-full">
-                      <Placeholder type="line" count={4} />
-                    </div>
-                  </div>
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
-                    <Placeholder type="image" />
-                    <div className="mt-3 sm:mt-0 w-full">
-                      <Placeholder type="line" count={4} />
-                    </div>
-                  </div>
-                </>
-              ) : news && news.length > 0 ? (
-                news.slice(0, 3).map((e, i) =>
-                  e.story ? (
-                    <div
-                      key={i}
-                      onClick={() => navigate("/news/" + e.story?.id)}
-                      className="flex cursor-pointer flex-col sm:flex-row items-start sm:items-start gap-5"
-                    >
-                      <Image
-                        faceImageId={e?.story?.imageId}
-                        className="h-auto w-full sm:h-54 sm:w-72"
-                        resolution="de"
-                      />
-                      <div className="mt-3 sm:mt-0">
-                        <p className="text-xl line-clamp-2 overflow-hidden text-ellipsis sm:text-2xl font-bold ">
-                          {e?.story?.hline}
-                        </p>
-                        <p className="line-clamp-2 overflow-hidden text-ellipsis">
-                          {e?.story?.intro}
-                        </p>
-                        <div className="flex mt-2 items-center gap-2 flex-wrap">
-                          <p>By {e?.story?.coverImage?.source || "Unknown"}</p>
-                          <div className="h-1.5 w-1.5 rounded-full bg-gray-400"></div>
-                          <p className="text-gray-400">
-                            {new Date(
-                              Number(e?.story?.pubTime || Date.now())
-                            ).toLocaleDateString("en-US", {
-                              day: "numeric",
-                              month: "long",
-                              year: "numeric",
-                            })}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  ) : null
-                )
-              ) : (
-                <p className="text-gray-500 italic">No blog posts available</p>
-              )}
-            </div>
-            <div
-              onClick={() => navigate("/news/" + news[4]?.story.id)}
-              className="w-full cursor-pointer lg:w-1/2 mt-6 lg:mt-0"
-            >
-              {isLoading ? (
-                <>
-                  <Placeholder type="image" />
-                  <Placeholder type="line" count={4} />
-                </>
-              ) : news && news.length > 4 && news[4]?.story ? (
-                <>
-                  <Image
-                    faceImageId={news[4]?.story?.imageId}
-                    className="w-full"
-                    resolution="de"
-                  />
-                  <p className="text-2xl sm:text-4xl px-3 mt-2 font-bold">
-                    {news[4]?.story?.hline}
-                  </p>
-                  <p className="px-3 mt-2">{news[4]?.story?.intro}</p>
-                  <div className="flex mt-2 mx-3 items-center gap-2 flex-wrap">
-                    <p>By {news[4]?.story?.coverImage?.source || "Unknown"}</p>
-                    <div className="h-1.5 w-1.5 rounded-full bg-gray-400"></div>
-                    <p className="text-gray-400">
-                      {new Date(
-                        Number(news[4]?.story?.pubTime || Date.now())
-                      ).toLocaleDateString("en-US", {
-                        day: "numeric",
-                        month: "long",
-                        year: "numeric",
-                      })}
-                    </p>
-                  </div>
-                </>
-              ) : (
-                <p className="text-gray-500 italic">
-                  Featured blog post not available
-                </p>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-
-      <div className="mt-5 flex flex-col lg:flex-row gap-5">
-        <div className="w-full lg:w-2/3">
-          {/* trending players */}
-          <TrendingPlayers isLoading={isLoading} />
-
-          {/* match coverage */}
-          {content === "cricket" && (
-            <div className="bg-white rounded-lg mt-5 border p-4 border-[#e6e6e6] w-full max-w-full overflow-hidden">
-              <h1 className="text-xl md:text-2xl font-bold text-primary">
-                Match Coverage
-              </h1>
-              {isLoading ? (
-                <>
-                  <Placeholder type="line" />
-                  <div className="flex flex-col md:flex-row gap-5 md:gap-10 mt-5">
-                    <div className="w-full">
-                      <Placeholder type="line" count={6} />
-                    </div>
-                  </div>
-                </>
-              ) : liveMatches && liveMatches.length > 0 ? (
-                <>
-                  <div className="flex gap-4 sm:gap-6 md:gap-10 items-center whitespace-nowrap border-b border-gray-200 mt-4 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-gray-300">
-                    {liveMatches.map((e, i) => (
-                      <div
-                        key={i}
-                        onClick={() => setSelectedMatch(i)}
-                        className={`min-w-[6rem] sm:min-w-[7rem] text-center flex-shrink-0 ${
-                          selectedMatch === i ? "text-blue-500" : ""
-                        } focus:text-blue-500 cursor-pointer hover:text-blue-500 transition-colors duration-200`}
-                      >
-                        <p className="font-bold text-sm sm:text-base">
-                          {e?.matchInfo?.team1?.teamSName}{" "}
-                          <span className="text-xs">VS</span>{" "}
-                          {e?.matchInfo?.team2?.teamSName}
-                        </p>
-                        <p className="text-xs sm:text-sm">
-                          {e?.matchInfo.matchFormat}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="flex flex-col md:flex-row gap-5 md:gap-10 mt-5">
-                    <div className="w-full">
-                      <h1 className="text-lg sm:text-xl md:text-2xl flex flex-wrap gap-4 items-center font-bold">
-                        {liveMatches[selectedMatch]?.matchInfo.team1 && (
-                          <Image
-                            faceImageId={
-                              liveMatches[selectedMatch]?.matchInfo.team1
-                                .teamSName ===
-                              liveMatches[
-                                selectedMatch
-                              ]?.matchInfo.stateTitle?.split(" ")[0]
-                                ? liveMatches[selectedMatch]?.matchInfo.team1
-                                    .imageId
-                                : liveMatches[selectedMatch]?.matchInfo.team2
-                                    .imageId
-                            }
-                            className="h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 rounded-full"
-                            resolution=""
-                          />
-                        )}
-                        <span className="block w-full md:w-auto text-sm sm:text-base md:text-lg line-clamp-2">
-                          {liveMatches &&
-                            liveMatches[selectedMatch]?.commentary?.miniscore
-                              ?.lastWicket}
-                        </span>
-                      </h1>
-                      <p className="flex my-3 bg-blue-100 px-2 p-1 items-center justify-between rounded text-sm sm:text-base">
-                        <span className="flex gap-2 sm:gap-3 items-center overflow-hidden">
-                          <LiaTrophySolid className="text-blue-500 flex-shrink-0" />
-                          <p className="font-bold truncate">
-                            {
-                              liveMatches[selectedMatch]?.matchInfo?.team1
-                                ?.teamSName
-                            }{" "}
-                            <span className="text-xs">VS</span>{" "}
-                            {
-                              liveMatches[selectedMatch]?.matchInfo?.team2
-                                ?.teamSName
-                            }
-                          </p>{" "}
-                          <span className="truncate">
-                            {liveMatches[selectedMatch]?.matchInfo?.status}
-                          </span>
-                        </span>
-                        <FaChevronRight
-                          className="text-blue-500 flex-shrink-0"
-                          size={12}
-                        />
-                      </p>
-                      {liveMatches[selectedMatch]?.commentary?.commentaryList
-                        ?.slice(2, 6)
-                        .map(
-                          (e, i) =>
-                            e?.commText &&
-                            e?.commText.length > 5 && (
-                              <p
-                                key={i}
-                                className="flex py-1 font-medium items-start gap-2 text-sm sm:text-base"
-                              >
-                                <FaChevronRight
-                                  className="text-blue-400 flex-shrink-0 mt-1"
-                                  size={13}
-                                />{" "}
-                                <span className="line-clamp-2">
-                                  {e?.commText.replace("B0$", "")}
-                                </span>
-                              </p>
-                            )
-                        )}
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <p className="text-gray-500 italic mt-3">
-                  No match coverage available
-                </p>
-              )}
-            </div>
-          )}
-        </div>
-        <div className="w-full lg:w-1/3 mt-5 lg:mt-0">
-          <InterestingFactsCarousel />
-        </div>
-      </div>
-
-      {/* editors picks */}
-      <EditorPicks isLoading={isLoading} />
-
-      {/* Gallery */}
-      {content === "cricket" && <Gallery id={1} isLoading={isLoading} />}
-    </div>
+    </>
   );
 }
