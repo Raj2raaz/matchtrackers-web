@@ -12,14 +12,14 @@ export default function TrendingPlayers() {
   const { content } = useMainStore();
   const [fbPlayers, setFbPlayers] = useState([]);
 
-  useEffect(() => {
-    const getData = async () => {
-      const data = await getPlayers();
-      setFbPlayers(data);
-    };
+  // useEffect(() => {
+  //   const getData = async () => {
+  //     const data = await getPlayers();
+  //     setFbPlayers(data);
+  //   };
 
-    getData();
-  }, [content]);
+  //   getData();
+  // }, [content]);
 
   return (
     <div>

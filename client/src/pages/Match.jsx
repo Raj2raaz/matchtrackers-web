@@ -283,7 +283,6 @@ const Match = () => {
             </table>
           </div>
         </div>
-
         {/* Bowlers Table */}
         <div className="p-4">
           <h3 className="font-bold text-base mb-3 flex items-center">

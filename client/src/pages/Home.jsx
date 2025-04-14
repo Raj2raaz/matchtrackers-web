@@ -18,6 +18,7 @@ import useMainStore from "../store/MainStore";
 import YtShorts from "../components/YtShorts";
 import InterestingFactsCarousel from "../components/Facts";
 import { Helmet } from "react-helmet-async";
+import header from "../assets/header.jpg";
 
 function generateMatchSummary(matchData) {
   /**
@@ -138,7 +139,7 @@ export default function Home() {
       setFixtures(fixtures);
     };
 
-    fetchData();
+    // fetchData();
   }, []);
 
   useEffect(() => {
@@ -153,6 +154,8 @@ export default function Home() {
 
   return (
     <>
+      <img src={header} className="w-full" alt="" />
+
       <Helmet>
         <title>Home | Match Trackers</title>
         <meta
@@ -183,7 +186,8 @@ export default function Home() {
           content="https://matchtrackers.com/favicon.svg"
         />
       </Helmet>
-      <div className=" mx-auto px-4 sm:px-6 lg:px-8">
+
+      <div className=" px-2 md:px-24 md:py-8">
         {/* search section */}
         {/* <div className="flex flex-col sm:flex-row gap-3 mt-4">
         <div className="flex flex-wrap items-center gap-2 sm:gap-5 mt-2 sm:mt-0">

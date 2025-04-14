@@ -26,6 +26,11 @@ import AllNews from "./pages/AllNews";
 import Analytics from "./pages/Analytics";
 import AnalyticsRouter from "./components/AnalyticsRouter";
 
+// Layout component to add padding to certain routes
+const PaddedLayout = ({ children }) => {
+  return <div className="px-2 md:px-24 md:py-8">{children}</div>;
+};
+
 export default function App() {
   return (
     <div className="font-inter bg-[#F5F5F5] h-full w-full">
@@ -33,28 +38,101 @@ export default function App() {
       <Router>
         <Navbar />
         <ScrollToTop />
-        <div className="px-2 md:px-24 md:py-8">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/player/:id" element={<Player />} />
-            <Route path="/schedules/:id" element={<Schedules />} />
-            <Route path="/points-table/:id" element={<PointsTable />} />
-            <Route path="/match/:id" element={<Match />} />
-            <Route
-              path="/match-list/:type"
-              element={<CricketScoresDashboard />}
-            />
-            <Route path="/rankings/:type" element={<Rankings />} />
-            <Route path="/news/:id" element={<NewsPage />} />
-            <Route path="/auth" element={<AuthForm />} />
-            <Route path="/analytics/*" element={<AnalyticsRouter />} />
-            <Route path="/gallery" element={<Gallery />} />
-            <Route path="/all-news" element={<AllNews />} />
-            <Route path="/football" element={<Navigate to="/" replace />} />
-          </Routes>
-        </div>
+
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route
+            path="/player/:id"
+            element={
+              <PaddedLayout>
+                <Player />
+              </PaddedLayout>
+            }
+          />
+          <Route
+            path="/schedules/:id"
+            element={
+              <PaddedLayout>
+                <Schedules />
+              </PaddedLayout>
+            }
+          />
+          <Route
+            path="/points-table/:id"
+            element={
+              <PaddedLayout>
+                <PointsTable />
+              </PaddedLayout>
+            }
+          />
+          <Route
+            path="/match/:id"
+            element={
+              <PaddedLayout>
+                <Match />
+              </PaddedLayout>
+            }
+          />
+          <Route
+            path="/match-list/:type"
+            element={
+              <PaddedLayout>
+                <CricketScoresDashboard />
+              </PaddedLayout>
+            }
+          />
+          <Route
+            path="/rankings/:type"
+            element={
+              <PaddedLayout>
+                <Rankings />
+              </PaddedLayout>
+            }
+          />
+          <Route
+            path="/news/:id"
+            element={
+              <PaddedLayout>
+                <NewsPage />
+              </PaddedLayout>
+            }
+          />
+          <Route
+            path="/auth"
+            element={
+              <PaddedLayout>
+                <AuthForm />
+              </PaddedLayout>
+            }
+          />
+          <Route
+            path="/analytics/*"
+            element={
+              <PaddedLayout>
+                <AnalyticsRouter />
+              </PaddedLayout>
+            }
+          />
+          <Route
+            path="/gallery"
+            element={
+              <PaddedLayout>
+                <Gallery />
+              </PaddedLayout>
+            }
+          />
+          <Route
+            path="/all-news"
+            element={
+              <PaddedLayout>
+                <AllNews />
+              </PaddedLayout>
+            }
+          />
+          <Route path="/football" element={<Navigate to="/" replace />} />
+        </Routes>
+        <Footer />
       </Router>
-      <Footer />
     </div>
   );
 }
