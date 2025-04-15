@@ -10,11 +10,6 @@ import {
   FaCommentDots,
 } from "react-icons/fa";
 
-import { ClockFading } from "lucide-react";
-import { BsChevronDown } from "react-icons/bs";
-import TrendingPlayers from "../components/TrendingPlayers";
-import volleyballPoster from "../assets/volleyballPoster.png";
-import TopNews from "../components/TopNews";
 import { useNavigate, useParams } from "react-router-dom";
 import { cricApiClient as apiClient, sofaScoreApi } from "../utils/axios";
 import Image from "../components/Image";
@@ -36,6 +31,8 @@ import Sqads from "../components/AnalyticsMatch/Sqads";
 import ScoreCard from "../components/AnalyticsMatch/ScoreCard";
 import MatchOdds from "../components/AnalyticsMatch/MatchOdds";
 import Overs from "../components/AnalyticsMatch/Overs";
+import TrendingPlayers from "../components/TrendingPlayers";
+import EditorPicks from "../components/EditorPicks";
 
 const AnalyticsMatch = () => {
   const navigate = useNavigate();
@@ -709,6 +706,9 @@ const AnalyticsMatch = () => {
         {/* Sidebar - Right */}
         <MatchOdds sofaData={sofaData} />
       </div>
+
+      <TrendingPlayers />
+      <EditorPicks />
     </div>
   );
 };

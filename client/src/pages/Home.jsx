@@ -19,6 +19,7 @@ import YtShorts from "../components/YtShorts";
 import InterestingFactsCarousel from "../components/Facts";
 import { Helmet } from "react-helmet-async";
 import header from "../assets/header.jpg";
+import HighlightHeaders from "../components/HighlightHeaders";
 
 function generateMatchSummary(matchData) {
   /**
@@ -186,6 +187,7 @@ export default function Home() {
           content="https://matchtrackers.com/favicon.svg"
         />
       </Helmet>
+      <HighlightHeaders />
 
       <div className=" px-2 md:px-24 md:py-8">
         {/* search section */}

@@ -4,10 +4,11 @@ import useCricbuzzStore from "../store/cricket";
 import Image from "./Image";
 import { formatTimeAgo } from "../utils/util";
 import { Clock } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function TopNews({ length = 5 }) {
   const { news } = useCricbuzzStore();
-
+  const navigate = useNavigate();
   return (
     <div>
       {/* Top News section */}
@@ -16,7 +17,8 @@ export default function TopNews({ length = 5 }) {
           {news.slice(0, length).map((item, i) => (
             <div
               key={i}
-              className="flex gap-3 pb-3 border-b border-gray-100 last:border-b-0 last:pb-0"
+              onClick={() => navigate("/news/" + item.story.id)}
+              className="flex gap-3 pb-3 border-b cursor-pointer border-gray-100 last:border-b-0 last:pb-0"
             >
               <Image
                 faceImageId={item.story?.imageId}

@@ -61,7 +61,7 @@ const PointsTable = () => {
             {data?.appIndex?.seoTitle?.split("|")[0] || "Points Table"}
           </h2>
           <Helmet>
-            <title>POint Table</title>
+            <title>Point Table</title>
             <meta name="description" content="Point table of series" />
             <meta property="og:title" content="Point Table | Match Trackers" />
             <meta property="og:description" content="Point Table Stats" />

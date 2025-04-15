@@ -12,7 +12,6 @@ import {
   FaArrowUp,
 } from "react-icons/fa";
 import TrendingPlayers from "../components/TrendingPlayers";
-import volleyballPoster from "../assets/volleyballPoster.png";
 import TopNews from "../components/TopNews";
 import { useNavigate, useParams } from "react-router-dom";
 import { cricApiClient as apiClient } from "../utils/axios";

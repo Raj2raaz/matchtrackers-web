@@ -22,11 +22,34 @@ const Navbar = () => {
   const { content, setContent, refresh, refreshNow } = useMainStore();
   const dropdownRefs = useRef({});
   const mobileMenuRef = useRef();
+  const [isHovering, setIsHovering] = useState(null);
 
   useEffect(() => {
     getData();
 
     // Close dropdown when clicking outside
+    const handleClickOutside = (event) => {
+      if (
+        openDropdown &&
+        dropdownRefs.current[openDropdown] &&
+        !dropdownRefs.current[openDropdown].contains(event.target)
+      ) {
+        setOpenDropdown(null);
+      }
+
+      if (
+        mobileMenuOpen &&
+        mobileMenuRef.current &&
+        !mobileMenuRef.current.contains(event.target)
+      ) {
+        setMobileMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, [openDropdown, mobileMenuOpen]);
 
   const getData = async () => {
@@ -40,7 +63,7 @@ const Navbar = () => {
   };
 
   const toggleDropdown = (menu, event) => {
-    event.stopPropagation(); // Prevent click from propagating to document
+    if (event) event.stopPropagation(); // Prevent click from propagating to document
     setOpenDropdown((prev) => (prev === menu ? null : menu));
   };
 
@@ -59,9 +82,22 @@ const Navbar = () => {
     setMobileMenuOpen((prev) => !prev);
   };
 
+  const handleMouseEnter = (menu) => {
+    setIsHovering(menu);
+    setOpenDropdown(menu);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovering(null);
+    // Only close if not clicked open
+    if (!openDropdown || openDropdown === isHovering) {
+      setOpenDropdown(null);
+    }
+  };
+
   // Shared dropdown content components
   const SeriesDropdown = () => (
-    <div className="max-h-96 overflow-y-auto z-70 py-2 text-black bg-white rounded-md ">
+    <div className="max-h-96 overflow-y-auto z-70 py-2 text-black bg-white rounded-md shadow-lg">
       {navLinks?.series?.seriesMapProto?.length > 0 ? (
         navLinks?.series?.seriesMapProto.flatMap((month) => (
           <React.Fragment key={month.date}>
@@ -73,7 +109,7 @@ const Navbar = () => {
                 key={index}
                 to={`/schedules/${match.id}`}
                 className="block px-4 py-2 hover:bg-blue-50 transition-colors duration-150 text-sm"
-                onClick={(e) => handleNavLinkClick(e, `/schedules/${match.id}`)} // Use handleNavLinkClick
+                onClick={(e) => handleNavLinkClick(e, `/schedules/${match.id}`)}
               >
                 {match.name}
               </Link>
@@ -89,25 +125,25 @@ const Navbar = () => {
   );
 
   const MatchesDropdown = () => (
-    <div className="py-2 bg-white z-70 rounded-md text-black ">
+    <div className="py-2 bg-white z-70 rounded-md text-black shadow-lg">
       <Link
         to="/match-list/recent"
         className="block px-4 py-2 hover:bg-blue-50 transition-colors duration-150 text-sm"
-        onClick={(e) => handleNavLinkClick(e, "/match-list/recent")} // Use handleNavLinkClick
+        onClick={(e) => handleNavLinkClick(e, "/match-list/recent")}
       >
         Recent
       </Link>
       <Link
         to="/match-list/live"
         className="block px-4 py-2 hover:bg-blue-50 transition-colors duration-150 text-sm"
-        onClick={(e) => handleNavLinkClick(e, "/match-list/live")} // Use handleNavLinkClick
+        onClick={(e) => handleNavLinkClick(e, "/match-list/live")}
       >
         Live
       </Link>
       <Link
         to="/match-list/upcoming"
         className="block px-4 py-2 hover:bg-blue-50 transition-colors duration-150 text-sm"
-        onClick={(e) => handleNavLinkClick(e, "/match-list/upcoming")} // Use handleNavLinkClick
+        onClick={(e) => handleNavLinkClick(e, "/match-list/upcoming")}
       >
         Upcoming
       </Link>
@@ -115,25 +151,25 @@ const Navbar = () => {
   );
 
   const RankingsDropdown = () => (
-    <div className="py-2 bg-white z-70 rounded-md text-black ">
+    <div className="py-2 bg-white z-70 rounded-md text-black shadow-lg">
       <Link
         to="/rankings/odi"
         className="block px-4 py-2 hover:bg-blue-50 transition-colors duration-150 text-sm"
-        onClick={(e) => handleNavLinkClick(e, "/rankings/odi")} // Use handleNavLinkClick
+        onClick={(e) => handleNavLinkClick(e, "/rankings/odi")}
       >
         ODI
       </Link>
       <Link
         to="/rankings/test"
         className="block px-4 py-2 hover:bg-blue-50 transition-colors duration-150 text-sm"
-        onClick={(e) => handleNavLinkClick(e, "/rankings/test")} // Use handleNavLinkClick
+        onClick={(e) => handleNavLinkClick(e, "/rankings/test")}
       >
         Test
       </Link>
       <Link
         to="/rankings/t20"
         className="block px-4 py-2 hover:bg-blue-50 transition-colors duration-150 text-sm"
-        onClick={(e) => handleNavLinkClick(e, "/rankings/t20")} // Use handleNavLinkClick
+        onClick={(e) => handleNavLinkClick(e, "/rankings/t20")}
       >
         T20
       </Link>
@@ -141,13 +177,13 @@ const Navbar = () => {
   );
 
   const NewsDropdown = () => (
-    <div className="py-2 max-h-96 z-70 overflow-y-auto text-black bg-white rounded-md ">
+    <div className="py-2 max-h-96 z-70 overflow-y-auto text-black bg-white rounded-md shadow-lg">
       {navLinks?.news?.slice(0, 7).map((e, i) => (
         <Link
           key={i}
           to={`/news/${e.id}`}
           className="block px-4 py-3 hover:bg-blue-50 transition-colors duration-150 border-b border-gray-100 last:border-0"
-          onClick={(event) => handleNavLinkClick(event, `/news/${e.id}`)} // Use handleNavLinkClick
+          onClick={(event) => handleNavLinkClick(event, `/news/${e.id}`)}
         >
           <p className="line-clamp-2 text-sm">{e.hline}</p>
           <p className="text-xs text-gray-500 mt-1">{e.date || "Recent"}</p>
@@ -160,7 +196,7 @@ const Navbar = () => {
         <Link
           to="/news"
           className="block px-4 py-2 text-center text-primary text-sm font-medium hover:bg-blue-50"
-          onClick={(e) => handleNavLinkClick(e, "/news")} // Use handleNavLinkClick
+          onClick={(e) => handleNavLinkClick(e, "/news")}
         >
           View All News
         </Link>
@@ -169,7 +205,7 @@ const Navbar = () => {
   );
 
   const SchedulesDropdown = () => (
-    <div className="py-2 max-h-96 z-70 overflow-y-auto text-black bg-white rounded-md ">
+    <div className="py-2 max-h-96 z-70 overflow-y-auto text-black bg-white rounded-md shadow-lg">
       {navLinks?.schedules?.matchScheduleMap
         ?.filter((item) => item.scheduleAdWrapper)
         .slice(0, 6)
@@ -190,7 +226,7 @@ const Navbar = () => {
                   className="block px-4 py-3 hover:bg-blue-50 transition-colors duration-150"
                   onClick={(e) =>
                     handleNavLinkClick(e, `/match/${match.matchId}`)
-                  } // Use handleNavLinkClick
+                  }
                 >
                   <div className="flex justify-between items-center">
                     <div className="text-xs text-gray-500">
@@ -223,7 +259,7 @@ const Navbar = () => {
       <Link
         to="/schedules"
         className="block px-4 py-2 text-center text-primary text-sm font-medium hover:bg-blue-50"
-        onClick={(e) => handleNavLinkClick(e, "/schedules")} // Use handleNavLinkClick
+        onClick={(e) => handleNavLinkClick(e, "/schedules")}
       >
         View Full Schedule
       </Link>
@@ -232,53 +268,37 @@ const Navbar = () => {
 
   return (
     <div className="sticky z-50 top-0 w-full left-0 shadow-md">
-      <div className="bg-gradient-to-r from-blue-600 to-blue-800 px-4 md:px-12 lg:px-24 py-3 text-white flex w-full justify-between items-center relative">
-        {" "}
-        {/* Added relative positioning */}
+      <div className="bg-gradient-to-r from-blue-600 to-blue-800 px-4 md:px-6 lg:px-24 py-3 text-white flex w-full justify-between items-center relative">
         <img
           onClick={() => navigate("/")}
           className="h-8 md:h-8 cursor-pointer transition-transform hover:scale-105"
           src={navLogo}
           alt="Logo"
         />
+
         {/* Mobile Menu Button */}
-        {/* <div className="flex items-center bg-white/20 rounded-full px-1 py-1">
-          <button
-            className={`px-4 py-1 rounded-full text-sm transition-all duration-300 ${
-              content === "cricket" ? "bg-white text-secondary" : "text-white"
-            }`}
-            onClick={() => setContent("cricket")}
-          >
-            Cricket
-          </button>
-          <button
-            className={`px-4 py-1 rounded-full text-sm transition-all duration-300 ${
-              content === "football" ? "bg-white text-secondary" : "text-white"
-            }`}
-            onClick={() => setContent("football")}
-          >
-            Football
-          </button>
-        </div> */}
-        <div className="md:hidden">
+        <div className="sm:hidden">
           <button
             onClick={toggleMobileMenu}
-            className="text-white focus:outline-none  z-70 relative" // Increased z-index and relative
+            className="text-white focus:outline-none z-70 relative"
             aria-label={mobileMenuOpen ? "Close Menu" : "Open Menu"}
           >
             {mobileMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
           </button>
         </div>
+
         {/* Desktop Navigation */}
-        <div className="hidden md:flex gap-6 md:gap-8 font-medium items-center">
+        <div className="hidden sm:flex gap-3 md:gap-6 lg:gap-8 font-medium items-center text-sm md:text-base">
           {/* Series Dropdown */}
           <div
             className="relative"
             ref={(el) => (dropdownRefs.current.series = el)}
+            onMouseEnter={() => handleMouseEnter("series")}
+            onMouseLeave={handleMouseLeave}
           >
             <div
-              className="capitalize flex gap-1 items-center cursor-pointer py-2 px-1 hover:text-primary transition-colors duration-200 z-10 relative" // Added z-index and relative
-              onClick={(event) => toggleDropdown("series", event)} // Added event argument
+              className="capitalize flex gap-1 items-center cursor-pointer py-2 px-1 hover:text-primary transition-colors duration-200 z-10 relative"
+              onClick={(event) => toggleDropdown("series", event)}
             >
               <span>Series</span>
               <span className="transition-transform duration-200">
@@ -297,10 +317,12 @@ const Navbar = () => {
           <div
             className="relative"
             ref={(el) => (dropdownRefs.current.matches = el)}
+            onMouseEnter={() => handleMouseEnter("matches")}
+            onMouseLeave={handleMouseLeave}
           >
             <div
-              className="capitalize flex gap-1 items-center cursor-pointer py-2 px-1 hover:text-primary transition-colors duration-200 z-10 relative" // Added z-index and relative
-              onClick={(event) => toggleDropdown("matches", event)} // Added event argument
+              className="capitalize flex gap-1 items-center cursor-pointer py-2 px-1 hover:text-primary transition-colors duration-200 z-10 relative"
+              onClick={(event) => toggleDropdown("matches", event)}
             >
               <span>Matches</span>
               <span className="transition-transform duration-200">
@@ -319,10 +341,12 @@ const Navbar = () => {
           <div
             className="relative"
             ref={(el) => (dropdownRefs.current.players = el)}
+            onMouseEnter={() => handleMouseEnter("players")}
+            onMouseLeave={handleMouseLeave}
           >
             <div
-              className="capitalize flex gap-1 items-center cursor-pointer py-2 px-1 hover:text-primary transition-colors duration-200 z-10 relative" // Added z-index and relative
-              onClick={(event) => toggleDropdown("players", event)} // Added event argument
+              className="capitalize flex gap-1 items-center cursor-pointer py-2 px-1 hover:text-primary transition-colors duration-200 z-10 relative"
+              onClick={(event) => toggleDropdown("players", event)}
             >
               <span>Rankings</span>
               <span className="transition-transform duration-200">
@@ -341,10 +365,12 @@ const Navbar = () => {
           <div
             className="relative"
             ref={(el) => (dropdownRefs.current.news = el)}
+            onMouseEnter={() => handleMouseEnter("news")}
+            onMouseLeave={handleMouseLeave}
           >
             <div
-              className="capitalize flex gap-1 items-center cursor-pointer py-2 px-1 hover:text-primary transition-colors duration-200 z-10 relative" // Added z-index and relative
-              onClick={(event) => toggleDropdown("news", event)} // Added event argument
+              className="capitalize flex gap-1 items-center cursor-pointer py-2 px-1 hover:text-primary transition-colors duration-200 z-10 relative"
+              onClick={(event) => toggleDropdown("news", event)}
             >
               <span>News</span>
               <span className="transition-transform duration-200">
@@ -363,10 +389,12 @@ const Navbar = () => {
           <div
             className="relative"
             ref={(el) => (dropdownRefs.current.schedules = el)}
+            onMouseEnter={() => handleMouseEnter("schedules")}
+            onMouseLeave={handleMouseLeave}
           >
             <div
-              className="capitalize flex gap-1 items-center cursor-pointer py-2 px-1 hover:text-primary transition-colors duration-200 z-10 relative" // Added z-index and relative
-              onClick={(event) => toggleDropdown("schedules", event)} // Added event argument
+              className="capitalize flex gap-1 items-center cursor-pointer py-2 px-1 hover:text-primary transition-colors duration-200 z-10 relative"
+              onClick={(event) => toggleDropdown("schedules", event)}
             >
               <span>Schedules</span>
               <span className="transition-transform duration-200">
@@ -383,10 +411,10 @@ const Navbar = () => {
 
           <div className="">
             <div
-              className="flex justify-between items-center py-3 z-60 px-6 font-medium cursor-pointer"
+              className="capitalize flex gap-1 items-center cursor-pointer py-2 px-1 hover:text-primary transition-colors duration-200"
               onClick={() => {
                 navigate("/analytics");
-                closeDropdown(); // Added to close menu after navigation
+                closeDropdown();
               }}
             >
               <span>Analytics</span>
@@ -417,10 +445,10 @@ const Navbar = () => {
 
       {/* Mobile Menu - Full screen overlay */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 bg-[#0004] bg-opacity-50 z-[80] md:hidden">
+        <div className="fixed inset-0 bg-[#0004] bg-opacity-50 z-[80] sm:hidden">
           <div
             ref={mobileMenuRef}
-            className="bg-white h-full w-full overflow-y-auto shadow-xl animate-slide-in-right z-[80]" // Increased z-index and relative
+            className="bg-white h-full w-full overflow-y-auto shadow-xl animate-slide-in-right z-[80]"
           >
             <div className="py-4 px-6 bg-secondary relative z-70 text-white flex justify-between items-center">
               <img
@@ -437,7 +465,7 @@ const Navbar = () => {
                 aria-label="Close Menu"
                 className="text-white focus:outline-none z-60 relative"
               >
-                <FaTimes size={24} /> {/* Added FaTimes icon explicitly */}
+                <FaTimes size={24} />
               </button>
             </div>
 
@@ -446,7 +474,7 @@ const Navbar = () => {
               <div className="border-b border-gray-200">
                 <div
                   className="flex justify-between items-center py-3 px-6 font-medium cursor-pointer"
-                  onClick={(event) => toggleDropdown("series", event)} // Added event argument
+                  onClick={(event) => toggleDropdown("series", event)}
                 >
                   <span>Series</span>
                   <span>
@@ -459,8 +487,6 @@ const Navbar = () => {
                 </div>
                 {openDropdown === "series" && (
                   <div className="bg-gray-50 border-t border-gray-100 relative z-60">
-                    {" "}
-                    {/* Increased z-index and relative */}
                     <SeriesDropdown />
                   </div>
                 )}
@@ -469,7 +495,7 @@ const Navbar = () => {
               <div className="border-b border-gray-200">
                 <div
                   className="flex justify-between items-center py-3 px-6 font-medium cursor-pointer"
-                  onClick={(event) => toggleDropdown("matches", event)} // Added event argument
+                  onClick={(event) => toggleDropdown("matches", event)}
                 >
                   <span>Matches</span>
                   <span>
@@ -482,8 +508,6 @@ const Navbar = () => {
                 </div>
                 {openDropdown === "matches" && (
                   <div className="bg-gray-50 border-t border-gray-100 relative z-60">
-                    {" "}
-                    {/* Increased z-index and relative */}
                     <MatchesDropdown />
                   </div>
                 )}
@@ -492,7 +516,7 @@ const Navbar = () => {
               <div className="border-b border-gray-200">
                 <div
                   className="flex justify-between items-center py-3 px-6 font-medium cursor-pointer"
-                  onClick={(event) => toggleDropdown("players", event)} // Added event argument
+                  onClick={(event) => toggleDropdown("players", event)}
                 >
                   <span>Rankings</span>
                   <span>
@@ -505,8 +529,6 @@ const Navbar = () => {
                 </div>
                 {openDropdown === "players" && (
                   <div className="bg-gray-50 border-t border-gray-100 relative z-60">
-                    {" "}
-                    {/* Increased z-index and relative */}
                     <RankingsDropdown />
                   </div>
                 )}
@@ -515,7 +537,7 @@ const Navbar = () => {
               <div className="border-b border-gray-200">
                 <div
                   className="flex justify-between items-center py-3 px-6 font-medium cursor-pointer"
-                  onClick={(event) => toggleDropdown("news", event)} // Added event argument
+                  onClick={(event) => toggleDropdown("news", event)}
                 >
                   <span>News</span>
                   <span>
@@ -524,8 +546,6 @@ const Navbar = () => {
                 </div>
                 {openDropdown === "news" && (
                   <div className="bg-gray-50 border-t border-gray-100 relative z-60">
-                    {" "}
-                    {/* Increased z-index and relative */}
                     <NewsDropdown />
                   </div>
                 )}
@@ -534,7 +554,7 @@ const Navbar = () => {
               <div className="border-b border-gray-200">
                 <div
                   className="flex justify-between items-center py-3 px-6 font-medium cursor-pointer"
-                  onClick={(event) => toggleDropdown("schedules", event)} // Added event argument
+                  onClick={(event) => toggleDropdown("schedules", event)}
                 >
                   <span>Schedules</span>
                   <span>
@@ -547,8 +567,6 @@ const Navbar = () => {
                 </div>
                 {openDropdown === "schedules" && (
                   <div className="bg-gray-50 border-t border-gray-100 relative z-60">
-                    {" "}
-                    {/* Increased z-index and relative */}
                     <SchedulesDropdown />
                   </div>
                 )}
@@ -559,7 +577,7 @@ const Navbar = () => {
                   className="flex justify-between items-center py-3 px-6 font-medium cursor-pointer"
                   onClick={() => {
                     navigate("/analytics");
-                    setMobileMenuOpen(false); // Fixed: Added this line to close mobile menu when Analytics is clicked
+                    setMobileMenuOpen(false);
                   }}
                 >
                   <span>Analytics</span>

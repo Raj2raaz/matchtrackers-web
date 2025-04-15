@@ -2,6 +2,10 @@ import React from "react";
 import { User, Circle, Award, Clock, Target } from "lucide-react";
 
 export default function Overs({ overSummaryList }) {
+  // Check if there's over summary data available
+  const hasOverData =
+    Array.isArray(overSummaryList) && overSummaryList.length > 0;
+
   // Helper function to convert ball values to styled components
   const renderBall = (value) => {
     const trimmedValue = value.trim();
@@ -36,24 +40,48 @@ export default function Overs({ overSummaryList }) {
     );
   };
 
+  if (!hasOverData) {
+    return (
+      <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
+        <div className="p-10 text-center">
+          <div className="text-gray-600 font-medium">
+            We could not find the over summary for this match.
+          </div>
+          <p className="text-gray-400 text-sm mt-2">
+            Check back later for updates.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
       {overSummaryList.map((over, index) => {
+        // Check if this over has valid data
+        if (!over || !over.o_summary) {
+          return null;
+        }
+
         // Format over number correctly
-        const displayOverNum = Math.ceil(over.overNum);
+        const displayOverNum = over.overNum
+          ? Math.ceil(over.overNum)
+          : index + 1;
 
-        // Convert over summary to array of balls
+        // Convert over summary to array of balls, handling potential null/undefined values
         const balls = over.o_summary
-          .trim()
-          .split(" ")
-          .filter((ball) => ball !== "");
+          ? over.o_summary
+              .trim()
+              .split(" ")
+              .filter((ball) => ball !== "")
+          : [];
 
-        // Get batsmen details
-        const batsman1 = over.batStrikerNames[0] || "";
-        const batsman2 = over.batStrikerNames[1] || "";
+        // Get batsmen details with null checks
+        const batsman1 = over.batStrikerNames?.[0] || "Unknown";
+        const batsman2 = over.batStrikerNames?.[1] || "";
 
-        // Get bowler details
-        const bowlerName = over.bowlNames[0] || "";
+        // Get bowler details with null check
+        const bowlerName = over.bowlNames?.[0] || "Unknown";
 
         return (
           <div
@@ -68,10 +96,10 @@ export default function Overs({ overSummaryList }) {
                 </div>
                 <div>
                   <div className="text-xs text-blue-500 uppercase font-semibold">
-                    {over.batTeamName}
+                    {over.batTeamName || "Team"}
                   </div>
                   <div className="text-xl font-bold">
-                    {over.score}/{over.wickets}
+                    {over.score || 0}/{over.wickets || 0}
                   </div>
                 </div>
               </div>
@@ -80,7 +108,7 @@ export default function Overs({ overSummaryList }) {
                   Runs
                 </div>
                 <div className="text-xl font-bold text-green-600">
-                  +{over.runs}
+                  +{over.runs || 0}
                 </div>
               </div>
             </div>
@@ -101,7 +129,7 @@ export default function Overs({ overSummaryList }) {
                       <span className="font-medium">{batsman1}</span>
                     </div>
                     <div className="ml-4 text-sm text-gray-600">
-                      {over.batStrikerRuns} ({over.batStrikerBalls})
+                      {over.batStrikerRuns || 0} ({over.batStrikerBalls || 0})
                     </div>
                   </div>
 
@@ -112,7 +140,8 @@ export default function Overs({ overSummaryList }) {
                         <span className="font-medium">{batsman2}</span>
                       </div>
                       <div className="ml-4 text-sm text-gray-600">
-                        {over.batNonStrikerRuns} ({over.batNonStrikerBalls})
+                        {over.batNonStrikerRuns || 0} (
+                        {over.batNonStrikerBalls || 0})
                       </div>
                     </div>
                   )}
@@ -130,15 +159,15 @@ export default function Overs({ overSummaryList }) {
                     <div className="flex items-center text-sm text-gray-600 mt-1">
                       <div className="mr-3">
                         <Clock size={14} className="inline mr-1" />
-                        {over.bowlOvers}
+                        {over.bowlOvers || "0.0"}
                       </div>
                       <div className="mr-3">
                         <Circle size={14} className="inline mr-1" />
-                        {over.bowlRuns}
+                        {over.bowlRuns || 0}
                       </div>
                       <div>
                         <Award size={14} className="inline mr-1" />
-                        {over.bowlWickets}
+                        {over.bowlWickets || 0}
                       </div>
                     </div>
                   </div>
@@ -151,11 +180,17 @@ export default function Overs({ overSummaryList }) {
                   THIS OVER
                 </div>
                 <div className="flex flex-wrap justify-center">
-                  {balls.map((ball, idx) => (
-                    <React.Fragment key={idx}>
-                      {renderBall(ball)}
-                    </React.Fragment>
-                  ))}
+                  {balls.length > 0 ? (
+                    balls.map((ball, idx) => (
+                      <React.Fragment key={idx}>
+                        {renderBall(ball)}
+                      </React.Fragment>
+                    ))
+                  ) : (
+                    <div className="text-gray-400 italic text-sm">
+                      No ball information available
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

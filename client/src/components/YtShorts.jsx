@@ -1,21 +1,67 @@
 import React, { useState, useRef, useEffect } from "react";
 import data from "../data.json";
 
+// Thumbnail imports
+import t1 from "../assets/ytThumbnails/1.jpg";
+import t2 from "../assets/ytThumbnails/2.jpg";
+import t3 from "../assets/ytThumbnails/3.jpg";
+import t4 from "../assets/ytThumbnails/4.jpg";
+import t5 from "../assets/ytThumbnails/5.jpg";
+import t6 from "../assets/ytThumbnails/6.jpg";
+import t7 from "../assets/ytThumbnails/7.jpg";
+import t8 from "../assets/ytThumbnails/8.jpg";
+import t9 from "../assets/ytThumbnails/9.jpg";
+import t10 from "../assets/ytThumbnails/10.jpg";
+
 export default function YtShorts() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [activeVideo, setActiveVideo] = useState(null);
   const scrollContainerRef = useRef(null);
 
-  const totalVideos = data.youtube.length;
+  // Map thumbnails to their imports
+  const thumbnails = {
+    1: t1,
+    2: t2,
+    3: t3,
+    4: t4,
+    5: t5,
+    6: t6,
+    7: t7,
+    8: t8,
+    9: t9,
+    10: t10,
+  };
+
+  const videos = data.youtube;
+  const totalVideos = videos.length;
+
+  // Create a circular array for display
+  const createCircularArray = () => {
+    // Add last item to beginning and first item to end
+    return [videos[totalVideos - 1], ...videos, videos[0]];
+  };
+
+  const circularVideos = createCircularArray();
+
+  const getVideoId = (url) => {
+    if (url.includes("/shorts/")) {
+      return url.split("/shorts/")[1];
+    }
+    return url.split("v=")[1];
+  };
 
   const scrollToIndex = (index) => {
     if (scrollContainerRef.current) {
       const container = scrollContainerRef.current;
       const slideWidth = container.querySelector(".slide-item").offsetWidth;
-      const gap = 16; // 4rem converted to pixels
+      const gap = 16; // Gap between slides in pixels
+
+      // Adjust for the extra item at the beginning
+      const adjustedIndex = index + 1;
 
       // Calculate center position to ensure the selected slide is centered
       const containerWidth = container.offsetWidth;
-      const slideCenter = index * (slideWidth + gap) + slideWidth / 2;
+      const slideCenter = adjustedIndex * (slideWidth + gap) + slideWidth / 2;
       const scrollLeft = slideCenter - containerWidth / 2;
 
       container.scrollTo({
@@ -36,6 +82,15 @@ export default function YtShorts() {
     scrollToIndex(prevIndex);
   };
 
+  const handleThumbnailClick = (index) => {
+    // Convert from circular index to original index
+    const adjustedIndex =
+      index === 0 ? totalVideos - 1 : index === totalVideos + 1 ? 0 : index - 1;
+
+    setActiveVideo(adjustedIndex);
+    setCurrentSlide(adjustedIndex);
+  };
+
   // Handle scroll events to update pagination
   useEffect(() => {
     const handleScroll = () => {
@@ -43,7 +98,7 @@ export default function YtShorts() {
         const container = scrollContainerRef.current;
         const slideElements = container.querySelectorAll(".slide-item");
         const slideWidth = slideElements[0]?.offsetWidth || 0;
-        const gap = 16; // 4rem gap in pixels
+        const gap = 16;
 
         // Calculate which slide is most centered in the viewport
         const containerCenter =
@@ -62,8 +117,13 @@ export default function YtShorts() {
           }
         });
 
-        if (closestIndex !== currentSlide) {
-          setCurrentSlide(closestIndex);
+        // Adjust for the circular array (first visible item is actually the last one)
+        const adjustedIndex = closestIndex - 1;
+        const normalizedIndex =
+          ((adjustedIndex % totalVideos) + totalVideos) % totalVideos;
+
+        if (normalizedIndex !== currentSlide) {
+          setCurrentSlide(normalizedIndex);
         }
       }
     };
@@ -73,18 +133,67 @@ export default function YtShorts() {
       container.addEventListener("scroll", handleScroll);
       return () => container.removeEventListener("scroll", handleScroll);
     }
-  }, [currentSlide]);
+  }, [currentSlide, totalVideos]);
 
-  // Set initial scroll position to show a bit of the last and first items
+  // Handle special scroll behavior for the circular effect
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const handleScrollEnd = () => {
+      const slideElements = container.querySelectorAll(".slide-item");
+      const slideWidth = slideElements[0]?.offsetWidth || 0;
+      const gap = 16;
+
+      // Check if we've scrolled to the fake first or last item
+      if (currentSlide === totalVideos - 1 && activeVideo !== totalVideos - 1) {
+        // We're at the "fake" last item, jump to the real last item
+        setTimeout(() => {
+          container.scrollTo({
+            left: totalVideos * (slideWidth + gap),
+            behavior: "auto",
+          });
+        }, 300);
+      } else if (currentSlide === 0 && activeVideo !== 0) {
+        // We're at the "fake" first item, jump to the real first item
+        setTimeout(() => {
+          container.scrollTo({
+            left: slideWidth + gap,
+            behavior: "auto",
+          });
+        }, 300);
+      }
+    };
+
+    container.addEventListener("scrollend", handleScrollEnd);
+    return () => container.removeEventListener("scrollend", handleScrollEnd);
+  }, [currentSlide, activeVideo, totalVideos]);
+
+  // Set initial scroll position
   useEffect(() => {
     if (scrollContainerRef.current) {
-      // Small delay to ensure the component is fully rendered
-      setTimeout(() => scrollToIndex(0), 100);
+      // Set initial position to the first actual item (not the duplicated one)
+      setTimeout(() => {
+        const container = scrollContainerRef.current;
+        const slideElements = container.querySelectorAll(".slide-item");
+        const slideWidth = slideElements[0]?.offsetWidth || 0;
+        const gap = 16;
+
+        container.scrollTo({
+          left: slideWidth + gap,
+          behavior: "auto",
+        });
+      }, 100);
     }
   }, []);
 
-  // Create video array with duplicated items for looping effect
-  const processedVideos = [...data.youtube];
+  // Get the correct thumbnail for a video
+  const getThumbnail = (index) => {
+    // Convert to 1-based index for thumbnail mapping
+    const thumbnailIndex =
+      (((index % totalVideos) + totalVideos) % totalVideos) + 1;
+    return thumbnails[thumbnailIndex] || null;
+  };
 
   return (
     <div className="bg-white shadow-lg px-6 py-4 rounded-lg">
@@ -95,29 +204,63 @@ export default function YtShorts() {
 
         <div
           ref={scrollContainerRef}
-          className="overflow-x-auto flex py-2 px-12 no-scrollbar "
+          className="overflow-x-auto flex py-2 px-12 no-scrollbar"
           style={{ scrollSnapType: "x mandatory" }}
         >
-          {processedVideos.map((e, i) => (
-            <div
-              key={i}
-              className={`slide-item flex-shrink-0 w-full max-w-[225px] aspect-[9/16] mx-2 transition-all duration-300 ${
-                i === currentSlide
-                  ? "scale-100 opacity-100"
-                  : "scale-95 opacity-90"
-              }`}
-              style={{ scrollSnapAlign: "center" }}
-            >
-              <iframe
-                src={`https://www.youtube.com/embed/${e.split("/shorts/")[1]}`}
-                title="YouTube Short"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="w-full h-full rounded-lg shadow-md"
-              ></iframe>
-            </div>
-          ))}
+          {circularVideos.map((url, i) => {
+            // Convert from circular index to original index
+            const originalIndex =
+              i === 0 ? totalVideos - 1 : i === totalVideos + 1 ? 0 : i - 1;
+
+            const isActive = activeVideo === originalIndex;
+            const videoId = getVideoId(url);
+
+            return (
+              <div
+                key={i}
+                className={`slide-item flex-shrink-0 w-full max-w-[225px] aspect-[9/16] mx-2 transition-all duration-300 ${
+                  originalIndex === currentSlide
+                    ? "scale-100 opacity-100"
+                    : "scale-95 opacity-90"
+                }`}
+                style={{ scrollSnapAlign: "center" }}
+              >
+                {isActive ? (
+                  <iframe
+                    src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
+                    title="YouTube Short"
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    className="w-full h-full rounded-lg shadow-md"
+                  ></iframe>
+                ) : (
+                  <div
+                    className="relative w-full h-full cursor-pointer"
+                    onClick={() => handleThumbnailClick(i)}
+                  >
+                    <img
+                      src={getThumbnail(originalIndex)}
+                      alt={`YouTube Short ${originalIndex + 1}`}
+                      className="w-full h-full object-cover rounded-lg shadow-md"
+                    />
+                    {/* Play button overlay */}
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="bg-black bg-opacity-50 rounded-full p-3">
+                        <svg
+                          className="h-8 w-8 text-white"
+                          fill="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path d="M8 5v14l11-7z" />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
 
         {/* Right fade effect */}
@@ -169,10 +312,13 @@ export default function YtShorts() {
 
       {/* Pagination dots */}
       <div className="mt-4 flex justify-center space-x-2">
-        {processedVideos.map((_, index) => (
+        {videos.map((_, index) => (
           <button
             key={index}
-            onClick={() => scrollToIndex(index)}
+            onClick={() => {
+              scrollToIndex(index);
+              setActiveVideo(null); // Reset active video when navigating with dots
+            }}
             className={`h-1.5 rounded-full transition-all ${
               index === currentSlide ? "w-8 bg-blue-600" : "w-2 bg-gray-300"
             }`}
