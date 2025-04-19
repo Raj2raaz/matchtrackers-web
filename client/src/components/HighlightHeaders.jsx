@@ -152,7 +152,7 @@ export default function HighlightHeaders() {
               className="flex-shrink-0 carousel-item w-64 md:w-72 mx-2 cursor-pointer snap-center transition-transform duration-300 hover:scale-105"
               onClick={() => handleImageClick(item.id)}
             >
-              <div className="relative h-36 md:h-44 rounded-lg overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300">
+              <div className="relative h-26 md:h-32 rounded-lg overflow-hidden border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300">
                 <img
                   src={item.src}
                   alt={item.name}

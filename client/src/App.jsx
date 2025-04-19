@@ -25,6 +25,10 @@ import Gallery from "./pages/Gallery";
 import AllNews from "./pages/AllNews";
 import Analytics from "./pages/Analytics";
 import AnalyticsRouter from "./components/AnalyticsRouter";
+import PrivacyPolicyPage from "./pages/PrivacyPolicy";
+import TermsAndConditionsPage from "./pages/TermsAndConditions";
+import FAQPage from "./pages/Faq";
+import AboutUsPage from "./pages/About";
 
 // Layout component to add padding to certain routes
 const PaddedLayout = ({ children }) => {
@@ -41,6 +45,15 @@ export default function App() {
 
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+          <Route path="/faqs" element={<FAQPage />} />
+          <Route path="/about" element={<AboutUsPage />} />
+
+          <Route
+            path="/Terms-and-conditions"
+            element={<TermsAndConditionsPage />}
+          />
+
           <Route
             path="/player/:id"
             element={

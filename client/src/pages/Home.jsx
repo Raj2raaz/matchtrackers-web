@@ -155,7 +155,12 @@ export default function Home() {
 
   return (
     <>
-      <img src={header} className="w-full" alt="" />
+      <img
+        src={header}
+        onClick={() => navigate("/auth")}
+        className="w-full cursor-pointer"
+        alt=""
+      />
 
       <Helmet>
         <title>Home | Match Trackers</title>
