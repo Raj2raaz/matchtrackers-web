@@ -14,9 +14,11 @@ export const getLeagues = async () => {
 
 export const getFixtures = async () => {
   try {
-    const response = await apiClient.get("/v3/fixtures?last=5");
+    const response = await apiClient.get("/v3/fixtures?last=23");
 
-    return response.data.response;
+    return response.data.response.filter(
+      (e) => e.fixture.status.short !== "NS"
+    );
   } catch (error) {
     console.log("error fetching fixtures", error);
   }

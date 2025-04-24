@@ -95,7 +95,7 @@ export default function HighlightHeaders() {
   };
 
   const handleImageClick = (id) => {
-    navigate(`/schedules/${id}`);
+    navigate(`/cricket/schedules/${id}`);
   };
 
   // Pause auto-scroll when user interacts with the carousel

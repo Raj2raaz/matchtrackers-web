@@ -720,7 +720,9 @@ const Analytics = () => {
                             <button
                               onClick={(el) => {
                                 el.stopPropagation(); // Prevents the click from reaching the parent
-                                navigate("/analytics/match/" + e.matchId);
+                                navigate(
+                                  "/cricket/analytics/match/" + e.matchId
+                                );
                               }}
                               className="bg-secondary text-base text-white px-3 py-0.5 rounded"
                             >

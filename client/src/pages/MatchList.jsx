@@ -173,7 +173,7 @@ const CricketScoresDashboard = ({}) => {
           </div>
           <div className="mt-2 sm:mt-0">
             <button
-              onClick={() => navigate("/match/" + matchInfo.matchId)}
+              onClick={() => navigate("/cricket/match/" + matchInfo.matchId)}
               className="bg-blue-600 text-white px-3 py-1.5 rounded text-sm font-medium hover:bg-blue-700"
             >
               Match Details

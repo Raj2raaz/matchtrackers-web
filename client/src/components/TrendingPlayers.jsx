@@ -30,7 +30,7 @@ export default function TrendingPlayers() {
             ? trendingPlayers?.player?.map((e, i) => (
                 <div
                   key={i}
-                  onClick={() => navigate("/player/" + e?.id)}
+                  onClick={() => navigate("/cricket/player/" + e?.id)}
                   className="pl-1 cursor-pointer hover:bg-gray-200 border-gray-300 border gap-4 pr-2 py-1 items-center justify-between rounded-full flex "
                 >
                   <div className="flex items-center gap-2">
@@ -46,7 +46,7 @@ export default function TrendingPlayers() {
             : fbPlayers.map((e, i) => (
                 <div
                   key={i}
-                  onClick={() => navigate("/player/" + e?.player?.id)}
+                  onClick={() => navigate("/cricket/player/" + e?.player?.id)}
                   className="pl-1 cursor-pointer hover:bg-gray-200 border-gray-300 border gap-4 pr-2 py-1 items-center justify-between rounded-full flex "
                 >
                   <div className="flex items-center gap-2">

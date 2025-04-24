@@ -12,6 +12,9 @@ import favicon from "../assets/favicon.svg";
 import { getNavLinks } from "../api/Home";
 import Cookies from "js-cookie";
 import useMainStore from "../store/MainStore";
+import { IoFootball } from "react-icons/io5";
+import { TbCricket } from "react-icons/tb";
+import toast from "react-hot-toast";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -107,9 +110,11 @@ const Navbar = () => {
             {month.series.map((match, index) => (
               <Link
                 key={index}
-                to={`/schedules/${match.id}`}
+                to={`/cricket/schedules/${match.id}`}
                 className="block px-4 py-2 hover:bg-blue-50 transition-colors duration-150 text-sm"
-                onClick={(e) => handleNavLinkClick(e, `/schedules/${match.id}`)}
+                onClick={(e) =>
+                  handleNavLinkClick(e, `/cricket/schedules/${match.id}`)
+                }
               >
                 {match.name}
               </Link>
@@ -127,23 +132,23 @@ const Navbar = () => {
   const MatchesDropdown = () => (
     <div className="py-2 bg-white z-70 rounded-md text-black shadow-lg">
       <Link
-        to="/match-list/recent"
+        to="/cricket/match-list/recent"
         className="block px-4 py-2 hover:bg-blue-50 transition-colors duration-150 text-sm"
-        onClick={(e) => handleNavLinkClick(e, "/match-list/recent")}
+        onClick={(e) => handleNavLinkClick(e, "/cricket/match-list/recent")}
       >
         Recent
       </Link>
       <Link
-        to="/match-list/live"
+        to="/cricket/match-list/live"
         className="block px-4 py-2 hover:bg-blue-50 transition-colors duration-150 text-sm"
-        onClick={(e) => handleNavLinkClick(e, "/match-list/live")}
+        onClick={(e) => handleNavLinkClick(e, "/cricket/match-list/live")}
       >
         Live
       </Link>
       <Link
-        to="/match-list/upcoming"
+        to="/cricket/match-list/upcoming"
         className="block px-4 py-2 hover:bg-blue-50 transition-colors duration-150 text-sm"
-        onClick={(e) => handleNavLinkClick(e, "/match-list/upcoming")}
+        onClick={(e) => handleNavLinkClick(e, "/cricket/match-list/upcoming")}
       >
         Upcoming
       </Link>
@@ -153,23 +158,23 @@ const Navbar = () => {
   const RankingsDropdown = () => (
     <div className="py-2 bg-white z-70 rounded-md text-black shadow-lg">
       <Link
-        to="/rankings/odi"
+        to="/cricket/rankings/odi"
         className="block px-4 py-2 hover:bg-blue-50 transition-colors duration-150 text-sm"
-        onClick={(e) => handleNavLinkClick(e, "/rankings/odi")}
+        onClick={(e) => handleNavLinkClick(e, "./cricket/rankings/odi")}
       >
         ODI
       </Link>
       <Link
-        to="/rankings/test"
+        to="/cricket/rankings/test"
         className="block px-4 py-2 hover:bg-blue-50 transition-colors duration-150 text-sm"
-        onClick={(e) => handleNavLinkClick(e, "/rankings/test")}
+        onClick={(e) => handleNavLinkClick(e, "/cricket/rankings/test")}
       >
         Test
       </Link>
       <Link
-        to="/rankings/t20"
+        to="/cricket/rankings/t20"
         className="block px-4 py-2 hover:bg-blue-50 transition-colors duration-150 text-sm"
-        onClick={(e) => handleNavLinkClick(e, "/rankings/t20")}
+        onClick={(e) => handleNavLinkClick(e, "/cricket/rankings/t20")}
       >
         T20
       </Link>
@@ -181,9 +186,11 @@ const Navbar = () => {
       {navLinks?.news?.slice(0, 7).map((e, i) => (
         <Link
           key={i}
-          to={`/news/${e.id}`}
+          to={`/cricket/news/${e.id}`}
           className="block px-4 py-3 hover:bg-blue-50 transition-colors duration-150 border-b border-gray-100 last:border-0"
-          onClick={(event) => handleNavLinkClick(event, `/news/${e.id}`)}
+          onClick={(event) =>
+            handleNavLinkClick(event, `/cricket/news/${e.id}`)
+          }
         >
           <p className="line-clamp-2 text-sm">{e.hline}</p>
           <p className="text-xs text-gray-500 mt-1">{e.date || "Recent"}</p>
@@ -194,9 +201,9 @@ const Navbar = () => {
       )}
       {navLinks?.news?.length > 0 && (
         <Link
-          to="/news"
+          to="/cricket/all-news"
           className="block px-4 py-2 text-center text-primary text-sm font-medium hover:bg-blue-50"
-          onClick={(e) => handleNavLinkClick(e, "/news")}
+          onClick={(e) => handleNavLinkClick(e, "/cricket/all-news")}
         >
           View All News
         </Link>
@@ -222,10 +229,10 @@ const Navbar = () => {
               {matches.map((match, mIndex) => (
                 <Link
                   key={mIndex}
-                  to={`/match/${match.matchId}`}
+                  to={`/cricket/match/${match.matchId}`}
                   className="block px-4 py-3 hover:bg-blue-50 transition-colors duration-150"
                   onClick={(e) =>
-                    handleNavLinkClick(e, `/match/${match.matchId}`)
+                    handleNavLinkClick(e, `/cricket/match/${match.matchId}`)
                   }
                 >
                   <div className="flex justify-between items-center">
@@ -256,25 +263,75 @@ const Navbar = () => {
             </div>
           ) : null;
         })}
-      <Link
-        to="/schedules"
-        className="block px-4 py-2 text-center text-primary text-sm font-medium hover:bg-blue-50"
-        onClick={(e) => handleNavLinkClick(e, "/schedules")}
-      >
-        View Full Schedule
-      </Link>
     </div>
   );
+
+  useEffect(() => {
+    const url = window.location.pathname;
+
+    if (url.split("/")[1] === "cricket") setContent("cricket");
+    if (url.split("/")[1] === "football") setContent("football");
+  }, [window.location.pathname]);
 
   return (
     <div className="sticky z-50 top-0 w-full left-0 shadow-md">
       <div className="bg-gradient-to-r from-blue-600 to-blue-800 px-4 md:px-6 lg:px-24 py-3 text-white flex w-full justify-between items-center relative">
         <img
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/cricket")}
           className="h-8 md:h-8 cursor-pointer transition-transform hover:scale-105"
           src={navLogo}
           alt="Logo"
         />
+
+        <div className="bg-white rounded-full flex items-center p-0.5 shadow-sm ">
+          <button
+            onClick={() => {
+              if (
+                !window.location.pathname
+                  .replace(/\/+$/, "")
+                  .endsWith("/analytics")
+              ) {
+                setContent("cricket");
+                navigate("/cricket");
+              } else {
+                setContent("cricket");
+                navigate("/cricket/analytics");
+              }
+            }}
+            className={`flex items-center cursor-pointer justify-center w-8 h-8 rounded-full transition-all duration-200 ${
+              content === "cricket"
+                ? "bg-blue-600 text-white"
+                : "text-blue-800 hover:bg-gray-100"
+            }`}
+            aria-label="Switch to Cricket"
+          >
+            <TbCricket size={20} />
+          </button>
+
+          <button
+            onClick={() => {
+              if (
+                !window.location.pathname
+                  .replace(/\/+$/, "")
+                  .endsWith("/analytics")
+              ) {
+                setContent("football");
+                navigate("/football");
+              } else {
+                setContent("football");
+                navigate("/football/analytics");
+              }
+            }}
+            className={`flex items-center cursor-pointer justify-center w-8 h-8 rounded-full transition-all duration-200 ${
+              content === "football"
+                ? "bg-blue-600 text-white"
+                : "text-blue-800 hover:bg-gray-100"
+            }`}
+            aria-label="Switch to Football"
+          >
+            <IoFootball size={20} />
+          </button>
+        </div>
 
         {/* Mobile Menu Button */}
         <div className="sm:hidden">
@@ -413,7 +470,7 @@ const Navbar = () => {
             <div
               className="capitalize flex gap-1 items-center cursor-pointer py-2 px-1 hover:text-primary transition-colors duration-200"
               onClick={() => {
-                navigate("/analytics");
+                navigate("/cricket/analytics");
                 closeDropdown();
               }}
             >
@@ -426,7 +483,7 @@ const Navbar = () => {
             onClick={() => {
               if (Cookies.get("token")) {
                 Cookies.remove("token");
-                navigate("/");
+                navigate("/cricket/");
                 refreshNow();
               } else {
                 navigate("/auth");
@@ -442,7 +499,6 @@ const Navbar = () => {
           </button>
         </div>
       </div>
-
       {/* Mobile Menu - Full screen overlay */}
       {mobileMenuOpen && (
         <div className="fixed inset-0 bg-[#0004] bg-opacity-50 z-[80] sm:hidden">
@@ -576,7 +632,7 @@ const Navbar = () => {
                 <div
                   className="flex justify-between items-center py-3 px-6 font-medium cursor-pointer"
                   onClick={() => {
-                    navigate("/analytics");
+                    navigate("/cricket/analytics");
                     setMobileMenuOpen(false);
                   }}
                 >

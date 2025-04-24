@@ -17,7 +17,7 @@ export default function TopNews({ length = 5 }) {
           {news.slice(0, length).map((item, i) => (
             <div
               key={i}
-              onClick={() => navigate("/news/" + item.story.id)}
+              onClick={() => navigate("/cricket/news/" + item.story.id)}
               className="flex gap-3 pb-3 border-b cursor-pointer border-gray-100 last:border-b-0 last:pb-0"
             >
               <Image

@@ -29,6 +29,8 @@ import PrivacyPolicyPage from "./pages/PrivacyPolicy";
 import TermsAndConditionsPage from "./pages/TermsAndConditions";
 import FAQPage from "./pages/Faq";
 import AboutUsPage from "./pages/About";
+import CricketRouter from "./components/CricketRouter";
+import FootballRouter from "./components/FootballRouter";
 
 // Layout component to add padding to certain routes
 const PaddedLayout = ({ children }) => {
@@ -42,74 +44,15 @@ export default function App() {
       <Router>
         <Navbar />
         <ScrollToTop />
-
         <Routes>
-          <Route path="/" element={<Home />} />
           <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
           <Route path="/faqs" element={<FAQPage />} />
           <Route path="/about" element={<AboutUsPage />} />
-
           <Route
             path="/Terms-and-conditions"
             element={<TermsAndConditionsPage />}
           />
 
-          <Route
-            path="/player/:id"
-            element={
-              <PaddedLayout>
-                <Player />
-              </PaddedLayout>
-            }
-          />
-          <Route
-            path="/schedules/:id"
-            element={
-              <PaddedLayout>
-                <Schedules />
-              </PaddedLayout>
-            }
-          />
-          <Route
-            path="/points-table/:id"
-            element={
-              <PaddedLayout>
-                <PointsTable />
-              </PaddedLayout>
-            }
-          />
-          <Route
-            path="/match/:id"
-            element={
-              <PaddedLayout>
-                <Match />
-              </PaddedLayout>
-            }
-          />
-          <Route
-            path="/match-list/:type"
-            element={
-              <PaddedLayout>
-                <CricketScoresDashboard />
-              </PaddedLayout>
-            }
-          />
-          <Route
-            path="/rankings/:type"
-            element={
-              <PaddedLayout>
-                <Rankings />
-              </PaddedLayout>
-            }
-          />
-          <Route
-            path="/news/:id"
-            element={
-              <PaddedLayout>
-                <NewsPage />
-              </PaddedLayout>
-            }
-          />
           <Route
             path="/auth"
             element={
@@ -118,31 +61,11 @@ export default function App() {
               </PaddedLayout>
             }
           />
-          <Route
-            path="/analytics/*"
-            element={
-              <PaddedLayout>
-                <AnalyticsRouter />
-              </PaddedLayout>
-            }
-          />
-          <Route
-            path="/gallery"
-            element={
-              <PaddedLayout>
-                <Gallery />
-              </PaddedLayout>
-            }
-          />
-          <Route
-            path="/all-news"
-            element={
-              <PaddedLayout>
-                <AllNews />
-              </PaddedLayout>
-            }
-          />
-          <Route path="/football" element={<Navigate to="/" replace />} />
+
+          <Route path="/" element={<Navigate to="/cricket" replace />} />
+
+          <Route path="/cricket/*" element={<CricketRouter />} />
+          <Route path="/football/*" element={<FootballRouter />} />
         </Routes>
         <Footer />
       </Router>

@@ -47,7 +47,7 @@ export default function Footer() {
             <ul className="space-y-2 text-sm">
               <li>
                 <Link
-                  to="/schedules/9237"
+                  to="/cricket/schedules/9237"
                   className="hover:text-gray-300 inline-block py-1"
                 >
                   Schedules
@@ -55,7 +55,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  to="/match-list/recent"
+                  to="/cricket/match-list/recent"
                   className="hover:text-gray-300 inline-block py-1"
                 >
                   Matches
@@ -63,7 +63,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  to="/rankings/t20"
+                  to="/cricket/rankings/t20"
                   className="hover:text-gray-300 inline-block py-1"
                 >
                   Rankings
@@ -71,7 +71,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  to="/analytics"
+                  to="/cricket/analytics"
                   className="hover:text-gray-300 inline-block py-1"
                 >
                   Analytics
@@ -85,13 +85,16 @@ export default function Footer() {
             <h3 className="font-semibold mb-4 text-lg">Site Content</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link to="/" className="hover:text-gray-300 inline-block py-1">
+                <Link
+                  to="/cricket"
+                  className="hover:text-gray-300 inline-block py-1"
+                >
                   Home
                 </Link>
               </li>
               <li>
                 <Link
-                  to="/gallery"
+                  to="/cricket/gallery"
                   className="hover:text-gray-300 inline-block py-1"
                 >
                   Gallery
@@ -99,7 +102,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  to="/all-news"
+                  to="/cricket/all-news"
                   className="hover:text-gray-300 inline-block py-1"
                 >
                   News

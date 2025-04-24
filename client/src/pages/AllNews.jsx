@@ -67,7 +67,7 @@ export default function AllNews() {
             e.story ? (
               <div
                 key={i}
-                onClick={() => navigate("/news/" + e.story?.id)}
+                onClick={() => navigate("/cricket/news/" + e.story?.id)}
                 className={`
                   group cursor-pointer transition-all duration-300 
                   ${i % 4 === 0 ? "md:col-span-2 md:row-span-2" : ""}

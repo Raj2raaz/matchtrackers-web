@@ -723,7 +723,7 @@ const Schedules = () => {
                 {news.slice(0, 5).map((item, i) => (
                   <div
                     key={i}
-                    onClick={() => navigate("/news/" + item.story.id)}
+                    onClick={() => navigate("/cricket/news/" + item.story.id)}
                     className="flex cursor-pointer gap-3 pb-3 border-b border-gray-100 last:border-b-0 last:pb-0"
                   >
                     <Image

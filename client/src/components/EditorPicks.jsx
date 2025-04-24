@@ -16,7 +16,7 @@ export default function EditorPicks() {
             Editors Picks
           </h1>
           <p
-            onClick={() => navigate("/all-news")}
+            onClick={() => navigate("/cricket/all-news")}
             className="flex text-xs md:text-sm gap-1 md:gap-2 items-center cursor-pointer"
           >
             See All <FaChevronRight size={12} />
@@ -28,7 +28,7 @@ export default function EditorPicks() {
               <div
                 key={i}
                 className="bg-black flex-shrink-0 w-full sm:w-[calc(100%/2.2)] md:w-[calc(100%/2.5)] lg:w-[calc(100%/3.5)] text-white rounded-lg md:rounded-2xl snap-start cursor-pointer"
-                onClick={() => navigate(`/news/${e?.story?.id}`)}
+                onClick={() => navigate(`/cricket/news/${e?.story?.id}`)}
               >
                 <Image
                   faceImageId={e?.story?.imageId}

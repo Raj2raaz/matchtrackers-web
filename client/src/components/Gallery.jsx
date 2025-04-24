@@ -15,7 +15,7 @@ export default function Gallery({ id = 0 }) {
             {galleries[id]?.headline} Photos
           </h1>
           <p
-            onClick={() => navigate("/gallery")}
+            onClick={() => navigate("/cricket/gallery")}
             className="flex cursor-pointer text-sm gap-2 items-center"
           >
             See All <FaChevronRight size={12} />

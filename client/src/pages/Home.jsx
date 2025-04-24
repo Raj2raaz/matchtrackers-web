@@ -238,7 +238,9 @@ export default function Home() {
                       e.seriesAdWrapper ? (
                         <div
                           onClick={() =>
-                            navigate("/schedules/" + e.seriesAdWrapper.seriesId)
+                            navigate(
+                              "/cricket/schedules/" + e.seriesAdWrapper.seriesId
+                            )
                           }
                           key={i}
                           className="bg-white hover:bg-gray-300 cursor-pointer items-center flex justify-between mt-2 pl-3 pr-1.5 py-1.5 rounded-full"
@@ -259,7 +261,7 @@ export default function Home() {
                   fbLeagues.slice(0, noOfRecentMatches).map((e, i) => (
                     <div
                       key={i}
-                      onClick={() => navigate("/leagues/" + e.id)}
+                      onClick={() => navigate("/cricket/leagues/" + e.id)}
                       className="bg-gray-200 hover:bg-gray-300 cursor-pointer items-center flex justify-between mt-2 pl-3 pr-1.5 py-1.5 rounded-full"
                     >
                       <p className="truncate flex items-center gap-4 max-w-[14rem] overflow-hidden whitespace-nowrap">
@@ -310,7 +312,9 @@ export default function Home() {
                   liveMatches.map((e, i) => (
                     <div
                       key={i}
-                      onClick={() => navigate("/match/" + e.matchInfo.matchId)}
+                      onClick={() =>
+                        navigate("/cricket/match/" + e.matchInfo.matchId)
+                      }
                       className="bg-white cursor-pointer shadow-lg mt-4 rounded-lg border border-[#E6E6E6] p-5"
                     >
                       <div className="flex text-sm justify-between">
@@ -430,7 +434,9 @@ export default function Home() {
                       </div>
                     </div>
                     <button
-                      onClick={() => navigate("/match/" + e.matchInfo.matchId)}
+                      onClick={() =>
+                        navigate("/cricket/match/" + e.matchInfo.matchId)
+                      }
                       className="bg-primary text-white py-1 rounded mt-2.5 font-semibold text-center w-full"
                     >
                       See live updates
@@ -495,7 +501,9 @@ export default function Home() {
                       </p>
                       <button
                         onClick={() =>
-                          navigate("/match/" + liveMatches[0].matchInfo.matchId)
+                          navigate(
+                            "/cricket/match/" + liveMatches[0].matchInfo.matchId
+                          )
                         }
                         className="flex items-center  w-fit mt-2 justify-center text-white bg-primary px-4 py-2 rounded-lg hover:bg-opacity-90 transition-colors space-x-2self-start md:self-auto"
                       >
@@ -522,7 +530,7 @@ export default function Home() {
                   : "Gallery Photos"}
               </h1>
               <p
-                onClick={() => navigate("/gallery")}
+                onClick={() => navigate("/cricket/gallery")}
                 className="flex text-sm gap-2 items-center cursor-pointer"
               >
                 See All <FaChevronRight size={12} />
@@ -568,7 +576,7 @@ export default function Home() {
             <div className="flex justify-between w-full">
               <h1 className="text-xl font-bold text-primary">LATEST NEWS</h1>
               <p
-                onClick={() => navigate("/all-news")}
+                onClick={() => navigate("/cricket/all-news")}
                 className="flex text-sm gap-2 items-center cursor-pointer"
               >
                 See All <FaChevronRight size={12} />
@@ -596,7 +604,7 @@ export default function Home() {
                     e.story ? (
                       <div
                         key={i}
-                        onClick={() => navigate("/news/" + e.story?.id)}
+                        onClick={() => navigate("/cricket/news/" + e.story?.id)}
                         className="flex cursor-pointer flex-col sm:flex-row items-start sm:items-start gap-5"
                       >
                         <Image
@@ -637,7 +645,7 @@ export default function Home() {
                 )}
               </div>
               <div
-                onClick={() => navigate("/news/" + news[4]?.story.id)}
+                onClick={() => navigate("/cricket/news/" + news[4]?.story.id)}
                 className="w-full cursor-pointer lg:w-1/2 mt-6 lg:mt-0"
               >
                 {isLoading ? (

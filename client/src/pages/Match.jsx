@@ -101,7 +101,7 @@ const Match = () => {
                 .map((player) => (
                   <div
                     key={player.id}
-                    onClick={() => navigate("/player/" + player.id)}
+                    onClick={() => navigate("/cricket/player/" + player.id)}
                     className="border cursor-pointer border-gray-200 rounded-lg p-3 bg-white shadow-sm hover:shadow-md transition-shadow duration-200"
                   >
                     <div className="flex items-center gap-2 mb-2">
@@ -173,7 +173,7 @@ const Match = () => {
                 )
                 .map((player) => (
                   <div
-                    onClick={() => navigate("/player/" + player.id)}
+                    onClick={() => navigate("/cricket/player/" + player.id)}
                     key={`team2-${player.id}`}
                     className="border cursor-pointer border-gray-200 rounded-lg p-3 bg-white shadow-sm hover:shadow-md transition-shadow duration-200"
                   >

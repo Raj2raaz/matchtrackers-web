@@ -5,8 +5,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import Image from "../components/Image";
 import data from "../data.json";
 import useCricbuzzStore from "../store/cricket";
-import { getFBPlayerInfo } from "../api/Football";
-import PlayerStatisticsDetail from "../components/StatDetails";
 import TrendingPlayers from "../components/TrendingPlayers";
 import useMainStore from "../store/MainStore";
 import YtShorts from "../components/YtShorts";
@@ -85,21 +83,12 @@ const Player = () => {
 
   const fetchData = async () => {
     try {
-      if (content === "cricket") {
-        const data = await getPlayerInfo(id);
-        if (!data || Object.keys(data).length === 0) {
-          throw new Error("No player data found");
-        }
-        setInfo(data);
-        setError(null);
-      } else {
-        const data = await getFBPlayerInfo(id);
-        if (!data || data.length === 0) {
-          throw new Error("No player data found");
-        }
-        setInfo(data[0]);
-        setError(null);
+      const data = await getPlayerInfo(id);
+      if (!data || Object.keys(data).length === 0) {
+        throw new Error("No player data found");
       }
+      setInfo(data);
+      setError(null);
     } catch (err) {
       console.error("Error fetching player data:", err);
       setError(err.message || "Unable to fetch player information");
@@ -146,7 +135,7 @@ const Player = () => {
     return <ErrorDisplay />;
   }
 
-  return content === "cricket" ? (
+  return (
     <div className="bg-gray-100 min-h-screen font-sans">
       {/* Tabs section - only visible on mobile */}
       {isMobile && (
@@ -231,7 +220,7 @@ const Player = () => {
               {data?.IndianPlayers?.slice(0, isMobile ? 6 : 10).map((e, i) => (
                 <div
                   key={i}
-                  onClick={() => navigate("/player/" + e.profileId)}
+                  onClick={() => navigate("/cricket/player/" + e.profileId)}
                   className="flex cursor-pointer gap-3 items-center my-2 md:my-3"
                 >
                   <img
@@ -255,7 +244,7 @@ const Player = () => {
                 .map((e, i) => (
                   <div
                     key={i}
-                    onClick={() => navigate("/player/" + e.id)}
+                    onClick={() => navigate("/cricket/player/" + e.id)}
                     className="flex cursor-pointer gap-3 items-center my-2 md:my-3"
                   >
                     <Image
@@ -420,8 +409,7 @@ const Player = () => {
                             {/* Player Stats */}
                             {info?.batting?.values?.map((row, rowIdx) => (
                               <td key={rowIdx} className="px-3 py-2 text-xs ">
-                                {row.values[formatIdx + 1]}{" "}
-                                {/* +1 to skip "Matches" row header */}
+                                {row.values[formatIdx + 1]}
                               </td>
                             ))}
                           </tr>
@@ -471,8 +459,7 @@ const Player = () => {
                             {/* Player Stats */}
                             {info?.bowling?.values?.map((row, rowIdx) => (
                               <td key={rowIdx} className="px-3 py-2 text-xs ">
-                                {row.values[formatIdx + 1]}{" "}
-                                {/* +1 to skip "Matches" row header */}
+                                {row.values[formatIdx + 1]}
                               </td>
                             ))}
                           </tr>
@@ -593,54 +580,6 @@ const Player = () => {
       )}
 
       <YtShorts />
-    </div>
-  ) : (
-    <div className="container mx-auto p-6 bg-gray-100 min-h-screen">
-      <div className="flex gap-6">
-        {/* Player Basic Info */}
-        <div className="w-1/3">
-          <div className=" bg-white shadow-lg rounded-lg p-6 text-center">
-            <img
-              src={info?.player?.photo || "/default-avatar.png"}
-              alt={info?.player?.name || "Player"}
-              className="w-48 h-48 object-cover rounded-full mx-auto mb-4 border-4 border-blue-500"
-            />
-            <h1 className="text-2xl font-bold text-gray-800">
-              {info?.player?.name || "Player Name"}
-            </h1>
-            <p className="text-gray-600">
-              {info?.statistics?.[0]?.games?.position || "Position"}
-            </p>
-            {/* Personal Details */}
-            <div className="mt-4 space-y-2">
-              <p>
-                <strong>Full Name:</strong> {info?.player?.firstname || ""}{" "}
-                {info?.player?.lastname || ""}
-              </p>
-              <p>
-                <strong>Age:</strong> {info?.player?.age || "N/A"}
-              </p>
-              <p>
-                <strong>Country Born in:</strong>{" "}
-                {info?.player?.birth?.country || "N/A"}
-              </p>
-              <p>
-                <strong>Height:</strong> {info?.player?.height || "N/A"}
-              </p>
-              <p>
-                <strong>Weight:</strong> {info?.player?.weight || "N/A"}
-              </p>
-            </div>
-          </div>
-          <div className="mt-5">
-            <TrendingPlayers />
-          </div>
-        </div>
-
-        <div className="w-3/4">
-          <PlayerStatisticsDetail stats={info?.statistics} />
-        </div>
-      </div>
     </div>
   );
 };
