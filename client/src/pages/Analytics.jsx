@@ -559,7 +559,7 @@ const Analytics = () => {
                                 onClick={(e) => {
                                   e.stopPropagation(); // Prevents the click from reaching the parent
                                   navigate(
-                                    "/analytics/match/" +
+                                    "/cricket/analytics/match/" +
                                       matchData.match.matchInfo.matchId
                                   );
                                 }}

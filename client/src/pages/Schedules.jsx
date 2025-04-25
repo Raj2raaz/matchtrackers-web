@@ -516,7 +516,8 @@ const Schedules = () => {
                                       <button
                                         onClick={() =>
                                           navigate(
-                                            "/match/" + matchInfo.matchId
+                                            "/cricket/match/" +
+                                              matchInfo.matchId
                                           )
                                         }
                                         className="bg-blue-600 text-white px-3 py-1.5 rounded text-sm font-medium hover:bg-blue-700"
@@ -614,7 +615,7 @@ const Schedules = () => {
                 </h2>
                 <Link
                   to={
-                    "/points-table/" +
+                    "/cricket/points-table/" +
                     matchDetails[0]?.matchDetailsMap?.match[0]?.matchInfo
                       ?.seriesId
                   }

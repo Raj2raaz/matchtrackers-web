@@ -12,6 +12,7 @@ import AuthForm from "../pages/Auth";
 import AnalyticsRouter from "./AnalyticsRouter";
 import Gallery from "./Gallery";
 import AllNews from "../pages/AllNews";
+import Blogs from "../pages/Blogs";
 
 export default function CricketRouter() {
   const PaddedLayout = ({ children }) => {
@@ -88,6 +89,7 @@ export default function CricketRouter() {
             </PaddedLayout>
           }
         />
+        <Route path="/blogs" element={<Blogs />} />
         <Route
           path="/gallery"
           element={

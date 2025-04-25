@@ -7,12 +7,13 @@ import Image from "./Image";
 export default function Gallery({ id = 0 }) {
   const navigate = useNavigate();
   const { galleries } = useCricbuzzStore();
+
   return (
     <div>
       <div className="p-4 bg-white border mt-6 shadow border-[#e6e6e6]">
         <div className="flex justify-between w-full">
           <h1 className="text-xl font-bold text-primary">
-            {galleries[id]?.headline} Photos
+            {galleries[0]?.headline} Photos
           </h1>
           <p
             onClick={() => navigate("/cricket/gallery")}

@@ -20,6 +20,7 @@ import InterestingFactsCarousel from "../components/Facts";
 import { Helmet } from "react-helmet-async";
 import header from "../assets/header.jpg";
 import HighlightHeaders from "../components/HighlightHeaders";
+import data from "../blogs.json";
 
 function generateMatchSummary(matchData) {
   /**
@@ -480,37 +481,35 @@ export default function Home() {
                 </>
               ) : (
                 <>
-                  <Image
-                    faceImageId={
-                      liveMatches[0].commentary.matchVideos[0].imageId
-                    }
-                    resolution="de"
-                    className="h-[20rem] w-full "
-                  />
                   <div className="space-y-3 p-2">
-                    <h1 className="text-2xl font-bold text-primary tracking-tight">
-                      {liveMatches[0].matchInfo.seriesName} (
-                      {liveMatches[0].matchInfo.team1.teamName} -
-                      {liveMatches[0].matchInfo.team2.teamName})
-                    </h1>
-                    <div className="flex flex-col space-y-3 md:space-y-0">
-                      <p className="text-sm text-gray-600 leading-relaxed">
-                        {liveMatches[0]
-                          ? generateMatchSummary(liveMatches[0])
-                          : null}
-                      </p>
-                      <button
-                        onClick={() =>
-                          navigate(
-                            "/cricket/match/" + liveMatches[0].matchInfo.matchId
-                          )
-                        }
-                        className="flex items-center  w-fit mt-2 justify-center text-white bg-primary px-4 py-2 rounded-lg hover:bg-opacity-90 transition-colors space-x-2self-start md:self-auto"
+                    <div className="flex justify-between w-full">
+                      <h1 className="text-xl font-bold text-primary">Blogs</h1>
+                      <p
+                        onClick={() => navigate("/cricket/blogs")}
+                        className="flex text-sm gap-2 items-center cursor-pointer"
                       >
-                        <span>View Match Highlights</span>
-                        <FaChevronRight className="w-4 h-4" />
-                      </button>
+                        See All <FaChevronRight size={12} />
+                      </p>
                     </div>
+
+                    <img
+                      className="w-full"
+                      src={data.blogs.cricket[0].img}
+                      border="0"
+                      alt="IPl-2025-Match-Fixing-Allegations-Rock-IPL-Rajasthan-Royals-Finally-Speak-Out-750x460"
+                    />
+
+                    <h1 className="text-2xl font-semibold mt-3">
+                      {data.blogs.cricket[0].title}
+                    </h1>
+                    <p>{data.blogs.cricket[0].paragraphs[0].content}</p>
+
+                    <button
+                      onClick={() => navigate("/cricket/blogs")}
+                      className="bg-blue-600 text-white px-3 py-1 rounded font-semibold"
+                    >
+                      View All Blogs
+                    </button>
                   </div>
                 </>
               )}
