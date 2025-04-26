@@ -180,7 +180,7 @@ app.post("/api/auth/send-otp", async (req, res) => {
   }
 });
 
-app.post("/webhook", (req, res) => {
+app.post("/api/webhook", (req, res) => {
   console.log("🔔 Received webhook push event from github!", req.body);
 
   exec("bash /home/ubuntu/app/deploy.sh", (err, stdout, stderr) => {
@@ -192,6 +192,10 @@ app.post("/webhook", (req, res) => {
     console.error(`⚠️ Deployment stderr: ${stderr}`);
     res.status(200).send("Deployment complete");
   });
+});
+
+app.get("/api/webhook", (req, res) => {
+  return res.send("yes working");
 });
 
 // Verify OTP
