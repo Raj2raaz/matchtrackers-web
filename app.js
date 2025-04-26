@@ -6,6 +6,7 @@ const nodemailer = require("nodemailer");
 require("dotenv").config();
 const path = require("path");
 const { OAuth2Client } = require("google-auth-library");
+const { exec } = require("child_process");
 
 const prisma = new PrismaClient();
 const app = express();
@@ -177,6 +178,20 @@ app.post("/api/auth/send-otp", async (req, res) => {
     res.status(500).json({ error: "Error sending OTP" });
     console.log(error);
   }
+});
+
+app.post("/webhook", (req, res) => {
+  console.log("🔔 Received webhook push event!", req.body);
+
+  exec("bash /home/ubuntu/app/deploy.sh", (err, stdout, stderr) => {
+    if (err) {
+      console.error(`❌ Deployment error: ${err}`);
+      return res.status(500).send("Deployment error");
+    }
+    console.log(`✅ Deployment output: ${stdout}`);
+    console.error(`⚠️ Deployment stderr: ${stderr}`);
+    res.status(200).send("Deployment complete");
+  });
 });
 
 // Verify OTP
