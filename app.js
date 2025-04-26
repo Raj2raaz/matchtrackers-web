@@ -181,7 +181,7 @@ app.post("/api/auth/send-otp", async (req, res) => {
 });
 
 app.post("/webhook", (req, res) => {
-  console.log("🔔 Received webhook push event!", req.body);
+  console.log("🔔 Received webhook push event from github!", req.body);
 
   exec("bash /home/ubuntu/app/deploy.sh", (err, stdout, stderr) => {
     if (err) {
