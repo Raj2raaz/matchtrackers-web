@@ -31,6 +31,7 @@ import FAQPage from "./pages/Faq";
 import AboutUsPage from "./pages/About";
 import CricketRouter from "./components/CricketRouter";
 import FootballRouter from "./components/FootballRouter";
+import Admin from "./pages/admin/Admin";
 
 // Layout component to add padding to certain routes
 const PaddedLayout = ({ children }) => {
@@ -66,6 +67,7 @@ export default function App() {
 
           <Route path="/cricket/*" element={<CricketRouter />} />
           <Route path="/football/*" element={<FootballRouter />} />
+          <Route path="/admin" element={<Admin />} />
         </Routes>
         <Footer />
       </Router>

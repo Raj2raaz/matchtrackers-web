@@ -84,6 +84,154 @@ async function verifyOTP(email, code) {
   return otp;
 }
 
+const verifyAdminAuth = (req, res, next) => {
+  const adminAuthHeader = req.headers["admin-auth"];
+
+  // Check if the admin auth header exists and matches the env variable
+  if (!adminAuthHeader || adminAuthHeader !== process.env.ADMIN_SECRET_STRING) {
+    return res
+      .status(401)
+      .json({ error: "Unauthorized. Admin authentication required." });
+  }
+
+  // If authentication is successful, proceed to the next middleware or route handler
+  next();
+};
+
+app.get("/api/blogs", async (req, res) => {
+  try {
+    const blogs = await prisma.blog.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    res.status(200).json({
+      blogs,
+    });
+  } catch (error) {
+    console.error("Error fetching blogs:", error);
+    res.status(500).json({ error: "Failed to fetch blogs" });
+  }
+});
+
+app.post("/api/blogs", verifyAdminAuth, async (req, res) => {
+  try {
+    const { type, title, img, paragraphs } = req.body;
+
+    if (!type || !title || !paragraphs || !Array.isArray(paragraphs)) {
+      return res.status(400).json({
+        error:
+          "Invalid blog data. Type, title, and paragraphs array are required",
+      });
+    }
+
+    // Validate paragraphs
+    const validParagraphs = paragraphs.every((p) => p.subtitle && p.content);
+    if (!validParagraphs) {
+      return res
+        .status(400)
+        .json({ error: "Each paragraph must have a subtitle and content" });
+    }
+
+    // Create blog
+    const blog = await prisma.blog.create({
+      data: {
+        type,
+        title,
+        img: img || null,
+        paragraphs,
+      },
+    });
+
+    res.status(201).json({
+      message: "Blog created successfully",
+      blog,
+    });
+  } catch (error) {
+    console.error("Error creating blog:", error);
+    res.status(500).json({ error: "Failed to create blog" });
+  }
+});
+
+app.put("/api/blogs/:id", verifyAdminAuth, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { type, title, img, paragraphs } = req.body;
+
+    if (!type || !title || !paragraphs || !Array.isArray(paragraphs)) {
+      return res.status(400).json({
+        error:
+          "Invalid blog data. Type, title, and paragraphs array are required",
+      });
+    }
+
+    // Validate paragraphs
+    const validParagraphs = paragraphs.every((p) => p.subtitle && p.content);
+    if (!validParagraphs) {
+      return res
+        .status(400)
+        .json({ error: "Each paragraph must have a subtitle and content" });
+    }
+
+    // Check if blog exists
+    const existingBlog = await prisma.blog.findUnique({
+      where: { id },
+    });
+
+    if (!existingBlog) {
+      return res.status(404).json({ error: "Blog not found" });
+    }
+
+    // Update blog
+    const updatedBlog = await prisma.blog.update({
+      where: { id },
+      data: {
+        type,
+        title,
+        img: img || null,
+        paragraphs,
+        updatedAt: new Date(),
+      },
+    });
+
+    res.status(200).json({
+      message: "Blog updated successfully",
+      blog: updatedBlog,
+    });
+  } catch (error) {
+    console.error("Error updating blog:", error);
+    res.status(500).json({ error: "Failed to update blog" });
+  }
+});
+
+app.delete("/api/blogs/:id", verifyAdminAuth, async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Check if blog exists
+    const existingBlog = await prisma.blog.findUnique({
+      where: { id },
+    });
+
+    if (!existingBlog) {
+      return res.status(404).json({ error: "Blog not found" });
+    }
+
+    // Delete blog
+    await prisma.blog.delete({
+      where: { id },
+    });
+
+    res.status(200).json({
+      message: "Blog deleted successfully",
+    });
+  } catch (error) {
+    console.error("Error deleting blog:", error);
+    res.status(500).json({ error: "Failed to delete blog" });
+  }
+});
+
 // Function to send OTP via email
 async function sendOTPEmail(email, otp) {
   const mailOptions = {
@@ -369,14 +517,6 @@ app.get("/api/users/me", authenticateToken, async (req, res) => {
       where: { userId: req.user.id },
       orderBy: { createdAt: "desc" },
     });
-
-    // Get user's favorite series - commented out for now
-    /*
-    const favoriteSeries = await prisma.favoriteSeries.findMany({
-      where: { userId: req.user.id },
-      orderBy: { createdAt: "desc" },
-    });
-    */
 
     // Return user info with favorites
     res.json({

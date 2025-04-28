@@ -62,3 +62,13 @@ model FavoriteSeries {
 
   @@unique([userId, seriesId])
 }
+
+model Blog {
+  id          String      @id @default(cuid())
+  type        String      // "football" or "cricket"
+  title       String
+  img         String?     // Optional image URL (mainly for cricket blogs)
+  paragraphs  Json        // Store paragraphs as JSON
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}

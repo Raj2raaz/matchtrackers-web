@@ -1,7 +1,19 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import blogs from "../blogs.json";
+import axios from "axios";
 
 export default function Blogs() {
+  const [blogs, setBlogs] = useState([]);
+
+  useEffect(() => {
+    const getBlogs = async () => {
+      const response = await axios.get("/api/blogs");
+      setBlogs(response.data.blogs);
+    };
+
+    getBlogs();
+  }, []);
+
   return (
     <div className="min-h-screen bg-gray-50 py-10 px-4 md:px-16">
       <div className="max-w-7xl mx-auto">
@@ -9,7 +21,7 @@ export default function Blogs() {
           Latest Blogs
         </h1>
         <div className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-2">
-          {blogs?.blogs?.cricket.map((blog, index) => (
+          {blogs?.map((blog, index) => (
             <div
               key={index}
               className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden flex flex-col"
