@@ -484,20 +484,18 @@ function Admin() {
                     />
                   </div>
 
-                  {blogType === "cricket" && (
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">
-                        Image URL
-                      </label>
-                      <input
-                        type="url"
-                        className="appearance-none border mt-2 border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        placeholder="Enter image URL"
-                        value={image}
-                        onChange={(e) => setImage(e.target.value)}
-                      />
-                    </div>
-                  )}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Image URL
+                    </label>
+                    <input
+                      type="url"
+                      className="appearance-none border mt-2 border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="Enter image URL"
+                      value={image}
+                      onChange={(e) => setImage(e.target.value)}
+                    />
+                  </div>
 
                   <div>
                     <div className="flex justify-between items-center mb-2">
