@@ -22,51 +22,6 @@ import header from "../assets/header.jpg";
 import HighlightHeaders from "../components/HighlightHeaders";
 import data from "../blogs.json";
 
-function generateMatchSummary(matchData) {
-  /**
-   * Generates a short paragraph summarizing the cricket match.
-   *
-   * @param {object} matchData - A dictionary containing match information.
-   * @returns {string} - A string containing the match summary.
-   */
-
-  const matchInfo = matchData?.matchInfo || {};
-  const matchScore = matchData?.matchScore || {};
-  const commentary = matchData?.commentary?.commentaryList || [];
-
-  const team1Name = matchInfo?.team1?.teamName || "Team 1";
-  const team2Name = matchInfo?.team2?.teamName || "Team 2";
-  const team1Score = matchScore?.team1Score?.inngs1?.runs ?? "N/A";
-  const team2Score = matchScore?.team2Score?.inngs1?.runs ?? "N/A";
-  const team1Wickets = matchScore?.team1Score?.inngs1?.wickets ?? "N/A";
-  const team2Wickets = matchScore?.team2Score?.inngs1?.wickets ?? "N/A";
-  const team1Overs =
-    matchScore?.team1Score?.inngs1?.overs === 19.6
-      ? 20
-      : matchScore?.team1Score?.inngs1?.overs ?? "N/A";
-  const team2Overs =
-    matchScore?.team2Score?.inngs1?.overs === 19.6
-      ? 20
-      : matchScore?.team2Score?.inngs1?.overs ?? "N/A";
-
-  const venue = matchInfo?.venueInfo?.ground || "Unknown Venue";
-  const city = matchInfo?.venueInfo?.city || "Unknown City";
-  const status = matchInfo?.status || "Match status unavailable";
-  const playerOfTheMatch =
-    matchData?.commentary?.matchHeader?.playersOfTheMatch?.[0]?.name ||
-    "Unknown Player";
-
-  let summary = `In a thrilling T20 encounter at ${venue}, ${city}, the ${
-    matchInfo?.seriesName || "Unknown Series"
-  } witnessed a high-scoring clash between ${team1Name} and ${team2Name}. `;
-  summary += `${team1Name} posted a formidable total of ${team1Score}/${team1Wickets} in ${team1Overs} overs. `;
-  summary += `${team2Name} fought valiantly, chasing the target, and managed to score ${team2Score}/${team2Wickets} in ${team2Overs} overs. `;
-  summary += `Ultimately, ${team1Name} emerged victorious, winning by 11 runs. `;
-  summary += `The match saw some crucial moments, including ${playerOfTheMatch}'s outstanding performance, earning him the Player of the Match award. ${status}. `;
-
-  return summary;
-}
-
 // Placeholder component for different UI elements
 const Placeholder = ({ type, count = 1 }) => {
   // Different placeholder types
@@ -130,24 +85,17 @@ export default function Home() {
 
   const [fbLeagues, setfbLeagues] = useState([]);
   const [fbFixtures, setFixtures] = useState([]);
+  const [blogs, setBlogs] = useState([]);
   const { content } = useMainStore();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const leagues = await getLeagues();
-      const fixtures = await getFixtures();
-
-      setfbLeagues(leagues);
-      setFixtures(fixtures);
-    };
-
-    // fetchData();
-  }, []);
 
   useEffect(() => {
     const loadData = async () => {
       setIsLoading(true);
       await fetchData();
+
+      const response = await axios.get("/api/blogs");
+      setBlogs(response.data.blogs);
+
       setIsLoading(false);
     };
 
@@ -494,15 +442,15 @@ export default function Home() {
 
                     <img
                       className="w-full"
-                      src={data.blogs.cricket[0].img}
+                      src={blogs[0].img}
                       border="0"
                       alt="IPl-2025-Match-Fixing-Allegations-Rock-IPL-Rajasthan-Royals-Finally-Speak-Out-750x460"
                     />
 
                     <h1 className="text-2xl font-semibold mt-3">
-                      {data.blogs.cricket[0].title}
+                      {blogs[0].title}
                     </h1>
-                    <p>{data.blogs.cricket[0].paragraphs[0].content}</p>
+                    <p>{blogs[0].paragraphs[0].content}</p>
 
                     <button
                       onClick={() => navigate("/cricket/blogs")}
