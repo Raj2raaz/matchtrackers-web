@@ -10,9 +10,10 @@ const handleApiError = (functionName, error) => {
 export const getRecentMatches = async () => {
   try {
     // Fetch recent and live matches concurrently
-    const [recentResponse, liveResponse] = await Promise.all([
+    const [recentResponse, liveResponse, upcoming] = await Promise.all([
       apiClient.get("/matches/v1/recent"),
       apiClient.get("/matches/v1/live"),
+      apiClient.get("/matches/v1/upcoming"),
     ]);
 
     const priority = ["League", "International", "Domestic", "Women"];
@@ -28,9 +29,10 @@ export const getRecentMatches = async () => {
     // Extract matches using the helper function
     const recentMatches = extractMatches(recentResponse.data);
     const liveMatches = extractMatches(liveResponse.data);
+    const upcomingMatches = extractMatches(upcoming.data).slice(0, 5);
 
     // Combine both recent and live matches
-    return [...liveMatches, ...recentMatches];
+    return [...upcomingMatches, ...liveMatches, ...recentMatches];
   } catch (error) {
     return handleApiError("getRecentMatches", error);
   }
@@ -59,8 +61,20 @@ export const getLiveMatches = async () => {
     });
 
     // Fetch commentary for each match with proper error handling
+    let upcomingCount = 0;
+
     const matchesWithCommentary = await Promise.all(
       indiaMatches.map(async (match) => {
+        const state = match.matchInfo.state;
+
+        // Skip if more than 4 upcoming matches
+        if (state === "Upcoming") {
+          if (upcomingCount >= 2) {
+            return null; // Skip this match
+          }
+          upcomingCount++;
+        }
+
         try {
           const matchId = match.matchInfo.matchId;
           const response = await apiClient.get(`/mcenter/v1/${matchId}/comm`);
@@ -74,7 +88,10 @@ export const getLiveMatches = async () => {
       })
     );
 
-    return matchesWithCommentary;
+    // Remove the nulls (matches skipped due to "Upcoming" limit)
+    const filteredMatches = matchesWithCommentary.filter(Boolean);
+
+    return filteredMatches;
   } catch (error) {
     return handleApiError("getLiveMatches", error);
   }

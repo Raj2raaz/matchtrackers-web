@@ -13,6 +13,7 @@ import AnalyticsRouter from "./AnalyticsRouter";
 import Gallery from "./Gallery";
 import AllNews from "../pages/AllNews";
 import Blogs from "../pages/Blogs";
+import AnalyticsMatch from "../pages/AnalyticsMatch";
 
 export default function CricketRouter() {
   const PaddedLayout = ({ children }) => {
@@ -52,7 +53,7 @@ export default function CricketRouter() {
           path="/match/:id"
           element={
             <PaddedLayout>
-              <Match />
+              <AnalyticsMatch />
             </PaddedLayout>
           }
         />

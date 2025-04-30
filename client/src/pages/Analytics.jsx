@@ -244,16 +244,6 @@ const Analytics = () => {
 
   const [show, setShow] = useState(false);
 
-  useEffect(() => {
-    if (!Cookies.get("token")) {
-      const timer = setTimeout(() => {
-        setShow(true); // Hide it after 5 sec
-      }, 5000);
-
-      return () => clearTimeout(timer); // Cleanup timer
-    }
-  }, []);
-
   return (
     <div className="">
       <Helmet>
@@ -295,21 +285,6 @@ const Analytics = () => {
         />
       </Helmet>
 
-      {show && (
-        <div className="fixed inset-0 top-20 z-40 flex items-center justify-center backdrop-blur-xs">
-          <div className="bg-blue-600 p-6 rounded-lg shadow-lg text-center">
-            <h2 className="text-white text-xl font-medium mb-4">
-              Login to View More
-            </h2>
-            <button
-              className="bg-white cursor-pointer text-blue-600 py-2 px-6 rounded font-medium hover:bg-blue-50 transition-colors"
-              onClick={() => navigate("/auth")}
-            >
-              Go to Login
-            </button>
-          </div>
-        </div>
-      )}
       <div className="mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-2xl font-bold text-gray-800">

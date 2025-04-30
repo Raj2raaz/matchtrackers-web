@@ -67,6 +67,31 @@ const Placeholder = ({ type, count = 1 }) => {
   );
 };
 
+function getReadableDate(timestampMs) {
+  const inputDate = new Date(Number(timestampMs));
+  const today = new Date();
+
+  // Zero out time for comparison
+  const normalize = (date) => {
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  };
+
+  const input = normalize(inputDate);
+  const now = normalize(today);
+
+  const diffTime = input.getTime() - now.getTime();
+  const diffDays = diffTime / (1000 * 60 * 60 * 24);
+
+  if (diffDays === 0) return "Today";
+  if (diffDays === -1) return "Yesterday";
+  if (diffDays === 1) return "Tomorrow";
+
+  const day = inputDate.getDate();
+  const month = inputDate.toLocaleString("default", { month: "short" }); // e.g., "Apr"
+
+  return `${day}, ${month}`;
+}
+
 export default function Home() {
   const {
     recentMatches,
@@ -258,7 +283,7 @@ export default function Home() {
                 </>
               ) : content === "cricket" ? (
                 liveMatches && liveMatches.length > 0 ? (
-                  liveMatches.map((e, i) => (
+                  liveMatches.slice(0, 10).map((e, i) => (
                     <div
                       key={i}
                       onClick={() =>
@@ -300,8 +325,22 @@ export default function Home() {
                               : e?.matchScore?.team1Score?.inngs1?.overs || 0}
                             )
                           </p>
+
+                          {e?.matchInfo?.stateTitle?.split(" ")[0] ===
+                            e.matchInfo.team1.teamSName && (
+                            <p className="text-green-600 text-sm font-semibold">
+                              winner
+                            </p>
+                          )}
                         </div>
-                        <p className="font-bold text-gray-400 text-lg">vs</p>
+                        <div>
+                          <p className="font-bold text-center text-gray-400 text-lg">
+                            vs
+                          </p>
+                          <p className="text-center bg-gray-200 rounded-full px-2 py-1 text-sm">
+                            {getReadableDate(e.matchInfo.startDate)}
+                          </p>
+                        </div>
                         <div className="flex flex-col items-end">
                           <div className="flex items-center font-bold text-lg gap-1">
                             <Image
@@ -318,6 +357,12 @@ export default function Home() {
                               : e?.matchScore?.team2Score?.inngs1?.overs || 0}
                             )
                           </p>
+                          {e?.matchInfo?.stateTitle?.split(" ")[0] ===
+                            e.matchInfo.team2.teamSName && (
+                            <p className="text-green-600 text-sm font-semibold">
+                              winner
+                            </p>
+                          )}
                         </div>
                       </div>
                     </div>

@@ -141,13 +141,13 @@ const MatchVideosSection = ({ commentary }) => {
             {commentary?.matchVideos?.map((video, index) => (
               <div
                 key={index}
-                className="min-w-[250px] cursor-pointer"
+                className="w-[20rem]  cursor-pointer"
                 onClick={() => handleVideoSelect(video)}
               >
                 <div className="mb-2 relative overflow-hidden rounded">
                   <Image
                     faceImageId={video.imageId}
-                    className="w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    className="w-[20rem] h-[13rem] object-cover transition-transform duration-300 group-hover:scale-105"
                     resolution="de"
                   />
                   <div className="absolute inset-0 flex items-center justify-center">

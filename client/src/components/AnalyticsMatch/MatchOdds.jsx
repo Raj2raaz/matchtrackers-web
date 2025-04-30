@@ -8,7 +8,7 @@ export default function MatchOdds({ sofaData }) {
   const hasOdds = sofaData?.odds?.markets && sofaData.odds.markets.length > 0;
 
   return (
-    <div className="w-full lg:w-1/4 mx-4 space-y-4">
+    <div className="w-full space-y-4">
       <div className="hidden lg:block order-1 lg:order-3">
         <div className="bg-white rounded-xl shadow-lg overflow-hidden mb-4">
           <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white p-4">

@@ -33,6 +33,11 @@ import MatchOdds from "../components/AnalyticsMatch/MatchOdds";
 import Overs from "../components/AnalyticsMatch/Overs";
 import TrendingPlayers from "../components/TrendingPlayers";
 import EditorPicks from "../components/EditorPicks";
+import PointTable from "../components/PointTable";
+import MatchCountdown from "../components/StartCountDown";
+import LastBallResult from "../components/FlashyLastBall";
+import TeamComparisonCard from "../components/AnalyticsMatch/TeamComparision";
+import VenueStats from "../components/AnalyticsMatch/VenueStats";
 
 const AnalyticsMatch = () => {
   const navigate = useNavigate();
@@ -45,6 +50,8 @@ const AnalyticsMatch = () => {
   const chartRef = useRef(null);
   const [sofaData, setSofaData] = useState({});
   const [overData, setOverData] = useState([]);
+  const [pTable, setPtable] = useState({});
+  const [venuStats, setVenueStats] = useState();
 
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
 
@@ -59,6 +66,31 @@ const AnalyticsMatch = () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await apiClient.get(
+          `/stats/v1/series/${
+            data?.matchInfo?.series?.id || "7572"
+          }/points-table`
+        );
+
+        setPtable(response.data);
+
+        const venueResponse = await apiClient.get(
+          `/stats/v1/venue/${data?.matchInfo?.venue?.id}`
+        );
+        setVenueStats(venueResponse.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    if (data?.matchInfo) {
+      getData();
+    }
+  }, [data]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -226,9 +258,16 @@ const AnalyticsMatch = () => {
                       {commentary?.miniscore?.batTeam?.teamScore || 0}/
                       {commentary?.miniscore?.batTeam?.teamWkts || 0}
                     </h1>
-                    <span className="text-xs md:text-sm bg-blue-900 px-2 py-1 rounded-full">
-                      {commentary?.miniscore?.matchStatus || "Not Started"}
-                    </span>
+
+                    {commentary?.miniscore?.recentOvsStats ? (
+                      <LastBallResult
+                        recentOvsStats={commentary.miniscore.recentOvsStats}
+                      />
+                    ) : (
+                      <span className="text-xs md:text-sm bg-blue-900 px-2 py-1 rounded-full">
+                        Not Started
+                      </span>
+                    )}
                   </div>
                   {commentary?.miniscore?.target ? (
                     <div className="text-xs mt-1 text-blue-100 flex items-center flex-wrap">
@@ -528,8 +567,8 @@ const AnalyticsMatch = () => {
 
               {/* Match Overview Card */}
               <div className="bg-white rounded-xl shadow-lg overflow-hidden mb-4">
-                <div className="p-3 md:p-4 border-b border-gray-200">
-                  <div className="flex items-center justify-between">
+                <div className=" border-b border-gray-200">
+                  <div className="flex bg-gradient-to-r py-5 px-4 text-white from-blue-600 to-blue-800 items-center justify-between">
                     <h2 className="font-bold">Match Stats</h2>
                     <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
                       {commentary?.matchHeader?.matchDescription ||
@@ -543,7 +582,7 @@ const AnalyticsMatch = () => {
                   <h3 className="text-sm pl-4 font-medium mb-3">
                     Run Rate Chart
                   </h3>
-                  <div className="h-48 md:h-64" ref={chartRef}>
+                  <div className="h-48 relative right-4 md:h-64" ref={chartRef}>
                     {graphData && graphData.length > 0 ? (
                       <ResponsiveContainer width="100%" height="100%">
                         <LineChart
@@ -572,6 +611,12 @@ const AnalyticsMatch = () => {
                   </div>
                 </div>
               </div>
+
+              {venuStats?.venueStats && (
+                <div>
+                  <VenueStats venueData={venuStats} />
+                </div>
+              )}
             </div>
 
             {/* Center - Main match analytics */}
@@ -584,6 +629,13 @@ const AnalyticsMatch = () => {
                       <span className="text-xs px-2 py-1 bg-blue-900 text-white rounded-full">
                         {data?.matchInfo?.series?.name}
                       </span>
+                      <div>
+                        <MatchCountdown
+                          matchStartTimestamp={
+                            data?.matchInfo?.matchStartTimestamp
+                          }
+                        />
+                      </div>
                       <span className="text-xs px-2 py-1 bg-green-500 text-white rounded-full">
                         {data.matchInfo.shortStatus}
                       </span>
@@ -670,7 +722,11 @@ const AnalyticsMatch = () => {
                 {/* Tab Content */}
                 <div>
                   {activeTab === "Info" && (
-                    <ScoreCard score={score} overSummaryList={overData} />
+                    <ScoreCard
+                      score={score}
+                      overSummaryList={overData}
+                      pointsTableData={pTable}
+                    />
                   )}
                   {activeTab === "Squads" && <Sqads data={data} />}
                   {activeTab === "Commentary" && (
@@ -696,15 +752,27 @@ const AnalyticsMatch = () => {
               </div>
 
               {/* Match Videos Section */}
-              <div className="mt-4">
-                <MatchVideosSection commentary={commentary} />
-              </div>
+              <div className="mt-4"></div>
             </div>
           </div>
         </div>
 
         {/* Sidebar - Right */}
-        <MatchOdds sofaData={sofaData} />
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-full">
+            {pTable.pointsTable && (
+              <TeamComparisonCard
+                team1={pTable?.pointsTable[0].pointsTableInfo.find(
+                  (e) => e.teamName === data?.matchInfo?.team1?.shortName
+                )}
+                team2={pTable?.pointsTable[0].pointsTableInfo.find(
+                  (e) => e.teamName === data?.matchInfo?.team2?.shortName
+                )}
+              />
+            )}
+          </div>
+          <MatchOdds sofaData={sofaData} />
+        </div>
       </div>
 
       <TrendingPlayers />
