@@ -38,6 +38,8 @@ import MatchCountdown from "../components/StartCountDown";
 import LastBallResult from "../components/FlashyLastBall";
 import TeamComparisonCard from "../components/AnalyticsMatch/TeamComparision";
 import VenueStats from "../components/AnalyticsMatch/VenueStats";
+import { Flag, User } from "lucide-react";
+import Poll from "../components/AnalyticsMatch/Poll";
 
 const AnalyticsMatch = () => {
   const navigate = useNavigate();
@@ -180,7 +182,7 @@ const AnalyticsMatch = () => {
     <div className="container mx-auto px-2 md:px-4 font-sans text-gray-800">
       {/* Match Header for Mobile */}
       {data?.matchInfo && (
-        <div className="md:hidden bg-white rounded-lg shadow-md p-3 mb-4">
+        <div className="md:hidden bg-gradient-to-r from-blue-600 to-blue-800 text-white mt-4 rounded-lg shadow-md p-3 mb-4">
           <div className="flex justify-between items-center mb-2">
             <span className="text-xs px-2 py-1 bg-blue-100 text-blue-800 rounded-full truncate max-w-40">
               {commentary?.matchHeader?.seriesName}
@@ -236,7 +238,7 @@ const AnalyticsMatch = () => {
             </div>
           </div>
 
-          <div className="flex items-center text-xs text-gray-600 justify-center">
+          <div className="flex items-center text-xs  justify-center">
             <FaMapMarkerAlt className="mr-1 flex-shrink-0" />
             <span className="truncate">
               {data?.matchInfo?.venue?.name}, {data?.matchInfo?.venue?.city}
@@ -700,6 +702,53 @@ const AnalyticsMatch = () => {
                 </div>
               )}
 
+              <div className="bg-white px-3 py-4 rounded-xl border border-gray-200 mb-4">
+                <h1 className="text-xl font-semibold text-blue-600">Umpires</h1>
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {data?.matchInfo?.umpire1 && (
+                    <div className="flex border border-gray-300 rounded px-3 py-2 items-center">
+                      <div className="text-sm">
+                        <p className="font-medium text-gray-800">
+                          {data.matchInfo.umpire1.name}
+                        </p>
+                        <div className="flex items-center text-xs text-gray-500">
+                          <Flag size={12} className="mr-1" />
+                          {data.matchInfo.umpire1.country}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {data?.matchInfo?.umpire2 && (
+                    <div className="flex border border-gray-300 rounded px-3 py-2 items-center">
+                      <div className="text-sm">
+                        <p className="font-medium text-gray-800">
+                          {data.matchInfo.umpire2.name}
+                        </p>
+                        <div className="flex items-center text-xs text-gray-500">
+                          <Flag size={12} className="mr-1" />
+                          {data.matchInfo.umpire2.country}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {data?.matchInfo?.umpire3 && (
+                    <div className="flex border border-gray-300 rounded px-3 py-2 items-center">
+                      <div className="text-sm">
+                        <p className="font-medium text-gray-800">
+                          {data.matchInfo.umpire3.name}
+                        </p>
+                        <div className="flex items-center text-xs text-gray-500">
+                          <Flag size={12} className="mr-1" />
+                          {data.matchInfo.umpire3.country}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+
               {/* Tabs Navigation */}
               <div className="bg-white rounded-xl shadow-md overflow-hidden">
                 <div className="flex overflow-x-auto scrollbar-thin border-b border-gray-200">
@@ -770,6 +819,13 @@ const AnalyticsMatch = () => {
                 )}
               />
             )}
+          </div>
+          <div className="w-full">
+            <Poll
+              team1={data?.matchInfo?.team1.shortName}
+              team2={data?.matchInfo?.team2.shortName}
+              startTime={data?.matchInfo?.matchStartTimestamp}
+            />
           </div>
           <MatchOdds sofaData={sofaData} />
         </div>

@@ -702,6 +702,221 @@ app.get("/api", (req, res) => {
   return res.send("heyyy");
 });
 
+// GET Poll Details with User's Vote
+app.get("/api/poll", async (req, res) => {
+  const { team1, team2, startTime } = req.query;
+  try {
+    const poll = await prisma.poll.findFirst({
+      where: {
+        team1Name: team1,
+        team2Name: team2,
+        startTime: String(startTime),
+      },
+    });
+
+    // Optional: Get user's vote if they're authenticated
+    let userVote = null;
+    if (req.headers.authorization) {
+      try {
+        const token = req.headers.authorization.split(" ")[1];
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+        if (poll) {
+          userVote = await prisma.pollVote.findUnique({
+            where: {
+              pollId_userId: {
+                pollId: poll.id,
+                userId: decoded.id,
+              },
+            },
+          });
+        }
+      } catch (error) {
+        // Token invalid or expired - proceed without user vote info
+      }
+    }
+
+    return res.status(200).json({
+      poll,
+      userVote: userVote ? userVote.voteChoice : null,
+    });
+  } catch (error) {
+    console.error("Error fetching poll:", error);
+    return res.status(500).json({ error: "Failed to get poll" });
+  }
+});
+
+// Vote on a Poll (create or update)
+app.post("/api/poll/vote", authenticateToken, async (req, res) => {
+  const { pollId, team1, team2, startTime, voteChoice } = req.body;
+  const userId = req.user.id;
+
+  if (!voteChoice || ![1, 2].includes(voteChoice)) {
+    return res.status(400).json({ error: "Invalid vote choice" });
+  }
+
+  try {
+    // Start a transaction for atomic operations
+    return await prisma.$transaction(async (tx) => {
+      // Find or create poll
+      let poll;
+      if (pollId) {
+        poll = await tx.poll.findUnique({
+          where: { id: pollId },
+        });
+      } else if (team1 && team2 && startTime) {
+        poll = await tx.poll.findFirst({
+          where: {
+            team1Name: team1,
+            team2Name: team2,
+            startTime: String(startTime),
+          },
+        });
+
+        if (!poll) {
+          // Create new poll if it doesn't exist
+          poll = await tx.poll.create({
+            data: {
+              team1Name: team1,
+              team2Name: team2,
+              startTime: String(startTime),
+            },
+          });
+        }
+      } else {
+        return res.status(400).json({ error: "Missing poll information" });
+      }
+
+      // Check if user has already voted
+      const existingVote = await tx.pollVote.findUnique({
+        where: {
+          pollId_userId: {
+            pollId: poll.id,
+            userId,
+          },
+        },
+      });
+
+      if (existingVote) {
+        // Update vote if user changes their mind
+        if (existingVote.voteChoice !== voteChoice) {
+          // Decrement previous vote count
+          if (existingVote.voteChoice === 1) {
+            await tx.poll.update({
+              where: { id: poll.id },
+              data: { team1Votes: { decrement: 1 } },
+            });
+          } else {
+            await tx.poll.update({
+              where: { id: poll.id },
+              data: { team2Votes: { decrement: 1 } },
+            });
+          }
+
+          // Increment new vote count
+          await tx.poll.update({
+            where: { id: poll.id },
+            data:
+              voteChoice === 1
+                ? { team1Votes: { increment: 1 } }
+                : { team2Votes: { increment: 1 } },
+          });
+
+          // Update user's vote
+          await tx.pollVote.update({
+            where: {
+              pollId_userId: {
+                pollId: poll.id,
+                userId,
+              },
+            },
+            data: {
+              voteChoice,
+              updatedAt: new Date(),
+            },
+          });
+        }
+        // If vote choice is the same, do nothing
+      } else {
+        // Create new vote
+        await tx.pollVote.create({
+          data: {
+            pollId: poll.id,
+            userId,
+            voteChoice,
+          },
+        });
+
+        // Increment vote count
+        await tx.poll.update({
+          where: { id: poll.id },
+          data:
+            voteChoice === 1
+              ? { team1Votes: { increment: 1 } }
+              : { team2Votes: { increment: 1 } },
+        });
+      }
+
+      // Get updated poll
+      const updatedPoll = await tx.poll.findUnique({
+        where: { id: poll.id },
+      });
+
+      return res.status(200).json({
+        success: true,
+        poll: updatedPoll,
+        userVote: voteChoice,
+      });
+    });
+  } catch (error) {
+    console.error("Error handling poll vote:", error);
+    return res.status(500).json({ error: "Failed to process vote" });
+  }
+});
+
+// Get all polls with optional user vote status
+// app.get("/api/polls", async (req, res) => {
+//   try {
+//     const polls = await prisma.poll.findMany({
+//       orderBy: { startTime: "desc" },
+//     });
+
+//     // Get user votes if authenticated
+//     let userVotes = {};
+//     if (req.headers.authorization) {
+//       try {
+//         const token = req.headers.authorization.split(" ")[1];
+//         const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+//         const votes = await prisma.pollVote.findMany({
+//           where: {
+//             userId: decoded.id,
+//             pollId: {
+//               in: polls.map((poll) => poll.id),
+//             },
+//           },
+//         });
+
+//         // Create lookup object for user votes
+//         userVotes = votes.reduce((acc, vote) => {
+//           acc[vote.pollId] = vote.voteChoice;
+//           return acc;
+//         }, {});
+//       } catch (error) {
+//         // Token invalid - proceed without user votes
+//       }
+//     }
+
+//     return res.status(200).json({
+//       polls,
+//       userVotes,
+//     });
+//   } catch (error) {
+//     console.error("Error fetching polls:", error);
+//     return res.status(500).json({ error: "Failed to get polls" });
+//   }
+// });
+
 app.use(express.static(path.join(__dirname, "client/dist")));
 
 app.get("*", (req, res) => {

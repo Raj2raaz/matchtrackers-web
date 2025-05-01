@@ -10,6 +10,7 @@ export default function Sqads({ data }) {
     if (role?.includes("WK")) return "bg-yellow-100 text-yellow-800";
     return "bg-gray-100 text-gray-800";
   };
+  console.log(data?.matchInfo);
   return (
     <div className="p-2 md:p-4">
       {data?.matchInfo?.team1 && (

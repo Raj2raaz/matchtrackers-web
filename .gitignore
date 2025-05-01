@@ -36,3 +36,8 @@ Thumbs.db
 dist/
 build/
 out/
+
+*.db
+*.sqlite
+*.sqlite3
+
