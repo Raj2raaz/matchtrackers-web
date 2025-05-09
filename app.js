@@ -115,6 +115,22 @@ app.get("/api/blogs", async (req, res) => {
   }
 });
 
+app.get("/api/blogs/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const blog = await prisma.blog.findFirst({
+      where: {
+        id: id,
+      },
+    });
+
+    return res.status(200).json({ blog });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to fetch blog" });
+  }
+});
+
 app.post("/api/blogs", verifyAdminAuth, async (req, res) => {
   try {
     const { type, title, img, paragraphs } = req.body;

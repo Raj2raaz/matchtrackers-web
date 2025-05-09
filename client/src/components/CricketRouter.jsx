@@ -14,6 +14,7 @@ import Gallery from "./Gallery";
 import AllNews from "../pages/AllNews";
 import Blogs from "../pages/Blogs";
 import AnalyticsMatch from "../pages/AnalyticsMatch";
+import CricketBlog from "../pages/CricketBlog";
 
 export default function CricketRouter() {
   const PaddedLayout = ({ children }) => {
@@ -73,6 +74,7 @@ export default function CricketRouter() {
             </PaddedLayout>
           }
         />
+
         <Route
           path="/news/:id"
           element={

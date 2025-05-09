@@ -287,6 +287,11 @@ const Navbar = () => {
           <button
             onClick={() => {
               if (
+                window.location.pathname.replace(/\/+$/, "").endsWith("/blogs")
+              ) {
+                setContent("cricket");
+                navigate("/cricket/blogs");
+              } else if (
                 !window.location.pathname
                   .replace(/\/+$/, "")
                   .endsWith("/analytics")
@@ -311,6 +316,11 @@ const Navbar = () => {
           <button
             onClick={() => {
               if (
+                window.location.pathname.replace(/\/+$/, "").endsWith("/blogs")
+              ) {
+                setContent("football");
+                navigate("/football/blogs");
+              } else if (
                 !window.location.pathname
                   .replace(/\/+$/, "")
                   .endsWith("/analytics")

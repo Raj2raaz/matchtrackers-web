@@ -1,14 +1,22 @@
 import React, { useEffect, useState } from "react";
 import blogs from "../blogs.json";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function Blogs() {
   const [blogs, setBlogs] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getBlogs = async () => {
       const response = await axios.get("/api/blogs");
-      setBlogs(response.data.blogs);
+      console.log(response.data);
+      const isCricket = window.location.pathname.includes("cricket");
+      setBlogs(
+        response.data.blogs.filter((e) =>
+          isCricket ? e.type === "cricket" : e.type === "football"
+        )
+      );
     };
 
     getBlogs();
@@ -24,7 +32,8 @@ export default function Blogs() {
           {blogs?.map((blog, index) => (
             <div
               key={index}
-              className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden flex flex-col"
+              onClick={() => navigate("/blog/" + blog.id)}
+              className="bg-white rounded-2xl hover:-translate-y-2 cursor-pointer shadow-md hover:shadow-xl  duration-300 overflow-hidden flex flex-col"
             >
               {blog.img && (
                 <img
