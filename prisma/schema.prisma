@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgres"
   url      = env("DATABASE_URL")
 }
 
@@ -60,13 +60,19 @@ model FavoriteSeries {
 }
 
 model Blog {
-  id          String      @id @default(cuid())
-  type        String      // "football" or "cricket"
-  title       String
-  img         String?     // Optional image URL (mainly for cricket blogs)
-  paragraphs  Json        // Store paragraphs as JSON
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  id            String   @id @default(uuid())
+  type          String   // "football" or "cricket"
+  title         String
+  slug          String?   @unique
+  img           String?
+  featuredImage String?
+  sections      Json?     // Stores the sections array as JSON
+  paragraphs    Json?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([type])
+  @@index([slug])
 }
 
 model Poll {

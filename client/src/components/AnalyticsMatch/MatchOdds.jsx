@@ -5,7 +5,7 @@ export default function MatchOdds({ sofaData }) {
   const [showOdds, setShowOdds] = useState(2);
 
   // Check if odds data exists
-  const hasOdds = sofaData?.odds?.markets && sofaData.odds.markets.length > 0;
+  const hasOdds = sofaData?.markets && sofaData.markets.length > 0;
 
   return (
     <div className="w-full space-y-4">
@@ -17,7 +17,7 @@ export default function MatchOdds({ sofaData }) {
 
           {hasOdds ? (
             <div className="space-y-4 p-4">
-              {sofaData.odds.markets.slice(0, showOdds).map((market) => (
+              {sofaData.markets.slice(0, showOdds).map((market) => (
                 <div
                   key={market.id}
                   className="bg-gradient-to-r from-blue-100 to-blue-50 rounded-lg p-4"
@@ -58,17 +58,16 @@ export default function MatchOdds({ sofaData }) {
               ))}
 
               {/* Only show this button if there are more than 2 markets */}
-              {sofaData.odds.markets.length > 2 && (
+              {sofaData.markets.length > 2 && (
                 <div className="w-full flex justify-center">
                   <button
                     onClick={() => {
-                      if (showOdds === 2)
-                        setShowOdds(sofaData.odds.markets.length);
+                      if (showOdds === 2) setShowOdds(sofaData.markets.length);
                       else setShowOdds(2);
                     }}
                     className="cursor-pointer font-semibold"
                   >
-                    {showOdds === sofaData.odds.markets.length
+                    {showOdds === sofaData.markets.length
                       ? "Show Less"
                       : "Show More"}
                   </button>

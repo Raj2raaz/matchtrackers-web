@@ -487,7 +487,7 @@ export default function Home() {
 
                     <img
                       className="w-full"
-                      src={blogs[0].img}
+                      src={blogs[0].featuredImage}
                       border="0"
                       alt="IPl-2025-Match-Fixing-Allegations-Rock-IPL-Rajasthan-Royals-Finally-Speak-Out-750x460"
                     />
@@ -495,7 +495,33 @@ export default function Home() {
                     <h1 className="text-2xl font-semibold mt-3">
                       {blogs[0].title}
                     </h1>
-                    <p>{blogs[0].paragraphs[0].content}</p>
+                    <p>
+                      {(() => {
+                        if (
+                          blogs[0].paragraphs &&
+                          blogs[0].paragraphs.length > 0
+                        ) {
+                          return (
+                            blogs[0].paragraphs[0].content.substring(0, 120) +
+                            "..."
+                          );
+                        }
+
+                        const firstContentSection = blogs[0].sections?.find(
+                          (s) => s.type === "content"
+                        );
+                        if (firstContentSection?.content) {
+                          // Strip HTML tags from the new rich text content
+                          const plainText = firstContentSection.content.replace(
+                            /<[^>]+>/g,
+                            ""
+                          );
+                          return plainText.substring(0, 120) + "...";
+                        }
+
+                        return "No preview available.";
+                      })()}
+                    </p>
 
                     <button
                       onClick={() => navigate("/cricket/blogs")}

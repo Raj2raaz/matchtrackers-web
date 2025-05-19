@@ -69,7 +69,7 @@ export default function App() {
           <Route path="/cricket/*" element={<CricketRouter />} />
           <Route path="/football/*" element={<FootballRouter />} />
           <Route
-            path="/blog/:id"
+            path="/blog/:id/:slug?"
             element={
               <PaddedLayout>
                 <CricketBlog />

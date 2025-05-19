@@ -25,7 +25,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import findTournamentIdAndFetchOdds from "../utils/getOdds";
+import getMatchOddsFromCricbuzzToSofascore from "../utils/getOdds";
 import toast from "react-hot-toast";
 import Sqads from "../components/AnalyticsMatch/Sqads";
 import ScoreCard from "../components/AnalyticsMatch/ScoreCard";
@@ -109,13 +109,15 @@ const AnalyticsMatch = () => {
         // Fetch odds data
         let sofaDataResponse = {};
         try {
-          sofaDataResponse = await findTournamentIdAndFetchOdds(
-            matchResponse.data.matchInfo.team1.shortName,
-            matchResponse.data.matchInfo.team2.shortName,
-            matchResponse.data.matchInfo.matchStartTimestamp,
-            1
-          );
+          sofaDataResponse = await getMatchOddsFromCricbuzzToSofascore({
+            team1: matchResponse.data.matchInfo.team1.name,
+            team2: matchResponse.data.matchInfo.team2.name,
+            startTime: matchResponse.data.matchInfo.matchStartTimestamp,
+          });
+
+          console.log(sofaDataResponse);
         } catch (err) {
+          toast.error("Error Fetching odds");
           console.log("Error fetching odds data:", err);
         }
 
@@ -510,13 +512,13 @@ const AnalyticsMatch = () => {
                 {/* Innings Summary */}
                 <div className="p-3 md:p-4 border-t border-gray-200">
                   <h2 className="text-xs uppercase text-gray-500 mb-2">
-                    CRR: {commentary?.miniscore?.crr || "0.00"}
+                    CRR: {commentary?.miniscore?.currentRunRate || "0.00"}
                   </h2>
                   <div className="mt-1 flex justify-between">
                     <div>
                       <span className="text-xs text-gray-500">Required RR</span>
                       <div className="font-semibold">
-                        {commentary?.miniscore?.rrr || "0.00"}
+                        {commentary?.miniscore?.requiredRunRate || "0.00"}
                       </div>
                     </div>
                     <div>
@@ -528,7 +530,8 @@ const AnalyticsMatch = () => {
                     <div>
                       <span className="text-xs text-gray-500">Partnership</span>
                       <div className="font-semibold">
-                        {commentary?.miniscore?.partnership || "0(0)"}
+                        {`${commentary?.miniscore?.partnerShip.balls}(${commentary?.miniscore?.partnerShip.runs})` ||
+                          "0(0)"}
                       </div>
                     </div>
                   </div>

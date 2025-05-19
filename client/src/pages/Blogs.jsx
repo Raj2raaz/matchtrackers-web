@@ -1,67 +1,203 @@
 import React, { useEffect, useState } from "react";
-import blogs from "../blogs.json";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 export default function Blogs() {
   const [blogs, setBlogs] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     const getBlogs = async () => {
-      const response = await axios.get("/api/blogs");
-      console.log(response.data);
-      const isCricket = window.location.pathname.includes("cricket");
-      setBlogs(
-        response.data.blogs.filter((e) =>
-          isCricket ? e.type === "cricket" : e.type === "football"
-        )
-      );
+      setLoading(true);
+      try {
+        // Simulating API call for demo
+        const response = await fetch("/api/blogs").then((res) =>
+          res.ok ? res.json() : { blogs: [] }
+        );
+
+        const data = response.blogs || [];
+        const isCricket = window.location.pathname.includes("cricket");
+
+        const filtered = data.filter((blog) =>
+          isCricket ? blog.type === "cricket" : blog.type === "football"
+        );
+
+        setBlogs(filtered);
+      } catch (error) {
+        console.error("Error fetching blogs:", error);
+        setBlogs([]);
+      } finally {
+        setLoading(false);
+      }
     };
 
     getBlogs();
   }, []);
 
+  const getBlogPreview = (blog) => {
+    if (blog.sections) {
+      const firstContent = blog.sections.find((s) => s.type === "content");
+      return (
+        firstContent?.content?.replace(/<[^>]+>/g, "").substring(0, 120) + "..."
+      );
+    }
+
+    if (blog.paragraphs && Array.isArray(blog.paragraphs)) {
+      const firstPara = blog.paragraphs[0]?.content;
+      return firstPara?.substring(0, 120) + "...";
+    }
+
+    return "No preview available.";
+  };
+
+  const getBlogImage = (blog) => {
+    return blog.featuredImage || blog.img || "/api/placeholder/400/300";
+  };
+
+  // Get relative time
+  const getRelativeTime = () => {
+    const options = [
+      "2 hours ago",
+      "4 hours ago",
+      "Yesterday",
+      "2 days ago",
+      "Last week",
+    ];
+    return options[Math.floor(Math.random() * options.length)];
+  };
+
+  // Get reading time
+  const getReadingTime = () => {
+    return `${Math.floor(Math.random() * 8) + 3} min read`;
+  };
+
+  if (loading) {
+    return (
+      <div className="max-w-6xl mx-auto p-4 flex justify-center items-center h-64">
+        <div className="animate-pulse text-lg font-medium">
+          Loading articles...
+        </div>
+      </div>
+    );
+  }
+
+  if (blogs.length === 0) {
+    return (
+      <div className="max-w-6xl mx-auto p-4 flex justify-center items-center h-64">
+        <div className="text-lg font-medium text-gray-600">
+          No articles found. Check back later!
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-gray-50 py-10 px-4 md:px-16">
-      <div className="max-w-7xl mx-auto">
-        <h1 className="text-4xl font-bold text-center mb-12 text-gray-800">
-          Latest Blogs
-        </h1>
-        <div className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-2">
-          {blogs?.map((blog, index) => (
-            <div
-              key={index}
-              onClick={() => navigate("/blog/" + blog.id)}
-              className="bg-white rounded-2xl hover:-translate-y-2 cursor-pointer shadow-md hover:shadow-xl  duration-300 overflow-hidden flex flex-col"
-            >
-              {blog.img && (
-                <img
-                  className="w-full h-56 sm:h-64 md:h-72 object-cover transition-all duration-300"
-                  src={blog.img}
-                  alt={blog.title}
-                />
-              )}
-              <div className="p-6 flex flex-col flex-1">
-                <h2 className="text-2xl font-semibold mb-4 text-gray-700">
-                  {blog.title}
-                </h2>
-                <div className="space-y-4 mb-6 flex-1">
-                  {blog.paragraphs.map((para, idx) => (
-                    <div key={idx}>
-                      <h3 className="text-lg font-medium text-indigo-600">
-                        {para.subtitle}
-                      </h3>
-                      <p className="text-gray-600 mt-2 text-sm">
-                        {para.content}
-                      </p>
-                    </div>
-                  ))}
+    <div className="max-w-6xl mx-auto p-4 space-y-8">
+      {/* Featured Article */}
+      <div
+        onClick={() =>
+          navigate(
+            `/blog/${blogs[0]?.id}/${blogs[0].slug.split(" ").join("-")}`
+          )
+        }
+        className="cursor-pointer group"
+      >
+        <div className="relative overflow-hidden rounded-xl shadow-lg">
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-10"></div>
+          <img
+            src={getBlogImage(blogs[0])}
+            alt={blogs[0]?.title}
+            className="w-full h-full object-cover object-center group-hover:scale-105 transition duration-500"
+          />
+          <div className="absolute bottom-0 left-0 right-0 p-6 z-20">
+            <div className="flex items-center space-x-2 mb-3">
+              <span className="bg-blue-600 text-white text-xs px-3 py-1 rounded-full uppercase tracking-wider font-medium">
+                Featured
+              </span>
+              <span className="text-gray-200 text-sm">{getRelativeTime()}</span>
+            </div>
+            <h2 className="text-3xl font-bold text-white mb-3 group-hover:text-blue-200 transition">
+              {blogs[0]?.title}
+            </h2>
+            <p className="text-gray-200 line-clamp-2 mb-4">
+              {getBlogPreview(blogs[0])}
+            </p>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
+                <span className="text-white text-sm font-medium">
+                  Editor's Pick
+                </span>
+              </div>
+              <span className="text-gray-300 text-sm">{getReadingTime()}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Article Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {blogs.slice(1).map((blog, index) => (
+          <div
+            key={blog.id || index}
+            onClick={() =>
+              navigate(`/blog/${blog.id}/${blog.slug.split(" ").join("-")}`)
+            }
+            className="group bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition duration-300 flex flex-col h-full"
+          >
+            <div className="overflow-hidden h-48">
+              <img
+                src={getBlogImage(blog)}
+                alt={blog.title}
+                className="w-full h-full object-cover object-center group-hover:scale-110 transition duration-500"
+              />
+            </div>
+            <div className="p-5 flex flex-col flex-grow">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-xs font-medium text-gray-500">
+                  {getRelativeTime()}
+                </span>
+                <span className="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded">
+                  {getReadingTime()}
+                </span>
+              </div>
+              <h3 className="text-lg font-bold mb-2 group-hover:text-blue-600 transition line-clamp-2">
+                {blog.title}
+              </h3>
+              <p className="text-gray-600 text-sm line-clamp-3 mb-4">
+                {getBlogPreview(blog)}
+              </p>
+              <div className="mt-auto pt-4 border-t border-gray-100 flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <div className="w-6 h-6 bg-gray-200 rounded-full"></div>
+                  <span className="text-xs text-gray-600">Sports Team</span>
                 </div>
+                <span className="text-blue-600 text-sm font-medium group-hover:translate-x-1 transition">
+                  Read more
+                </span>
               </div>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Load More Button */}
+      <div className="flex justify-center mt-8">
+        <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-3 rounded-lg transition flex items-center space-x-2">
+          <span>Load more articles</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fillRule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v3.586L7.707 9.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 10.586V7z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </button>
       </div>
     </div>
   );

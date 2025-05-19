@@ -11,8 +11,11 @@ import {
   Image,
   FileText,
 } from "lucide-react";
-
 import { IoIosFootball as FootballIcon } from "react-icons/io";
+
+// Import the React Quill rich text editor
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css"; // Import the styles
 
 function Admin() {
   // Authentication states
@@ -34,11 +37,41 @@ function Admin() {
   const [blogs, setBlogs] = useState([]);
   const [currentBlog, setCurrentBlog] = useState(null);
 
-  // Form states
+  // Enhanced Form states
   const [blogType, setBlogType] = useState("football");
   const [title, setTitle] = useState("");
-  const [paragraphs, setParagraphs] = useState([{ subtitle: "", content: "" }]);
-  const [image, setImage] = useState("");
+  const [slug, setSlug] = useState("");
+  const [featuredImage, setFeaturedImage] = useState("");
+  const [sections, setSections] = useState([
+    {
+      type: "content",
+      content: "", // This will hold HTML content
+    },
+  ]);
+
+  // Quill editor modules configuration
+  const quillModules = {
+    toolbar: [
+      [{ header: [1, 2, 3, false] }],
+      ["bold", "italic", "underline", "strike"],
+      [{ list: "ordered" }, { list: "bullet" }],
+      ["link", "image"],
+      ["clean"],
+    ],
+  };
+
+  // Quill editor formats
+  const quillFormats = [
+    "header",
+    "bold",
+    "italic",
+    "underline",
+    "strike",
+    "list",
+    "bullet",
+    "link",
+    "image",
+  ];
 
   // Hardcoded credentials (in a real app, this would be in the backend)
   const validUsername = "admin";
@@ -53,6 +86,19 @@ function Admin() {
       fetchBlogs();
     }
   }, []);
+
+  // Generate slug from title
+  useEffect(() => {
+    if (title && activeView === "add") {
+      setSlug(
+        title
+          .toLowerCase()
+          .replace(/[^\w\s-]/g, "") // Remove special chars
+          .replace(/\s+/g, "-") // Replace spaces with hyphens
+          .replace(/-+/g, "-") // Replace multiple hyphens with single hyphen
+      );
+    }
+  }, [title, activeView]);
 
   // Show notification with auto-hide
   const showNotification = (type, message) => {
@@ -101,19 +147,22 @@ function Admin() {
     }
   };
 
+  const prepareBlogData = () => {
+    return {
+      type: blogType,
+      title,
+      slug,
+      featuredImage,
+      sections,
+    };
+  };
+
   const handleAddBlog = async (e) => {
     e.preventDefault();
     setIsLoading(true);
 
-    const blogData = {
-      type: blogType,
-      title,
-      img: blogType === "cricket" ? image : null,
-      paragraphs,
-    };
-
     try {
-      const response = await axios.post("/api/blogs", blogData, {
+      const response = await axios.post("/api/blogs", prepareBlogData(), {
         headers: {
           "Admin-Auth": import.meta.env.VITE_ADMIN_STRING,
         },
@@ -137,17 +186,10 @@ function Admin() {
     e.preventDefault();
     setIsLoading(true);
 
-    const blogData = {
-      type: blogType,
-      title,
-      img: blogType === "cricket" ? image : null,
-      paragraphs,
-    };
-
     try {
       const response = await axios.put(
         `/api/blogs/${currentBlog.id}`,
-        blogData,
+        prepareBlogData(),
         {
           headers: {
             "Admin-Auth": import.meta.env.VITE_ADMIN_STRING,
@@ -199,35 +241,63 @@ function Admin() {
     setCurrentBlog(blog);
     setBlogType(blog.type);
     setTitle(blog.title);
-    setImage(blog.img || "");
-    setParagraphs(blog.paragraphs);
+    setSlug(blog.slug || "");
+    setFeaturedImage(blog.featuredImage || "");
+
+    // Map old data structure to new one if needed
+    if (blog.sections) {
+      setSections(blog.sections);
+    } else if (blog.paragraphs) {
+      // Convert old paragraphs format to new sections format
+      const newSections = blog.paragraphs.map((para) => ({
+        type: "content",
+        content: `<h3>${para.subtitle}</h3><p>${para.content}</p>`,
+      }));
+      setSections(newSections);
+    }
+
     setActiveView("edit");
   };
 
   const resetForm = () => {
     setBlogType("football");
     setTitle("");
-    setImage("");
-    setParagraphs([{ subtitle: "", content: "" }]);
+    setSlug("");
+    setFeaturedImage("");
+    setSections([{ type: "content", content: "" }]);
     setCurrentBlog(null);
   };
 
-  const handleAddParagraph = () => {
-    setParagraphs([...paragraphs, { subtitle: "", content: "" }]);
+  const handleSectionContentChange = (index, value) => {
+    const newSections = [...sections];
+    newSections[index].content = value;
+    setSections(newSections);
   };
 
-  const handleParagraphChange = (index, field, value) => {
-    const newParagraphs = [...paragraphs];
-    newParagraphs[index][field] = value;
-    setParagraphs(newParagraphs);
-  };
+  const handleAddSection = (type) => {
+    let newSection;
 
-  const handleRemoveParagraph = (index) => {
-    if (paragraphs.length > 1) {
-      const newParagraphs = [...paragraphs];
-      newParagraphs.splice(index, 1);
-      setParagraphs(newParagraphs);
+    if (type === "content") {
+      newSection = { type: "content", content: "" };
+    } else if (type === "image") {
+      newSection = { type: "image", url: "", caption: "" };
     }
+
+    setSections([...sections, newSection]);
+  };
+
+  const handleRemoveSection = (index) => {
+    if (sections.length > 1) {
+      const newSections = [...sections];
+      newSections.splice(index, 1);
+      setSections(newSections);
+    }
+  };
+
+  const handleImageSectionChange = (index, field, value) => {
+    const newSections = [...sections];
+    newSections[index][field] = value;
+    setSections(newSections);
   };
 
   const handleNewBlog = () => {
@@ -407,7 +477,7 @@ function Admin() {
                             <div className="text-sm text-gray-500">
                               {blog.type.charAt(0).toUpperCase() +
                                 blog.type.slice(1)}{" "}
-                              • {blog.paragraphs.length} paragraphs
+                              • {blog.slug ? `/${blog.slug}` : "No slug"}
                             </div>
                           </div>
                         </div>
@@ -456,12 +526,13 @@ function Admin() {
                 }
               >
                 <div className="grid grid-cols-1 gap-6">
+                  {/* Blog Type */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700">
                       Blog Type
                     </label>
                     <select
-                      className="appearance-none border mt-2 border-gray-300 rounded-lg  py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-[20rem]"
+                      className="appearance-none border mt-2 border-gray-300 rounded-lg py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-full md:w-64"
                       value={blogType}
                       onChange={(e) => setBlogType(e.target.value)}
                       required
@@ -471,6 +542,7 @@ function Admin() {
                     </select>
                   </div>
 
+                  {/* Blog Title */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700">
                       Blog Title
@@ -484,48 +556,102 @@ function Admin() {
                     />
                   </div>
 
+                  {/* Blog Slug */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700">
-                      Image URL
+                      Blog URL Slug
+                    </label>
+                    <div className="flex items-center mt-2">
+                      <span className="text-gray-500 mr-2">/</span>
+                      <input
+                        type="text"
+                        className="appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="blog-post-url-slug"
+                        value={slug}
+                        onChange={(e) => setSlug(e.target.value)}
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  {/* Featured Image */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Featured Image URL
                     </label>
                     <input
                       type="url"
                       className="appearance-none border mt-2 border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      placeholder="Enter image URL"
-                      value={image}
-                      onChange={(e) => setImage(e.target.value)}
+                      placeholder="Enter featured image URL"
+                      value={featuredImage}
+                      onChange={(e) => setFeaturedImage(e.target.value)}
                     />
+                    {featuredImage && (
+                      <div className="mt-2">
+                        <p className="text-sm text-gray-500 mb-2">Preview:</p>
+                        <img
+                          src={featuredImage}
+                          alt="Featured"
+                          className="h-40 object-cover rounded-md"
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src =
+                              "https://via.placeholder.com/300x200?text=Invalid+Image+URL";
+                          }}
+                        />
+                      </div>
+                    )}
                   </div>
 
+                  {/* Blog Content Sections */}
                   <div>
-                    <div className="flex justify-between items-center mb-2">
+                    <div className="flex justify-between items-center mb-4">
                       <label className="block text-sm font-medium text-gray-700">
-                        Paragraphs
+                        Blog Content
                       </label>
-                      <button
-                        type="button"
-                        onClick={handleAddParagraph}
-                        className="inline-flex items-center px-3 py-1 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none"
-                      >
-                        <Plus size={14} className="mr-1" />
-                        Add Paragraph
-                      </button>
+                      <div className="flex space-x-2">
+                        <button
+                          type="button"
+                          onClick={() => handleAddSection("content")}
+                          className="inline-flex items-center px-3 py-1 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none"
+                        >
+                          <Plus size={14} className="mr-1" />
+                          Add Text Section
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleAddSection("image")}
+                          className="inline-flex items-center px-3 py-1 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none"
+                        >
+                          <Image size={14} className="mr-1" />
+                          Add Image Section
+                        </button>
+                      </div>
                     </div>
 
-                    {paragraphs.map((paragraph, index) => (
+                    {sections.map((section, index) => (
                       <div
                         key={index}
                         className="mb-6 p-4 border border-gray-200 rounded-md bg-gray-50"
                       >
                         <div className="flex justify-between items-center mb-3">
                           <h4 className="font-medium text-gray-700 flex items-center">
-                            <FileText size={16} className="mr-2" />
-                            Paragraph {index + 1}
+                            {section.type === "content" ? (
+                              <>
+                                <FileText size={16} className="mr-2" />
+                                Text Section {index + 1}
+                              </>
+                            ) : (
+                              <>
+                                <Image size={16} className="mr-2" />
+                                Image Section {index + 1}
+                              </>
+                            )}
                           </h4>
-                          {paragraphs.length > 1 && (
+                          {sections.length > 1 && (
                             <button
                               type="button"
-                              onClick={() => handleRemoveParagraph(index)}
+                              onClick={() => handleRemoveSection(index)}
                               className="inline-flex items-center px-2 py-1 border border-transparent text-xs font-medium rounded text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none"
                             >
                               <X size={12} className="mr-1" />
@@ -534,45 +660,74 @@ function Admin() {
                           )}
                         </div>
 
-                        <div className="mb-3">
-                          <label className="block text-sm font-medium text-gray-700">
-                            Subtitle
-                          </label>
-                          <input
-                            type="text"
-                            className="appearance-none border mt-2 border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            placeholder="Enter subtitle"
-                            value={paragraph.subtitle}
-                            onChange={(e) =>
-                              handleParagraphChange(
-                                index,
-                                "subtitle",
-                                e.target.value
-                              )
-                            }
-                            required
-                          />
-                        </div>
-
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700">
-                            Content
-                          </label>
-                          <textarea
-                            className="appearance-none border mt-2 border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            rows="4"
-                            placeholder="Enter paragraph content"
-                            value={paragraph.content}
-                            onChange={(e) =>
-                              handleParagraphChange(
-                                index,
-                                "content",
-                                e.target.value
-                              )
-                            }
-                            required
-                          />
-                        </div>
+                        {section.type === "content" ? (
+                          <div className="mb-3">
+                            <ReactQuill
+                              value={section.content}
+                              onChange={(value) =>
+                                handleSectionContentChange(index, value)
+                              }
+                              modules={quillModules}
+                              formats={quillFormats}
+                              className="bg-white rounded-md"
+                              style={{ height: "250px", marginBottom: "50px" }}
+                            />
+                          </div>
+                        ) : (
+                          <div>
+                            <div className="mb-3">
+                              <label className="block text-sm font-medium text-gray-700">
+                                Image URL
+                              </label>
+                              <input
+                                type="url"
+                                className="appearance-none border mt-2 border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                placeholder="Enter image URL"
+                                value={section.url || ""}
+                                onChange={(e) =>
+                                  handleImageSectionChange(
+                                    index,
+                                    "url",
+                                    e.target.value
+                                  )
+                                }
+                                required
+                              />
+                            </div>
+                            {section.url && (
+                              <div className="mt-2 mb-4">
+                                <img
+                                  src={section.url}
+                                  alt="Section"
+                                  className="h-40 object-cover rounded-md"
+                                  onError={(e) => {
+                                    e.target.onerror = null;
+                                    e.target.src =
+                                      "https://via.placeholder.com/300x200?text=Invalid+Image+URL";
+                                  }}
+                                />
+                              </div>
+                            )}
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700">
+                                Image Caption
+                              </label>
+                              <input
+                                type="text"
+                                className="appearance-none border mt-2 border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                placeholder="Enter image caption (optional)"
+                                value={section.caption || ""}
+                                onChange={(e) =>
+                                  handleImageSectionChange(
+                                    index,
+                                    "caption",
+                                    e.target.value
+                                  )
+                                }
+                              />
+                            </div>
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>
