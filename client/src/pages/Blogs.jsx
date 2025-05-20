@@ -97,7 +97,9 @@ export default function Blogs() {
       <div
         onClick={() =>
           navigate(
-            `/blog/${blogs[0]?.id}/${blogs[0].slug.split(" ").join("-")}`
+            `/blog/${blogs[0]?.id}/${
+              blogs[0]?.slug?.split(" ")?.join("-") || ""
+            }`
           )
         }
         className="cursor-pointer group"
@@ -141,7 +143,9 @@ export default function Blogs() {
           <div
             key={blog.id || index}
             onClick={() =>
-              navigate(`/blog/${blog.id}/${blog.slug.split(" ").join("-")}`)
+              navigate(
+                `/blog/${blog.id}/${blog?.slug?.split(" ")?.join("-") || ""}`
+              )
             }
             className="group bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition duration-300 flex flex-col h-full"
           >
