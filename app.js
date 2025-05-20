@@ -196,21 +196,31 @@ app.post("/api/blogs", verifyAdminAuth, async (req, res) => {
 app.put("/api/blogs/:id", verifyAdminAuth, async (req, res) => {
   try {
     const { id } = req.params;
-    const { type, title, img, paragraphs } = req.body;
+    const { type, title, slug, featuredImage, sections } = req.body;
 
-    if (!type || !title || !paragraphs || !Array.isArray(paragraphs)) {
+    if (!type || !title || !sections || !Array.isArray(sections)) {
       return res.status(400).json({
         error:
-          "Invalid blog data. Type, title, and paragraphs array are required",
+          "Invalid blog data. Type, title, and sections array are required",
       });
     }
 
-    // Validate paragraphs
-    const validParagraphs = paragraphs.every((p) => p.subtitle && p.content);
-    if (!validParagraphs) {
-      return res
-        .status(400)
-        .json({ error: "Each paragraph must have a subtitle and content" });
+    // Validate sections
+    const validSections = sections.every((section) => {
+      if (section.type === "content") {
+        return (
+          typeof section.content === "string" && section.content.trim() !== ""
+        );
+      } else if (section.type === "image") {
+        return typeof section.url === "string" && section.url.trim() !== "";
+      }
+      return false;
+    });
+
+    if (!validSections) {
+      return res.status(400).json({
+        error: "Each section must have valid content based on its type",
+      });
     }
 
     // Check if blog exists
@@ -222,14 +232,24 @@ app.put("/api/blogs/:id", verifyAdminAuth, async (req, res) => {
       return res.status(404).json({ error: "Blog not found" });
     }
 
+    // Create normalized slug if not provided
+    const normalizedSlug =
+      slug ||
+      title
+        .toLowerCase()
+        .replace(/[^\w\s-]/g, "")
+        .replace(/\s+/g, "-")
+        .replace(/-+/g, "-");
+
     // Update blog
     const updatedBlog = await prisma.blog.update({
       where: { id },
       data: {
         type,
         title,
-        img: img || null,
-        paragraphs,
+        slug: normalizedSlug,
+        featuredImage: featuredImage || null,
+        sections,
         updatedAt: new Date(),
       },
     });

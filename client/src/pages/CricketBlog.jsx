@@ -34,9 +34,20 @@ export default function CricketBlog() {
       // NEW STRUCTURE
       return blog.sections.map((section, idx) => {
         if (section.type === "content") {
+          // Add Tailwind classes to h1, h2, h3
+          const styledHTML = section.content
+            .replace(
+              /<h([1-3])>/g,
+              '<h$1 class="text-2xl font-medium text-indigo-700">'
+            )
+            .replace(
+              /<h([1-3])\s+class="(.*?)">/g,
+              '<h$1 class="$2 text-2xl font-medium text-indigo-700">'
+            );
+
           return (
             <div key={idx} className="prose max-w-none">
-              <div dangerouslySetInnerHTML={{ __html: section.content }} />
+              <div dangerouslySetInnerHTML={{ __html: styledHTML }} />
             </div>
           );
         } else if (section.type === "image") {

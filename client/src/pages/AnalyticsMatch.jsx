@@ -114,8 +114,6 @@ const AnalyticsMatch = () => {
             team2: matchResponse.data.matchInfo.team2.name,
             startTime: matchResponse.data.matchInfo.matchStartTimestamp,
           });
-
-          console.log(sofaDataResponse);
         } catch (err) {
           toast.error("Error Fetching odds");
           console.log("Error fetching odds data:", err);
