@@ -551,7 +551,7 @@ app.post("/api/auth/google", async (req, res) => {
           googleId,
           password: hashedPassword,
           isVerified: true, // Auto-verify Google users
-          profilePicture: picture || null,
+          // profilePicture: picture || null,
         },
       });
     }
@@ -569,7 +569,7 @@ app.post("/api/auth/google", async (req, res) => {
         id: user.id,
         name: user.name,
         email: user.email,
-        profilePicture: user.profilePicture,
+        // profilePicture: user.profilePicture,
       },
     });
   } catch (error) {
