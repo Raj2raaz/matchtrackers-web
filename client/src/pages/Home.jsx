@@ -118,9 +118,10 @@ export default function Home() {
       setIsLoading(true);
       await fetchData();
 
-      const response = await axios.get("/api/blogs");
+      const response = await axios.get("/api/blog");
       setBlogs(response.data.blogs);
 
+      // console.log(response.data.blogs);
       setIsLoading(false);
     };
 
@@ -487,27 +488,24 @@ export default function Home() {
 
                     <img
                       className="w-full"
-                      src={blogs[0].featuredImage}
+                      src={blogs.featuredImage}
                       border="0"
                       alt="IPl-2025-Match-Fixing-Allegations-Rock-IPL-Rajasthan-Royals-Finally-Speak-Out-750x460"
                     />
 
                     <h1 className="text-2xl font-semibold mt-3">
-                      {blogs[0].title}
+                      {blogs.title}
                     </h1>
                     <p>
                       {(() => {
-                        if (
-                          blogs[0].paragraphs &&
-                          blogs[0].paragraphs.length > 0
-                        ) {
+                        if (blogs.paragraphs && blogs.paragraphs.length > 0) {
                           return (
-                            blogs[0].paragraphs[0].content.substring(0, 120) +
+                            blogs.paragraphs[0].content.substring(0, 300) +
                             "..."
                           );
                         }
 
-                        const firstContentSection = blogs[0].sections?.find(
+                        const firstContentSection = blogs.sections?.find(
                           (s) => s.type === "content"
                         );
                         if (firstContentSection?.content) {
@@ -516,7 +514,7 @@ export default function Home() {
                             /<[^>]+>/g,
                             ""
                           );
-                          return plainText.substring(0, 120) + "...";
+                          return plainText.substring(0, 500) + "...";
                         }
 
                         return "No preview available.";

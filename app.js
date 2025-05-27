@@ -116,6 +116,24 @@ app.get("/api/blogs", async (req, res) => {
   }
 });
 
+app.get("/api/blog", async (req, res) => {
+  try {
+    const blogs = await prisma.blog.findFirst({
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    // console.log(blogs);
+    res.status(200).json({
+      blogs,
+    });
+  } catch (error) {
+    console.error("Error fetching blogs:", error);
+    res.status(500).json({ error: "Failed to fetch blogs" });
+  }
+});
+
 app.get("/api/blogs/:id", async (req, res) => {
   const { id } = req.params;
   try {
