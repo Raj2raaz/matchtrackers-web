@@ -1,13 +1,14 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import facts1 from "../assets/facts1.jpg";
 import facts2 from "../assets/facts2.jpg";
 import facts3 from "../assets/facts3.jpg";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 export default function InterestingFactsCarousel() {
+  const containerRef = useRef(null);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [cardsPerView, setCardsPerView] = useState(1); // default to 1
 
-  // Sample facts data - replace with your actual data
   const facts = [
     {
       id: 1,
@@ -28,57 +29,110 @@ export default function InterestingFactsCarousel() {
     },
   ];
 
+  // Update cards per view based on screen size
+  useEffect(() => {
+    const updateCardsPerView = () => {
+      if (window.innerWidth < 768) {
+        setCardsPerView(1);
+      } else {
+        setCardsPerView(3);
+      }
+    };
+    updateCardsPerView();
+    window.addEventListener("resize", updateCardsPerView);
+    return () => window.removeEventListener("resize", updateCardsPerView);
+  }, []);
+
+  // Calculate card width dynamically
+  const cardWidth = containerRef.current
+    ? containerRef.current.offsetWidth / cardsPerView
+    : 300; // fallback
+
+  const scrollToIndex = (index) => {
+    if (containerRef.current) {
+      containerRef.current.scrollTo({
+        left: index * cardWidth,
+        behavior: "smooth",
+      });
+    }
+  };
+
   const nextSlide = () => {
-    setCurrentSlide((prev) => (prev === facts.length - 1 ? 0 : prev + 1));
+    const maxIndex = facts.length - cardsPerView;
+    const newIndex = Math.min(currentSlide + 1, maxIndex);
+    setCurrentSlide(newIndex);
+    scrollToIndex(newIndex);
   };
 
   const prevSlide = () => {
-    setCurrentSlide((prev) => (prev === 0 ? facts.length - 1 : prev - 1));
+    const newIndex = Math.max(currentSlide - 1, 0);
+    setCurrentSlide(newIndex);
+    scrollToIndex(newIndex);
   };
 
   return (
-    <div className="w-full h-fit bg-white rounded-lg shadow-lg p-6 flex flex-col">
-      <div className="flex items-center mb-4">
-        <div className="bg-orange-100 p-1 rounded-lg">
-          <span className="text-2xl">🤔</span>
-        </div>
-        <h2 className="ml-2 text-xl font-bold">Interesting Facts</h2>
+    <div className="w-full mx-auto relative">
+      {/* Header */}
+      <div className="mb-4 text-center">
+        <h2 className="text-xl font-bold">Web Stories</h2>
+        <p className="text-sm">
+          Cricket in 60 Seconds — Swipe through quick stories on match moments,
+          player spotlights, and iconic plays.
+        </p>
       </div>
 
-      <div className="relative flex-grow flex flex-col">
-        <div className="rounded-2xl overflow-hidden relative flex-grow">
-          <img src={facts[currentSlide].image} alt="" />
+      {/* Carousel */}
+      <div className="relative">
+        <div
+          ref={containerRef}
+          className="flex overflow-x-auto gap-4 scroll-smooth no-scrollbar"
+        >
+          {facts.map((fact) => (
+            <div
+              key={fact.id}
+              style={{ minWidth: `${100 / cardsPerView}%` }}
+              className="flex-none rounded-xl overflow-hidden border border-gray-200 shadow"
+            >
+              <img
+                src={fact.image}
+                alt=""
+                className="w-full h-[28.5rem] object-cover"
+              />
+            </div>
+          ))}
         </div>
 
-        {/* Navigation buttons */}
+        {/* Left Arrow */}
         <button
           onClick={prevSlide}
-          className="absolute left-0 top-full transform -translate-y-1/2 bg-blue-600 text-white cursor-pointer rounded-full w-8 h-8 flex items-center justify-center shadow-md -ml-3"
+          className="absolute left-0 top-1/2 -translate-y-1/2 bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center shadow -ml-4"
         >
-          <span className="text-xl font-bold">
-            <FaChevronLeft />
-          </span>
+          <FaChevronLeft />
         </button>
 
+        {/* Right Arrow */}
         <button
           onClick={nextSlide}
-          className="absolute right-0 top-full transform -translate-y-1/2 bg-blue-600 cursor-pointer text-white rounded-full w-8 h-8 flex items-center justify-center shadow-md -mr-3"
+          className="absolute right-0 top-1/2 -translate-y-1/2 bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center shadow -mr-4"
         >
           <FaChevronRight />
         </button>
+      </div>
 
-        {/* Pagination dots */}
-        <div className="mt-4 flex justify-center space-x-2">
-          {facts.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentSlide(index)}
-              className={`h-1.5 rounded-full transition-all ${
-                index === currentSlide ? "w-8 bg-blue-600" : "w-2 bg-gray-300"
-              }`}
-            />
-          ))}
-        </div>
+      {/* Pagination Dots */}
+      <div className="flex justify-center mt-4 gap-2">
+        {facts.slice(0, facts.length - cardsPerView + 1).map((_, index) => (
+          <button
+            key={index}
+            onClick={() => {
+              setCurrentSlide(index);
+              scrollToIndex(index);
+            }}
+            className={`h-2 rounded-full transition-all ${
+              index === currentSlide ? "w-8 bg-blue-600" : "w-2 bg-gray-300"
+            }`}
+          ></button>
+        ))}
       </div>
     </div>
   );

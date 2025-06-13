@@ -6,6 +6,66 @@ const handleApiError = (functionName, error) => {
   return null;
 };
 
+const priority = ["League", "International", "Domestic", "Women"];
+
+// Helper function to extract and sort matches by priority
+const extractMatches = (data) =>
+  priority.flatMap((type) =>
+    (data?.typeMatches || [])
+      .filter((e) => e.matchType === type)
+      .flatMap((e) => e.seriesMatches)
+  );
+
+export const getMatches = async (category) => {
+  try {
+    const response = await apiClient.get(`/matches/v1/${category}`);
+    const extractedData = extractMatches(response.data);
+    const allMatches = extractedData
+      .filter((e) => e.seriesAdWrapper)
+      .map((e) => e.seriesAdWrapper.matches)
+      .flat();
+
+    return allMatches;
+  } catch (error) {
+    return handleApiError("getMatches", error);
+  }
+};
+
+export const getAllSeriesList = async () => {
+  try {
+    // Make both API calls in parallel
+    const [leagueResponse, internationalResponse] = await Promise.all([
+      apiClient.get("/series/v1/league"),
+      apiClient.get("/series/v1/international"),
+    ]);
+
+    // Extract the relevant parts (assuming same structure: seriesMapProto)
+    const leagueSeries = leagueResponse.data.seriesMapProto.flatMap(
+      (entry) =>
+        entry.series?.map((s) => ({
+          id: s.id,
+          name: s.name,
+        })) || []
+    );
+
+    const internationalSeries =
+      internationalResponse.data.seriesMapProto.flatMap(
+        (entry) =>
+          entry.series?.map((s) => ({
+            id: s.id,
+            name: s.name,
+          })) || []
+      );
+
+    // Combine both lists
+    const allSeries = [...leagueSeries, ...internationalSeries];
+
+    return allSeries;
+  } catch (error) {
+    return handleApiError("getAllSeriesList", error);
+  }
+};
+
 // Fetch recent and live matches
 export const getRecentMatches = async () => {
   try {
@@ -16,20 +76,10 @@ export const getRecentMatches = async () => {
       apiClient.get("/matches/v1/upcoming"),
     ]);
 
-    const priority = ["League", "International", "Domestic", "Women"];
-
-    // Helper function to extract and sort matches by priority
-    const extractMatches = (data) =>
-      priority.flatMap((type) =>
-        (data?.typeMatches || [])
-          .filter((e) => e.matchType === type)
-          .flatMap((e) => e.seriesMatches)
-      );
-
     // Extract matches using the helper function
     const recentMatches = extractMatches(recentResponse.data);
     const liveMatches = extractMatches(liveResponse.data);
-    const upcomingMatches = extractMatches(upcoming.data).slice(0, 5);
+    const upcomingMatches = extractMatches(upcoming.data).slice(0, 10);
 
     // Combine both recent and live matches
     return [...upcomingMatches, ...liveMatches, ...recentMatches];
@@ -227,10 +277,12 @@ export const getSeries = async () => {
 };
 
 // Fetch rankings
-export const getRankings = async () => {
+export const getRankings = async (cat, type) => {
   try {
-    const response = await apiClient.get("/stats/v1/rankings/batsment");
-    return response.data;
+    const response = await apiClient.get(
+      `/stats/v1/rankings/${cat}?formatType=${type} `
+    );
+    return response.data.rank;
   } catch (error) {
     return handleApiError("getRankings", error);
   }

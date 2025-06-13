@@ -10,7 +10,7 @@ export default function Gallery({ id = 0 }) {
 
   return (
     <div>
-      <div className="p-4 bg-white border mt-6 shadow border-[#e6e6e6]">
+      <div className="p-4 rounded-lg bg-white border mt-6 shadow border-[#e6e6e6]">
         <div className="flex justify-between w-full">
           <h1 className="text-xl font-bold text-primary">
             {galleries[0]?.headline} Photos

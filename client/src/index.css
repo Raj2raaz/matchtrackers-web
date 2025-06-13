@@ -17,3 +17,17 @@
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+/* For Chrome, Edge, Safari */
+::-webkit-scrollbar {
+  width: 8px; /* width of vertical scrollbar */
+  height: 8px; /* height of horizontal scrollbar */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #aaa; /* grayish thumb */
+  border-radius: 4px; /* rounded edges (optional) */
+}
+
+::-webkit-scrollbar-track {
+  background: #ffffff00; /* no background color */
+}
