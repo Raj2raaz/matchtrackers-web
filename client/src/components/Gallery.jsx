@@ -1,16 +1,30 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FaChevronRight } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import useCricbuzzStore from "../store/cricket";
 import Image from "./Image";
+import { getGalaryImages } from "../api/Home";
 
 export default function Gallery({ id = 0 }) {
   const navigate = useNavigate();
-  const { galleries } = useCricbuzzStore();
+  const [galleries, setGalleries] = useState([]);
+
+  useEffect(() => {
+    const fetchGalleries = async () => {
+      try {
+        const response = await getGalaryImages();
+        setGalleries(response);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchGalleries();
+  }, []);
 
   return (
     <div>
-      <div className="p-4 rounded-lg bg-white border mt-6 shadow border-[#e6e6e6]">
+      <div className="p-4 rounded-lg bg-gray-200 border mt-3 shadow border-slate-300">
         <div className="flex justify-between w-full">
           <h1 className="text-xl font-bold text-primary">
             {galleries[0]?.headline} Photos

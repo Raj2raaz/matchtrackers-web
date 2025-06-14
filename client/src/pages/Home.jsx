@@ -20,6 +20,7 @@ import { IoMdArrowDroprightCircle } from "react-icons/io";
 import ipl from "../assets/ipl.jpg";
 import InterestingFactsCarousel from "../components/Facts";
 import { FaChevronRight } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 function getReadableDate(timestampMs) {
   const inputDate = new Date(Number(timestampMs));
@@ -54,6 +55,7 @@ export default function Home() {
   const [playerRankings, setPlayerRankings] = useState([]);
   const [upcomingMatches, setUpcomingMatches] = useState([]);
   const [blog, setBlog] = useState(null);
+  const navigate = useNavigate();
   const [news, setNews] = useState([]);
 
   useEffect(() => {
@@ -161,7 +163,7 @@ export default function Home() {
         <div className="flex gap-4 overflow-x-auto no-scrollbar md:mx-10">
           {topSectionMatches.length > 0 &&
             topSectionMatches.map((e, i) => (
-              <div key={i} className="min-w-[250px]">
+              <div key={i} className="min-w-[290px]">
                 <div
                   onClick={() =>
                     navigate("/cricket/match/" + e.matchInfo.matchId)
@@ -254,8 +256,24 @@ export default function Home() {
                 </div>
                 <div className="bg-blue-600 rounded-b-2xl z-0 -mt-3 p-2">
                   <div className="flex justify-between font-semibold px-3 text-xs mt-3 text-white items-center">
-                    <button className="cursor-pointer">Schedule</button>
-                    <button className="cursor-pointer">Point Table</button>
+                    <button
+                      onClick={() => {
+                        navigate("/cricket/schedules/" + e.matchInfo.seriesId);
+                      }}
+                      className="cursor-pointer"
+                    >
+                      Schedule
+                    </button>
+                    <button
+                      onClick={() => {
+                        navigate(
+                          "/cricket/points-table/" + e.matchInfo.seriesId
+                        );
+                      }}
+                      className="cursor-pointer"
+                    >
+                      Point Table
+                    </button>
                   </div>
                 </div>
               </div>
@@ -488,7 +506,10 @@ export default function Home() {
                 src={blog?.featuredImage}
                 alt=""
               />
-              <button className="px-5 py-1 rounded-full bg-white text-blue-700 absolute bottom-2 right-4">
+              <button
+                onClick={() => navigate("/cricket/blogs")}
+                className="px-5 py-1 cursor-pointer rounded-full bg-white text-blue-700 absolute bottom-2 right-4"
+              >
                 Explore Blogs
               </button>
             </div>
@@ -496,7 +517,7 @@ export default function Home() {
         </div>
 
         <div className="flex-1">
-          <div className="flex flex-col md:flex-col gap-5">
+          <div className="flex flex-col md:flex-row gap-5">
             <div className="flex-1 bg-gray-200 border rounded-xl border-slate-300 p-5">
               <h1 className="font-bold text-lg">Player Rankings</h1>
               <p className="text-sm">
@@ -521,7 +542,10 @@ export default function Home() {
                     </div>
                   ))}
               </div>
-              <button className="bg-blue-700 rounded-lg font-semibold text-center mt-2 py-2 text-white w-full">
+              <button
+                onClick={() => navigate("/cricket/rankings/t20")}
+                className="bg-blue-700 cursor-pointer rounded-lg font-semibold text-center mt-2 py-2 text-white w-full"
+              >
                 Explore Full Rankings
               </button>
             </div>

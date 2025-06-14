@@ -9,9 +9,9 @@ const Rankings = () => {
   const [sortDirection, setSortDirection] = useState("asc");
   const [filteredCountry, setFilteredCountry] = useState("");
   const [data, setData] = useState();
-  const [activeTab, setActiveTab] = useState("Batsmen");
+  const [activeTab, setActiveTab] = useState("All Rounders");
   const { type } = useParams();
-  const [isMen, setIsMen] = useState(false);
+  const [isMen, setIsMen] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
