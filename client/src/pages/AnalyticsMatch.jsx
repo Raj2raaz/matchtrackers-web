@@ -528,7 +528,7 @@ const AnalyticsMatch = () => {
                     <div>
                       <span className="text-xs text-gray-500">Partnership</span>
                       <div className="font-semibold">
-                        {`${commentary?.miniscore?.partnerShip.balls}(${commentary?.miniscore?.partnerShip.runs})` ||
+                        {`${commentary?.miniscore?.partnerShip?.balls}(${commentary?.miniscore?.partnerShip?.runs})` ||
                           "0(0)"}
                       </div>
                     </div>

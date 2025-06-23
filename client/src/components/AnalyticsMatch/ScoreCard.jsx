@@ -4,8 +4,11 @@ import toast from "react-hot-toast";
 
 export default function ScoreCard({ score, overSummaryList, pointsTableData }) {
   const scoreCardTabs = ["Overs", "1st Innings", "2nd Innings", "Points Table"];
-  const [selectedScoreCardTab, setSelectedScoreTab] = useState(0);
+  const [selectedScoreCardTab, setSelectedScoreTab] = useState(
+    overSummaryList ? 0 : 3
+  );
 
+  console.log(overSummaryList);
   // Memoized helpers to reduce recomputation
   const getBatters = useMemo(
     () => (scorecard) => {
