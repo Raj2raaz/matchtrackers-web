@@ -76,28 +76,42 @@ export default function Home() {
       setPredictions(updatedPredictions);
     }
   }, []);
+
   const handlePredictionClick = (index) => {
-    if (selectedPrediction === null) {
-      // Allow voting only if not already voted
-      const newPredictions = [...predictions];
-      const totalPercentage = newPredictions.reduce(
-        (acc, curr) => acc + curr.percentage,
-        0
-      );
-      const increaseAmount = 3;
-      newPredictions[index].percentage += increaseAmount;
-      // Decrease the others proportionally
+    const newPredictions = [...predictions];
+
+    // If the user is changing their vote
+    if (selectedPrediction !== null) {
+      // Decrease the percentage of the previously selected team
+      const previousIndex = selectedPrediction;
       const decreaseAmount =
-        (totalPercentage + increaseAmount - 100) / (newPredictions.length - 1);
-      newPredictions.forEach((prediction, i) => {
-        if (i !== index) {
-          prediction.percentage -= decreaseAmount;
-        }
-      });
-      setPredictions(newPredictions);
-      setSelectedPrediction(index);
-      localStorage.setItem("votedPrediction", index); // Store the vote in localStorage
+        (newPredictions[previousIndex].percentage / 100) * 3; // Decrease by 3%
+      newPredictions[previousIndex].percentage -= decreaseAmount;
     }
+
+    // Increase the percentage of the newly selected team
+    const increaseAmount = 3;
+    newPredictions[index].percentage += increaseAmount;
+
+    // Normalize the percentages to ensure they sum up to 100
+    const totalPercentage = newPredictions.reduce(
+      (acc, curr) => acc + curr.percentage,
+      0
+    );
+
+    newPredictions.forEach((prediction, i) => {
+      if (i !== index) {
+        const decreaseAmount =
+          (totalPercentage - 100) / (newPredictions.length - 1);
+        prediction.percentage = parseFloat(
+          (prediction.percentage - decreaseAmount).toFixed(1)
+        );
+      }
+    });
+
+    setPredictions(newPredictions);
+    setSelectedPrediction(index);
+    localStorage.setItem("votedPrediction", index); // Store the vote in localStorage
   };
 
   useEffect(() => {
@@ -205,7 +219,7 @@ export default function Home() {
         <div className="flex gap-4 overflow-x-auto no-scrollbar md:mx-10">
           {topSectionMatches.length > 0 &&
             topSectionMatches.map((e, i) => (
-              <div key={i} className="min-w-[290px]">
+              <div key={i} className="min-w-[320px]">
                 <div
                   onClick={() =>
                     navigate("/cricket/match/" + e.matchInfo.matchId)
@@ -565,10 +579,14 @@ export default function Home() {
               <p className="text-sm">
                 Who's ruling the field? Check out the trending players.
               </p>
-              <div className="flex mt-5 h-72 overflow-auto flex-col gap-3">
+              <div className="flex mt-5 h-72 overflow-auto flex-col ">
                 {playerRankings.length > 0 &&
                   playerRankings.map((e, i) => (
-                    <div key={i} className="flex gap-2.5 items-center">
+                    <div
+                      key={i}
+                      onClick={() => navigate("/cricket/player/" + e.id)}
+                      className="flex gap-2.5 items-center cursor-pointer py-3 px-1 rounded hover:bg-gray-100"
+                    >
                       <Image
                         className="h-14 w-14 rounded-full"
                         faceImageId={e.faceImageId}
@@ -599,22 +617,30 @@ export default function Home() {
               {predictions.map((prediction, index) => (
                 <div className="relative mb-4" key={index}>
                   <div
-                    className={`absolute top-0 left-0 h-full bg-green-200 rounded-xl`}
+                    className="absolute top-0 left-0 h-full rounded-xl transition-all duration-500"
                     style={{
-                      width: `${prediction.percentage}%`,
-                      transition: "width 0.3s",
-                      zIndex: 1,
+                      width:
+                        selectedPrediction === index
+                          ? `${prediction.percentage}%`
+                          : "0%",
+                      backgroundColor:
+                        index === 0
+                          ? "rgba(34,197,94,0.4)" // green
+                          : index === 1
+                          ? "rgba(239,68,68,0.4)" // red
+                          : index === 2
+                          ? "rgba(59,130,246,0.4)" // blue
+                          : "rgba(0,0,0,0.1)",
+                      zIndex: 20,
                     }}
                   ></div>
+
                   <div
-                    className={`relative bg-white border rounded-xl border-slate-300 py-4 text-center font-semibold cursor-pointer ${
-                      selectedPrediction === index ? "bg-gray-300" : ""
-                    }`}
+                    className="relative border rounded-xl border-slate-300 py-4 z-10 text-center font-semibold cursor-pointer bg-white"
                     onClick={() => handlePredictionClick(index)}
-                    style={{ zIndex: 2 }} // Ensure the button is above the fill
                   >
                     {prediction.team}{" "}
-                    <span className="ml-2 text-sm text-gray-500">
+                    <span className="ml-2 text-sm">
                       {prediction.percentage}%
                     </span>
                   </div>
