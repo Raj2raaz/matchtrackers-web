@@ -58,6 +58,48 @@ export default function Home() {
   const navigate = useNavigate();
   const [news, setNews] = useState([]);
 
+  const initialPredictions = [
+    { team: "India", percentage: 45 },
+    { team: "Australia", percentage: 30 },
+    { team: "England", percentage: 25 },
+  ];
+  const [predictions, setPredictions] = useState(initialPredictions);
+  const [selectedPrediction, setSelectedPrediction] = useState(null);
+  useEffect(() => {
+    // Check localStorage for existing vote
+    const votedIndex = localStorage.getItem("votedPrediction");
+
+    if (votedIndex !== null) {
+      setSelectedPrediction(Number(votedIndex));
+      const updatedPredictions = [...predictions];
+      updatedPredictions[Number(votedIndex)].percentage += 3; // Increase by 3% for the voted team
+      setPredictions(updatedPredictions);
+    }
+  }, []);
+  const handlePredictionClick = (index) => {
+    if (selectedPrediction === null) {
+      // Allow voting only if not already voted
+      const newPredictions = [...predictions];
+      const totalPercentage = newPredictions.reduce(
+        (acc, curr) => acc + curr.percentage,
+        0
+      );
+      const increaseAmount = 3;
+      newPredictions[index].percentage += increaseAmount;
+      // Decrease the others proportionally
+      const decreaseAmount =
+        (totalPercentage + increaseAmount - 100) / (newPredictions.length - 1);
+      newPredictions.forEach((prediction, i) => {
+        if (i !== index) {
+          prediction.percentage -= decreaseAmount;
+        }
+      });
+      setPredictions(newPredictions);
+      setSelectedPrediction(index);
+      localStorage.setItem("votedPrediction", index); // Store the vote in localStorage
+    }
+  };
+
   useEffect(() => {
     loadData();
   }, [selectedCat]);
@@ -120,8 +162,8 @@ export default function Home() {
 
       <div className="relative">
         <img src={header} alt="" className="w-full h-auto" />
-        <div className="absolute bottom-0 h-[50%] bg-gradient-to-t from-[#002B5B] to-[#ffffff03] w-full">
-          <div className="flex flex-col w-full gap-2 justify-end text-white py-5 h-full items-center">
+        <div className="absolute  bottom-0 h-[50%] bg-gradient-to-t from-[#002B5B] to-[#ffffff03] w-full">
+          <div className="md:flex flex-col hidden  w-full gap-2 justify-end text-white py-5 h-full items-center">
             <p className="text-center">
               Experience the thrill of cricket like never before live scores,
               expert insights and match predictions, all in real time.
@@ -333,7 +375,7 @@ export default function Home() {
               alt="Team"
             />
           </div>
-          <div className="flex gap-10 my-2 font-semibold w-full ">
+          <div className=" flex md:flex-row flex-col gap-1 md:gap-10 my-2 font-semibold w-full ">
             <button className="bg-blue-700 flex-1 py-1.5 text-white rounded-lg">
               View Full Highlights
             </button>
@@ -554,41 +596,30 @@ export default function Home() {
               <p className="text-gray-700 mb-4">
                 Cast your vote — who’s winning today?
               </p>
-
-              {/* Option 1 */}
-              <div className="relative mb-4">
-                <div
-                  className="absolute top-0 left-0 h-full bg-green-200 rounded-xl"
-                  style={{ width: "45%" }}
-                ></div>
-                <div className="relative bg-white border rounded-xl border-slate-300 py-4 text-center font-semibold">
-                  India <span className="ml-2 text-sm text-gray-500">45%</span>
+              {predictions.map((prediction, index) => (
+                <div className="relative mb-4" key={index}>
+                  <div
+                    className={`absolute top-0 left-0 h-full bg-green-200 rounded-xl`}
+                    style={{
+                      width: `${prediction.percentage}%`,
+                      transition: "width 0.3s",
+                      zIndex: 1,
+                    }}
+                  ></div>
+                  <div
+                    className={`relative bg-white border rounded-xl border-slate-300 py-4 text-center font-semibold cursor-pointer ${
+                      selectedPrediction === index ? "bg-gray-300" : ""
+                    }`}
+                    onClick={() => handlePredictionClick(index)}
+                    style={{ zIndex: 2 }} // Ensure the button is above the fill
+                  >
+                    {prediction.team}{" "}
+                    <span className="ml-2 text-sm text-gray-500">
+                      {prediction.percentage}%
+                    </span>
+                  </div>
                 </div>
-              </div>
-
-              {/* Option 2 */}
-              <div className="relative mb-4">
-                <div
-                  className="absolute top-0 left-0 h-full bg-green-200 rounded-xl"
-                  style={{ width: "30%" }}
-                ></div>
-                <div className="relative bg-white border rounded-xl border-slate-300 py-4 text-center font-semibold">
-                  Australia{" "}
-                  <span className="ml-2 text-sm text-gray-500">30%</span>
-                </div>
-              </div>
-
-              {/* Option 3 */}
-              <div className="relative">
-                <div
-                  className="absolute top-0 left-0 h-full bg-green-200 rounded-xl"
-                  style={{ width: "25%" }}
-                ></div>
-                <div className="relative bg-white border rounded-xl border-slate-300 py-4 text-center font-semibold">
-                  England{" "}
-                  <span className="ml-2 text-sm text-gray-500">25%</span>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
 

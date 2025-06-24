@@ -24,8 +24,8 @@ export default function Gallery({ id = 0 }) {
 
   return (
     <div>
-      <div className="p-4 rounded-lg bg-gray-200 border mt-3 shadow border-slate-300">
-        <div className="flex justify-between w-full">
+      <div className="p-4 rounded-lg bg-gray-200 border my-3 shadow border-slate-300">
+        <div className="flex md:flex flex-col justify-between w-full">
           <h1 className="text-xl font-bold text-primary">
             {galleries[0]?.headline} Photos
           </h1>
@@ -36,9 +36,9 @@ export default function Gallery({ id = 0 }) {
             See All <FaChevronRight size={12} />
           </p>
         </div>
-        <div className="flex gap-4 mt-3 overflow-x-auto no-scrollbar whitespace-nowrap px-4">
+        <div className="flex gap-4 mt-3 overflow-x-auto no-scrollbar whitespace-nowrap ">
           {galleries[id]?.images.map((e, i) => (
-            <div key={i} className="shrink-0 w-[23vw]">
+            <div key={i} className="shrink-0 min-w-54 max-w-[23vw]">
               <Image
                 faceImageId={e}
                 className="w-full h-full"
