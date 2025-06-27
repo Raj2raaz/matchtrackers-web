@@ -17,10 +17,13 @@ import {
 } from "react-icons/cg";
 import { Helmet } from "react-helmet-async";
 import { IoMdArrowDroprightCircle } from "react-icons/io";
-import ipl from "../assets/ipl.jpg";
+import englandtour from "../assets/headerMatches/englandtour.webp";
+
 import InterestingFactsCarousel from "../components/Facts";
 import { FaChevronRight } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import YtShorts from "../components/YtShorts";
+import HistoricMoments from "../components/HistoricMoments";
 
 function getReadableDate(timestampMs) {
   const inputDate = new Date(Number(timestampMs));
@@ -384,16 +387,22 @@ export default function Home() {
         <div className="w-full md:w-2/3">
           <div className="relative w-full overflow-hidden rounded-lg">
             <img
-              src={ipl}
+              src={englandtour}
               className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
               alt="Team"
             />
           </div>
           <div className=" flex md:flex-row flex-col gap-1 md:gap-10 my-2 font-semibold w-full ">
-            <button className="bg-blue-700 flex-1 py-1.5 text-white rounded-lg">
+            <button
+              onClick={() => navigate("/cricket/schedules/8786")}
+              className="bg-blue-700 flex-1 py-1.5 text-white cursor-pointer rounded-lg"
+            >
               View Full Highlights
             </button>
-            <button className="text-blue-700 flex-1 py-1.5 border-2 rounded-lg">
+            <button
+              onClick={() => navigate("/cricket/schedules/8786")}
+              className="text-blue-700 flex-1 py-1.5 border-2 rounded-lg"
+            >
               View Match Summary
             </button>
           </div>
@@ -409,8 +418,8 @@ export default function Home() {
             </p>
             <div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-2 mt-4 gap-y-2">
-                {upcomingMatches.length > 0 &&
-                  upcomingMatches.slice(0, 4).map((match, i) => (
+                {upcomingMatches?.length > 0 &&
+                  upcomingMatches?.slice(0, 4).map((match, i) => (
                     <div
                       onClick={() =>
                         navigate("/cricket/match/" + match.matchInfo.matchId)
@@ -527,28 +536,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="flex flex-col md:flex-row gap-5 mt-5 w-full">
-            <div className="bg-gray-200 flex-1 border w-fit border-slate-300 rounded-xl p-5">
-              <h1 className="font-bold text-lg">Deep Stats</h1>
-              <p className="text-sm">
-                Dive into match insights, head-to-head stats & player analysis.
-              </p>
-              <img
-                src="https://michael-whitehead.com.au/wp-content/uploads/2011/10/Cricket-graph-of-T20-series1.jpg"
-                alt=""
-                className="mt-2"
-              />
-            </div>
-            <div className="bg-gray-200 flex-1 border w-fit border-slate-300 rounded-xl p-5">
-              <h1 className="font-bold text-lg">Historic Moments</h1>
-              <p className="text-sm">On This Day in Cricket History.</p>
-              <img
-                src="https://im.indiatimes.in/content/2023/Oct/Indian-Cricket-History_6530fb1aa44f0.jpg?w=1200&h=900&cc=1&webp=1&q=75"
-                alt=""
-                className="mt-2"
-              />
-            </div>
-          </div>
+          <HistoricMoments />
 
           <div className="bg-gray-200 flex-1 my-5 border w-fit border-slate-300 rounded-xl p-5 overflow-hidden">
             <h1 className="font-bold text-lg">Blogs</h1>
@@ -572,7 +560,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="flex-1">
+        <div className="flex-1 flex flex-col mb-5">
           <div className="flex flex-col md:flex-row gap-5">
             <div className="flex-1 bg-gray-200 border rounded-xl border-slate-300 p-5">
               <h1 className="font-bold text-lg">Player Rankings</h1>
@@ -648,9 +636,8 @@ export default function Home() {
               ))}
             </div>
           </div>
-
-          <div className="bg-gray-200 flex-1 my-5 border w-fit border-slate-300 rounded-xl p-5 overflow-hidden">
-            <InterestingFactsCarousel />
+          <div className="mt-5 flex-1">
+            <YtShorts />
           </div>
         </div>
       </div>
