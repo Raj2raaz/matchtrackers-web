@@ -10,11 +10,7 @@ import {
 } from "../api/Home";
 import Image from "../components/Image";
 import Gallery from "../components/Gallery";
-import {
-  CgArrowRight,
-  CgChevronDoubleDown,
-  CgChevronDoubleUp,
-} from "react-icons/cg";
+import { CgChevronDoubleDown, CgChevronDoubleUp } from "react-icons/cg";
 import { Helmet } from "react-helmet-async";
 import { IoMdArrowDroprightCircle } from "react-icons/io";
 import englandtour from "../assets/headerMatches/englandtour.webp";
