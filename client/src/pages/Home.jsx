@@ -19,7 +19,6 @@ import { Helmet } from "react-helmet-async";
 import { IoMdArrowDroprightCircle } from "react-icons/io";
 import englandtour from "../assets/headerMatches/englandtour.webp";
 
-import InterestingFactsCarousel from "../components/Facts";
 import { FaChevronRight } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import YtShorts from "../components/YtShorts";
