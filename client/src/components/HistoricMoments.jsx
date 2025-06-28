@@ -14,26 +14,25 @@ export default function HistoricMoments() {
       setCurrentImageIndex(index);
     };
 
-    container.addEventListener("scroll", handleScroll);
-    return () => container.removeEventListener("scroll", handleScroll);
+    container?.addEventListener("scroll", handleScroll);
+    return () => container?.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
-    <div className="bg-gray-200 w-[680px] flex-1 my-5 border border-slate-300 rounded-xl p-5">
-      <h1 className="font-bold text-lg">Historic Moments</h1>
-      {/* <p className="text-sm">On This Day in Cricket History.</p> */}
+    <div className="bg-gray-200 w-full max-w-[680px] flex-1 my-5 border border-slate-300 rounded-xl p-4 sm:p-5">
+      <h1 className="font-bold text-lg sm:text-xl">Historic Moments</h1>
 
       <div className="relative mt-2 overflow-x-auto snap-x snap-mandatory no-scrollbar">
-        <div className="flex space-x-2">
+        <div className="flex space-x-4">
           {images.map((src, index) => (
             <div
               key={index}
-              className="snap-start flex-shrink-0 w-[320px] relative"
+              className="snap-start flex-shrink-0 w-[80%] sm:w-[320px] relative"
             >
               <img
                 src={src}
                 alt={`Historic Moment ${index + 1}`}
-                className="w-full h-full object-cover rounded-lg"
+                className="w-full h-48 sm:h-56 object-cover rounded-lg"
               />
             </div>
           ))}
