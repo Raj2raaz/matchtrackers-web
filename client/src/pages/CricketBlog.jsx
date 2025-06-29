@@ -135,6 +135,29 @@ export default function CricketBlog() {
           )}
 
           <div className="space-y-8">{renderContent()}</div>
+
+          <div className="mt-16 border-t pt-10">
+            <div className="flex md:flex-row flex-col gap-10 md:gap-0 items-center space-x-6">
+              <img
+                src="https://media.licdn.com/dms/image/v2/C4E03AQEHzBiFN-u1UQ/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1621057196221?e=1756944000&v=beta&t=BJtjmUEiF9Hfgvi-OrEFeAthiwbj7ieL2GGTYchEHJw"
+                alt="Arvind Kumar M"
+                className="w-20 h-20 rounded-full object-cover shadow"
+              />
+              <div>
+                <h3 className="text-lg font-semibold text-gray-800">
+                  Arvind Kumar M
+                </h3>
+                <p className="text-sm text-gray-600 leading-snug max-w-xl">
+                  As a Writer and Director with four years of experience
+                  collaborating with diverse production houses, visionary
+                  filmmakers, and corporate giants, Arvind brings a
+                  writer-centric approach to content creation. His storytelling
+                  craft shapes industries through emotionally resonant and
+                  visually impactful narratives.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </>

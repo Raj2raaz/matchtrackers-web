@@ -173,8 +173,13 @@ export default function Blogs() {
               </p>
               <div className="mt-auto pt-4 border-t border-gray-100 flex items-center justify-between">
                 <div className="flex items-center space-x-2">
-                  <div className="w-6 h-6 bg-gray-200 rounded-full"></div>
-                  <span className="text-xs text-gray-600">Sports Team</span>
+                  <img
+                    className="w-6 h-6 bg-gray-200 rounded-full"
+                    src="https://media.licdn.com/dms/image/v2/C4E03AQEHzBiFN-u1UQ/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1621057196221?e=1756944000&v=beta&t=BJtjmUEiF9Hfgvi-OrEFeAthiwbj7ieL2GGTYchEHJw"
+                    alt=""
+                  />
+
+                  <span className="text-xs text-gray-600">Arvind Kumar M</span>
                 </div>
                 <span className="text-blue-600 text-sm font-medium group-hover:translate-x-1 transition">
                   Read more
