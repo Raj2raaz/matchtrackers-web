@@ -9,7 +9,7 @@ export default function MatchOdds({ sofaData }) {
 
   return (
     <div className="w-full space-y-4">
-      <div className="hidden lg:block order-1 lg:order-3">
+      <div className=" order-1 lg:order-3">
         <div className="bg-white rounded-xl shadow-lg overflow-hidden mb-4">
           <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white p-4">
             <h2 className="text-xl font-bold">Match Odds</h2>

@@ -256,42 +256,104 @@ const AnalyticsMatch = () => {
               <div className="bg-white rounded-xl shadow-lg overflow-hidden mb-4">
                 <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white p-3 md:p-4">
                   <div className="flex justify-between items-center">
-                    <h1 className="text-lg md:text-xl font-bold">
-                      {commentary?.miniscore?.batTeam?.teamScore || 0}/
-                      {commentary?.miniscore?.batTeam?.teamWkts || 0}
-                    </h1>
+                    {(() => {
+                      const innings =
+                        commentary?.miniscore?.inningsScores?.inningsScore ||
+                        [];
+                      const currentInningsId = commentary?.miniscore?.inningsId;
+                      console.log(currentInningsId, innings);
+                      const currentInnings = innings.find(
+                        (inn) => inn.inningsId === currentInningsId
+                      );
 
-                    {commentary?.miniscore?.recentOvsStats ? (
-                      <LastBallResult
-                        recentOvsStats={commentary.miniscore.recentOvsStats}
-                      />
+                      if (!currentInnings) {
+                        return (
+                          <h1 className="text-lg md:text-xl font-bold">0/0</h1>
+                        );
+                      }
+
+                      const { runs, wickets, balls, target } = currentInnings;
+
+                      // Show chase info only if there's a target and it's not first innings
+                      const showChaseInfo = target && currentInningsId > 1;
+
+                      // Get total balls from the previous innings that set the target (or fallback to 540)
+                      const targetInnings = innings.find(
+                        (inn) =>
+                          inn.target === target &&
+                          inn.inningsId !== currentInningsId
+                      );
+                      const totalBalls = targetInnings?.balls || 540;
+
+                      const ballsLeft = showChaseInfo
+                        ? totalBalls - balls
+                        : null;
+                      const runsNeeded = showChaseInfo ? target - runs : null;
+
+                      return (
+                        <h1 className="text-lg md:text-xl font-bold">
+                          {runs}/{wickets}
+                          <br />
+                          {showChaseInfo && (
+                            <span className="text-xs font-normal ">
+                              {runsNeeded} runs needed in {ballsLeft} balls
+                            </span>
+                          )}
+                        </h1>
+                      );
+                    })()}
+
+                    {commentary?.matchHeaders.state === "Complete" ? (
+                      <div>
+                        <p className="bg-green-500 text-white px-4 py-1 rounded-full text-sm font-semibold">
+                          Match Completed
+                        </p>
+                      </div>
+                    ) : commentary?.miniscore?.recentOvsStats ||
+                      commentary?.miniscore?.curOvsStats ? (
+                      <div>
+                        <LastBallResult
+                          recentOvsStats={
+                            commentary.miniscore.recentOvsStats ||
+                            commentary?.miniscore?.curOvsStats
+                          }
+                        />
+                        {(() => {
+                          const innings =
+                            commentary?.miniscore?.inningsScores
+                              ?.inningsScore || [];
+                          const currentInningsId =
+                            commentary?.miniscore?.inningsId;
+
+                          const currentInnings = innings.find(
+                            (inn) => inn.inningsId === currentInningsId
+                          );
+
+                          const batTeamId = currentInnings?.batTeamId;
+
+                          const team1 = commentary?.matchHeaders?.team1;
+                          const team2 = commentary?.matchHeaders?.team2;
+
+                          const battingTeam =
+                            team1?.teamId === batTeamId
+                              ? team1?.teamName
+                              : team2?.teamId === batTeamId
+                              ? team2?.teamName
+                              : "Unknown Team";
+
+                          return (
+                            <h2 className="text-xs w-full text-right mt-1">
+                              {battingTeam}
+                            </h2>
+                          );
+                        })()}
+                      </div>
                     ) : (
                       <span className="text-xs md:text-sm bg-blue-900 px-2 py-1 rounded-full">
                         Not Started
                       </span>
                     )}
                   </div>
-                  {commentary?.miniscore?.target ? (
-                    <div className="text-xs mt-1 text-blue-100 flex items-center flex-wrap">
-                      <FaRegClock className="mr-1 flex-shrink-0" />
-                      <span className="truncate">
-                        {commentary?.miniscore?.batTeam?.teamName || "Team"}{" "}
-                        need{" "}
-                        {(commentary?.miniscore?.target || 0) -
-                          (commentary?.miniscore?.batTeam?.teamScore || 0)}{" "}
-                        runs from {commentary?.miniscore?.remBalls || 0} balls
-                      </span>
-                    </div>
-                  ) : (
-                    <div className="text-xs mt-1 text-blue-100">
-                      {commentary?.miniscore?.matchStatus ===
-                      "Match not started"
-                        ? "Match yet to begin"
-                        : `${
-                            commentary?.miniscore?.batTeam?.teamName || "Team"
-                          } batting`}
-                    </div>
-                  )}
                 </div>
 
                 {/* Recent Balls - Visual timeline */}
@@ -301,8 +363,12 @@ const AnalyticsMatch = () => {
                       RECENT
                     </span>
                     <div className="flex space-x-1 overflow-x-auto pb-1 scrollbar-thin">
-                      {commentary?.miniscore?.recentOvsStats
-                        ? commentary.miniscore.recentOvsStats
+                      {commentary?.miniscore?.recentOvsStats ||
+                      commentary?.miniscore?.curOvsStats
+                        ? (
+                            commentary.miniscore.recentOvsStats ||
+                            commentary.miniscore.curOvsStats
+                          )
                             .trim()
                             .split(/\s+/)
                             .slice(-8)
@@ -310,19 +376,12 @@ const AnalyticsMatch = () => {
                               <div
                                 key={index}
                                 className={`w-5 h-5 md:w-6 md:h-6 flex items-center justify-center rounded-full text-xs font-medium shrink-0
-                           ${ball === "6" ? "bg-blue-600 text-white" : ""}
-                           ${ball === "4" ? "bg-green-500 text-white" : ""}
-                           ${
-                             ball === "W"
-                               ? "bg-red-600 text-white font-bold"
-                               : ""
-                           }
-                           ${ball === "|" ? "border-none" : ""}
-                           ${
-                             !["6", "4", "W", "|"].includes(ball)
-                               ? "bg-gray-200"
-                               : ""
-                           }`}
+              ${ball === "6" ? "bg-blue-600 text-white" : ""}
+              ${ball === "4" ? "bg-green-500 text-white" : ""}
+              ${ball === "W" ? "bg-red-600 text-white font-bold" : ""}
+              ${ball === "|" ? "border-none" : ""}
+              ${!["6", "4", "W", "|"].includes(ball) ? "bg-gray-200" : ""}
+            `}
                               >
                                 {ball === "|" ? "•" : ball}
                               </div>
@@ -356,18 +415,22 @@ const AnalyticsMatch = () => {
                             <div className="w-2 h-2 bg-green-500 rounded-full mr-2 flex-shrink-0"></div>
                             <span className="font-semibold text-sm truncate">
                               {commentary?.miniscore?.batsmanStriker?.batName ||
+                                commentary?.miniscore?.batsmanStriker?.name ||
                                 "Batsman"}
                             </span>
                           </div>
                           <div className="flex mt-1">
                             <span className="text-xl font-bold mr-2">
                               {commentary?.miniscore?.batsmanStriker?.batRuns ||
+                                commentary?.miniscore?.batsmanStriker?.runs ||
                                 0}
                             </span>
                             <span className="text-xs text-gray-500 self-end mb-1">
                               (
                               {commentary?.miniscore?.batsmanStriker
-                                ?.batBalls || 0}
+                                ?.batBalls ||
+                                commentary?.miniscore?.batsmanStriker?.balls ||
+                                0}
                               )
                             </span>
                           </div>
@@ -375,17 +438,24 @@ const AnalyticsMatch = () => {
                             <span>
                               4s:{" "}
                               {commentary?.miniscore?.batsmanStriker
-                                ?.batFours || 0}
+                                ?.batFours ||
+                                commentary?.miniscore?.batsmanStriker?.fours ||
+                                0}
                             </span>
                             <span>
                               6s:{" "}
                               {commentary?.miniscore?.batsmanStriker
-                                ?.batSixes || 0}
+                                ?.batSixes ||
+                                commentary?.miniscore?.batsmanStriker?.sixes ||
+                                0}
                             </span>
                             <span>
                               SR:{" "}
                               {commentary?.miniscore?.batsmanStriker
-                                ?.batStrikeRate || "0.00"}
+                                ?.batStrikeRate ||
+                                commentary?.miniscore?.batsmanStriker
+                                  ?.strikeRate ||
+                                "0.00"}
                             </span>
                           </div>
                         </div>
@@ -394,18 +464,27 @@ const AnalyticsMatch = () => {
                           <div className="flex items-center">
                             <span className="text-sm truncate">
                               {commentary?.miniscore?.batsmanNonStriker
-                                ?.batName || "Batsman"}
+                                ?.batName ||
+                                commentary?.miniscore?.batsmanNonStriker
+                                  ?.name ||
+                                "Batsman"}
                             </span>
                           </div>
                           <div className="flex mt-1">
                             <span className="text-xl font-bold mr-2">
                               {commentary?.miniscore?.batsmanNonStriker
-                                ?.batRuns || 0}
+                                ?.batRuns ||
+                                commentary?.miniscore?.batsmanNonStriker
+                                  ?.runs ||
+                                0}
                             </span>
                             <span className="text-xs text-gray-500 self-end mb-1">
                               (
                               {commentary?.miniscore?.batsmanNonStriker
-                                ?.batBalls || 0}
+                                ?.batBalls ||
+                                commentary?.miniscore?.batsmanNonStriker
+                                  ?.balls ||
+                                0}
                               )
                             </span>
                           </div>
@@ -413,17 +492,26 @@ const AnalyticsMatch = () => {
                             <span>
                               4s:{" "}
                               {commentary?.miniscore?.batsmanNonStriker
-                                ?.batFours || 0}
+                                ?.batFours ||
+                                commentary?.miniscore?.batsmanNonStriker
+                                  ?.fours ||
+                                0}
                             </span>
                             <span>
                               6s:{" "}
                               {commentary?.miniscore?.batsmanNonStriker
-                                ?.batSixes || 0}
+                                ?.batSixes ||
+                                commentary?.miniscore?.batsmanNonStriker
+                                  ?.sixes ||
+                                0}
                             </span>
                             <span>
                               SR:{" "}
                               {commentary?.miniscore?.batsmanNonStriker
-                                ?.batStrikeRate || "0.00"}
+                                ?.batStrikeRate ||
+                                commentary?.miniscore?.batsmanNonStriker
+                                  ?.strikeRate ||
+                                "0.00"}
                             </span>
                           </div>
                         </div>
@@ -439,17 +527,20 @@ const AnalyticsMatch = () => {
                             <div className="w-2 h-2 bg-red-500 rounded-full mr-2 flex-shrink-0"></div>
                             <span className="font-semibold text-sm truncate">
                               {commentary?.miniscore?.bowlerStriker?.bowlName ||
+                                commentary?.miniscore?.bowlerStriker?.name ||
                                 "Bowler"}
                             </span>
                           </div>
                           <div className="flex mt-1 items-end">
                             <span className="text-lg font-bold mr-2">
                               {commentary?.miniscore?.bowlerStriker?.bowlWkts ||
+                                commentary?.miniscore?.bowlerStriker?.wickets ||
                                 0}
                             </span>
                             <span className="text-xs text-gray-500">
                               /
                               {commentary?.miniscore?.bowlerStriker?.bowlRuns ||
+                                commentary?.miniscore?.bowlerStriker?.runs ||
                                 0}
                             </span>
                           </div>
@@ -457,11 +548,13 @@ const AnalyticsMatch = () => {
                             <span>
                               Ovs:{" "}
                               {commentary?.miniscore?.bowlerStriker?.bowlOvs ||
+                                commentary?.miniscore?.bowlerStriker?.overs ||
                                 "0.0"}
                             </span>
                             <span>
                               Econ:{" "}
                               {commentary?.miniscore?.bowlerStriker?.bowlEcon ||
+                                commentary?.miniscore?.bowlerStriker?.economy ||
                                 "0.00"}
                             </span>
                           </div>
@@ -471,30 +564,43 @@ const AnalyticsMatch = () => {
                           <div className="flex items-center">
                             <span className="text-sm truncate">
                               {commentary?.miniscore?.bowlerNonStriker
-                                ?.bowlName || "Bowler"}
+                                ?.bowlName ||
+                                commentary?.miniscore?.bowlerNonStriker?.name ||
+                                "Bowler"}
                             </span>
                           </div>
                           <div className="flex mt-1 items-end">
                             <span className="text-lg font-bold mr-2">
                               {commentary?.miniscore?.bowlerNonStriker
-                                ?.bowlWkts || 0}
+                                ?.bowlWkts ||
+                                commentary?.miniscore?.bowlerNonStriker
+                                  ?.wickets ||
+                                0}
                             </span>
                             <span className="text-xs text-gray-500">
                               /
                               {commentary?.miniscore?.bowlerNonStriker
-                                ?.bowlRuns || 0}
+                                ?.bowlRuns ||
+                                commentary?.miniscore?.bowlerNonStriker?.runs ||
+                                0}
                             </span>
                           </div>
                           <div className="flex text-xs text-gray-600 mt-1 space-x-2">
                             <span>
                               Ovs:{" "}
                               {commentary?.miniscore?.bowlerNonStriker
-                                ?.bowlOvs || "0.0"}
+                                ?.bowlOvs ||
+                                commentary?.miniscore?.bowlerNonStriker
+                                  ?.overs ||
+                                "0.0"}
                             </span>
                             <span>
                               Econ:{" "}
                               {commentary?.miniscore?.bowlerNonStriker
-                                ?.bowlEcon || "0.00"}
+                                ?.bowlEcon ||
+                                commentary?.miniscore?.bowlerNonStriker
+                                  ?.economy ||
+                                "0.00"}
                             </span>
                           </div>
                         </div>
@@ -510,13 +616,18 @@ const AnalyticsMatch = () => {
                 {/* Innings Summary */}
                 <div className="p-3 md:p-4 border-t border-gray-200">
                   <h2 className="text-xs uppercase text-gray-500 mb-2">
-                    CRR: {commentary?.miniscore?.currentRunRate || "0.00"}
+                    CRR:{" "}
+                    {commentary?.miniscore?.currentRunRate ||
+                      commentary?.miniscore?.crr ||
+                      "0.00"}
                   </h2>
                   <div className="mt-1 flex justify-between">
                     <div>
                       <span className="text-xs text-gray-500">Required RR</span>
                       <div className="font-semibold">
-                        {commentary?.miniscore?.requiredRunRate || "0.00"}
+                        {commentary?.miniscore?.requiredRunRate ||
+                          commentary?.miniscore?.rrr ||
+                          "0.00"}
                       </div>
                     </div>
                     <div>
@@ -703,53 +814,6 @@ const AnalyticsMatch = () => {
                 </div>
               )}
 
-              <div className="bg-white px-3 py-4 rounded-xl border border-gray-200 mb-4">
-                <h1 className="text-xl font-semibold text-blue-600">Umpires</h1>
-                <div className="flex flex-wrap gap-2 mt-2">
-                  {data?.matchInfo?.umpire1 && (
-                    <div className="flex border border-gray-300 rounded px-3 py-2 items-center">
-                      <div className="text-sm">
-                        <p className="font-medium text-gray-800">
-                          {data.matchInfo.umpire1.name}
-                        </p>
-                        <div className="flex items-center text-xs text-gray-500">
-                          <Flag size={12} className="mr-1" />
-                          {data.matchInfo.umpire1.country}
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {data?.matchInfo?.umpire2 && (
-                    <div className="flex border border-gray-300 rounded px-3 py-2 items-center">
-                      <div className="text-sm">
-                        <p className="font-medium text-gray-800">
-                          {data.matchInfo.umpire2.name}
-                        </p>
-                        <div className="flex items-center text-xs text-gray-500">
-                          <Flag size={12} className="mr-1" />
-                          {data.matchInfo.umpire2.country}
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {data?.matchInfo?.umpire3 && (
-                    <div className="flex border border-gray-300 rounded px-3 py-2 items-center">
-                      <div className="text-sm">
-                        <p className="font-medium text-gray-800">
-                          {data.matchInfo.umpire3.name}
-                        </p>
-                        <div className="flex items-center text-xs text-gray-500">
-                          <Flag size={12} className="mr-1" />
-                          {data.matchInfo.umpire3.country}
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-
               {/* Tabs Navigation */}
               <div className="bg-white rounded-xl shadow-md overflow-hidden">
                 <div className="flex overflow-x-auto scrollbar-thin border-b border-gray-200">
@@ -821,6 +885,52 @@ const AnalyticsMatch = () => {
               />
             )}
           </div>
+          <div className="bg-white px-3 py-4 rounded-xl border border-gray-200 mb-2">
+            <h1 className="text-xl font-semibold text-blue-600">Umpires</h1>
+            <div className="flex flex-wrap gap-2 mt-2">
+              {data?.matchInfo?.umpire1 && (
+                <div className="flex border border-gray-300 rounded px-3 py-2 items-center">
+                  <div className="text-sm">
+                    <p className="font-medium text-gray-800">
+                      {data.matchInfo.umpire1.name}
+                    </p>
+                    <div className="flex items-center text-xs text-gray-500">
+                      <Flag size={12} className="mr-1" />
+                      {data.matchInfo.umpire1.country}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {data?.matchInfo?.umpire2 && (
+                <div className="flex border border-gray-300 rounded px-3 py-2 items-center">
+                  <div className="text-sm">
+                    <p className="font-medium text-gray-800">
+                      {data.matchInfo.umpire2.name}
+                    </p>
+                    <div className="flex items-center text-xs text-gray-500">
+                      <Flag size={12} className="mr-1" />
+                      {data.matchInfo.umpire2.country}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {data?.matchInfo?.umpire3 && (
+                <div className="flex border border-gray-300 rounded px-3 py-2 items-center">
+                  <div className="text-sm">
+                    <p className="font-medium text-gray-800">
+                      {data.matchInfo.umpire3.name}
+                    </p>
+                    <div className="flex items-center text-xs text-gray-500">
+                      <Flag size={12} className="mr-1" />
+                      {data.matchInfo.umpire3.country}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
           <div className="w-full">
             <Poll
               team1={data?.matchInfo?.team1.shortName}
@@ -828,6 +938,7 @@ const AnalyticsMatch = () => {
               startTime={data?.matchInfo?.matchStartTimestamp}
             />
           </div>
+
           <MatchOdds sofaData={sofaData} />
         </div>
       </div>
