@@ -257,45 +257,50 @@ const AnalyticsMatch = () => {
                 <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white p-3 md:p-4">
                   <div className="flex justify-between items-center">
                     {(() => {
-                      const innings =
-                        commentary?.miniscore?.inningsScores?.inningsScore ||
-                        [];
-                      const currentInningsId = commentary?.miniscore?.inningsId;
-                      console.log(currentInningsId, innings);
-                      const currentInnings = innings.find(
+                      const miniscore = commentary?.miniscore;
+                      const inningsArray =
+                        miniscore?.inningsScores?.inningsScore || [];
+                      const currentInningsId = miniscore?.inningsId;
+
+                      // Try to get data from inningsScores if available
+                      const inningsData = inningsArray.find(
                         (inn) => inn.inningsId === currentInningsId
                       );
 
-                      if (!currentInnings) {
-                        return (
-                          <h1 className="text-lg md:text-xl font-bold">0/0</h1>
-                        );
-                      }
+                      // Fallback to miniscore values if inningsData is unavailable
+                      const runs =
+                        inningsData?.runs ?? miniscore?.batTeam?.teamScore ?? 0;
+                      const wickets =
+                        inningsData?.wickets ??
+                        miniscore?.batTeam?.teamWkts ??
+                        0;
 
-                      const { runs, wickets, balls, target } = currentInnings;
+                      const showChaseInfo =
+                        inningsData?.target && currentInningsId > 1;
 
-                      // Show chase info only if there's a target and it's not first innings
-                      const showChaseInfo = target && currentInningsId > 1;
-
-                      // Get total balls from the previous innings that set the target (or fallback to 540)
-                      const targetInnings = innings.find(
+                      const targetInnings = inningsArray.find(
                         (inn) =>
-                          inn.target === target &&
+                          inn.target === inningsData?.target &&
                           inn.inningsId !== currentInningsId
                       );
                       const totalBalls = targetInnings?.balls || 540;
-
+                      const balls =
+                        inningsData?.balls ??
+                        Math.round(miniscore?.overs * 6) ??
+                        0;
                       const ballsLeft = showChaseInfo
                         ? totalBalls - balls
                         : null;
-                      const runsNeeded = showChaseInfo ? target - runs : null;
+                      const runsNeeded = showChaseInfo
+                        ? inningsData.target - runs
+                        : null;
 
                       return (
                         <h1 className="text-lg md:text-xl font-bold">
                           {runs}/{wickets}
                           <br />
                           {showChaseInfo && (
-                            <span className="text-xs font-normal ">
+                            <span className="text-xs font-normal">
                               {runsNeeded} runs needed in {ballsLeft} balls
                             </span>
                           )}
@@ -303,7 +308,7 @@ const AnalyticsMatch = () => {
                       );
                     })()}
 
-                    {commentary?.matchHeaders.state === "Complete" ? (
+                    {commentary?.matchHeader?.state === "Complete" ? (
                       <div>
                         <p className="bg-green-500 text-white px-4 py-1 rounded-full text-sm font-semibold">
                           Match Completed
@@ -319,20 +324,10 @@ const AnalyticsMatch = () => {
                           }
                         />
                         {(() => {
-                          const innings =
-                            commentary?.miniscore?.inningsScores
-                              ?.inningsScore || [];
-                          const currentInningsId =
-                            commentary?.miniscore?.inningsId;
-
-                          const currentInnings = innings.find(
-                            (inn) => inn.inningsId === currentInningsId
-                          );
-
-                          const batTeamId = currentInnings?.batTeamId;
-
-                          const team1 = commentary?.matchHeaders?.team1;
-                          const team2 = commentary?.matchHeaders?.team2;
+                          const batTeamId =
+                            commentary?.miniscore?.batTeam?.teamId;
+                          const team1 = commentary?.matchHeader?.team1;
+                          const team2 = commentary?.matchHeader?.team2;
 
                           const battingTeam =
                             team1?.teamId === batTeamId

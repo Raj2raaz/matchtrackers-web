@@ -8,7 +8,6 @@ export default function ScoreCard({ score, overSummaryList, pointsTableData }) {
     overSummaryList ? 0 : 3
   );
 
-  console.log(overSummaryList);
   // Memoized helpers to reduce recomputation
   const getBatters = useMemo(
     () => (scorecard) => {
