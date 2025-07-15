@@ -123,7 +123,7 @@ const AnalyticsMatch = () => {
         setData(matchResponse.data);
         setScore(scoreResponse.data);
         setCommentary(commResponse.data);
-        setOverData(overResponse.data.overSummaryList);
+        setOverData(overResponse.data?.overSepList?.overSep);
       } catch (error) {
         console.log("Error fetching match data:", error);
       } finally {
@@ -880,7 +880,7 @@ const AnalyticsMatch = () => {
               />
             )}
           </div>
-          <div className="bg-white px-3 py-4 rounded-xl border border-gray-200 mb-2">
+          <div className="bg-white px-5 w-full py-4 flex flex-col items-center rounded-xl border border-gray-200 mb-2">
             <h1 className="text-xl font-semibold text-blue-600">Umpires</h1>
             <div className="flex flex-wrap gap-2 mt-2">
               {data?.matchInfo?.umpire1 && (

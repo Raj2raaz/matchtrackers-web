@@ -59,7 +59,7 @@ export default function Overs({ overSummaryList }) {
     <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
       {overSummaryList.map((over, index) => {
         // Check if this over has valid data
-        if (!over || !over.o_summary) {
+        if (!over || !over.overSummary) {
           return null;
         }
 
@@ -69,19 +69,19 @@ export default function Overs({ overSummaryList }) {
           : index + 1;
 
         // Convert over summary to array of balls, handling potential null/undefined values
-        const balls = over.o_summary
-          ? over.o_summary
+        const balls = over.overSummary
+          ? over.overSummary
               .trim()
               .split(" ")
               .filter((ball) => ball !== "")
           : [];
 
         // Get batsmen details with null checks
-        const batsman1 = over.batStrikerNames?.[0] || "Unknown";
-        const batsman2 = over.batStrikerNames?.[1] || "";
+        const batsman1 = over.ovrBatNames?.[0] || "Unknown";
+        const batsman2 = over.ovrBatNames?.[1] || "";
 
         // Get bowler details with null check
-        const bowlerName = over.bowlNames?.[0] || "Unknown";
+        const bowlerName = over.ovrBowlNames?.[0] || "Unknown";
 
         return (
           <div
@@ -96,7 +96,7 @@ export default function Overs({ overSummaryList }) {
                 </div>
                 <div>
                   <div className="text-xs text-blue-500 uppercase font-semibold">
-                    {over.batTeamName || "Team"}
+                    {over.battingTeamName || "Team"}
                   </div>
                   <div className="text-xl font-bold">
                     {over.score || 0}/{over.wickets || 0}
@@ -128,9 +128,7 @@ export default function Overs({ overSummaryList }) {
                       <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
                       <span className="font-medium">{batsman1}</span>
                     </div>
-                    <div className="ml-4 text-sm text-gray-600">
-                      {over.batStrikerRuns || 0} ({over.batStrikerBalls || 0})
-                    </div>
+                    <div className="ml-4 text-sm text-gray-600">On Strike</div>
                   </div>
 
                   {batsman2 && (
@@ -140,8 +138,7 @@ export default function Overs({ overSummaryList }) {
                         <span className="font-medium">{batsman2}</span>
                       </div>
                       <div className="ml-4 text-sm text-gray-600">
-                        {over.batNonStrikerRuns || 0} (
-                        {over.batNonStrikerBalls || 0})
+                        Non-striker
                       </div>
                     </div>
                   )}
@@ -159,15 +156,16 @@ export default function Overs({ overSummaryList }) {
                     <div className="flex items-center text-sm text-gray-600 mt-1">
                       <div className="mr-3">
                         <Clock size={14} className="inline mr-1" />
-                        {over.bowlOvers || "0.0"}
+                        {Math.floor(over.overNum || 0)}.
+                        {Math.floor(((over.overNum || 0) % 1) * 10)}
                       </div>
                       <div className="mr-3">
                         <Circle size={14} className="inline mr-1" />
-                        {over.bowlRuns || 0}
+                        {over.runs || 0}
                       </div>
                       <div>
                         <Award size={14} className="inline mr-1" />
-                        {over.bowlWickets || 0}
+                        {over.wickets || 0}
                       </div>
                     </div>
                   </div>
