@@ -27,7 +27,7 @@ export default function Gallery({ id = 0 }) {
       <div className="p-4 rounded-lg bg-gray-200 border my-3 shadow border-slate-300">
         <div className="flex md:flex flex-col justify-between w-full">
           <h1 className="text-xl font-bold text-primary">
-            {galleries[0]?.headline} Photos
+            {galleries[0]?.headline || ""} Photos
           </h1>
           <p
             onClick={() => navigate("/cricket/gallery")}

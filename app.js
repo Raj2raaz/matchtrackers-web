@@ -118,10 +118,11 @@ app.get("/api/blogs", async (req, res) => {
 
 app.get("/api/blog", async (req, res) => {
   try {
-    const blogs = await prisma.blog.findFirst({
+    const blogs = await prisma.blog.findMany({
       orderBy: {
         createdAt: "desc",
       },
+      take: 7,
     });
 
     // console.log(blogs);

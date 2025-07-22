@@ -33,37 +33,43 @@ export const getMatches = async (category) => {
 
 export const getAllSeriesList = async () => {
   try {
-    // Make both API calls in parallel
     const [leagueResponse, internationalResponse] = await Promise.all([
       apiClient.get("/series/v1/league"),
       apiClient.get("/series/v1/international"),
     ]);
 
-    // Extract the relevant parts (assuming same structure: seriesMapProto)
-    const leagueSeries = leagueResponse.data.seriesMapProto.flatMap(
-      (entry) =>
-        entry.series?.map((s) => ({
-          id: s.id,
-          name: s.name,
-        })) || []
-    );
+    // Combine all series from both responses
+    const combinedSeries = [
+      ...leagueResponse.data.seriesMapProto,
+      ...internationalResponse.data.seriesMapProto,
+    ];
 
-    const internationalSeries =
-      internationalResponse.data.seriesMapProto.flatMap(
-        (entry) =>
-          entry.series?.map((s) => ({
-            id: s.id,
-            name: s.name,
-          })) || []
-      );
+    // Flatten and collect series into a single list
+    const allSeries = combinedSeries.flatMap((entry) => entry.series || []);
+    console.log(leagueResponse.data);
 
-    // Combine both lists
-    const allSeries = [...leagueSeries, ...internationalSeries];
+    // Use a Map to filter unique series by ID
+    const uniqueSeriesMap = new Map();
+    allSeries.forEach((s) => {
+      if (!uniqueSeriesMap.has(s.id)) {
+        uniqueSeriesMap.set(s.id, { id: s.id, name: s.name });
+      }
+    });
 
-    return allSeries;
+    // Return unique series as an array
+    return Array.from(uniqueSeriesMap.values());
   } catch (error) {
     return handleApiError("getAllSeriesList", error);
   }
+
+  // return [
+  //   { id: 8786, name: "India tour of England, 2025" },
+  //   { id: 9614, name: "Major League Cricket 2025" },
+  //   { id: 9809, name: "Bangladesh tour of Sri Lanka, 2025" },
+  //   { id: 9408, name: "Australia tour of West Indies, 2025" },
+  //   { id: 9929, name: "Australia Women tour of India, 2025" },
+  //   { id: 9257, name: "T20 Blast 2025" },
+  // ];
 };
 
 // Fetch recent and live matches
