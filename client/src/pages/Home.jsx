@@ -556,7 +556,7 @@ export default function Home() {
         </div>
       </div>
 
-      <NewsSection news={news} />
+      {/* <NewsSection news={news} /> */}
 
       <div className="mx-5 md:mx-24">
         <Gallery id={1} />

@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useEffect, useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -55,15 +56,22 @@ const Navbar = () => {
     };
   }, [openDropdown, mobileMenuOpen]);
 
-  const getData = async () => {
-    try {
-      const data = await getNavLinks();
-      setNavLinks(data);
-    } catch (error) {
-      console.error("Failed to fetch nav links:", error);
-      // Consider setting an error state to display a message to the user
-    }
-  };
+  const [blogs, setBlogs] = useState([]);
+
+const getData = async () => {
+  try {
+    const data = await getNavLinks();
+    setNavLinks(data);
+
+    // Fetch blog articles
+    const blogResponse = await axios.get("/api/blog");
+    setBlogs(blogResponse.data.blogs); // Assuming the response data is an array of blogs
+  } catch (error) {
+    console.error("Failed to fetch data:", error);
+    // Consider setting an error state to display a message to the user
+  }
+};
+
 
   const toggleDropdown = (menu, event) => {
     if (event) event.stopPropagation(); // Prevent click from propagating to document
@@ -182,34 +190,34 @@ const Navbar = () => {
   );
 
   const NewsDropdown = () => (
-    <div className="py-2 max-h-96 z-70 overflow-y-auto text-black bg-white rounded-md shadow-lg">
-      {navLinks?.news?.slice(0, 7).map((e, i) => (
+  <div className="py-2 max-h-96 z-70 overflow-y-auto text-black bg-white rounded-md shadow-lg">
+    {blogs.length > 0 ? (
+      blogs.slice(0, 7).map((blog, i) => (
         <Link
           key={i}
-          to={`/cricket/news/${e.id}`}
+          to={`/blog/${blog.id}/${blog.slug}`} // Adjust the path as necessary
           className="block px-4 py-3 hover:bg-blue-50 transition-colors duration-150 border-b border-gray-100 last:border-0"
-          onClick={(event) =>
-            handleNavLinkClick(event, `/cricket/news/${e.id}`)
-          }
+          onClick={(event) => handleNavLinkClick(event, `/blog/${blog.id}/${blog.slug}`)}
         >
-          <p className="line-clamp-2 text-sm">{e.hline}</p>
-          <p className="text-xs text-gray-500 mt-1">{e.date || "Recent"}</p>
+          <p className="line-clamp-2 text-sm">{blog.title}</p>
+          <p className="text-xs text-gray-500 mt-1">{new Date(blog.createdAt).toLocaleDateString()}</p>
         </Link>
-      ))}
-      {(!navLinks?.news || navLinks.news.length === 0) && (
-        <div className="px-4 py-3 text-gray-500 text-sm">No news available</div>
-      )}
-      {navLinks?.news?.length > 0 && (
-        <Link
-          to="/cricket/all-news"
-          className="block px-4 py-2 text-center text-primary text-sm font-medium hover:bg-blue-50"
-          onClick={(e) => handleNavLinkClick(e, "/cricket/all-news")}
-        >
-          View All News
-        </Link>
-      )}
-    </div>
-  );
+      ))
+    ) : (
+      <div className="px-4 py-3 text-gray-500 text-sm">No blogs available</div>
+    )}
+    {blogs.length > 0 && (
+      <Link
+        to="/cricket/blogs" // Adjust the path as necessary
+        className="block px-4 py-2 text-center text-primary text-sm font-medium hover:bg-blue-50"
+        onClick={(e) => handleNavLinkClick(e, "/cricket/blogs")}
+      >
+        View All Blogs
+      </Link>
+    )}
+  </div>
+);
+
 
   const SchedulesDropdown = () => (
     <div className="py-2 max-h-96 z-70 overflow-y-auto text-black bg-white rounded-md shadow-lg">

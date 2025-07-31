@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Navigate, useNavigate } from "react-router-dom";
 
 export default function BlogSection({ blog = [] }) {
+  const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
 
   // Handle navigation - move by 1 slide
@@ -95,7 +97,7 @@ export default function BlogSection({ blog = [] }) {
             <button
               onClick={() => {
                 // Replace with your navigation logic
-                console.log("Navigate to /cricket/blogs");
+                navigate("/cricket/blogs",);
               }}
               className="absolute bottom-2 right-4 px-3 py-1.5 cursor-pointer rounded-full bg-white text-blue-700 text-xs font-medium hover:bg-blue-50 transition-colors duration-200 shadow-lg z-10"
             >
