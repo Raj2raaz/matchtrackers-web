@@ -25,10 +25,10 @@ export default function Highlights() {
   }, []);
 
   useEffect(() => {
-    if (matches.length <= 1) return;
+    if (matches?.length <= 1) return;
 
     const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % matches.length);
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % matches?.length);
     }, 4000);
 
     return () => clearInterval(interval);
@@ -37,7 +37,7 @@ export default function Highlights() {
   useEffect(() => {
     if (
       scrollContainerRef.current &&
-      matches.length > 0 &&
+      matches?.length > 0 &&
       cardRefs.current[currentIndex]
     ) {
       // Get the current card element
@@ -66,12 +66,12 @@ export default function Highlights() {
 
   const handlePrev = () => {
     setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? matches.length - 1 : prevIndex - 1
+      prevIndex === 0 ? matches?.length - 1 : prevIndex - 1
     );
   };
 
   const handleNext = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % matches.length);
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % matches?.length);
   };
 
   const formatMatchDate = (dateString) => {
@@ -151,8 +151,8 @@ export default function Highlights() {
         className="flex overflow-x-auto gap-6 py-4 px-8 no-scrollbar scroll-smooth snap-x snap-mandatory"
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
       >
-        {matches.length > 0 ? (
-          matches.map((match, i) => (
+        {matches?.length > 0 ? (
+          matches?.map((match, i) => (
             <div
               key={i}
               ref={
