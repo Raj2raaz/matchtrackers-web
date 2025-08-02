@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import BlogSkeleton from "../components/BlogSkeleton";
+
 
 export default function CricketBlog() {
   const [blog, setBlog] = useState(null);
@@ -22,12 +24,9 @@ export default function CricketBlog() {
   }, [id]);
 
   if (!blog) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-gray-500 text-lg">Loading...</p>
-      </div>
-    );
-  }
+  return <BlogSkeleton />;
+}
+
 
   const renderContent = () => {
     if (blog.sections && Array.isArray(blog.sections)) {
