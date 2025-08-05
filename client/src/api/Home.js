@@ -39,10 +39,6 @@ export const getAllSeriesList = async () => {
       apiClient.get("/series/v1/international"),
     ]);
 
-    console.log(
-      "Sample series object:",
-      JSON.stringify(leagueResponse.data.seriesMapProto[0]?.series?.[0], null, 2)
-    );
 
     // Combine all series from both responses
     const combinedSeries = [

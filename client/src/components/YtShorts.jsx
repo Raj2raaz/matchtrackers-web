@@ -227,7 +227,7 @@ export default function YtShorts() {
                       title="YouTube Short"
                       frameBorder="0"
                       allow="autoplay; encrypted-media; fullscreen; accelerometer; clipboard-write; gyroscope; picture-in-picture"
-                      allowFullScreen
+                    
                       className="w-full h-full rounded-lg shadow-md"
                     />
                   </div>

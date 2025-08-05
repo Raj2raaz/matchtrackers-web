@@ -25,6 +25,8 @@ export default function BlogSection(props) {
   useEffect(() => {
     if (currentIndex >= blog.length) {
       const timeout = setTimeout(() => {
+        if (!sliderRef.current) return;
+        
         // Disable animation temporarily
         sliderRef.current.style.transition = "none";
         setCurrentIndex(0);
