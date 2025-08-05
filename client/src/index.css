@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&display=swap");
 @import "tailwindcss";
 
-@theme {
+:root {
   --color-primary: #00082d;
   --color-secondary: #0057b7;
   --color-sub: #525252;
@@ -9,14 +9,14 @@
   --font-inter: "Inter", "sans-serif";
 }
 
-.no-scrollbar::-webkit-scrollbar {
+.scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
-
-.no-scrollbar {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
 }
+
 /* For Chrome, Edge, Safari */
 ::-webkit-scrollbar {
   width: 8px; /* width of vertical scrollbar */

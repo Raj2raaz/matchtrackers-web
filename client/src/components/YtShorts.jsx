@@ -173,6 +173,18 @@ export default function YtShorts() {
     }
   }, []);
 
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const nextIndex = (currentSlide + 1) % totalVideos;
+      scrollToIndex(nextIndex);
+      setActiveVideo(nextIndex);
+    }, 10000); // every 10 seconds
+
+    return () => clearInterval(interval);
+  }, [currentSlide, totalVideos]);
+
+
   const getThumbnail = (index) => {
     const thumbnailIndex =
       (((index % totalVideos) + totalVideos) % totalVideos) + 1;
@@ -210,13 +222,14 @@ export default function YtShorts() {
                 {isActive ? (
                   <div className="relative w-full h-full">
                     <iframe
-                      src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
+                      key={videoId}
+                      src={`https://www.youtube.com/embed/${videoId}?autoplay=${isActive ? 1 : 0}&mute=1&enablejsapi=1`}
                       title="YouTube Short"
                       frameBorder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allow="autoplay; encrypted-media; fullscreen; accelerometer; clipboard-write; gyroscope; picture-in-picture"
                       allowFullScreen
                       className="w-full h-full rounded-lg shadow-md"
-                    ></iframe>
+                    />
                   </div>
                 ) : (
                   <div

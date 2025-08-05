@@ -33,10 +33,16 @@ export const getMatches = async (category) => {
 
 export const getAllSeriesList = async () => {
   try {
+    // Fetch league and international series concurrently
     const [leagueResponse, internationalResponse] = await Promise.all([
       apiClient.get("/series/v1/league"),
       apiClient.get("/series/v1/international"),
     ]);
+
+    console.log(
+      "Sample series object:",
+      JSON.stringify(leagueResponse.data.seriesMapProto[0]?.series?.[0], null, 2)
+    );
 
     // Combine all series from both responses
     const combinedSeries = [

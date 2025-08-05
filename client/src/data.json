@@ -1,4 +1,54 @@
 {
+  
+  "recentHighlights": [
+    {
+      "id": "t20-blast-2025",
+      "name": "T20 Blast 2025",
+      "thumbnail": "https://example.com/logos/t20-blast-2025.png"
+    },
+    {
+      "id": "mlc-2025",
+      "name": "Major League Cricket 2025",
+      "thumbnail": "https://example.com/logos/mlc-2025.png"
+    },
+    {
+      "id": "pondicherry-premier-league-2025",
+      "name": "Pondicherry Premier League 2025",
+      "thumbnail": "https://fancode.com/skillup-uploads/prod-images/2024/07/PPL-T20-Tour-Logo.png"
+    },
+    {
+      "id": "global-super-league-2025",
+      "name": "Global Super League 2025",
+      "thumbnail": "https://example.com/logos/global-super-league-2025.png"
+    },
+    {
+      "id": "world-championship-2025",
+      "name": "World Championship of Legends 2025",
+      "thumbnail": "https://example.com/logos/world-championship-2025.png"
+    },
+    {
+      "id": "hundred-mens-competition-2025",
+      "name": "The Hundred Mens Competition 2025",
+      "thumbnail": "https://example.com/logos/hundred-mens-competition-2025.png"
+    },
+    {
+      "id": "caribbean-premier-league-2025",
+      "name": "Caribbean Premier League 2025",
+      "thumbnail": "https://example.com/logos/caribbean-premier-league-2025.png"
+    },
+    {
+      "id": "big-bash-league-2025",
+      "name": "Big Bash League 2025-26",
+      "thumbnail": "https://example.com/logos/big-bash-league-2025.png"
+    },
+    {
+      "id": "sa20-2025",
+      "name": "SA20, 2025-26",
+      "thumbnail": "https://example.com/logos/sa20-2025.png"
+    }
+  ],
+
+
   "IndianPlayers": [
     {
       "name": "Virat Kohli",
