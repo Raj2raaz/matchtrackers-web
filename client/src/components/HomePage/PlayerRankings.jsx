@@ -137,7 +137,7 @@ export default function PlayerRankings() {
                       }
                       className="flex flex-col sm:flex-row items-center bg-white h-full rounded-xl border border-gray-200 p-2 sm:p-3 cursor-pointer hover:bg-gray-50 hover:shadow-md transition duration-200"
                     >
-                      <div className="mb-2 sm:mb-0 sm:mr-3 flex-shrink-0">
+                      <div className="mb-2 sm:mb-0 sm:mr-3 flex-shrink-0 pl-3">
                         <div className="relative">
                           <Image
                             className="h-12 w-12 sm:h-14 sm:w-14 aspect-square rounded-full border-2 border-blue-100 shadow"
