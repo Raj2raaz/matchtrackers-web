@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import data from "../data.json";
 
 // Thumbnail imports
@@ -17,6 +17,9 @@ export default function YtShorts() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [activeVideo, setActiveVideo] = useState(null);
   const scrollContainerRef = useRef(null);
+  const isScrollingRef = useRef(false);
+  const autoScrollTimeoutRef = useRef(null);
+  const scrollTimeoutRef = useRef(null);
 
   // Map thumbnails to their imports
   const thumbnails = {
@@ -49,53 +52,75 @@ export default function YtShorts() {
     return url.split("v=")[1];
   };
 
-  const scrollToIndex = (index) => {
-    if (scrollContainerRef.current) {
+  const scrollToIndex = useCallback((index, smooth = true) => {
+    if (scrollContainerRef.current && !isScrollingRef.current) {
+      isScrollingRef.current = true;
+      
       const container = scrollContainerRef.current;
-      const slideWidth = container.querySelector(".slide-item").offsetWidth;
-      const gap = 16; // Gap between slides in pixels
+      const slideWidth = container.querySelector(".slide-item")?.offsetWidth || 280;
+      const gap = 16;
 
-      const adjustedIndex = index + 1;
+      const adjustedIndex = index + 1; // Account for circular array
       const containerWidth = container.offsetWidth;
       const slideCenter = adjustedIndex * (slideWidth + gap) + slideWidth / 2;
       const scrollLeft = slideCenter - containerWidth / 2;
 
       container.scrollTo({
         left: scrollLeft,
-        behavior: "smooth",
+        behavior: smooth ? "smooth" : "auto",
       });
-      setCurrentSlide(index);
-    }
-  };
 
-  const handleNext = () => {
+      setCurrentSlide(index);
+
+      // Reset scrolling flag after animation
+      setTimeout(() => {
+        isScrollingRef.current = false;
+      }, smooth ? 500 : 100);
+    }
+  }, []);
+
+  const handleNext = useCallback(() => {
     const nextIndex = (currentSlide + 1) % totalVideos;
     scrollToIndex(nextIndex);
-  };
+    setActiveVideo(null); // Close any active video
+  }, [currentSlide, totalVideos, scrollToIndex]);
 
-  const handlePrev = () => {
+  const handlePrev = useCallback(() => {
     const prevIndex = (currentSlide - 1 + totalVideos) % totalVideos;
     scrollToIndex(prevIndex);
-  };
+    setActiveVideo(null); // Close any active video
+  }, [currentSlide, totalVideos, scrollToIndex]);
 
   const handleThumbnailClick = (index) => {
+    // Convert circular array index to original index
     const adjustedIndex =
       index === 0 ? totalVideos - 1 : index === totalVideos + 1 ? 0 : index - 1;
 
     setActiveVideo(adjustedIndex);
     setCurrentSlide(adjustedIndex);
+    
+    // Reset auto-scroll timer when user interacts
+    if (autoScrollTimeoutRef.current) {
+      clearTimeout(autoScrollTimeoutRef.current);
+    }
+    startAutoScroll();
   };
 
-  useEffect(() => {
-    const handleScroll = () => {
+  // Debounced scroll handler to prevent jittering
+  const handleScroll = useCallback(() => {
+    if (isScrollingRef.current) return;
+    
+    if (scrollTimeoutRef.current) {
+      clearTimeout(scrollTimeoutRef.current);
+    }
+
+    scrollTimeoutRef.current = setTimeout(() => {
       if (scrollContainerRef.current) {
         const container = scrollContainerRef.current;
         const slideElements = container.querySelectorAll(".slide-item");
-        const slideWidth = slideElements[0]?.offsetWidth || 0;
-        const gap = 16;
+        const slideWidth = slideElements[0]?.offsetWidth || 280;
 
-        const containerCenter =
-          container.scrollLeft + container.offsetWidth / 2;
+        const containerCenter = container.scrollLeft + container.offsetWidth / 2;
 
         let closestIndex = 0;
         let closestDistance = Infinity;
@@ -110,84 +135,81 @@ export default function YtShorts() {
           }
         });
 
+        // Convert to original index
         const adjustedIndex = closestIndex - 1;
-        const normalizedIndex =
-          ((adjustedIndex % totalVideos) + totalVideos) % totalVideos;
+        const normalizedIndex = ((adjustedIndex % totalVideos) + totalVideos) % totalVideos;
 
-        if (normalizedIndex !== currentSlide) {
+        if (normalizedIndex !== currentSlide && !isScrollingRef.current) {
           setCurrentSlide(normalizedIndex);
         }
       }
-    };
+    }, 100); // Debounce scroll detection
+  }, [currentSlide, totalVideos]);
 
+  // Auto-scroll functionality
+  const startAutoScroll = useCallback(() => {
+    if (autoScrollTimeoutRef.current) {
+      clearTimeout(autoScrollTimeoutRef.current);
+    }
+
+    autoScrollTimeoutRef.current = setTimeout(() => {
+      if (!isScrollingRef.current) {
+        handleNext();
+        startAutoScroll(); // Restart the cycle
+      }
+    }, 10000);
+  }, [handleNext]);
+
+  // Initialize scroll position
+  useEffect(() => {
+    if (scrollContainerRef.current) {
+      const timer = setTimeout(() => {
+        scrollToIndex(0, false); // Start at first video without animation
+      }, 100);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [scrollToIndex]);
+
+  // Set up scroll listener
+  useEffect(() => {
     const container = scrollContainerRef.current;
     if (container) {
       container.addEventListener("scroll", handleScroll);
-      return () => container.removeEventListener("scroll", handleScroll);
+      return () => {
+        container.removeEventListener("scroll", handleScroll);
+        if (scrollTimeoutRef.current) {
+          clearTimeout(scrollTimeoutRef.current);
+        }
+      };
     }
-  }, [currentSlide, totalVideos]);
+  }, [handleScroll]);
 
+  // Start auto-scroll
   useEffect(() => {
-    const container = scrollContainerRef.current;
-    if (!container) return;
-
-    const handleScrollEnd = () => {
-      const slideElements = container.querySelectorAll(".slide-item");
-      const slideWidth = slideElements[0]?.offsetWidth || 0;
-      const gap = 16;
-
-      if (currentSlide === totalVideos - 1 && activeVideo !== totalVideos - 1) {
-        setTimeout(() => {
-          container.scrollTo({
-            left: totalVideos * (slideWidth + gap),
-            behavior: "auto",
-          });
-        }, 300);
-      } else if (currentSlide === 0 && activeVideo !== 0) {
-        setTimeout(() => {
-          container.scrollTo({
-            left: slideWidth + gap,
-            behavior: "auto",
-          });
-        }, 300);
+    startAutoScroll();
+    
+    return () => {
+      if (autoScrollTimeoutRef.current) {
+        clearTimeout(autoScrollTimeoutRef.current);
       }
     };
+  }, [startAutoScroll]);
 
-    container.addEventListener("scrollend", handleScrollEnd);
-    return () => container.removeEventListener("scrollend", handleScrollEnd);
-  }, [currentSlide, activeVideo, totalVideos]);
-
+  // Cleanup on unmount
   useEffect(() => {
-    if (scrollContainerRef.current) {
-      setTimeout(() => {
-        const container = scrollContainerRef.current;
-        const slideElements = container.querySelectorAll(".slide-item");
-        const slideWidth = slideElements[0]?.offsetWidth || 0;
-        const gap = 16;
-
-        container.scrollTo({
-          left: slideWidth + gap,
-          behavior: "auto",
-        });
-      }, 100);
-    }
+    return () => {
+      if (autoScrollTimeoutRef.current) {
+        clearTimeout(autoScrollTimeoutRef.current);
+      }
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+    };
   }, []);
 
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const nextIndex = (currentSlide + 1) % totalVideos;
-      scrollToIndex(nextIndex);
-      setActiveVideo(nextIndex);
-    }, 10000); // every 10 seconds
-
-    return () => clearInterval(interval);
-  }, [currentSlide, totalVideos]);
-
-
   const getThumbnail = (index) => {
-    const thumbnailIndex =
-      (((index % totalVideos) + totalVideos) % totalVideos) + 1;
+    const thumbnailIndex = (((index % totalVideos) + totalVideos) % totalVideos) + 1;
     return thumbnails[thumbnailIndex] || null;
   };
 
@@ -200,7 +222,10 @@ export default function YtShorts() {
         <div
           ref={scrollContainerRef}
           className="overflow-x-auto flex py-2 px-12 no-scrollbar"
-          style={{ scrollSnapType: "x mandatory" }}
+          style={{ 
+            scrollSnapType: "x mandatory",
+            scrollBehavior: "smooth"
+          }}
         >
           {circularVideos.map((url, i) => {
             const originalIndex =
@@ -211,8 +236,8 @@ export default function YtShorts() {
 
             return (
               <div
-                key={i}
-                className={`slide-item flex-shrink-0 w-full max-w-[280px] aspect-[9/16] mx-2 transition-all duration-300 ${
+                key={`${i}-${originalIndex}`}
+                className={`slide-item flex-shrink-0 w-full max-w-[280px] aspect-[9/16] mx-2 transition-all duration-300 ease-in-out ${
                   originalIndex === currentSlide
                     ? "scale-100 opacity-100"
                     : "scale-95 opacity-90"
@@ -222,12 +247,11 @@ export default function YtShorts() {
                 {isActive ? (
                   <div className="relative w-full h-full">
                     <iframe
-                      key={videoId}
+                      key={`video-${videoId}`}
                       src={`https://www.youtube.com/embed/${videoId}?autoplay=${isActive ? 1 : 0}&mute=1&enablejsapi=1`}
                       title="YouTube Short"
                       frameBorder="0"
                       allow="autoplay; encrypted-media; fullscreen; accelerometer; clipboard-write; gyroscope; picture-in-picture"
-                    
                       className="w-full h-full rounded-lg shadow-md"
                     />
                   </div>
@@ -239,10 +263,11 @@ export default function YtShorts() {
                     <img
                       src={getThumbnail(originalIndex)}
                       alt={`YouTube Short ${originalIndex + 1}`}
-                      className="w-full h-full object-cover rounded-lg shadow-md"
+                      className="w-full h-full object-cover rounded-lg shadow-md transition-transform duration-200 hover:scale-105"
+                      loading="lazy"
                     />
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="bg-black bg-opacity-50 rounded-full p-3">
+                      <div className="bg-black bg-opacity-50 rounded-full p-3 transition-all duration-200 hover:bg-opacity-70">
                         <svg
                           className="h-8 w-8 text-white"
                           fill="currentColor"
@@ -263,7 +288,7 @@ export default function YtShorts() {
 
         <button
           onClick={handlePrev}
-          className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md z-20 hover:bg-gray-100"
+          className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md z-20 hover:bg-gray-100 transition-colors duration-200"
           aria-label="Previous video"
         >
           <svg
@@ -284,7 +309,7 @@ export default function YtShorts() {
 
         <button
           onClick={handleNext}
-          className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md z-20 hover:bg-gray-100"
+          className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md z-20 hover:bg-gray-100 transition-colors duration-200"
           aria-label="Next video"
         >
           <svg
@@ -311,8 +336,13 @@ export default function YtShorts() {
             onClick={() => {
               scrollToIndex(index);
               setActiveVideo(null);
+              // Reset auto-scroll timer
+              if (autoScrollTimeoutRef.current) {
+                clearTimeout(autoScrollTimeoutRef.current);
+              }
+              startAutoScroll();
             }}
-            className={`h-1.5 rounded-full transition-all ${
+            className={`h-1.5 rounded-full transition-all duration-300 ${
               index === currentSlide ? "w-8 bg-blue-600" : "w-2 bg-gray-300"
             }`}
             aria-label={`Go to slide ${index + 1}`}

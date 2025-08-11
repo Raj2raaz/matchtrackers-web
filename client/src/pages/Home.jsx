@@ -170,7 +170,7 @@ export default function Home() {
       const news = await getNews();
       setNews(news);
     } catch (error) {
-      console.log(error);
+       console.log(error);
     }
   };
 
