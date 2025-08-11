@@ -13,7 +13,7 @@ export default function Footer() {
               <img
                 src={navLogo}
                 alt="MatchTrackers Logo"
-                className="h-12 w-auto"
+                className="h-16 w-auto"
               />
             </Link>
             <p className="text-sm">

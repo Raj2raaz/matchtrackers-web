@@ -286,7 +286,7 @@ const getData = async () => {
       <div className="bg-gradient-to-r from-blue-600 to-blue-800 px-4 md:px-6 lg:px-24 py-3 text-white flex w-full justify-between items-center relative">
         <img
           onClick={() => navigate("/cricket")}
-          className="h-8 md:h-8 cursor-pointer transition-transform hover:scale-105"
+          className="h-12 md:h-14 cursor-pointer transition-transform hover:scale-105"
           src={navLogo}
           alt="Logo"
         />
