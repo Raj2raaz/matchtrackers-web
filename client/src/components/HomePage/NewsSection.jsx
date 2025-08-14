@@ -9,15 +9,14 @@ export default function NewsSection({ news = [] }) {
   const [itemsPerView, setItemsPerView] = useState(1);
   const navigate = useNavigate();
 
-  // Handle responsive items per view
   useEffect(() => {
     const updateItemsPerView = () => {
       if (window.innerWidth >= 1024) {
-        setItemsPerView(3); // Desktop: 3 items
+        setItemsPerView(3);
       } else if (window.innerWidth >= 768) {
-        setItemsPerView(2); // Tablet: 2 items
+        setItemsPerView(2);
       } else {
-        setItemsPerView(1); // Mobile: 1 item
+        setItemsPerView(1);
       }
     };
 
@@ -29,38 +28,28 @@ export default function NewsSection({ news = [] }) {
   const displayNews = news.slice(0, 12).filter((item) => item?.story);
   const maxSlide = Math.max(0, displayNews.length - itemsPerView);
 
-  // Auto-play functionality
   useEffect(() => {
     if (isAutoPlaying && displayNews.length > itemsPerView) {
       const interval = setInterval(() => {
-        setCurrentSlide((prev) => {
-          if (prev >= maxSlide) {
-            return 0; // Loop back to start
-          }
-          return prev + 1; // Move one item at a time
-        });
+        setCurrentSlide((prev) =>
+          prev >= maxSlide ? 0 : prev + 1
+        );
       }, 4000);
       return () => clearInterval(interval);
     }
   }, [isAutoPlaying, displayNews.length, itemsPerView, maxSlide]);
 
   const goToPrevious = () => {
-    setCurrentSlide((prev) => {
-      if (prev <= 0) {
-        return maxSlide; // Go to last possible position
-      }
-      return prev - 1; // Move one item back
-    });
+    setCurrentSlide((prev) =>
+      prev <= 0 ? maxSlide : prev - 1
+    );
     setIsAutoPlaying(false);
   };
 
   const goToNext = () => {
-    setCurrentSlide((prev) => {
-      if (prev >= maxSlide) {
-        return 0; // Loop back to start
-      }
-      return prev + 1; // Move one item forward
-    });
+    setCurrentSlide((prev) =>
+      prev >= maxSlide ? 0 : prev + 1
+    );
     setIsAutoPlaying(false);
   };
 
@@ -69,51 +58,45 @@ export default function NewsSection({ news = [] }) {
     setIsAutoPlaying(false);
   };
 
-  const formatDate = (timestamp) => {
-    return new Date(Number(timestamp || Date.now())).toLocaleDateString(
-      "en-US",
-      {
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
-      }
-    );
-  };
+  const formatDate = (timestamp) =>
+    new Date(Number(timestamp || Date.now())).toLocaleDateString("en-US", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
 
   const navigateToNews = (newsId) => {
     navigate(`/cricket/news/${newsId}`);
-    // Replace with your actual navigation logic
   };
 
   const navigateToAllNews = () => {
     navigate("/cricket/all-news");
-    // Replace with your actual navigation logic
   };
 
   if (!news || news.length === 0) {
     return (
-      <div className="bg-gray-200 mx-2 sm:mx-5 md:mx-24 flex-1 mb-5 border border-slate-300 rounded-xl p-4 sm:p-5">
-        <h1 className="text-xl font-bold text-primary">LATEST NEWS</h1>
-        <p className="text-gray-500 italic mt-4">No news available</p>
+      <div className="bg-gray-200 dark:bg-gray-800 mx-2 sm:mx-5 md:mx-24 flex-1 mb-5 border border-slate-300 dark:border-slate-600 rounded-xl p-4 sm:p-5">
+        <h1 className="text-xl font-bold text-primary dark:text-gray-100">LATEST NEWS</h1>
+        <p className="text-gray-500 dark:text-gray-400 italic mt-4">No news available</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-gray-200 border rounded-xl border-slate-300 mx-2 sm:mx-5 md:mx-24 flex-1 mb-5  overflow-hidden shadow-sm">
+    <div className="bg-gray-200 dark:bg-gray-800 border rounded-xl border-slate-300 dark:border-slate-600 mx-2 sm:mx-5 md:mx-24 flex-1 mb-5 overflow-hidden shadow-sm">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 sm:p-6  border-b border-gray-100 gap-3 sm:gap-0">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700 gap-3 sm:gap-0">
         <div>
-          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100">
             LATEST NEWS
           </h1>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
             Stay updated with cricket news
           </p>
         </div>
         <button
           onClick={navigateToAllNews}
-          className="flex cursor-pointer items-center gap-2 text-blue-600 hover:text-blue-700 font-medium text-sm transition-colors self-start sm:self-auto"
+          className="flex cursor-pointer items-center gap-2 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium text-sm transition-colors self-start sm:self-auto"
         >
           See All <ExternalLink size={14} />
         </button>
@@ -140,7 +123,7 @@ export default function NewsSection({ news = [] }) {
                   onClick={() => navigateToNews(newsItem.story.id)}
                 >
                   <div className="mx-1 sm:mx-2">
-                    <div className="relative h-64 sm:h-72 lg:h-80 rounded-xl overflow-hidden bg-gray-100">
+                    <div className="relative h-64 sm:h-72 lg:h-80 rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-700">
                       <Image
                         faceImageId={newsItem.story.imageId}
                         className="w-full h-full object-cover"
@@ -153,8 +136,7 @@ export default function NewsSection({ news = [] }) {
                         <div className="flex items-center gap-1 sm:gap-2 mb-2 text-xs sm:text-sm">
                           <Clock size={12} className="sm:w-4 sm:h-4" />
                           <span className="truncate">
-                            {newsItem.story.coverImage?.source ||
-                              "Cricket News"}
+                            {newsItem.story.coverImage?.source || "Cricket News"}
                           </span>
                           <span className="hidden sm:inline">•</span>
                           <span className="hidden sm:inline text-xs">
@@ -164,7 +146,7 @@ export default function NewsSection({ news = [] }) {
                         <h2 className="text-sm sm:text-lg lg:text-xl font-bold mb-2 line-clamp-2 group-hover:text-blue-200 transition-colors">
                           {newsItem.story.hline}
                         </h2>
-                        <p className="text-gray-200 line-clamp-2 text-xs sm:text-sm leading-relaxed hidden sm:block">
+                        <p className="text-gray-200 dark:text-gray-300 line-clamp-2 text-xs sm:text-sm leading-relaxed hidden sm:block">
                           {newsItem.story.intro}
                         </p>
                       </div>
@@ -181,7 +163,7 @@ export default function NewsSection({ news = [] }) {
               ))}
             </div>
 
-            {/* Navigation Arrows - Only show if there are more items than visible */}
+            {/* Navigation Arrows */}
             {displayNews.length > itemsPerView && (
               <>
                 <button
@@ -214,8 +196,8 @@ export default function NewsSection({ news = [] }) {
                   onClick={() => goToSlide(index)}
                   className={`h-2 rounded-full transition-all duration-300 ${
                     index === currentSlide
-                      ? "bg-blue-600 w-6 sm:w-8"
-                      : "bg-gray-300 hover:bg-gray-400 w-2"
+                      ? "bg-blue-600 dark:bg-blue-400 w-6 sm:w-8"
+                      : "bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500 w-2"
                   }`}
                   aria-label={`Go to slide ${index + 1}`}
                 />
@@ -225,8 +207,8 @@ export default function NewsSection({ news = [] }) {
         </div>
 
         {/* News Strip/Bar */}
-        <div className="bg-gray-50 rounded-xl p-3 sm:p-4">
-          <h3 className="font-semibold text-gray-900 mb-3 text-sm uppercase tracking-wide">
+        <div className="bg-gray-50 dark:bg-gray-900 rounded-xl p-3 sm:p-4">
+          <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-3 text-sm uppercase tracking-wide">
             Recent Updates
           </h3>
           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3">
@@ -234,7 +216,7 @@ export default function NewsSection({ news = [] }) {
               <div
                 key={index}
                 onClick={() => navigateToNews(newsItem.story.id)}
-                className="flex items-center gap-3 sm:gap-4 p-3 bg-white rounded-lg cursor-pointer hover:shadow-md transition-all group border border-transparent hover:border-blue-100"
+                className="flex items-center gap-3 sm:gap-4 p-3 bg-white dark:bg-gray-800 rounded-lg cursor-pointer hover:shadow-md transition-all group border border-transparent hover:border-blue-100 dark:hover:border-blue-500/40"
               >
                 <Image
                   faceImageId={newsItem.story.imageId}
@@ -243,10 +225,10 @@ export default function NewsSection({ news = [] }) {
                 />
 
                 <div className="flex-1 min-w-0">
-                  <h4 className="font-medium text-gray-900 line-clamp-2 group-hover:text-blue-600 transition-colors text-sm">
+                  <h4 className="font-medium text-gray-900 dark:text-gray-100 line-clamp-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors text-sm">
                     {newsItem.story.hline}
                   </h4>
-                  <div className="flex items-center gap-2 mt-1 text-xs text-gray-500">
+                  <div className="flex items-center gap-2 mt-1 text-xs text-gray-500 dark:text-gray-400">
                     <span className="truncate">
                       {newsItem.story.coverImage?.source || "Cricket News"}
                     </span>
@@ -258,7 +240,7 @@ export default function NewsSection({ news = [] }) {
                 </div>
                 <ChevronRight
                   size={14}
-                  className="text-gray-400 group-hover:text-blue-500 transition-colors flex-shrink-0 sm:w-4 sm:h-4"
+                  className="text-gray-400 dark:text-gray-500 group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors flex-shrink-0 sm:w-4 sm:h-4"
                 />
               </div>
             ))}

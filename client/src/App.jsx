@@ -34,6 +34,9 @@ import FootballRouter from "./components/FootballRouter";
 import Admin from "./pages/admin/Admin";
 import CricketBlog from "./pages/CricketBlog";
 
+// ✅ Import ThemeProvider
+import { ThemeProvider } from "./context/ThemeContext";
+
 // Layout component to add padding to certain routes
 const PaddedLayout = ({ children }) => {
   return <div className="px-2 md:px-24 md:py-8">{children}</div>;
@@ -41,45 +44,47 @@ const PaddedLayout = ({ children }) => {
 
 export default function App() {
   return (
-    <div className="font-inter bg-[#F5F5F5] h-full w-full">
-      <Toaster />
-      <Router>
-        <Navbar />
-        <ScrollToTop />
-        <Routes>
-          <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
-          <Route path="/faqs" element={<FAQPage />} />
-          <Route path="/about" element={<AboutUsPage />} />
-          <Route
-            path="/Terms-and-conditions"
-            element={<TermsAndConditionsPage />}
-          />
+    <ThemeProvider>
+      <div className="font-inter bg-[#F5F5F5] dark:bg-[#1A1A1A] h-full w-full transition-colors duration-300">
+        <Toaster />
+        <Router>
+          <Navbar />
+          <ScrollToTop />
+          <Routes>
+            <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+            <Route path="/faqs" element={<FAQPage />} />
+            <Route path="/about" element={<AboutUsPage />} />
+            <Route
+              path="/Terms-and-conditions"
+              element={<TermsAndConditionsPage />}
+            />
 
-          <Route
-            path="/auth"
-            element={
-              <PaddedLayout>
-                <AuthForm />
-              </PaddedLayout>
-            }
-          />
+            <Route
+              path="/auth"
+              element={
+                <PaddedLayout>
+                  <AuthForm />
+                </PaddedLayout>
+              }
+            />
 
-          <Route path="/" element={<Navigate to="/cricket" replace />} />
+            <Route path="/" element={<Navigate to="/cricket" replace />} />
 
-          <Route path="/cricket/*" element={<CricketRouter />} />
-          <Route path="/football/*" element={<FootballRouter />} />
-          <Route
-            path="/blog/:id/:slug?"
-            element={
-              <PaddedLayout>
-                <CricketBlog />
-              </PaddedLayout>
-            }
-          />
-          <Route path="/admin" element={<Admin />} />
-        </Routes>
-        <Footer />
-      </Router>
-    </div>
+            <Route path="/cricket/*" element={<CricketRouter />} />
+            <Route path="/football/*" element={<FootballRouter />} />
+            <Route
+              path="/blog/:id/:slug?"
+              element={
+                <PaddedLayout>
+                  <CricketBlog />
+                </PaddedLayout>
+              }
+            />
+            <Route path="/admin" element={<Admin />} />
+          </Routes>
+          <Footer />
+        </Router>
+      </div>
+    </ThemeProvider>
   );
 }

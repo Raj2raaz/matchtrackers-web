@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import axios from "axios";
 import { cricApiClient as apiClient } from "../utils/axios";
 
 const Image = ({ faceImageId, className = "", resolution = "" }) => {
@@ -7,114 +8,81 @@ const Image = ({ faceImageId, className = "", resolution = "" }) => {
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    // Early return if no image ID provided
-    if (!faceImageId) {
-      setLoading(false);
-      setError(true);
-      return;
-    }
+  if (!faceImageId) {
+    setLoading(false);
+    setError(true);
+    return;
+  }
 
-    let isMounted = true;
-    const controller = new AbortController();
-    let timeoutId = null;
+  let isMounted = true;
+  const controller = new AbortController();
+  let timeoutId = null;
 
-    // Function to safely clean up resources
-    const cleanup = () => {
-      if (timeoutId) clearTimeout(timeoutId);
-      if (imageSrc && typeof URL !== "undefined") URL.revokeObjectURL(imageSrc);
-    };
+  const cleanup = () => {
+    if (timeoutId) clearTimeout(timeoutId);
+    if (imageSrc && typeof URL !== "undefined") URL.revokeObjectURL(imageSrc);
+  };
 
-    const fetchImage = async (retryAttempt = 0) => {
-      // Clean up any previous timeout
-      if (timeoutId) clearTimeout(timeoutId);
-
-      // Set a timeout for this request
-      timeoutId = setTimeout(() => {
-        controller.abort();
-        if (isMounted && retryAttempt < 3) {
-          // console.log(`Request timed out (attempt ${retryAttempt + 1})`);
-          // Retry with exponential backoff
-          fetchImage(retryAttempt + 1);
-        } else if (isMounted) {
-          setError(true);
-          setLoading(false);
-        }
-      }, 10000); // 10 second timeout
-
-      try {
-        const url = `/img/v1/i1/c${faceImageId}/i.jpg${
-          resolution ? `?p=${resolution}` : ""
-        }`;
-        // console.log(`Fetching image: ${url} (attempt ${retryAttempt + 1})`);
-
-        const response = await apiClient.get(url, {
-          responseType: "blob",
-          signal: controller.signal,
-          // Add cache busting parameter if this is a retry
-          params: retryAttempt > 0 ? { _t: new Date().getTime() } : undefined,
-        });
-
-        // Clear timeout since request completed
-        clearTimeout(timeoutId);
-
-        if (isMounted) {
-          // Clean up existing blob URL before creating a new one
-          if (imageSrc && typeof URL !== "undefined")
-            URL.revokeObjectURL(imageSrc);
-
-          // Make sure we have valid image data
-          if (response.data && response.data.size > 0) {
-            // Verify content type is an image
-            const contentType = response.headers["content-type"];
-            if (contentType && contentType.startsWith("image/")) {
-              const imageUrl = URL.createObjectURL(response.data);
-              setImageSrc(imageUrl);
-              setLoading(false);
-              setError(false);
-            } else {
-              console.error("Invalid content type received:", contentType);
-              throw new Error("Invalid content type");
-            }
-          } else {
-            console.error("Empty response or invalid blob received");
-            throw new Error("Empty response");
-          }
-        }
-      } catch (err) {
-        clearTimeout(timeoutId);
-
-        if (err.name === "AbortError") {
-          // console.log("Request was aborted");
-          return; // Already handled by timeout logic
-        }
-
-        console.error(
-          `Error fetching image (Attempt ${retryAttempt + 1}):`,
-          err
-        );
-
-        if (isMounted && retryAttempt < 3) {
-          // Retry with exponential backoff
-          const delay = 1000 * Math.pow(2, retryAttempt);
-          // console.log(`Retrying in ${delay}ms...`);
-          setTimeout(() => fetchImage(retryAttempt + 1), delay);
-        } else if (isMounted) {
-          setError(true);
-          setLoading(false);
-        }
-      }
-    };
-
-    // Start the initial fetch
-    fetchImage(0);
-
-    // Clean up on unmount or when dependencies change
-    return () => {
-      isMounted = false;
+  const fetchImage = async (retryAttempt = 0) => {
+    // Set request timeout
+    timeoutId = setTimeout(() => {
       controller.abort();
-      cleanup();
-    };
-  }, [faceImageId, resolution]);
+    }, 10000);
+
+    try {
+      const url = `/img/v1/i1/c${faceImageId}/i.jpg${resolution ? `?p=${resolution}` : ""}`;
+      const response = await apiClient.get(url, {
+        responseType: "blob",
+        signal: controller.signal,
+        params: retryAttempt > 0 ? { _t: new Date().getTime() } : undefined,
+      });
+
+      clearTimeout(timeoutId);
+
+      if (!isMounted) return;
+
+      if (imageSrc) URL.revokeObjectURL(imageSrc);
+
+      if (response.data && response.data.size > 0) {
+        const contentType = response.headers["content-type"];
+        if (contentType?.startsWith("image/")) {
+          setImageSrc(URL.createObjectURL(response.data));
+          setLoading(false);
+          setError(false);
+        } else throw new Error("Invalid content type");
+      } else throw new Error("Empty response");
+    } catch (err) {
+      clearTimeout(timeoutId);
+
+      if (err.name === "AbortError" || axios.isCancel?.(err)) {
+        // Do not log aborted requests
+        if (retryAttempt < 3 && isMounted) {
+          setTimeout(() => fetchImage(retryAttempt + 1), 1000 * Math.pow(2, retryAttempt));
+        }
+        return;
+      }
+
+      console.error(`Error fetching image (Attempt ${retryAttempt + 1}):`, err);
+
+      if (retryAttempt < 3 && isMounted) {
+        const delay = 1000 * Math.pow(2, retryAttempt);
+        setTimeout(() => fetchImage(retryAttempt + 1), delay);
+      } else if (isMounted) {
+        setError(true);
+        setLoading(false);
+      }
+    }
+  };
+
+  fetchImage(0);
+
+  return () => {
+    isMounted = false;
+    controller.abort();
+    cleanup();
+  };
+}, [faceImageId, resolution]);
+
 
   // Image onLoad handler to verify image loaded correctly
   const handleImageLoad = (e) => {

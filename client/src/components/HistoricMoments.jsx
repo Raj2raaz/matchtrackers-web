@@ -19,8 +19,10 @@ export default function HistoricMoments() {
   }, []);
 
   return (
-    <div className="bg-gray-200 w-full max-w-[680px] flex-1 my-5 border border-slate-300 rounded-xl p-4 sm:p-5">
-      <h1 className="font-bold text-lg sm:text-xl">Historic Moments</h1>
+    <div className="bg-gray-200 dark:bg-gray-800 w-full max-w-[680px] flex-1 my-5 border border-slate-300 dark:border-slate-600 rounded-xl p-4 sm:p-5">
+      <h1 className="font-bold text-lg sm:text-xl text-gray-900 dark:text-gray-100">
+        Historic Moments
+      </h1>
 
       <div className="relative mt-2 overflow-x-auto snap-x snap-mandatory no-scrollbar">
         <div className="flex space-x-4">
@@ -32,7 +34,7 @@ export default function HistoricMoments() {
               <img
                 src={src}
                 alt={`Historic Moment ${index + 1}`}
-                className="w-full h-48 sm:h-56 object-cover rounded-lg"
+                className="w-full h-48 sm:h-56 object-cover rounded-lg border border-slate-300 dark:border-slate-600"
               />
             </div>
           ))}

@@ -1,7 +1,7 @@
 // PrivacyPolicyPage.jsx
 export default function PrivacyPolicyPage() {
   return (
-    <div className="max-w-4xl mx-auto px-6 py-12 text-gray-800">
+    <div className="max-w-4xl mx-auto px-6 py-12 text-gray-800 dark:text-gray-100 transition-colors duration-300">
       <h1 className="text-3xl font-bold mb-6">Privacy Policy</h1>
 
       <p className="mb-4">
@@ -65,7 +65,7 @@ export default function PrivacyPolicyPage() {
       <h2 className="text-2xl font-semibold mt-8 mb-4">5. Your Rights</h2>
       <p className="mb-4">
         You have the right to access, correct, or delete your personal data.
-        Contact us at privacy@matchtrackers.com.
+        Contact us at <span className="text-blue-600 dark:text-blue-400">privacy@matchtrackers.com</span>.
       </p>
 
       <h2 className="text-2xl font-semibold mt-8 mb-4">

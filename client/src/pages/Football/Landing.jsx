@@ -84,7 +84,7 @@ export default function Landing() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
+    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Hero Section */}
       <div className="relative h-96 w-full">
         <img
@@ -99,13 +99,13 @@ export default function Landing() {
         {/* Content container */}
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            <span className="text-blue-400">MatchTrackers</span>
+            <span className="text-blue-400 dark:text-blue-300">MatchTrackers</span>
           </h1>
           <p className="text-white text-lg md:text-xl mb-6 max-w-2xl">
             Follow every goal, every play, every moment. Get instant match
             updates and scores from the world's top leagues.
           </p>
-          <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-8 rounded-md transition duration-300 text-lg shadow-lg">
+          <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-8 rounded-md transition duration-300 text-lg shadow-lg dark:bg-blue-700 dark:hover:bg-blue-600">
             Start Tracking Now
           </button>
         </div>
@@ -119,7 +119,7 @@ export default function Landing() {
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Leagues Section - Now with Season Selector */}
           <div className="w-full lg:w-1/3">
-            <div className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-100 dark:border-gray-700">
               {/* League & Season Selector Header */}
               <div className="bg-gradient-to-r from-blue-600 to-blue-800 p-4">
                 <div className="flex justify-between items-center">
@@ -141,8 +141,8 @@ export default function Landing() {
                           onClick={() => handleLeagueSelect(league)}
                           className={`flex items-center justify-between p-3 rounded-lg cursor-pointer transition-all ${
                             selectedLeague.id === league.id
-                              ? "bg-blue-50 border border-blue-200"
-                              : "bg-white border border-gray-100 hover:bg-gray-50"
+                              ? "bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800"
+                              : "bg-white dark:bg-gray-700 border border-gray-100 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600"
                           }`}
                         >
                           <div className="flex items-center gap-3">
@@ -152,10 +152,10 @@ export default function Landing() {
                               alt={league.name}
                             />
                             <div>
-                              <p className="font-medium text-gray-800">
+                              <p className="font-medium text-gray-800 dark:text-gray-100">
                                 {league.name}
                               </p>
-                              <p className="text-xs text-gray-500">
+                              <p className="text-xs text-gray-500 dark:text-gray-400">
                                 {league.country.name}
                               </p>
                             </div>
@@ -164,14 +164,14 @@ export default function Landing() {
                             size={24}
                             className={
                               selectedLeague.id === league.id
-                                ? "text-blue-600"
-                                : "text-gray-400"
+                                ? "text-blue-600 dark:text-blue-400"
+                                : "text-gray-400 dark:text-gray-500"
                             }
                           />
                         </div>
                       ))
                   ) : (
-                    <p className="text-gray-500 italic py-4 text-center">
+                    <p className="text-gray-500 dark:text-gray-400 italic py-4 text-center">
                       No leagues available
                     </p>
                   )}
@@ -187,7 +187,7 @@ export default function Landing() {
                         setNoOfRecentMatches(5);
                       }
                     }}
-                    className="flex items-center justify-center w-full mt-4 py-2 text-blue-600 hover:text-blue-800 font-medium text-sm"
+                    className="flex items-center justify-center w-full mt-4 py-2 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-medium text-sm"
                   >
                     {noOfRecentMatches >= data.topleagues.length
                       ? "Show Less"
@@ -202,7 +202,7 @@ export default function Landing() {
               </div>
             </div>
 
-            <div className="bg-white mt-5 rounded-xl overflow-hidden border border-gray-200 shadow-md max-w-md">
+            <div className="bg-white dark:bg-gray-800 mt-5 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 shadow-md max-w-md">
               {/* Header */}
               <div className="bg-gradient-to-r from-blue-700 to-blue-600 p-4 text-white">
                 <div className="flex items-center gap-2 mb-3">
@@ -226,21 +226,21 @@ export default function Landing() {
               </div>
 
               {/* Tabs */}
-              <div className="flex border-b">
+              <div className="flex border-b dark:border-gray-700">
                 <button
                   onClick={() => setActiveTab("scorers")}
                   className={`flex-1 flex items-center justify-center py-3 px-2 font-medium text-sm ${
                     activeTab === "scorers"
-                      ? "text-blue-600 border-b-2 border-blue-600"
-                      : "text-gray-500"
+                      ? "text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400"
+                      : "text-gray-500 dark:text-gray-400"
                   }`}
                 >
                   <Trophy
                     size={16}
                     className={`mr-2 ${
                       activeTab === "scorers"
-                        ? "text-blue-600"
-                        : "text-gray-400"
+                        ? "text-blue-600 dark:text-blue-400"
+                        : "text-gray-400 dark:text-gray-500"
                     }`}
                   />
                   Top Scorers
@@ -249,16 +249,16 @@ export default function Landing() {
                   onClick={() => setActiveTab("assisters")}
                   className={`flex-1 flex items-center justify-center py-3 px-2 font-medium text-sm ${
                     activeTab === "assisters"
-                      ? "text-blue-600 border-b-2 border-blue-600"
-                      : "text-gray-500"
+                      ? "text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400"
+                      : "text-gray-500 dark:text-gray-400"
                   }`}
                 >
                   <Shuffle
                     size={16}
                     className={`mr-2 ${
                       activeTab === "assisters"
-                        ? "text-blue-600"
-                        : "text-gray-400"
+                        ? "text-blue-600 dark:text-blue-400"
+                        : "text-gray-400 dark:text-gray-500"
                     }`}
                   />
                   Top Assisters
@@ -275,7 +275,7 @@ export default function Landing() {
                         onClick={() =>
                           navigate("/football/player/" + item.player.id)
                         }
-                        className="flex cursor-pointer items-center justify-between p-2 border-b border-gray-100 last:border-0 hover:bg-gray-50 rounded-md"
+                        className="flex cursor-pointer items-center justify-between p-2 border-b border-gray-100 dark:border-gray-700 last:border-0 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-md"
                       >
                         <div className="flex items-center gap-3">
                           <div
@@ -287,7 +287,7 @@ export default function Landing() {
                         ? "bg-yellow-300 text-gray-800"
                         : i === 2
                         ? "bg-blue-700 text-white"
-                        : "text-gray-500"
+                        : "text-gray-500 dark:text-gray-400"
                     }`}
                           >
                             {i + 1}
@@ -296,28 +296,28 @@ export default function Landing() {
                             <img
                               src={item.player.photo}
                               alt=""
-                              className="h-10 w-10 rounded-full border border-gray-200 object-cover"
+                              className="h-10 w-10 rounded-full border border-gray-200 dark:border-gray-600 object-cover"
                             />
                             <img
                               src={item.statistics[0].team.logo}
                               alt=""
-                              className="absolute -bottom-1 -right-1 h-5 w-5 rounded-full border border-white bg-white"
+                              className="absolute -bottom-1 -right-1 h-5 w-5 rounded-full border border-white dark:border-gray-800 bg-white dark:bg-gray-800"
                             />
                           </div>
                           <div className="min-w-0">
-                            <p className="font-semibold text-sm truncate">
+                            <p className="font-semibold text-sm truncate dark:text-gray-100">
                               {item.player.name}
                             </p>
-                            <p className="text-xs text-gray-500 truncate">
+                            <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
                               {item.statistics[0].team.name}
                             </p>
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
-                          <div className="bg-blue-100 text-blue-800 font-bold text-sm px-2 py-1 rounded">
+                          <div className="bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200 font-bold text-sm px-2 py-1 rounded">
                             {item.statistics[0].goals.total}
                           </div>
-                          <ChevronRight size={16} className="text-gray-400" />
+                          <ChevronRight size={16} className="text-gray-400 dark:text-gray-500" />
                         </div>
                       </div>
                     ))}
@@ -332,7 +332,7 @@ export default function Landing() {
                           navigate("/football/player/" + item.player.id)
                         }
                         key={i}
-                        className="flex cursor-pointer items-center justify-between p-2 border-b border-gray-100 last:border-0 hover:bg-gray-50 rounded-md"
+                        className="flex cursor-pointer items-center justify-between p-2 border-b border-gray-100 dark:border-gray-700 last:border-0 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-md"
                       >
                         <div className="flex items-center gap-3">
                           <div
@@ -344,7 +344,7 @@ export default function Landing() {
                         ? "bg-yellow-300 text-gray-800"
                         : i === 2
                         ? "bg-blue-700 text-white"
-                        : "text-gray-500"
+                        : "text-gray-500 dark:text-gray-400"
                     }`}
                           >
                             {i + 1}
@@ -353,35 +353,35 @@ export default function Landing() {
                             <img
                               src={item.player.photo}
                               alt=""
-                              className="h-10 w-10 rounded-full border border-gray-200 object-cover"
+                              className="h-10 w-10 rounded-full border border-gray-200 dark:border-gray-600 object-cover"
                             />
                             <img
                               src={item.statistics[0].team.logo}
                               alt=""
-                              className="absolute -bottom-1 -right-1 h-5 w-5 rounded-full border border-white bg-white"
+                              className="absolute -bottom-1 -right-1 h-5 w-5 rounded-full border border-white dark:border-gray-800 bg-white dark:bg-gray-800"
                             />
                           </div>
                           <div className="min-w-0">
-                            <p className="font-semibold text-sm truncate">
+                            <p className="font-semibold text-sm truncate dark:text-gray-100">
                               {item.player.name}
                             </p>
-                            <p className="text-xs text-gray-500 truncate">
+                            <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
                               {item.statistics[0].team.name}
                             </p>
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
-                          <div className="bg-green-100 text-green-800 font-bold text-sm px-2 py-1 rounded">
+                          <div className="bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200 font-bold text-sm px-2 py-1 rounded">
                             {item.statistics[0].goals.assists}
                           </div>
-                          <ChevronRight size={16} className="text-gray-400" />
+                          <ChevronRight size={16} className="text-gray-400 dark:text-gray-500" />
                         </div>
                       </div>
                     ))}
                   </div>
                 )}
                 <div className="mt-2 px-2">
-                  <button className="w-full bg-blue-50 hover:bg-blue-100 text-blue-600 text-sm font-medium py-2 rounded-md flex items-center justify-center">
+                  <button className="w-full bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 dark:hover:bg-blue-900/50 text-blue-600 dark:text-blue-300 text-sm font-medium py-2 rounded-md flex items-center justify-center">
                     View complete stats{" "}
                     <ArrowRight size={14} className="ml-1" />
                   </button>
@@ -392,7 +392,7 @@ export default function Landing() {
 
           {/* Matches Section */}
           <div className="w-full lg:w-2/3">
-            <div className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-100 dark:border-gray-700">
               {/* Matches Header */}
               <div className="bg-gradient-to-r from-blue-600 to-blue-800 p-4">
                 <div className="flex justify-between items-center">
@@ -411,7 +411,7 @@ export default function Landing() {
                       onClick={() =>
                         setIsSeasonDropdownOpen(!isSeasonDropdownOpen)
                       }
-                      className="bg-white text-blue-800 py-1 px-3 rounded-md flex items-center text-sm font-medium"
+                      className="bg-white dark:bg-gray-700 text-blue-800 dark:text-white py-1 px-3 rounded-md flex items-center text-sm font-medium"
                     >
                       Season: {selectedSeason}
                       {isSeasonDropdownOpen ? (
@@ -423,15 +423,15 @@ export default function Landing() {
 
                     {/* Season Dropdown */}
                     {isSeasonDropdownOpen && (
-                      <div className="absolute right-0 mt-1 w-36 bg-white rounded-md shadow-lg z-10 max-h-56 overflow-y-auto">
+                      <div className="absolute right-0 mt-1 w-36 bg-white dark:bg-gray-700 rounded-md shadow-lg z-10 max-h-56 overflow-y-auto">
                         {selectedLeague.seasons.map((season, index) => (
                           <button
                             key={index}
                             onClick={() => handleSeasonSelect(season)}
                             className={`block w-full text-left px-4 py-2 text-sm ${
                               selectedSeason === season
-                                ? "bg-blue-100 text-blue-800"
-                                : "hover:bg-gray-100"
+                                ? "bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200"
+                                : "hover:bg-gray-100 dark:hover:bg-gray-600"
                             }`}
                           >
                             {season}
@@ -453,7 +453,7 @@ export default function Landing() {
               {/* No Matches State */}
               {!loading && (!matches || matches.length === 0) && (
                 <div className="p-12 text-center">
-                  <p className="text-gray-500">
+                  <p className="text-gray-500 dark:text-gray-400">
                     No matches available for this selection.
                   </p>
                 </div>
@@ -461,14 +461,14 @@ export default function Landing() {
 
               {/* Matches List */}
               {!loading && matches && matches.length > 0 && (
-                <div className="divide-y divide-gray-400">
+                <div className="divide-y divide-gray-200 dark:divide-gray-700">
                   {matches.slice(0, matchLength).map((match, index) => (
                     <div
                       key={index}
-                      className="hover:bg-gray-50 transition-colors"
+                      className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
                     >
                       {/* Match Date & Venue */}
-                      <div className="px-4 py-3 bg-gray-50 flex flex-wrap justify-between items-center text-xs text-gray-600">
+                      <div className="px-4 py-3 bg-gray-50 dark:bg-gray-700 flex flex-wrap justify-between items-center text-xs text-gray-600 dark:text-gray-300">
                         <div className="flex items-center mb-1 md:mb-0">
                           <Calendar size={14} className="mr-1" />
                           <span>{formatDate(match.fixture.date)}</span>
@@ -488,7 +488,7 @@ export default function Landing() {
                           {/* Home Team */}
                           <div className="flex items-center w-full md:w-5/12 justify-end md:justify-start mb-3 md:mb-0">
                             <div className="flex flex-row-reverse md:flex-row items-center">
-                              <div className="w-12 h-12 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center border border-gray-200 ml-3 md:mr-3 md:ml-0">
+                              <div className="w-12 h-12 rounded-full overflow-hidden bg-gray-100 dark:bg-gray-600 flex items-center justify-center border border-gray-200 dark:border-gray-600 ml-3 md:mr-3 md:ml-0">
                                 <img
                                   src={match.teams.home.logo}
                                   alt={match.teams.home.name}
@@ -498,8 +498,8 @@ export default function Landing() {
                               <span
                                 className={`font-medium text-right md:text-left ${
                                   match.teams.home.winner
-                                    ? "text-green-600"
-                                    : ""
+                                    ? "text-green-600 dark:text-green-400"
+                                    : "dark:text-gray-100"
                                 }`}
                               >
                                 {match.teams.home.name}
@@ -510,21 +510,21 @@ export default function Landing() {
                           {/* Score */}
                           <div className="flex flex-col items-center justify-center w-full md:w-2/12 mx-4 mb-3 md:mb-0">
                             <div className="flex items-center">
-                              <span className="text-xl font-bold px-2">
+                              <span className="text-xl font-bold px-2 dark:text-white">
                                 {match.goals.home}
                               </span>
                               <span className="text-gray-400 font-medium">
                                 -
                               </span>
-                              <span className="text-xl font-bold px-2">
+                              <span className="text-xl font-bold px-2 dark:text-white">
                                 {match.goals.away}
                               </span>
                             </div>
                             <span
                               className={`text-xs px-3 py-1 rounded-full ${
                                 match.fixture.status.short === "FT"
-                                  ? "bg-green-100 text-green-800"
-                                  : "bg-yellow-100 text-yellow-800"
+                                  ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-200"
+                                  : "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-200"
                               }`}
                             >
                               {match.fixture.status.long}
@@ -534,7 +534,7 @@ export default function Landing() {
                           {/* Away Team */}
                           <div className="flex items-center w-full md:w-5/12 justify-start md:justify-end">
                             <div className="flex flex-row md:flex-row-reverse items-center">
-                              <div className="w-12 h-12 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center border border-gray-200 mr-3 md:ml-3 md:mr-0">
+                              <div className="w-12 h-12 rounded-full overflow-hidden bg-gray-100 dark:bg-gray-600 flex items-center justify-center border border-gray-200 dark:border-gray-600 mr-3 md:ml-3 md:mr-0">
                                 <img
                                   src={match.teams.away.logo}
                                   alt={match.teams.away.name}
@@ -544,8 +544,8 @@ export default function Landing() {
                               <span
                                 className={`font-medium text-left md:text-right ${
                                   match.teams.away.winner
-                                    ? "text-green-600"
-                                    : ""
+                                    ? "text-green-600 dark:text-green-400"
+                                    : "dark:text-gray-100"
                                 }`}
                               >
                                 {match.teams.away.name}
@@ -556,14 +556,14 @@ export default function Landing() {
                       </div>
 
                       {/* Match Details */}
-                      <div className="px-4 py-3 bg-gray-50 border-t border-gray-100 flex flex-col sm:flex-row justify-between items-start sm:items-center text-xs">
+                      <div className="px-4 py-3 bg-gray-50 dark:bg-gray-700 border-t border-gray-100 dark:border-gray-600 flex flex-col sm:flex-row justify-between items-start sm:items-center text-xs">
                         <div className="flex flex-wrap gap-3 mb-2 sm:mb-0">
-                          <span className="flex items-center text-gray-600">
+                          <span className="flex items-center text-gray-600 dark:text-gray-300">
                             <Timer size={14} className="mr-1" />
                             HT: {match.score.halftime.home}-
                             {match.score.halftime.away}
                           </span>
-                          <span className="flex items-center text-gray-600">
+                          <span className="flex items-center text-gray-600 dark:text-gray-300">
                             <TrendingUp size={14} className="mr-1" />
                             FT: {match.score.fulltime.home}-
                             {match.score.fulltime.away}
@@ -573,12 +573,12 @@ export default function Landing() {
                           onClick={() =>
                             navigate("/football/match/" + match.fixture.id)
                           }
-                          className="bg-blue-600 text-white px-2 py-1 rounded cursor-pointer"
+                          className="bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 rounded cursor-pointer dark:bg-blue-700 dark:hover:bg-blue-600"
                         >
                           View match
                         </button>
                         <div>
-                          <span className="flex items-center text-gray-600">
+                          <span className="flex items-center text-gray-600 dark:text-gray-300">
                             <Award size={14} className="mr-1" />
                             {match.league.round}
                           </span>
@@ -595,7 +595,7 @@ export default function Landing() {
                       setMatchLength(matches.length);
                     else setMatchLength(10);
                   }}
-                  className="bg-blue-600 my-2 items-center text-white px-3 py-1 flex  gap-2 rounded text-sm font-medium"
+                  className="bg-blue-600 hover:bg-blue-700 my-2 items-center text-white px-3 py-1 flex gap-2 rounded text-sm font-medium dark:bg-blue-700 dark:hover:bg-blue-600"
                 >
                   {matchLength >= matches?.length ? "see less" : "see more"}
                   {matchLength >= matches?.length ? (

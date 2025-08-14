@@ -26,8 +26,8 @@ const Gallery = () => {
 
   if (loading) {
     return (
-      <div className="fixed inset-0 flex items-center justify-center ">
-        <div className="animate-pulse text-white text-2xl">
+      <div className="fixed inset-0 flex items-center justify-center">
+        <div className="animate-pulse text-gray-900 dark:text-gray-100 text-2xl">
           Loading gallery...
         </div>
       </div>
@@ -36,8 +36,8 @@ const Gallery = () => {
 
   if (error) {
     return (
-      <div className="fixed inset-0 flex items-center justify-center bg-red-100">
-        <div className="text-red-600 text-2xl text-center">
+      <div className="fixed inset-0 flex items-center justify-center bg-red-100 dark:bg-red-900">
+        <div className="text-red-600 dark:text-red-300 text-2xl text-center">
           Failed to load gallery
           <p className="text-base mt-2">Please try again later</p>
         </div>
@@ -46,7 +46,7 @@ const Gallery = () => {
   }
 
   return (
-    <div className="min-h-screen  ">
+    <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
       <Helmet>
         <title>Match Trackers | Live Scores, Stats & News</title>
         <meta
@@ -54,7 +54,7 @@ const Gallery = () => {
           content="Track live matches, player stats, rankings, and news across all formats and leagues at Match Trackers."
         />
 
-        {/* Open Graph (Facebook, WhatsApp, etc.) */}
+        {/* Open Graph */}
         <meta
           property="og:title"
           content="Match Trackers | Live Scores, Stats & News"
@@ -87,7 +87,7 @@ const Gallery = () => {
       </Helmet>
 
       <div className="container mx-auto px-4">
-        <h1 className="text-4xl font-bold text-center mb-10 tracking-tight ">
+        <h1 className="text-4xl font-bold text-center mb-10 tracking-tight text-gray-900 dark:text-gray-100">
           Cricket Moments Gallery
         </h1>
 
@@ -95,10 +95,10 @@ const Gallery = () => {
           {gallery.slice(0, 5).map((item) => (
             <div
               key={item.galleryId}
-              className=" rounded-xl shadow-md overflow-hidden transition-transform duration-300"
+              className="rounded-xl shadow-md overflow-hidden transition-transform duration-300 bg-white dark:bg-gray-800"
             >
               <div className="px-6 py-4">
-                <h2 className="text-xl font-semibold text-gray-800">
+                <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
                   {item.headline}
                 </h2>
               </div>

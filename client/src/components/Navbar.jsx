@@ -1,4 +1,7 @@
+import { useContext } from "react";
 import axios from "axios";
+import { FaSun, FaMoon } from "react-icons/fa"; // Import icons
+import { ThemeContext } from "../context/ThemeContext";
 import React, { useEffect, useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -27,6 +30,7 @@ const Navbar = () => {
   const dropdownRefs = useRef({});
   const mobileMenuRef = useRef();
   const [isHovering, setIsHovering] = useState(null);
+  const { theme, toggleTheme } = useContext(ThemeContext);
 
   useEffect(() => {
     getData();
@@ -58,20 +62,19 @@ const Navbar = () => {
 
   const [blogs, setBlogs] = useState([]);
 
-const getData = async () => {
-  try {
-    const data = await getNavLinks();
-    setNavLinks(data);
+  const getData = async () => {
+    try {
+      const data = await getNavLinks();
+      setNavLinks(data);
 
-    // Fetch blog articles
-    const blogResponse = await axios.get("/api/blog");
-    setBlogs(blogResponse.data.blogs); // Assuming the response data is an array of blogs
-  } catch (error) {
-    console.error("Failed to fetch data:", error);
-    // Consider setting an error state to display a message to the user
-  }
-};
-
+      // Fetch blog articles
+      const blogResponse = await axios.get("/api/blog");
+      setBlogs(blogResponse.data.blogs); // Assuming the response data is an array of blogs
+    } catch (error) {
+      console.error("Failed to fetch data:", error);
+      // Consider setting an error state to display a message to the user
+    }
+  };
 
   const toggleDropdown = (menu, event) => {
     if (event) event.stopPropagation(); // Prevent click from propagating to document
@@ -190,34 +193,33 @@ const getData = async () => {
   );
 
   const NewsDropdown = () => (
-  <div className="py-2 max-h-96 z-70 overflow-y-auto text-black bg-white rounded-md shadow-lg">
-    {blogs.length > 0 ? (
-      blogs.slice(0, 7).map((blog, i) => (
+    <div className="py-2 max-h-96 z-70 overflow-y-auto text-black bg-white rounded-md shadow-lg">
+      {blogs.length > 0 ? (
+        blogs.slice(0, 7).map((blog, i) => (
+          <Link
+            key={i}
+            to={`/blog/${blog.id}/${blog.slug}`} // Adjust the path as necessary
+            className="block px-4 py-3 hover:bg-blue-50 transition-colors duration-150 border-b border-gray-100 last:border-0"
+            onClick={(event) => handleNavLinkClick(event, `/blog/${blog.id}/${blog.slug}`)}
+          >
+            <p className="line-clamp-2 text-sm">{blog.title}</p>
+            <p className="text-xs text-gray-500 mt-1">{new Date(blog.createdAt).toLocaleDateString()}</p>
+          </Link>
+        ))
+      ) : (
+        <div className="px-4 py-3 text-gray-500 text-sm">No blogs available</div>
+      )}
+      {blogs.length > 0 && (
         <Link
-          key={i}
-          to={`/blog/${blog.id}/${blog.slug}`} // Adjust the path as necessary
-          className="block px-4 py-3 hover:bg-blue-50 transition-colors duration-150 border-b border-gray-100 last:border-0"
-          onClick={(event) => handleNavLinkClick(event, `/blog/${blog.id}/${blog.slug}`)}
+          to="/cricket/blogs" // Adjust the path as necessary
+          className="block px-4 py-2 text-center text-primary text-sm font-medium hover:bg-blue-50"
+          onClick={(e) => handleNavLinkClick(e, "/cricket/blogs")}
         >
-          <p className="line-clamp-2 text-sm">{blog.title}</p>
-          <p className="text-xs text-gray-500 mt-1">{new Date(blog.createdAt).toLocaleDateString()}</p>
+          View All Blogs
         </Link>
-      ))
-    ) : (
-      <div className="px-4 py-3 text-gray-500 text-sm">No blogs available</div>
-    )}
-    {blogs.length > 0 && (
-      <Link
-        to="/cricket/blogs" // Adjust the path as necessary
-        className="block px-4 py-2 text-center text-primary text-sm font-medium hover:bg-blue-50"
-        onClick={(e) => handleNavLinkClick(e, "/cricket/blogs")}
-      >
-        View All Blogs
-      </Link>
-    )}
-  </div>
-);
-
+      )}
+    </div>
+  );
 
   const SchedulesDropdown = () => (
     <div className="py-2 max-h-96 z-70 overflow-y-auto text-black bg-white rounded-md shadow-lg">
@@ -496,6 +498,17 @@ const getData = async () => {
             </div>
           </div>
 
+           {/* <button
+        onClick={toggleTheme}
+        className="p-2 rounded-full bg-gray-200 dark:bg-gray-700"
+      >
+        {theme === "light" ? (
+          <FaMoon className="text-gray-800" />
+        ) : (
+          <FaSun className="text-yellow-400" />
+        )}
+      </button> */}
+
           <button
             className="px-4 py-2 rounded-full bg-primary text-white font-medium text-sm hover:bg-primary/90 transition-colors shadow-sm hover:shadow z-10 relative flex items-center gap-2"
             onClick={() => {
@@ -517,171 +530,97 @@ const getData = async () => {
           </button>
         </div>
       </div>
+
+
       {/* Mobile Menu - Full screen overlay */}
-      {mobileMenuOpen && (
-        <div className="fixed inset-0 bg-[#0004] bg-opacity-50 z-[80] sm:hidden">
+{mobileMenuOpen && (
+  <div className="fixed inset-0 bg-black/40 dark:bg-black/60 z-[80] sm:hidden">
+    <div
+      ref={mobileMenuRef}
+      className="bg-white dark:bg-gray-900 h-full w-full overflow-y-auto shadow-xl animate-slide-in-right z-[80]"
+    >
+      <div className="py-4 px-6 bg-secondary dark:bg-gray-800 relative z-70 text-white flex justify-between items-center">
+        <img
+          onClick={() => {
+            navigate("/");
+            setMobileMenuOpen(false);
+          }}
+          className="h-8 cursor-pointer"
+          src={navLogo}
+          alt="Logo"
+        />
+        <button
+          onClick={toggleMobileMenu}
+          aria-label="Close Menu"
+          className="focus:outline-none relative z-60 text-gray-800 dark:text-white"s
+        >
+          <FaTimes size={24} />
+        </button>
+      </div>
+
+      <div className="py-4">
+        {/* Mobile Accordion Menus */}
+        {["series", "matches", "players", "news", "schedules"].map((item) => (
+          <div key={item} className="border-b border-gray-200 dark:border-gray-700">
+            <div
+              className="flex justify-between items-center py-3 px-6 font-medium cursor-pointer text-gray-800 dark:text-gray-200"
+              onClick={(event) => toggleDropdown(item, event)}
+            >
+              <span>
+                {item === "players" ? "Rankings" : item.charAt(0).toUpperCase() + item.slice(1)}
+              </span>
+              <span>
+                {openDropdown === item ? <FaAngleUp /> : <FaAngleDown />}
+              </span>
+            </div>
+            {openDropdown === item && (
+              <div className="bg-gray-50 dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700 relative z-60">
+                {item === "series" && <SeriesDropdown />}
+                {item === "matches" && <MatchesDropdown />}
+                {item === "players" && <RankingsDropdown />}
+                {item === "news" && <NewsDropdown />}
+                {item === "schedules" && <SchedulesDropdown />}
+              </div>
+            )}
+          </div>
+        ))}
+
+        {/* Analytics Link */}
+        <div className="border-b border-gray-200 dark:border-gray-700">
           <div
-            ref={mobileMenuRef}
-            className="bg-white h-full w-full overflow-y-auto shadow-xl animate-slide-in-right z-[80]"
+            className="flex justify-between items-center py-3 px-6 font-medium cursor-pointer text-gray-800 dark:text-gray-200"
+            onClick={() => {
+              navigate("/cricket/analytics");
+              setMobileMenuOpen(false);
+            }}
           >
-            <div className="py-4 px-6 bg-secondary relative z-70 text-white flex justify-between items-center">
-              <img
-                onClick={() => {
-                  navigate("/");
-                  setMobileMenuOpen(false);
-                }}
-                className="h-8 cursor-pointer"
-                src={navLogo}
-                alt="Logo"
-              />
-              <button
-                onClick={toggleMobileMenu}
-                aria-label="Close Menu"
-                className="text-white focus:outline-none z-60 relative"
-              >
-                <FaTimes size={24} />
-              </button>
-            </div>
-
-            <div className="py-4">
-              {/* Mobile Accordion Menus */}
-              <div className="border-b border-gray-200">
-                <div
-                  className="flex justify-between items-center py-3 px-6 font-medium cursor-pointer"
-                  onClick={(event) => toggleDropdown("series", event)}
-                >
-                  <span>Series</span>
-                  <span>
-                    {openDropdown === "series" ? (
-                      <FaAngleUp />
-                    ) : (
-                      <FaAngleDown />
-                    )}
-                  </span>
-                </div>
-                {openDropdown === "series" && (
-                  <div className="bg-gray-50 border-t border-gray-100 relative z-60">
-                    <SeriesDropdown />
-                  </div>
-                )}
-              </div>
-
-              <div className="border-b border-gray-200">
-                <div
-                  className="flex justify-between items-center py-3 px-6 font-medium cursor-pointer"
-                  onClick={(event) => toggleDropdown("matches", event)}
-                >
-                  <span>Matches</span>
-                  <span>
-                    {openDropdown === "matches" ? (
-                      <FaAngleUp />
-                    ) : (
-                      <FaAngleDown />
-                    )}
-                  </span>
-                </div>
-                {openDropdown === "matches" && (
-                  <div className="bg-gray-50 border-t border-gray-100 relative z-60">
-                    <MatchesDropdown />
-                  </div>
-                )}
-              </div>
-
-              <div className="border-b border-gray-200">
-                <div
-                  className="flex justify-between items-center py-3 px-6 font-medium cursor-pointer"
-                  onClick={(event) => toggleDropdown("players", event)}
-                >
-                  <span>Rankings</span>
-                  <span>
-                    {openDropdown === "players" ? (
-                      <FaAngleUp />
-                    ) : (
-                      <FaAngleDown />
-                    )}
-                  </span>
-                </div>
-                {openDropdown === "players" && (
-                  <div className="bg-gray-50 border-t border-gray-100 relative z-60">
-                    <RankingsDropdown />
-                  </div>
-                )}
-              </div>
-
-              <div className="border-b border-gray-200">
-                <div
-                  className="flex justify-between items-center py-3 px-6 font-medium cursor-pointer"
-                  onClick={(event) => toggleDropdown("news", event)}
-                >
-                  <span>News</span>
-                  <span>
-                    {openDropdown === "news" ? <FaAngleUp /> : <FaAngleDown />}
-                  </span>
-                </div>
-                {openDropdown === "news" && (
-                  <div className="bg-gray-50 border-t border-gray-100 relative z-60">
-                    <NewsDropdown />
-                  </div>
-                )}
-              </div>
-
-              <div className="border-b border-gray-200">
-                <div
-                  className="flex justify-between items-center py-3 px-6 font-medium cursor-pointer"
-                  onClick={(event) => toggleDropdown("schedules", event)}
-                >
-                  <span>Schedules</span>
-                  <span>
-                    {openDropdown === "schedules" ? (
-                      <FaAngleUp />
-                    ) : (
-                      <FaAngleDown />
-                    )}
-                  </span>
-                </div>
-                {openDropdown === "schedules" && (
-                  <div className="bg-gray-50 border-t border-gray-100 relative z-60">
-                    <SchedulesDropdown />
-                  </div>
-                )}
-              </div>
-
-              <div className="border-b border-gray-200">
-                <div
-                  className="flex justify-between items-center py-3 px-6 font-medium cursor-pointer"
-                  onClick={() => {
-                    navigate("/cricket/analytics");
-                    setMobileMenuOpen(false);
-                  }}
-                >
-                  <span>Analytics</span>
-                </div>
-              </div>
-
-              <div className="px-6 mt-6">
-                <button
-                  className="px-4 py-2 rounded-full bg-primary text-white font-medium text-sm hover:bg-primary/90 transition-colors shadow-sm hover:shadow z-10 relative flex items-center gap-2"
-                  onClick={() => {
-                    if (Cookies.get("token")) {
-                      Cookies.remove("token");
-                      refreshNow();
-                    } else {
-                      navigate("/auth");
-                    }
-                  }}
-                  key={refresh}
-                >
-                  {Cookies.get("token") ? (
-                    <FaUser className="text-lg" />
-                  ) : (
-                    "Login or Signup"
-                  )}
-                </button>
-              </div>
-            </div>
+            <span>Analytics</span>
           </div>
         </div>
-      )}
+
+        {/* Login / Logout Button */}
+<div className="px-6 mt-6">
+  <button
+    className="px-4 py-2 rounded-full bg-blue-600 text-white font-medium text-sm hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 transition-colors shadow-sm hover:shadow z-10 relative flex items-center gap-2"
+    onClick={() => {
+      if (Cookies.get("token")) {
+        Cookies.remove("token");
+        refreshNow();
+      } else {
+        navigate("/auth");
+      }
+    }}
+    key={refresh}
+  >
+    {Cookies.get("token") ? <FaUser className="text-lg" /> : "Login or Signup"}
+  </button>
+</div>
+
+      </div>
+    </div>
+  </div>
+)}
+
     </div>
   );
 };

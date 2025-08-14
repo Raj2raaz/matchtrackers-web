@@ -20,7 +20,6 @@ export default function PlayerRankings() {
   const [playerRankings, setPlayerRankings] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [slideDirection, setSlideDirection] = useState(null);
 
   const categories = [
     { id: "batsmen", icon: Bat, label: "Batsmen" },
@@ -55,7 +54,6 @@ export default function PlayerRankings() {
   const handleSlideChange = (direction) => {
     if (isTransitioning || playerRankings.length <= 1) return;
     setIsTransitioning(true);
-    setSlideDirection(direction);
     setTimeout(() => {
       setCurrentPlayerIndex((prev) =>
         direction === "next"
@@ -65,25 +63,25 @@ export default function PlayerRankings() {
           : prev - 1
       );
       setIsTransitioning(false);
-      setSlideDirection(null);
     }, 300);
   };
 
-  const currentPlayer = playerRankings[currentPlayerIndex];
   const currentCategory = categories.find((cat) => cat.id === activeCategory);
 
   return (
-    <div className="bg-gray-200 border rounded-xl border-slate-300 shadow p-3 sm:p-4 w-full max-w-sm mx-auto">
+    <div className="bg-gray-200 dark:bg-gray-800 border border-slate-300 dark:border-slate-700 rounded-xl shadow p-3 sm:p-4 w-full max-w-sm mx-auto transition-colors duration-300">
+      {/* Title */}
       <div className="mb-3">
-        <h1 className="font-bold text-lg sm:text-xl text-gray-800">
+        <h1 className="font-bold text-lg sm:text-xl text-gray-800 dark:text-gray-100">
           Player Rankings
         </h1>
-        <p className="text-xs sm:text-sm text-gray-600 mt-0.5">
+        <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-0.5">
           Top trending players
         </p>
       </div>
 
-      <div className="flex flex-wrap gap-1 mb-3 bg-white p-1 rounded-xl shadow-sm border border-gray-100">
+      {/* Category buttons */}
+      <div className="flex flex-wrap gap-1 mb-3 bg-white dark:bg-gray-900 p-1 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
         {categories.map((category) => {
           const IconComponent = category.icon;
           return (
@@ -93,7 +91,7 @@ export default function PlayerRankings() {
               className={`flex-1 p-2 cursor-pointer rounded-md text-xs sm:text-sm transition-all duration-200 flex items-center justify-center ${
                 activeCategory === category.id
                   ? "bg-blue-600 text-white shadow"
-                  : "text-gray-600 hover:bg-gray-100"
+                  : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
               }`}
               title={category.label}
             >
@@ -103,12 +101,13 @@ export default function PlayerRankings() {
         })}
       </div>
 
+      {/* Player slider */}
       <div className="relative h-48 sm:h-36 mb-3 overflow-hidden rounded-xl">
         {loading ? (
-          <div className="flex items-center justify-center h-full bg-white rounded-xl shadow-sm border border-gray-100">
+          <div className="flex items-center justify-center h-full bg-white dark:bg-gray-900 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
             <div className="flex flex-col items-center gap-2">
               <div className="animate-spin rounded-full h-6 w-6 border-2 border-blue-600 border-t-transparent"></div>
-              <p className="text-xs text-gray-500">Loading...</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">Loading...</p>
             </div>
           </div>
         ) : (
@@ -124,7 +123,7 @@ export default function PlayerRankings() {
                 return (
                   <div
                     key={player?.id}
-                    className={`absolute transition-all duration-500 ease-in-out w-full px-2`}
+                    className="absolute transition-all duration-500 ease-in-out w-full px-2"
                     style={{
                       transform: `translateX(${offset}%) scale(${scale})`,
                       zIndex,
@@ -135,27 +134,27 @@ export default function PlayerRankings() {
                       onClick={() =>
                         navigate("/cricket/player/" + player?.id)
                       }
-                      className="flex flex-col sm:flex-row items-center bg-white h-full rounded-xl border border-gray-200 p-2 sm:p-3 cursor-pointer hover:bg-gray-50 hover:shadow-md transition duration-200"
+                      className="flex flex-col sm:flex-row items-center bg-white dark:bg-gray-900 h-full rounded-xl border border-gray-200 dark:border-gray-700 p-2 sm:p-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 hover:shadow-md transition duration-200"
                     >
                       <div className="mb-2 sm:mb-0 sm:mr-3 flex-shrink-0 pl-3">
                         <div className="relative">
                           <Image
-                            className="h-12 w-12 sm:h-14 sm:w-14 aspect-square rounded-full border-2 border-blue-100 shadow"
+                            className="h-12 w-12 sm:h-14 sm:w-14 aspect-square rounded-full border-2 border-blue-100 dark:border-blue-800 shadow"
                             faceImageId={player?.faceImageId}
                           />
-                          <div className="bg-blue-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center border-2 border-white absolute -top-1 -right-1">
+                          <div className="bg-blue-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center border-2 border-white dark:border-gray-900 absolute -top-1 -right-1">
                             {player?.rank}
                           </div>
                         </div>
                       </div>
 
                       <div className="flex-1 text-center sm:text-left">
-                        <h3 className="font-bold text-sm sm:text-base text-gray-800 truncate">
+                        <h3 className="font-bold text-sm sm:text-base text-gray-800 dark:text-gray-100 truncate">
                           {player?.name}
                         </h3>
                         <div className="flex justify-center sm:justify-start items-center gap-1 text-xs mt-1">
                           <TrendingUp className="w-3 h-3 text-blue-600" />
-                          <span className="text-gray-700 font-semibold">
+                          <span className="text-gray-700 dark:text-gray-300 font-semibold">
                             {player?.points}
                           </span>
                         </div>
@@ -163,7 +162,7 @@ export default function PlayerRankings() {
                           {currentCategory && (
                             <>
                               <currentCategory.icon className="w-3 h-3 text-blue-600" />
-                              <span className="text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full text-xs font-medium capitalize">
+                              <span className="text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-900 px-2 py-0.5 rounded-full text-xs font-medium capitalize">
                                 {currentCategory.label}
                               </span>
                             </>
@@ -176,6 +175,7 @@ export default function PlayerRankings() {
               })}
             </div>
 
+            {/* Navigation arrows */}
             {playerRankings.length > 1 && (
               <>
                 <button
@@ -183,22 +183,23 @@ export default function PlayerRankings() {
                     e.stopPropagation();
                     handleSlideChange("prev");
                   }}
-                  className="absolute left-1 top-1/2 -translate-y-1/2 z-10 bg-white/90 backdrop-blur-sm border border-gray-200 rounded-full p-1 shadow hover:scale-110"
+                  className="absolute left-1 top-1/2 -translate-y-1/2 z-10 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-full p-1 shadow hover:scale-110"
                 >
-                  <ChevronLeft className="w-4 h-4 text-gray-600" />
+                  <ChevronLeft className="w-4 h-4 text-gray-600 dark:text-gray-300" />
                 </button>
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
                     handleSlideChange("next");
                   }}
-                  className="absolute right-1 top-1/2 -translate-y-1/2 z-10 bg-white/90 backdrop-blur-sm border border-gray-200 rounded-full p-1 shadow hover:scale-110"
+                  className="absolute right-1 top-1/2 -translate-y-1/2 z-10 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-full p-1 shadow hover:scale-110"
                 >
-                  <ChevronRight className="w-4 h-4 text-gray-600" />
+                  <ChevronRight className="w-4 h-4 text-gray-600 dark:text-gray-300" />
                 </button>
               </>
             )}
 
+            {/* Slider dots */}
             {playerRankings.length > 1 && (
               <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1 z-10">
                 {playerRankings.slice(0, 5).map((_, index) => (
@@ -207,7 +208,7 @@ export default function PlayerRankings() {
                     className={`h-1.5 rounded-full transition-all ${
                       index === currentPlayerIndex
                         ? "bg-blue-600 w-5"
-                        : "bg-gray-300 w-1.5"
+                        : "bg-gray-300 dark:bg-gray-600 w-1.5"
                     }`}
                   />
                 ))}
@@ -217,6 +218,7 @@ export default function PlayerRankings() {
         )}
       </div>
 
+      {/* View all button */}
       <button
         onClick={() =>
           navigate(`/cricket/rankings/${activeCategory}/t20`)

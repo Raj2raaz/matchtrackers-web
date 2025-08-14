@@ -11,7 +11,6 @@ export default function Blogs() {
     const getBlogs = async () => {
       setLoading(true);
       try {
-        // Simulating API call for demo
         const response = await fetch("/api/blogs").then((res) =>
           res.ok ? res.json() : { blogs: [] }
         );
@@ -55,7 +54,6 @@ export default function Blogs() {
     return blog.featuredImage || blog.img || "/api/placeholder/400/300";
   };
 
-  // Get relative time
   const getRelativeTime = () => {
     const options = [
       "2 hours ago",
@@ -67,31 +65,27 @@ export default function Blogs() {
     return options[Math.floor(Math.random() * options.length)];
   };
 
-  // Get reading time
   const getReadingTime = () => {
     return `${Math.floor(Math.random() * 8) + 3} min read`;
   };
 
   if (loading) {
-  return (
-    <div className="max-w-6xl mx-auto p-4 space-y-8">
-      {/* Featured skeleton */}
-      <div className="bg-gray-300 h-80 w-full rounded-xl animate-pulse" />
-
-      {/* Grid skeletons */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {Array.from({ length: 6 }).map((_, i) => (
-          <ArticleSkeleton key={i} />
-        ))}
+    return (
+      <div className="max-w-6xl mx-auto p-4 space-y-8">
+        <div className="bg-gray-300 dark:bg-gray-700 h-80 w-full rounded-xl animate-pulse" />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <ArticleSkeleton key={i} />
+          ))}
+        </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
 
   if (blogs.length === 0) {
     return (
       <div className="max-w-6xl mx-auto p-4 flex justify-center items-center h-64">
-        <div className="text-lg font-medium text-gray-600">
+        <div className="text-lg font-medium text-gray-600 dark:text-gray-300">
           No articles found. Check back later!
         </div>
       </div>
@@ -133,7 +127,7 @@ export default function Blogs() {
             </p>
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
+                <div className="w-8 h-8 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
                 <span className="text-white text-sm font-medium">
                   Editor's Pick
                 </span>
@@ -154,7 +148,7 @@ export default function Blogs() {
                 `/blog/${blog.id}/${blog?.slug?.split(" ")?.join("-") || ""}`
               )
             }
-            className="group bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition duration-300 flex flex-col h-full"
+            className="group bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition duration-300 flex flex-col h-full"
           >
             <div className="overflow-hidden h-48">
               <img
@@ -165,30 +159,31 @@ export default function Blogs() {
             </div>
             <div className="p-5 flex flex-col flex-grow">
               <div className="flex items-center justify-between mb-3">
-                <span className="text-xs font-medium text-gray-500">
+                <span className="text-xs font-medium text-gray-500 dark:text-gray-400">
                   {getRelativeTime()}
                 </span>
-                <span className="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded">
+                <span className="text-xs bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-2 py-1 rounded">
                   {getReadingTime()}
                 </span>
               </div>
-              <h3 className="text-lg font-bold mb-2 group-hover:text-blue-600 transition line-clamp-2">
+              <h3 className="text-lg font-bold mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition line-clamp-2 text-gray-900 dark:text-white">
                 {blog.title}
               </h3>
-              <p className="text-gray-600 text-sm line-clamp-3 mb-4">
+              <p className="text-gray-600 dark:text-gray-300 text-sm line-clamp-3 mb-4">
                 {getBlogPreview(blog)}
               </p>
-              <div className="mt-auto pt-4 border-t border-gray-100 flex items-center justify-between">
+              <div className="mt-auto pt-4 border-t border-gray-100 dark:border-gray-700 flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                   <img
-                    className="w-6 h-6 bg-gray-200 rounded-full"
+                    className="w-6 h-6 bg-gray-200 dark:bg-gray-600 rounded-full"
                     src="https://media.licdn.com/dms/image/v2/C4E03AQEHzBiFN-u1UQ/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1621057196221?e=1756944000&v=beta&t=BJtjmUEiF9Hfgvi-OrEFeAthiwbj7ieL2GGTYchEHJw"
                     alt=""
                   />
-
-                  <span className="text-xs text-gray-600">Arvind Kumar M</span>
+                  <span className="text-xs text-gray-600 dark:text-gray-300">
+                    Arvind Kumar M
+                  </span>
                 </div>
-                <span className="text-blue-600 text-sm font-medium group-hover:translate-x-1 transition">
+                <span className="text-blue-600 dark:text-blue-400 text-sm font-medium group-hover:translate-x-1 transition">
                   Read more
                 </span>
               </div>

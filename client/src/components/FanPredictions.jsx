@@ -7,10 +7,8 @@ export default function FanPredictions({
 }) {
   return (
     <div>
-      {/* Enhanced CSS Animations */}
       <style>
         {`
-          /* WAVE ANIMATION */
           .wave-bar::before {
             content: "";
             position: absolute;
@@ -24,17 +22,11 @@ export default function FanPredictions({
             opacity: 0.3;
             transform: translateY(-50%);
           }
-
           @keyframes wave {
-            0% {
-              transform: translateX(0) translateY(-50%);
-            }
-            100% {
-              transform: translateX(-50%) translateY(-50%);
-            }
+            0% { transform: translateX(0) translateY(-50%); }
+            100% { transform: translateX(-50%) translateY(-50%); }
           }
 
-          /* SHIMMER EFFECT */
           .shimmer::after {
             content: "";
             position: absolute;
@@ -46,17 +38,11 @@ export default function FanPredictions({
             animation: shimmer 2s infinite;
             z-index: 30;
           }
-
           @keyframes shimmer {
-            0% {
-              left: -100%;
-            }
-            100% {
-              left: 100%;
-            }
+            0% { left: -100%; }
+            100% { left: 100%; }
           }
 
-          /* BUBBLES */
           .bubble-container {
             position: absolute;
             top: 0;
@@ -67,7 +53,6 @@ export default function FanPredictions({
             z-index: 25;
             pointer-events: none;
           }
-
           .bubble {
             position: absolute;
             bottom: -10px;
@@ -78,55 +63,33 @@ export default function FanPredictions({
             animation: rise 4s infinite ease-in;
             opacity: 0.6;
           }
-
           @keyframes rise {
-            0% {
-              transform: translateY(0) scale(1);
-              opacity: 0.6;
-            }
-            100% {
-              transform: translateY(-120px) scale(1.2);
-              opacity: 0;
-            }
+            0% { transform: translateY(0) scale(1); opacity: 0.6; }
+            100% { transform: translateY(-120px) scale(1.2); opacity: 0; }
           }
 
-          /* GLOW ON SELECTION */
           .selected-glow {
             box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
             animation: pulse-glow 1.5s infinite;
           }
-
           @keyframes pulse-glow {
-            0% {
-              box-shadow: 0 0 5px rgba(59, 130, 246, 0.3);
-            }
-            50% {
-              box-shadow: 0 0 15px rgba(59, 130, 246, 0.7);
-            }
-            100% {
-              box-shadow: 0 0 5px rgba(59, 130, 246, 0.3);
-            }
+            0% { box-shadow: 0 0 5px rgba(59, 130, 246, 0.3); }
+            50% { box-shadow: 0 0 15px rgba(59, 130, 246, 0.7); }
+            100% { box-shadow: 0 0 5px rgba(59, 130, 246, 0.3); }
           }
 
-          /* COLORS */
-          .wave-green {
-            background-color: rgba(34, 197, 94, 0.4);
-          }
-          .wave-red {
-            background-color: rgba(239, 68, 68, 0.4);
-          }
-          .wave-blue {
-            background-color: rgba(59, 130, 246, 0.4);
-          }
-          .wave-default {
-            background-color: rgba(0, 0, 0, 0.1);
-          }
+          .wave-green { background-color: rgba(34, 197, 94, 0.4); }
+          .wave-red { background-color: rgba(239, 68, 68, 0.4); }
+          .wave-blue { background-color: rgba(59, 130, 246, 0.4); }
+          .wave-default { background-color: rgba(0, 0, 0, 0.1); }
         `}
       </style>
 
-      <div className="flex-1 bg-gray-200 border rounded-xl border-slate-300 p-5">
-        <h2 className="text-xl font-bold mb-1">Fan Predictions</h2>
-        <p className="text-gray-700 mb-4">
+      <div className="flex-1 bg-gray-200 dark:bg-gray-800 border rounded-xl border-slate-300 dark:border-slate-600 p-5">
+        <h2 className="text-xl font-bold mb-1 text-gray-900 dark:text-gray-100">
+          Fan Predictions
+        </h2>
+        <p className="text-gray-700 dark:text-gray-300 mb-4">
           Cast your vote — who’s winning today?
         </p>
 
@@ -143,19 +106,15 @@ export default function FanPredictions({
 
           return (
             <div className="relative mb-4" key={index}>
-              {/* Animated fill bar with shimmer and wave */}
               <div
                 className={`absolute top-0 left-0 h-full rounded-xl overflow-hidden z-20 wave-bar shimmer ${
                   isSelected ? "selected-glow" : ""
                 } ${waveColor}`}
                 style={{
-                  width: isSelected
-                    ? `${prediction.percentage}%`
-                    : "0%",
+                  width: isSelected ? `${prediction.percentage}%` : "0%",
                   transition: "width 1s ease-out",
                 }}
               >
-                {/* Bubbles */}
                 <div className="bubble-container">
                   <div className="bubble" style={{ left: "20%" }}></div>
                   <div className="bubble" style={{ left: "50%" }}></div>
@@ -163,9 +122,8 @@ export default function FanPredictions({
                 </div>
               </div>
 
-              {/* Clickable top layer */}
               <div
-                className={`relative border rounded-xl border-slate-300 py-4 z-10 text-center font-semibold cursor-pointer bg-white transition-all duration-300`}
+                className={`relative border rounded-xl border-slate-300 dark:border-slate-600 py-4 z-10 text-center font-semibold cursor-pointer bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-all duration-300`}
                 onClick={() => handlePredictionClick(index)}
               >
                 {prediction.team}{" "}

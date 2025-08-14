@@ -24,19 +24,19 @@ export default function Gallery({ id = 0 }) {
 
   return (
     <div>
-      <div className="p-4 rounded-lg bg-gray-200 border my-3 shadow border-slate-300">
+      <div className="p-4 rounded-lg bg-gray-200 dark:bg-gray-800 border my-3 shadow border-slate-300 dark:border-gray-700">
         <div className="flex md:flex flex-col justify-between w-full">
-          <h1 className="text-xl font-bold text-primary">
+          <h1 className="text-xl font-bold text-primary dark:text-white">
             {galleries[0]?.headline || ""} Photos
           </h1>
           <p
             onClick={() => navigate("/cricket/gallery")}
-            className="flex cursor-pointer text-sm gap-2 items-center"
+            className="flex cursor-pointer text-sm gap-2 items-center text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary-light"
           >
             See All <FaChevronRight size={12} />
           </p>
         </div>
-        <div className="flex gap-4 mt-3 overflow-x-auto no-scrollbar whitespace-nowrap ">
+        <div className="flex gap-4 mt-3 overflow-x-auto no-scrollbar whitespace-nowrap">
           {galleries[id]?.images.map((e, i) => (
             <div key={i} className="shrink-0 min-w-54 max-w-[23vw]">
               <Image

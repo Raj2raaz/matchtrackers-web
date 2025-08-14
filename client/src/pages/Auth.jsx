@@ -595,41 +595,41 @@ const AuthForm = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 flex py-8 md:py-16 justify-center p-4">
-      <div className="w-full max-w-5xl animate-fadeIn">
-        <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-          {/* Tabs - Hide when in verification mode */}
-          {!verificationMode && (
-            <div className="flex border-b border-gray-200">
-              <button
-                className={`flex-1 cursor-pointer py-4 font-medium text-sm focus:outline-none transition duration-150 ease-in-out ${
-                  isLogin
-                    ? "text-blue-600 border-b-2 border-blue-600"
-                    : "text-gray-500 hover:text-gray-700"
-                }`}
-                onClick={() => setIsLogin(true)}
-              >
-                Login
-              </button>
-              <button
-                className={`flex-1 py-4 cursor-pointer font-medium text-sm focus:outline-none transition duration-150 ease-in-out ${
-                  !isLogin
-                    ? "text-blue-600 border-b-2 border-blue-600"
-                    : "text-gray-500 hover:text-gray-700"
-                }`}
-                onClick={() => setIsLogin(false)}
-              >
-                Sign Up
-              </button>
-            </div>
-          )}
+  <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 flex py-8 md:py-16 justify-center p-4 transition-colors duration-300">
+    <div className="w-full max-w-5xl animate-fadeIn">
+      <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl overflow-hidden transition-colors duration-300">
+        {/* Tabs - Hide when in verification mode */}
+        {!verificationMode && (
+          <div className="flex border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
+            <button
+              className={`flex-1 cursor-pointer py-4 font-medium text-sm focus:outline-none transition duration-150 ease-in-out ${
+                isLogin
+                  ? "text-blue-600 border-b-2 border-blue-600"
+                  : "text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-100"
+              }`}
+              onClick={() => setIsLogin(true)}
+            >
+              Login
+            </button>
+            <button
+              className={`flex-1 py-4 cursor-pointer font-medium text-sm focus:outline-none transition duration-150 ease-in-out ${
+                !isLogin
+                  ? "text-blue-600 border-b-2 border-blue-600"
+                  : "text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-100"
+              }`}
+              onClick={() => setIsLogin(false)}
+            >
+              Sign Up
+            </button>
+          </div>
+        )}
 
-          {/* Render either verification form or auth form */}
-          {verificationMode ? renderVerificationForm() : renderAuthForm()}
-        </div>
+        {/* Render either verification form or auth form */}
+        {verificationMode ? renderVerificationForm() : renderAuthForm()}
       </div>
     </div>
-  );
+  </div>
+);
 };
 
 export default AuthForm;

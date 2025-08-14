@@ -61,7 +61,7 @@ export default function FAQPage() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-6 py-12 text-gray-800">
+    <div className="max-w-4xl mx-auto px-6 py-12 text-gray-800 dark:text-gray-100">
       <h1 className="text-3xl font-bold mb-8 text-center">
         Frequently Asked Questions
       </h1>
@@ -70,11 +70,11 @@ export default function FAQPage() {
         {faqs.map((faq, index) => (
           <div
             key={index}
-            className="border  border-gray-200 rounded-xl transition-all shadow-sm"
+            className="border border-gray-200 dark:border-gray-700 rounded-xl transition-all shadow-sm dark:shadow-gray-800"
           >
             <button
               onClick={() => toggleFAQ(index)}
-              className="w-full px-6 cursor-pointer py-4 flex justify-between items-center text-left"
+              className="w-full px-6 cursor-pointer py-4 flex justify-between items-center text-left bg-white dark:bg-gray-900"
             >
               <span className="text-lg font-medium">{faq.question}</span>
               <span className="text-xl">{openIndex === index ? "−" : "+"}</span>
@@ -83,9 +83,9 @@ export default function FAQPage() {
             <div
               className={`px-6 overflow-hidden transition-all duration-300 ${
                 openIndex === index ? "max-h-40 py-2" : "max-h-0"
-              }`}
+              } bg-white dark:bg-gray-900`}
             >
-              <p className="text-gray-600">{faq.answer}</p>
+              <p className="text-gray-600 dark:text-gray-300">{faq.answer}</p>
             </div>
           </div>
         ))}

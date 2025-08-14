@@ -14,23 +14,19 @@ export default function Highlights() {
       try {
         const matches = await getFixtures();
         setMatches(matches);
-        // Initialize card refs array with the correct length
-        cardRefs.current = matches.map(() => React.createRef());
+        cardRefs.current = matches.map((_, i) => cardRefs.current[i] || React.createRef());
       } catch (error) {
         console.error("Error fetching fixtures:", error);
       }
     };
-
     getMatches();
   }, []);
 
   useEffect(() => {
     if (matches?.length <= 1) return;
-
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % matches?.length);
     }, 4000);
-
     return () => clearInterval(interval);
   }, [matches]);
 
@@ -40,22 +36,15 @@ export default function Highlights() {
       matches?.length > 0 &&
       cardRefs.current[currentIndex]
     ) {
-      // Get the current card element
       const currentCard = cardRefs.current[currentIndex].current;
-
       if (currentCard) {
-        // Calculate the scroll position based on the current card's position
-        const containerRect =
-          scrollContainerRef.current.getBoundingClientRect();
+        const containerRect = scrollContainerRef.current.getBoundingClientRect();
         const cardRect = currentCard.getBoundingClientRect();
-
-        // Center the card in the container
         const scrollPosition =
           cardRect.left -
           containerRect.left -
           (containerRect.width / 2 - cardRect.width / 2) +
           scrollContainerRef.current.scrollLeft;
-
         scrollContainerRef.current.scrollTo({
           left: scrollPosition,
           behavior: "smooth",
@@ -86,28 +75,23 @@ export default function Highlights() {
   };
 
   const getStatusColor = (status) => {
-    if (status.short === "1H" || status.short === "2H") {
-      return "bg-red-500";
-    } else if (status.short === "HT") {
-      return "bg-orange-500";
-    } else if (status.short === "FT") {
-      return "bg-blue-500";
-    } else if (status.short === "NS") {
-      return "bg-green-500";
-    }
+    if (status.short === "1H" || status.short === "2H") return "bg-red-500";
+    else if (status.short === "HT") return "bg-orange-500";
+    else if (status.short === "FT") return "bg-blue-500";
+    else if (status.short === "NS") return "bg-green-500";
     return "bg-gray-500";
   };
 
   return (
     <div className="relative w-full mt-0">
       {/* Gradient overlays */}
-      <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-white to-transparent z-10" />
-      <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-white to-transparent z-10" />
+      <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-white dark:from-gray-900 to-transparent z-10" />
+      <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-white dark:from-gray-900 to-transparent z-10" />
 
       {/* Navigation buttons */}
       <button
         onClick={handlePrev}
-        className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg p-3 z-20 hover:bg-white transition-all"
+        className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full shadow-lg p-3 z-20 hover:bg-white dark:hover:bg-gray-700 transition-all"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -127,7 +111,7 @@ export default function Highlights() {
 
       <button
         onClick={handleNext}
-        className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg p-3 z-20 hover:bg-white transition-all"
+        className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-full shadow-lg p-3 z-20 hover:bg-white dark:hover:bg-gray-700 transition-all"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -145,29 +129,27 @@ export default function Highlights() {
         </svg>
       </button>
 
-      {/* Match cards container - Added snap scrolling for better mobile experience */}
+      {/* Match cards container */}
       <div
         ref={scrollContainerRef}
         className="flex overflow-x-auto gap-6 py-4 px-8 no-scrollbar scroll-smooth snap-x snap-mandatory"
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
       >
         {matches?.length > 0 ? (
-          matches?.map((match, i) => (
+          matches.map((match, i) => (
             <div
               key={i}
-              ref={
-                cardRefs.current[i] || (cardRefs.current[i] = React.createRef())
-              }
+              ref={cardRefs.current[i]}
               onClick={() => navigate("/football/match/" + match?.fixture.id)}
-              className={`flex-shrink-0 w-72 hover:scale-105 cursor-pointer md:w-96 rounded-xl overflow-hidden shadow-lg bg-white border snap-center 
+              className={`flex-shrink-0 w-72 hover:scale-105 cursor-pointer md:w-96 rounded-xl overflow-hidden shadow-lg border snap-center transition-all duration-300
                 ${
                   currentIndex === i
                     ? "border-blue-500 scale-100"
                     : "border-blue-400 scale-95"
                 } 
-                transition-all duration-300`}
+                bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100`}
             >
-              {/* Match header with league and date */}
+              {/* Match header */}
               <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-3">
                 <div className="flex justify-between items-center">
                   <div className="flex items-center gap-2">
@@ -205,7 +187,7 @@ export default function Highlights() {
                 </div>
               </div>
 
-              {/* Match status indicator */}
+              {/* Match status */}
               <div className="flex justify-center -mt-3">
                 <div
                   className={`${getStatusColor(
@@ -220,42 +202,37 @@ export default function Highlights() {
               <div className="px-4 py-3">
                 <div className="flex gap-3 items-center justify-between mb-2">
                   <div className="flex items-center gap-2 md:gap-3 w-2/5">
-                    <div className="w-8 h-8 md:w-10 md:h-10 bg-white rounded-full shadow-md flex items-center justify-center p-1 overflow-hidden">
+                    <div className="w-8 h-8 md:w-10 md:h-10 bg-white dark:bg-gray-700 rounded-full shadow-md flex items-center justify-center p-1 overflow-hidden">
                       <img
                         src={match.teams.home.logo}
                         alt={match.teams.home.name}
                         className="w-6 h-6 md:w-8 md:h-8 object-contain"
                       />
                     </div>
-                    <span className="font-bold text-gray-800 text-xs md:text-sm">
+                    <span className="font-bold text-gray-800 dark:text-gray-100 text-xs md:text-sm">
                       {match.teams.home.name}
                     </span>
                   </div>
 
-                  {/* Score display */}
                   <div className="bg-blue-600 text-white py-2 px-4 rounded-lg shadow-md">
                     {match.goals.home !== null && match.goals.away !== null ? (
                       <div className="flex items-center gap-2">
-                        <span className="text-xl font-bold">
-                          {match.goals.home}
-                        </span>
+                        <span className="text-xl font-bold">{match.goals.home}</span>
                         <span className="text-sm text-white">|</span>
-                        <span className="text-xl font-bold">
-                          {match.goals.away}
-                        </span>
+                        <span className="text-xl font-bold">{match.goals.away}</span>
                       </div>
                     ) : (
-                      <div className="text-lg font-medium text-gray-600">
+                      <div className="text-lg font-medium text-gray-300 dark:text-gray-400">
                         vs
                       </div>
                     )}
                   </div>
 
                   <div className="flex items-center justify-end gap-2 md:gap-3 w-2/5">
-                    <span className="font-bold text-gray-800 text-xs md:text-sm text-right">
+                    <span className="font-bold text-gray-800 dark:text-gray-100 text-xs md:text-sm text-right">
                       {match.teams.away.name}
                     </span>
-                    <div className="w-8 h-8 md:w-10 md:h-10 bg-white rounded-full shadow-md flex items-center justify-center p-1 overflow-hidden">
+                    <div className="w-8 h-8 md:w-10 md:h-10 bg-white dark:bg-gray-700 rounded-full shadow-md flex items-center justify-center p-1 overflow-hidden">
                       <img
                         src={match.teams.away.logo}
                         alt={match.teams.away.name}
@@ -268,9 +245,9 @@ export default function Highlights() {
             </div>
           ))
         ) : (
-          <div className="w-full text-center py-12 text-gray-500 bg-white backdrop-blur-sm rounded-xl shadow-md">
+          <div className="w-full text-center py-12 bg-white dark:bg-gray-800 rounded-xl shadow-md text-gray-500 dark:text-gray-300">
             <div className="animate-pulse flex justify-center">
-              <div className="h-6 w-48 bg-gray-200 rounded"></div>
+              <div className="h-6 w-48 bg-gray-200 dark:bg-gray-700 rounded"></div>
             </div>
             <div className="mt-2">Loading matches...</div>
           </div>
