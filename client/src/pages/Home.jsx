@@ -322,26 +322,29 @@ export default function Home() {
 
   {/* Category Buttons */}
 <div
-  className="flex flex-nowrap overflow-x-auto gap-2 mb-6 sm:mb-8 scrollbar-hide"
+  className="flex justify-center overflow-x-auto gap-2 mb-6 sm:mb-8 scrollbar-hide"
   data-animate
 >
-  {["Featured", "Live Score", "Upcoming", "Result"].map((category, i) => (
-    <button
-      key={i}
-      className={`flex-shrink-0 px-3 sm:px-5 py-2 sm:py-3 text-xs sm:text-sm md:text-base font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 ${
-        selectedCat === i
-          ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg animate-pulse-glow"
-          : "bg-white/10 dark:bg-black/20 text-white hover:bg-white/20 dark:hover:bg-white/10 backdrop-blur-sm border border-white/20"
-      }`}
-      onClick={() => setSelectedCat(i)}
-    >
-      <span className="mr-1 sm:mr-2">
-        {i === 0 ? "⭐" : i === 1 ? "🔴" : i === 2 ? "⏰" : "🏆"}
-      </span>
-      {category}
-    </button>
-  ))}
+  <div className="flex flex-nowrap gap-2 mx-auto">
+    {["Featured", "Live Score", "Upcoming", "Result"].map((category, i) => (
+      <button
+        key={i}
+        className={`flex-shrink-0 px-3 sm:px-5 py-2 sm:py-3 text-xs sm:text-sm md:text-base font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 ${
+          selectedCat === i
+            ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg animate-pulse-glow"
+            : "bg-white/10 dark:bg-black/20 text-white hover:bg-white/20 dark:hover:bg-white/10 backdrop-blur-sm border border-white/20"
+        }`}
+        onClick={() => setSelectedCat(i)}
+      >
+        <span className="mr-1 sm:mr-2">
+          {i === 0 ? "⭐" : i === 1 ? "🔴" : i === 2 ? "⏰" : "🏆"}
+        </span>
+        {category}
+      </button>
+    ))}
+  </div>
 </div>
+
 
   {/* Match cards scroll container */}
   <div className="flex gap-3 sm:gap-6 overflow-x-auto scrollbar-hide mx-2 sm:mx-0 pb-4">
