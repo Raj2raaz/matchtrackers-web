@@ -25,14 +25,19 @@ import NewsSection from "../components/HomePage/NewsSection";
 import PlayerRankings from "../components/HomePage/PlayerRankings";
 import UpcomingFixtures from "../components/HomePage/UpcomingFixtures";
 
-
 const getColorClass = (index) => {
-    const colors = [
-      "red-500", "blue-500", "green-500", "yellow-500",
-      "purple-500", "pink-500", "orange-500", "teal-500",
-    ];
-    return colors[index % colors.length];
-  };
+  const colors = [
+    "red-500",
+    "blue-500",
+    "green-500",
+    "yellow-500",
+    "purple-500",
+    "pink-500",
+    "orange-500",
+    "teal-500",
+  ];
+  return colors[index % colors.length];
+};
 
 function getReadableDate(timestampMs) {
   const inputDate = new Date(Number(timestampMs));
@@ -170,7 +175,7 @@ export default function Home() {
       const news = await getNews();
       setNews(news);
     } catch (error) {
-       console.log(error);
+      console.log(error);
     }
   };
 
@@ -295,252 +300,262 @@ export default function Home() {
           </div>
         </div> 
         */}
-
       </div>
 
       {/* Enhanced Match Categories Section */}
-<div className="bg-gradient-to-br from-[#002b5b] via-[#1e40af] to-[#002b5b] py-10 sm:py-12 px-4 sm:px-6 relative overflow-hidden">
-  
-  {/* Animated background */}
-  <div className="absolute inset-0 bg-[#002B5B] opacity-10 z-0"></div>
+      <div className="bg-gradient-to-br from-[#002b5b] via-[#1e40af] to-[#002b5b] py-10 sm:py-12 px-4 sm:px-6 relative overflow-hidden">
+        {/* Animated background */}
+        <div className="absolute inset-0 bg-[#002B5B] opacity-10 z-0"></div>
 
-  {/* Category Buttons */}
-  <div className="flex flex-wrap justify-center gap-2 mb-6 sm:mb-8" data-animate>
-    {["Featured", "Live Score", "Upcoming", "Result"].map((category, i) => (
-      <button
-        key={i}
-        className={`px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm md:text-base font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 ${
-          selectedCat === i
-            ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg animate-pulse-glow"
-            : "bg-white/10 dark:bg-black/20 text-white hover:bg-white/20 dark:hover:bg-white/10 backdrop-blur-sm border border-white/20"
-        }`}
-        onClick={() => setSelectedCat(i)}
-      >
-        <span className="mr-1 sm:mr-2">
-          {i === 0 ? "⭐" : i === 1 ? "🔴" : i === 2 ? "⏰" : "🏆"}
-        </span>
-        {category}
-      </button>
-    ))}
-  </div>
-
-  {/* Match cards scroll container */}
-  <div className="flex gap-3 sm:gap-6 overflow-x-auto scrollbar-hide mx-2 sm:mx-0 pb-4">
-    {topSectionMatches?.length > 0 &&
-      topSectionMatches.map((match, i) => (
+        {/* Category Buttons */}
         <div
-          key={i}
-          className="flex-shrink-0 min-w-[90%] sm:min-w-[340px] max-w-sm mx-2 sm:mx-0"
+          className="flex flex-wrap justify-center gap-2 mb-6 sm:mb-8"
           data-animate
-          style={{ animationDelay: `${i * 0.2}s` }}
         >
-          {/* Match Card */}
-          <div
-            onClick={() => navigate("/cricket/match/" + match.matchInfo.matchId)}
-            className="match-card bg-white/95 dark:bg-gray-800/90 backdrop-blur-sm relative cursor-pointer shadow-xl mt-4 rounded-2xl border border-white/20 dark:border-gray-700 p-4 sm:p-6 hover:shadow-2xl group overflow-hidden"
-          >
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-50 dark:from-gray-700 to-purple-50 dark:to-gray-800 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            <div className="absolute top-0 right-0 w-full h-1 bg-gradient-to-r from-blue-500 to-purple-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
-
-            {/* Top info section */}
-            <div className="flex flex-col sm:flex-row text-sm items-start sm:items-center justify-between gap-2 sm:gap-0 relative z-10">
-              <div className="space-y-1">
-                <div className="flex items-center flex-wrap gap-2">
-                  <p className="font-semibold text-xs text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded-full">
-                    {match.matchInfo.matchDesc}
-                  </p>
-                  <p className="font-semibold text-xs text-gray-600 dark:text-gray-300 bg-blue-100 dark:bg-blue-900 px-2 py-1 rounded-full">
-                    {match.matchInfo.matchFormat}
-                  </p>
-                </div>
-                <p className="text-xs truncate max-w-[220px] text-gray-500 dark:text-gray-400 font-medium">
-                  📍 {match?.matchInfo?.venueInfo?.ground}
-                </p>
-              </div>
-
-              <div
-                className={`px-2 py-2 text-xs flex items-center font-semibold rounded-full transition-all duration-300 ${
-                  match.matchInfo.state === "In Progress"
-                    ? "bg-gradient-to-r from-red-500 to-red-600 text-white animate-pulse shadow-lg"
-                    : match.matchInfo.state === "Complete"
-                    ? "bg-gradient-to-r from-green-500 to-green-600 text-white"
-                    : "bg-gradient-to-r from-gray-300 dark:from-gray-600 to-gray-400 dark:to-gray-700 text-gray-700 dark:text-gray-200"
+          {["Featured", "Live Score", "Upcoming", "Result"].map(
+            (category, i) => (
+              <button
+                key={i}
+                className={`px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm md:text-base font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 ${
+                  selectedCat === i
+                    ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg animate-pulse-glow"
+                    : "bg-white/10 dark:bg-black/20 text-white hover:bg-white/20 dark:hover:bg-white/10 backdrop-blur-sm border border-white/20"
                 }`}
+                onClick={() => setSelectedCat(i)}
               >
                 <span className="mr-1 sm:mr-2">
-                  {match.matchInfo.state === "In Progress"
-                    ? "🔴"
-                    : match.matchInfo.state === "Complete"
-                    ? "✅"
-                    : "⏳"}
+                  {i === 0 ? "⭐" : i === 1 ? "🔴" : i === 2 ? "⏰" : "🏆"}
                 </span>
-                {match.matchInfo.state}
-              </div>
-            </div>
-
-            {/* Team Comparison Section */}
-            <div className="flex justify-between items-center mt-6 gap-3 sm:gap-6 relative z-10">
-              {/* Team 1 */}
-              <div className="flex flex-col flex-1 items-start space-y-2 relative">
-                <div className="flex items-center font-bold text-lg gap-2 group/team hover:scale-105 transition-transform duration-200">
-                  <Image
-                    faceImageId={match.matchInfo.team1.imageId}
-                    className="w-7 h-7 sm:w-8 sm:h-8 rounded-full ring-2 ring-blue-100 group-hover/team:ring-blue-300 transition-all duration-200"
-                  />
-                  <span className="group-hover/team:text-blue-600 dark:group-hover/team:text-blue-400 transition-colors duration-200 dark:text-gray-100">
-                    {match.matchInfo.team1.teamSName}
-                  </span>
-                </div>
-                <div className="bg-gradient-to-r from-blue-50 dark:from-gray-700 to-purple-50 dark:to-gray-700 px-2 py-1 rounded-lg">
-                  <p className="text-sm font-semibold text-gray-700 dark:text-gray-200">
-                    {match?.matchScore?.team1Score?.inngs1?.runs || 0}/
-                    {match?.matchScore?.team1Score?.inngs1?.wickets || 0} (
-                    {match?.matchScore?.team1Score?.inngs1?.overs === 19.6
-                      ? 20
-                      : match?.matchScore?.team1Score?.inngs1?.overs || 0}
-                    )
-                  </p>
-                </div>
-              </div>
-
-              {/* VS Text + Date */}
-              <div className="text-center space-y-2">
-                <p className="font-bold text-xl sm:text-2xl text-gray-400 dark:text-gray-500 animate-pulse">
-                  vs
-                </p>
-                <div className="bg-gradient-to-r from-gray-100 dark:from-gray-700 to-gray-200 dark:to-gray-800 rounded-full px-3 py-1 shadow-inner">
-                  <p className="text-xs font-semibold text-gray-700 dark:text-gray-200">
-                    {getReadableDate(match.matchInfo.startDate)}
-                  </p>
-                </div>
-              </div>
-
-              {/* Team 2 */}
-              <div className="flex flex-col flex-1 items-end space-y-2 relative">
-                <div className="flex items-center font-bold text-lg gap-2 group/team hover:scale-105 transition-transform duration-200">
-                  <span className="group-hover/team:text-purple-600 dark:group-hover/team:text-purple-400 transition-colors duration-200 dark:text-gray-100">
-                    {match.matchInfo.team2.teamSName}
-                  </span>
-                  <Image
-                    faceImageId={match.matchInfo.team2.imageId}
-                    className="w-7 h-7 sm:w-8 sm:h-8 rounded-full ring-2 ring-purple-100 group-hover/team:ring-purple-300 transition-all duration-200"
-                  />
-                </div>
-                <div className="bg-gradient-to-r from-purple-50 dark:from-gray-700 to-blue-50 dark:to-gray-700 px-2 py-1 rounded-lg">
-                  <p className="text-sm font-semibold text-gray-700 dark:text-gray-200">
-                    {match?.matchScore?.team2Score?.inngs1?.runs || 0}/
-                    {match?.matchScore?.team2Score?.inngs1?.wickets || 0} (
-                    {match?.matchScore?.team2Score?.inngs1?.overs === 19.6
-                      ? 20
-                      : match?.matchScore?.team2Score?.inngs1?.overs || 0}
-                    )
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Bottom Action Bar */}
-          <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-b-2xl -mt-3 p-4 shadow-lg relative overflow-hidden">
-            <div className="absolute inset-0 shimmer-effect opacity-20"></div>
-            <div className="flex justify-between font-semibold text-sm text-white items-center relative z-10">
-              <button
-                onClick={() =>
-                  navigate("/cricket/schedules/" + match.matchInfo.seriesId)
-                }
-                className="cursor-pointer hover:text-yellow-300 transition-colors duration-200 flex items-center gap-1 group"
-              >
-                <span className="group-hover:rotate-12 transition-transform duration-200">
-                  📅
-                </span>
-                Schedule
+                {category}
               </button>
-              <button
-                onClick={() =>
-                  navigate("/cricket/points-table/" + match.matchInfo.seriesId)
-                }
-                className="cursor-pointer hover:text-yellow-300 transition-colors duration-200 flex items-center gap-1 group"
-              >
-                <span className="group-hover:rotate-12 transition-transform duration-200">
-                  📊
-                </span>
-                Point Table
-              </button>
-            </div>
-          </div>
+            )
+          )}
         </div>
-      ))}
-  </div>
-</div>
 
+        {/* Match cards scroll container */}
+        <div className="flex gap-3 sm:gap-6 overflow-x-auto scrollbar-hide mx-2 sm:mx-0 pb-4">
+          {topSectionMatches?.length > 0 &&
+            topSectionMatches.map((match, i) => (
+              <div
+                key={i}
+                className="flex-shrink-0 min-w-[90%] sm:min-w-[340px] max-w-sm mx-2 sm:mx-0"
+                data-animate
+                style={{ animationDelay: `${i * 0.2}s` }}
+              >
+                {/* Match Card */}
+                <div
+                  onClick={() =>
+                    navigate("/cricket/match/" + match.matchInfo.matchId)
+                  }
+                  className="match-card bg-white/95 dark:bg-gray-800/90 backdrop-blur-sm relative cursor-pointer shadow-xl mt-4 rounded-2xl border border-white/20 dark:border-gray-700 p-4 sm:p-6 hover:shadow-2xl group overflow-hidden"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-br from-blue-50 dark:from-gray-700 to-purple-50 dark:to-gray-800 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="absolute top-0 right-0 w-full h-1 bg-gradient-to-r from-blue-500 to-purple-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
+
+                  {/* Top info section */}
+                  <div className="flex flex-col sm:flex-row text-sm items-start sm:items-center justify-between gap-2 sm:gap-0 relative z-10">
+                    <div className="space-y-1">
+                      <div className="flex items-center flex-wrap gap-2">
+                        <p className="font-semibold text-xs text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded-full">
+                          {match.matchInfo.matchDesc}
+                        </p>
+                        <p className="font-semibold text-xs text-gray-600 dark:text-gray-300 bg-blue-100 dark:bg-blue-900 px-2 py-1 rounded-full">
+                          {match.matchInfo.matchFormat}
+                        </p>
+                      </div>
+                      <p className="text-xs truncate max-w-[220px] text-gray-500 dark:text-gray-400 font-medium">
+                        📍 {match?.matchInfo?.venueInfo?.ground}
+                      </p>
+                    </div>
+
+                    <div
+                      className={`px-2 py-2 text-xs flex items-center font-semibold rounded-full transition-all duration-300 ${
+                        match.matchInfo.state === "In Progress"
+                          ? "bg-gradient-to-r from-red-500 to-red-600 text-white animate-pulse shadow-lg"
+                          : match.matchInfo.state === "Complete"
+                          ? "bg-gradient-to-r from-green-500 to-green-600 text-white"
+                          : "bg-gradient-to-r from-gray-300 dark:from-gray-600 to-gray-400 dark:to-gray-700 text-gray-700 dark:text-gray-200"
+                      }`}
+                    >
+                      <span className="mr-1 sm:mr-2">
+                        {match.matchInfo.state === "In Progress"
+                          ? "🔴"
+                          : match.matchInfo.state === "Complete"
+                          ? "✅"
+                          : "⏳"}
+                      </span>
+                      {match.matchInfo.state}
+                    </div>
+                  </div>
+
+                  {/* Team Comparison Section */}
+                  <div className="flex justify-between items-center mt-6 gap-3 sm:gap-6 relative z-10">
+                    {/* Team 1 */}
+                    <div className="flex flex-col flex-1 items-start space-y-2 relative">
+                      <div className="flex items-center font-bold text-lg gap-2 group/team hover:scale-105 transition-transform duration-200">
+                        <Image
+                          faceImageId={match.matchInfo.team1.imageId}
+                          className="w-7 h-7 sm:w-8 sm:h-8 rounded-full ring-2 ring-blue-100 group-hover/team:ring-blue-300 transition-all duration-200"
+                        />
+                        <span className="group-hover/team:text-blue-600 dark:group-hover/team:text-blue-400 transition-colors duration-200 dark:text-gray-100">
+                          {match.matchInfo.team1.teamSName}
+                        </span>
+                      </div>
+                      <div className="bg-gradient-to-r from-blue-50 dark:from-gray-700 to-purple-50 dark:to-gray-700 px-2 py-1 rounded-lg">
+                        <p className="text-sm font-semibold text-gray-700 dark:text-gray-200">
+                          {match?.matchScore?.team1Score?.inngs1?.runs || 0}/
+                          {match?.matchScore?.team1Score?.inngs1?.wickets || 0}{" "}
+                          (
+                          {match?.matchScore?.team1Score?.inngs1?.overs === 19.6
+                            ? 20
+                            : match?.matchScore?.team1Score?.inngs1?.overs || 0}
+                          )
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* VS Text + Date */}
+                    <div className="text-center space-y-2">
+                      <p className="font-bold text-xl sm:text-2xl text-gray-400 dark:text-gray-500 animate-pulse">
+                        vs
+                      </p>
+                      <div className="bg-gradient-to-r from-gray-100 dark:from-gray-700 to-gray-200 dark:to-gray-800 rounded-full px-3 py-1 shadow-inner">
+                        <p className="text-xs font-semibold text-gray-700 dark:text-gray-200">
+                          {getReadableDate(match.matchInfo.startDate)}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Team 2 */}
+                    <div className="flex flex-col flex-1 items-end space-y-2 relative">
+                      <div className="flex items-center font-bold text-lg gap-2 group/team hover:scale-105 transition-transform duration-200">
+                        <span className="group-hover/team:text-purple-600 dark:group-hover/team:text-purple-400 transition-colors duration-200 dark:text-gray-100">
+                          {match.matchInfo.team2.teamSName}
+                        </span>
+                        <Image
+                          faceImageId={match.matchInfo.team2.imageId}
+                          className="w-7 h-7 sm:w-8 sm:h-8 rounded-full ring-2 ring-purple-100 group-hover/team:ring-purple-300 transition-all duration-200"
+                        />
+                      </div>
+                      <div className="bg-gradient-to-r from-purple-50 dark:from-gray-700 to-blue-50 dark:to-gray-700 px-2 py-1 rounded-lg">
+                        <p className="text-sm font-semibold text-gray-700 dark:text-gray-200">
+                          {match?.matchScore?.team2Score?.inngs1?.runs || 0}/
+                          {match?.matchScore?.team2Score?.inngs1?.wickets || 0}{" "}
+                          (
+                          {match?.matchScore?.team2Score?.inngs1?.overs === 19.6
+                            ? 20
+                            : match?.matchScore?.team2Score?.inngs1?.overs || 0}
+                          )
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Bottom Action Bar */}
+                <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-b-2xl -mt-3 p-4 shadow-lg relative overflow-hidden">
+                  <div className="absolute inset-0 shimmer-effect opacity-20"></div>
+                  <div className="flex justify-between font-semibold text-sm text-white items-center relative z-10">
+                    <button
+                      onClick={() =>
+                        navigate(
+                          "/cricket/schedules/" + match.matchInfo.seriesId
+                        )
+                      }
+                      className="cursor-pointer hover:text-yellow-300 transition-colors duration-200 flex items-center gap-1 group"
+                    >
+                      <span className="group-hover:rotate-12 transition-transform duration-200">
+                        📅
+                      </span>
+                      Schedule
+                    </button>
+                    <button
+                      onClick={() =>
+                        navigate(
+                          "/cricket/points-table/" + match.matchInfo.seriesId
+                        )
+                      }
+                      className="cursor-pointer hover:text-yellow-300 transition-colors duration-200 flex items-center gap-1 group"
+                    >
+                      <span className="group-hover:rotate-12 transition-transform duration-200">
+                        📊
+                      </span>
+                      Point Table
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+        </div>
+      </div>
 
       {/* Enhanced Main Content Section */}
-<div className="flex flex-col md:flex-row gap-8 my-8 px-5 md:px-24">
-  {/* Recent Highlights Section */}
-  <div className="w-full md:w-1/3 flex flex-col">
-    <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4">
-      Recent Highlights
-    </h2>
+      <div className="flex flex-col md:flex-row gap-8 my-8 px-5 md:px-24">
+        {/* Recent Highlights Section */}
+        <div className="w-full md:w-1/3 flex flex-col">
+          <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4">
+            Recent Highlights
+          </h2>
 
-    <div
-      className="overflow-y-auto space-y-4 pr-1 scrollbar-hide"
-      style={{ maxHeight: "28rem" }}
-    >
-      {seriesList && seriesList.length > 0 ? (
-        seriesList.slice(0, seriesShown).map((e, i) => (
           <div
-            onClick={() => navigate("/cricket/schedules/" + e.id)}
-            key={i}
-            className="bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer w-full px-4 py-3 rounded-lg shadow-sm border border-gray-300 dark:border-gray-700 transition duration-200"
+            className="overflow-y-auto space-y-4 pr-1 scrollbar-hide"
+            style={{ maxHeight: "28rem" }}
           >
-            <p className="text-base text-gray-800 dark:text-gray-100 font-semibold leading-snug break-words">
-              {e.name}
-            </p>
+            {seriesList && seriesList.length > 0 ? (
+              seriesList.slice(0, seriesShown).map((e, i) => (
+                <div
+                  onClick={() => navigate("/cricket/schedules/" + e.id)}
+                  key={i}
+                  className="bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer w-full px-4 py-3 rounded-lg shadow-sm border border-gray-300 dark:border-gray-700 transition duration-200"
+                >
+                  <p className="text-base text-gray-800 dark:text-gray-100 font-semibold leading-snug break-words">
+                    {e.name}
+                  </p>
+                </div>
+              ))
+            ) : (
+              <p className="text-gray-500 dark:text-gray-400 italic text-lg">
+                No recent matches available
+              </p>
+            )}
           </div>
-        ))
-      ) : (
-        <p className="text-gray-500 dark:text-gray-400 italic text-lg">
-          No recent matches available
-        </p>
-      )}
-    </div>
-  </div>
+        </div>
 
-  {/* England Tour Section */}
-  <div className="w-full md:w-2/3" data-animate>
-    <div className="relative w-full overflow-hidden rounded-2xl group shadow-2xl">
-      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10"></div>
-      <img
-        src={englandtour}
-        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-        alt="England Tour"
-      />
-      <div className="absolute bottom-4 left-4 right-4 z-20 text-white">
-        <h3 className="text-2xl font-bold mb-2">
-          England Tour Highlights
-        </h3>
-        <p className="text-sm opacity-90">
-          Catch the most exciting moments from the series
-        </p>
+        {/* England Tour Section */}
+        <div className="w-full md:w-2/3" data-animate>
+          <div className="relative w-full overflow-hidden rounded-2xl group shadow-2xl">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10"></div>
+            <img
+              src={englandtour}
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+              alt="England Tour"
+            />
+            <div className="absolute bottom-4 left-4 right-4 z-20 text-white">
+              <h3 className="text-2xl font-bold mb-2">
+                England Tour Highlights
+              </h3>
+              <p className="text-sm opacity-90">
+                Catch the most exciting moments from the series
+              </p>
+            </div>
+          </div>
+
+          <div className="flex md:flex-row flex-col gap-3 mt-4 font-semibold w-full">
+            <button
+              onClick={() => navigate("/cricket/schedules/8786")}
+              className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 flex-1 py-3 text-white cursor-pointer rounded-xl transition-all duration-300 hover:shadow-lg transform hover:scale-105"
+            >
+              🎥 View Full Highlights
+            </button>
+            <button
+              onClick={() => navigate("/cricket/schedules/8786")}
+              className="text-blue-700 dark:text-blue-400 flex-1 py-3 border-2 border-blue-700 dark:border-blue-400 rounded-xl hover:bg-blue-700 dark:hover:bg-blue-400 hover:text-white dark:hover:text-gray-900 transition-all duration-300 hover:shadow-lg transform hover:scale-105"
+            >
+              View Match Summary
+            </button>
+          </div>
+        </div>
       </div>
-    </div>
-
-    <div className="flex md:flex-row flex-col gap-3 mt-4 font-semibold w-full">
-      <button
-        onClick={() => navigate("/cricket/schedules/8786")}
-        className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 flex-1 py-3 text-white cursor-pointer rounded-xl transition-all duration-300 hover:shadow-lg transform hover:scale-105"
-      >
-        🎥 View Full Highlights
-      </button>
-      <button
-        onClick={() => navigate("/cricket/schedules/8786")}
-        className="text-blue-700 dark:text-blue-400 flex-1 py-3 border-2 border-blue-700 dark:border-blue-400 rounded-xl hover:bg-blue-700 dark:hover:bg-blue-400 hover:text-white dark:hover:text-gray-900 transition-all duration-300 hover:shadow-lg transform hover:scale-105"
-      >
-        View Match Summary
-      </button>
-    </div>
-  </div>
-</div>
 
       {/* components */}
       <div className="flex flex-col md:flex-row gap-5 py-3 px-5 md:px-24">
@@ -568,10 +583,9 @@ export default function Home() {
       </div>
 
       {/* <Gallery /> */}
-<div className="mx-5 md:mx-24 bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300">
-  <Gallery id={1} />
-</div>
-
+      <div className="mx-5 md:mx-24 bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300">
+        <Gallery id={1} />
+      </div>
     </div>
   );
 }

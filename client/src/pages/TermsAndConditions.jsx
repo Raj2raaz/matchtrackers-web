@@ -1,7 +1,12 @@
+import { useContext } from "react";
+import { ThemeContext } from "../context/ThemeContext";
+
 // TermsAndConditionsPage.jsx
 export default function TermsAndConditionsPage() {
+  const { theme, toggleTheme } = useContext(ThemeContext);
+
   return (
-    <div className="max-w-4xl mx-auto px-6 py-12 text-gray-800">
+    <div className="max-w-4xl mx-auto px-6 py-12 text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-900 rounded-lg shadow-lg">
       <h1 className="text-3xl font-bold mb-6">Terms and Conditions</h1>
 
       <p className="mb-4">

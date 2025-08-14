@@ -32,6 +32,8 @@ const Navbar = () => {
   const [isHovering, setIsHovering] = useState(null);
   const { theme, toggleTheme } = useContext(ThemeContext);
 
+  console.log(theme);
+
   useEffect(() => {
     getData();
 
@@ -200,14 +202,20 @@ const Navbar = () => {
             key={i}
             to={`/blog/${blog.id}/${blog.slug}`} // Adjust the path as necessary
             className="block px-4 py-3 hover:bg-blue-50 transition-colors duration-150 border-b border-gray-100 last:border-0"
-            onClick={(event) => handleNavLinkClick(event, `/blog/${blog.id}/${blog.slug}`)}
+            onClick={(event) =>
+              handleNavLinkClick(event, `/blog/${blog.id}/${blog.slug}`)
+            }
           >
             <p className="line-clamp-2 text-sm">{blog.title}</p>
-            <p className="text-xs text-gray-500 mt-1">{new Date(blog.createdAt).toLocaleDateString()}</p>
+            <p className="text-xs text-gray-500 mt-1">
+              {new Date(blog.createdAt).toLocaleDateString()}
+            </p>
           </Link>
         ))
       ) : (
-        <div className="px-4 py-3 text-gray-500 text-sm">No blogs available</div>
+        <div className="px-4 py-3 text-gray-500 text-sm">
+          No blogs available
+        </div>
       )}
       {blogs.length > 0 && (
         <Link
@@ -498,16 +506,16 @@ const Navbar = () => {
             </div>
           </div>
 
-           {/* <button
-        onClick={toggleTheme}
-        className="p-2 rounded-full bg-gray-200 dark:bg-gray-700"
-      >
-        {theme === "light" ? (
-          <FaMoon className="text-gray-800" />
-        ) : (
-          <FaSun className="text-yellow-400" />
-        )}
-      </button> */}
+          <button
+            onClick={toggleTheme}
+            className="p-2 rounded-full bg-gray-200 dark:bg-gray-700"
+          >
+            {theme === "light" ? (
+              <FaMoon className="text-gray-800" />
+            ) : (
+              <FaSun className="text-yellow-400" />
+            )}
+          </button>
 
           <button
             className="px-4 py-2 rounded-full bg-primary text-white font-medium text-sm hover:bg-primary/90 transition-colors shadow-sm hover:shadow z-10 relative flex items-center gap-2"
@@ -531,96 +539,109 @@ const Navbar = () => {
         </div>
       </div>
 
-
       {/* Mobile Menu - Full screen overlay */}
-{mobileMenuOpen && (
-  <div className="fixed inset-0 bg-black/40 dark:bg-black/60 z-[80] sm:hidden">
-    <div
-      ref={mobileMenuRef}
-      className="bg-white dark:bg-gray-900 h-full w-full overflow-y-auto shadow-xl animate-slide-in-right z-[80]"
-    >
-      <div className="py-4 px-6 bg-secondary dark:bg-gray-800 relative z-70 text-white flex justify-between items-center">
-        <img
-          onClick={() => {
-            navigate("/");
-            setMobileMenuOpen(false);
-          }}
-          className="h-8 cursor-pointer"
-          src={navLogo}
-          alt="Logo"
-        />
-        <button
-          onClick={toggleMobileMenu}
-          aria-label="Close Menu"
-          className="focus:outline-none relative z-60 text-gray-800 dark:text-white"s
-        >
-          <FaTimes size={24} />
-        </button>
-      </div>
-
-      <div className="py-4">
-        {/* Mobile Accordion Menus */}
-        {["series", "matches", "players", "news", "schedules"].map((item) => (
-          <div key={item} className="border-b border-gray-200 dark:border-gray-700">
-            <div
-              className="flex justify-between items-center py-3 px-6 font-medium cursor-pointer text-gray-800 dark:text-gray-200"
-              onClick={(event) => toggleDropdown(item, event)}
-            >
-              <span>
-                {item === "players" ? "Rankings" : item.charAt(0).toUpperCase() + item.slice(1)}
-              </span>
-              <span>
-                {openDropdown === item ? <FaAngleUp /> : <FaAngleDown />}
-              </span>
-            </div>
-            {openDropdown === item && (
-              <div className="bg-gray-50 dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700 relative z-60">
-                {item === "series" && <SeriesDropdown />}
-                {item === "matches" && <MatchesDropdown />}
-                {item === "players" && <RankingsDropdown />}
-                {item === "news" && <NewsDropdown />}
-                {item === "schedules" && <SchedulesDropdown />}
-              </div>
-            )}
-          </div>
-        ))}
-
-        {/* Analytics Link */}
-        <div className="border-b border-gray-200 dark:border-gray-700">
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 bg-black/40 dark:bg-black/60 z-[80] sm:hidden">
           <div
-            className="flex justify-between items-center py-3 px-6 font-medium cursor-pointer text-gray-800 dark:text-gray-200"
-            onClick={() => {
-              navigate("/cricket/analytics");
-              setMobileMenuOpen(false);
-            }}
+            ref={mobileMenuRef}
+            className="bg-white dark:bg-gray-900 h-full w-full overflow-y-auto shadow-xl animate-slide-in-right z-[80]"
           >
-            <span>Analytics</span>
+            <div className="py-4 px-6 bg-secondary dark:bg-gray-800 relative z-70 text-white flex justify-between items-center">
+              <img
+                onClick={() => {
+                  navigate("/");
+                  setMobileMenuOpen(false);
+                }}
+                className="h-8 cursor-pointer"
+                src={navLogo}
+                alt="Logo"
+              />
+              <button
+                onClick={toggleMobileMenu}
+                aria-label="Close Menu"
+                className="focus:outline-none relative z-60 text-gray-800 dark:text-white"
+                s
+              >
+                <FaTimes size={24} />
+              </button>
+            </div>
+
+            <div className="py-4">
+              {/* Mobile Accordion Menus */}
+              {["series", "matches", "players", "news", "schedules"].map(
+                (item) => (
+                  <div
+                    key={item}
+                    className="border-b border-gray-200 dark:border-gray-700"
+                  >
+                    <div
+                      className="flex justify-between items-center py-3 px-6 font-medium cursor-pointer text-gray-800 dark:text-gray-200"
+                      onClick={(event) => toggleDropdown(item, event)}
+                    >
+                      <span>
+                        {item === "players"
+                          ? "Rankings"
+                          : item.charAt(0).toUpperCase() + item.slice(1)}
+                      </span>
+                      <span>
+                        {openDropdown === item ? (
+                          <FaAngleUp />
+                        ) : (
+                          <FaAngleDown />
+                        )}
+                      </span>
+                    </div>
+                    {openDropdown === item && (
+                      <div className="bg-gray-50 dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700 relative z-60">
+                        {item === "series" && <SeriesDropdown />}
+                        {item === "matches" && <MatchesDropdown />}
+                        {item === "players" && <RankingsDropdown />}
+                        {item === "news" && <NewsDropdown />}
+                        {item === "schedules" && <SchedulesDropdown />}
+                      </div>
+                    )}
+                  </div>
+                )
+              )}
+
+              {/* Analytics Link */}
+              <div className="border-b border-gray-200 dark:border-gray-700">
+                <div
+                  className="flex justify-between items-center py-3 px-6 font-medium cursor-pointer text-gray-800 dark:text-gray-200"
+                  onClick={() => {
+                    navigate("/cricket/analytics");
+                    setMobileMenuOpen(false);
+                  }}
+                >
+                  <span>Analytics</span>
+                </div>
+              </div>
+
+              {/* Login / Logout Button */}
+              <div className="px-6 mt-6">
+                <button
+                  className="px-4 py-2 rounded-full bg-blue-600 text-white font-medium text-sm hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 transition-colors shadow-sm hover:shadow z-10 relative flex items-center gap-2"
+                  onClick={() => {
+                    if (Cookies.get("token")) {
+                      Cookies.remove("token");
+                      refreshNow();
+                    } else {
+                      navigate("/auth");
+                    }
+                  }}
+                  key={refresh}
+                >
+                  {Cookies.get("token") ? (
+                    <FaUser className="text-lg" />
+                  ) : (
+                    "Login or Signup"
+                  )}
+                </button>
+              </div>
+            </div>
           </div>
         </div>
-
-        {/* Login / Logout Button */}
-<div className="px-6 mt-6">
-  <button
-    className="px-4 py-2 rounded-full bg-blue-600 text-white font-medium text-sm hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 transition-colors shadow-sm hover:shadow z-10 relative flex items-center gap-2"
-    onClick={() => {
-      if (Cookies.get("token")) {
-        Cookies.remove("token");
-        refreshNow();
-      } else {
-        navigate("/auth");
-      }
-    }}
-    key={refresh}
-  >
-    {Cookies.get("token") ? <FaUser className="text-lg" /> : "Login or Signup"}
-  </button>
-</div>
-
-      </div>
-    </div>
-  </div>
-)}
-
+      )}
     </div>
   );
 };
