@@ -506,6 +506,7 @@ const Navbar = () => {
             </div>
           </div>
 
+          {/* Theme Toggle Button */}
           <button
             onClick={toggleTheme}
             className="p-2 rounded-full bg-gray-200 dark:bg-gray-700"
@@ -565,6 +566,18 @@ const Navbar = () => {
                 <FaTimes size={24} />
               </button>
             </div>
+
+            {/* Theme Toggle Button */}
+              <button
+            onClick={toggleTheme}
+            className="ml-4 mt-3 p-2 rounded-full bg-gray-200 dark:bg-gray-700"
+          >
+            {theme === "light" ? (
+              <FaMoon className="text-gray-800" />
+            ) : (
+              <FaSun className="text-yellow-400" />
+            )}
+          </button>
 
             <div className="py-4">
               {/* Mobile Accordion Menus */}
