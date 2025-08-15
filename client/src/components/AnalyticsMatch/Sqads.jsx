@@ -20,7 +20,9 @@ export default function Sqads({ data }) {
               faceImageId={data.matchInfo.team1.imageId}
               className="h-6 w-6"
             />
-            <h3 className="font-bold text-lg">{data.matchInfo.team1.name}</h3>
+            <h3 className="font-bold text-lg text-gray-900 dark:text-gray-100">
+              {data.matchInfo.team1.name}
+            </h3>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-3">
             {data.matchInfo.team1.playerDetails
@@ -29,7 +31,7 @@ export default function Sqads({ data }) {
                 <div
                   key={player.id}
                   onClick={() => navigate("/cricket/player/" + player.id)}
-                  className="border cursor-pointer border-gray-200 rounded-lg p-2 md:p-3 bg-white shadow-sm hover:shadow-md transition-shadow duration-200"
+                  className="border cursor-pointer border-gray-200 dark:border-gray-700 rounded-lg p-2 md:p-3 bg-white dark:bg-gray-900 shadow-sm hover:shadow-md transition-shadow duration-200"
                 >
                   <div className="flex items-center gap-2 mb-2">
                     <Image
@@ -37,18 +39,18 @@ export default function Sqads({ data }) {
                       className="h-8 w-8 rounded-full object-cover"
                       alt={player.fullName}
                     />
-                    <div className="font-medium truncate">
+                    <div className="font-medium truncate text-gray-900 dark:text-gray-100">
                       {player.fullName}
                     </div>
                   </div>
                   <div className="flex flex-wrap gap-1 mb-1">
                     {player.captain && (
-                      <span className="text-xs bg-red-100 text-red-800 px-2 py-0.5 rounded mr-1">
+                      <span className="text-xs bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-300 px-2 py-0.5 rounded mr-1">
                         Captain
                       </span>
                     )}
                     {player.keeper && (
-                      <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded">
+                      <span className="text-xs bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-300 px-2 py-0.5 rounded">
                         Keeper
                       </span>
                     )}
@@ -62,17 +64,17 @@ export default function Sqads({ data }) {
                       {player.role}
                     </span>
                     {player.isOverseas && (
-                      <span className="px-2 py-0.5 bg-gray-100 text-gray-800 rounded">
+                      <span className="px-2 py-0.5 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded">
                         Overseas
                       </span>
                     )}
                   </div>
                   <div className="text-xs flex flex-wrap gap-1 mt-1">
-                    <span className="px-2 py-0.5 bg-gray-100 text-gray-800 rounded">
+                    <span className="px-2 py-0.5 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded">
                       {player.battingStyle} Bat
                     </span>
                     {player.bowlingStyle && (
-                      <span className="px-2 py-0.5 bg-gray-100 text-gray-800 rounded">
+                      <span className="px-2 py-0.5 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded">
                         {player.bowlingStyle}
                       </span>
                     )}
@@ -91,7 +93,9 @@ export default function Sqads({ data }) {
               className="h-6 w-6"
               alt={data.matchInfo.team2.name}
             />
-            <h3 className="font-bold text-lg">{data.matchInfo.team2.name}</h3>
+            <h3 className="font-bold text-lg text-gray-900 dark:text-gray-100">
+              {data.matchInfo.team2.name}
+            </h3>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-3">
             {data.matchInfo.team2.playerDetails
@@ -100,7 +104,7 @@ export default function Sqads({ data }) {
                 <div
                   onClick={() => navigate("/cricket/player/" + player.id)}
                   key={`team2-${player.id}`}
-                  className="border cursor-pointer border-gray-200 rounded-lg p-2 md:p-3 bg-white shadow-sm hover:shadow-md transition-shadow duration-200"
+                  className="border cursor-pointer border-gray-200 dark:border-gray-700 rounded-lg p-2 md:p-3 bg-white dark:bg-gray-900 shadow-sm hover:shadow-md transition-shadow duration-200"
                 >
                   <div className="flex items-center gap-2 mb-2">
                     <Image
@@ -108,18 +112,18 @@ export default function Sqads({ data }) {
                       className="h-8 w-8 rounded-full object-cover"
                       alt={player.fullName}
                     />
-                    <div className="font-medium truncate">
+                    <div className="font-medium truncate text-gray-900 dark:text-gray-100">
                       {player.fullName}
                     </div>
                   </div>
                   <div className="flex flex-wrap gap-1 mb-1">
                     {player.captain && (
-                      <span className="text-xs bg-red-100 text-red-800 px-2 py-0.5 rounded mr-1">
+                      <span className="text-xs bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-300 px-2 py-0.5 rounded mr-1">
                         Captain
                       </span>
                     )}
                     {player.keeper && (
-                      <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded">
+                      <span className="text-xs bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-300 px-2 py-0.5 rounded">
                         Keeper
                       </span>
                     )}
@@ -133,17 +137,17 @@ export default function Sqads({ data }) {
                       {player.role}
                     </span>
                     {player.isOverseas && (
-                      <span className="px-2 py-0.5 bg-gray-100 text-gray-800 rounded">
+                      <span className="px-2 py-0.5 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded">
                         Overseas
                       </span>
                     )}
                   </div>
                   <div className="text-xs flex flex-wrap gap-1 mt-1">
-                    <span className="px-2 py-0.5 bg-gray-100 text-gray-800 rounded">
+                    <span className="px-2 py-0.5 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded">
                       {player.battingStyle} Bat
                     </span>
                     {player.bowlingStyle && (
-                      <span className="px-2 py-0.5 bg-gray-100 text-gray-800 rounded">
+                      <span className="px-2 py-0.5 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded">
                         {player.bowlingStyle}
                       </span>
                     )}

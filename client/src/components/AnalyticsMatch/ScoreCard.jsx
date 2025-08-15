@@ -81,8 +81,8 @@ export default function ScoreCard({ score, overSummaryList, pointsTableData }) {
             key={section}
             className={`py-2 px-4 text-sm rounded-md transition-colors ${
               selectedScoreCardTab === i
-                ? "bg-blue-800 text-white"
-                : "border border-gray-300 text-gray-700 hover:bg-gray-100"
+                ? "bg-blue-800 text-white dark:bg-blue-600 dark:text-white"
+                : "border border-gray-300 text-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-800"
             }`}
             onClick={() => setSelectedScoreTab(i)}
           >
@@ -240,8 +240,8 @@ function PointsTable({ pointsTableData }) {
   }
 
   return (
-    <div className="bg-white w-full my-4">
-      <h2 className="text-base sm:text-lg font-bold text-gray-800 p-3">
+    <div className="bg-white dark:bg-gray-800 w-full my-4 rounded-lg shadow-sm border dark:border-gray-700">
+      <h2 className="text-base sm:text-lg font-bold text-gray-800 dark:text-gray-200 p-3 border-b border-gray-200 dark:border-gray-600">
         {pointsTableData?.appIndex?.seoTitle?.split("|")[0] || "Points Table"}
       </h2>
 
@@ -250,15 +250,31 @@ function PointsTable({ pointsTableData }) {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="bg-blue-50">
-                <th className="py-2 px-2 text-left">Team</th>
-                <th className="py-2 px-1 text-center">M</th>
-                <th className="py-2 px-1 text-center">W</th>
-                <th className="py-2 px-1 text-center">L</th>
-                <th className="py-2 px-1 text-center">D</th>
-                <th className="py-2 px-1 text-center">Pts</th>
-                <th className="py-2 px-1 text-center">NRR</th>
-                <th className="py-2 px-1 text-center">Form</th>
+              <tr className="bg-blue-50 dark:bg-blue-900/30">
+                <th className="py-2 px-2 text-left text-gray-700 dark:text-gray-300 font-semibold">
+                  Team
+                </th>
+                <th className="py-2 px-1 text-center text-gray-700 dark:text-gray-300 font-semibold">
+                  M
+                </th>
+                <th className="py-2 px-1 text-center text-gray-700 dark:text-gray-300 font-semibold">
+                  W
+                </th>
+                <th className="py-2 px-1 text-center text-gray-700 dark:text-gray-300 font-semibold">
+                  L
+                </th>
+                <th className="py-2 px-1 text-center text-gray-700 dark:text-gray-300 font-semibold">
+                  D
+                </th>
+                <th className="py-2 px-1 text-center text-gray-700 dark:text-gray-300 font-semibold">
+                  Pts
+                </th>
+                <th className="py-2 px-1 text-center text-gray-700 dark:text-gray-300 font-semibold">
+                  NRR
+                </th>
+                <th className="py-2 px-1 text-center text-gray-700 dark:text-gray-300 font-semibold">
+                  Form
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -266,27 +282,31 @@ function PointsTable({ pointsTableData }) {
                 (team, i) => (
                   <tr
                     key={team.teamId}
-                    className="border-b border-gray-100 hover:bg-gray-50"
+                    className="border-b border-gray-100 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
                   >
                     <td className="py-2 px-2">
-                      <span className="font-medium">{team.teamName}</span>
+                      <span className="font-medium text-gray-900 dark:text-gray-100">
+                        {team.teamName}
+                      </span>
                     </td>
-                    <td className="py-2 px-1 text-center">
+                    <td className="py-2 px-1 text-center text-gray-700 dark:text-gray-300">
                       {team.matchesPlayed || 0}
                     </td>
-                    <td className="py-2 px-1 text-center">
+                    <td className="py-2 px-1 text-center text-gray-700 dark:text-gray-300">
                       {team.matchesWon || 0}
                     </td>
-                    <td className="py-2 px-1 text-center">
+                    <td className="py-2 px-1 text-center text-gray-700 dark:text-gray-300">
                       {team.matchesLost || 0}
                     </td>
-                    <td className="py-2 px-1 text-center">
+                    <td className="py-2 px-1 text-center text-gray-700 dark:text-gray-300">
                       {team.matchesDraw || 0}
                     </td>
-                    <td className="py-2 px-1 text-center font-medium">
+                    <td className="py-2 px-1 text-center font-medium text-gray-900 dark:text-gray-100">
                       {team.points || 0}
                     </td>
-                    <td className="py-2 px-1 text-center">{team.nrr || 0}</td>
+                    <td className="py-2 px-1 text-center text-gray-700 dark:text-gray-300">
+                      {team.nrr || 0}
+                    </td>
                     <td className="py-2 px-1">
                       <div className="flex gap-1 justify-center">
                         {team?.form?.slice(0, 5).map((result, index) => (
@@ -305,24 +325,33 @@ function PointsTable({ pointsTableData }) {
       {/* Mobile version - Simplified cards */}
       <div className="sm:hidden px-3 pb-3">
         {pointsTableData?.pointsTable?.[0]?.pointsTableInfo?.map((team, i) => (
-          <div key={team.teamId} className="border-b border-gray-200 py-2">
+          <div
+            key={team.teamId}
+            className="border-b border-gray-200 dark:border-gray-600 py-2 last:border-b-0"
+          >
             <div
-              className="flex justify-between items-center cursor-pointer"
+              className="flex justify-between items-center cursor-pointer py-1 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors"
               onClick={() => toggleTeamExpansion(team.teamId)}
             >
               <div className="flex items-center">
-                <span className="text-gray-500 mr-2">{i + 1}.</span>
-                <span className="font-medium w-[10rem] truncate">
+                <span className="text-gray-500 dark:text-gray-400 mr-2 font-medium">
+                  {i + 1}.
+                </span>
+                <span className="font-medium w-[10rem] truncate text-gray-900 dark:text-gray-100">
                   {team.teamFullName || team.teamName}
                 </span>
               </div>
               <div className="flex items-center space-x-3">
                 <div className="text-right">
-                  <span className="font-medium text-base">{team.points}</span>
-                  <span className="text-xs text-gray-500 ml-1">pts</span>
+                  <span className="font-medium text-base text-gray-900 dark:text-gray-100">
+                    {team.points}
+                  </span>
+                  <span className="text-xs text-gray-500 dark:text-gray-400 ml-1">
+                    pts
+                  </span>
                 </div>
                 <svg
-                  className={`w-4 h-4 transition-transform ${
+                  className={`w-4 h-4 transition-transform text-gray-500 dark:text-gray-400 ${
                     expandedTeam === team.teamId ? "transform rotate-180" : ""
                   }`}
                   fill="none"
@@ -340,29 +369,47 @@ function PointsTable({ pointsTableData }) {
             </div>
 
             {expandedTeam === team.teamId && (
-              <div className="pt-2 grid grid-cols-2 gap-x-4 gap-y-1 text-xs text-gray-600">
+              <div className="pt-2 mt-2 grid grid-cols-2 gap-x-4 gap-y-2 text-xs text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-700/30 p-3 rounded-md">
                 <div className="flex justify-between">
-                  <span>Matches:</span>
-                  <span>{team.matchesPlayed || 0}</span>
+                  <span className="font-medium">Matches:</span>
+                  <span className="text-gray-800 dark:text-gray-200">
+                    {team.matchesPlayed || 0}
+                  </span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Won:</span>
-                  <span>{team.matchesWon || 0}</span>
+                  <span className="font-medium">Won:</span>
+                  <span className="text-green-600 dark:text-green-400 font-medium">
+                    {team.matchesWon || 0}
+                  </span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Lost:</span>
-                  <span>{team.matchesLost || 0}</span>
+                  <span className="font-medium">Lost:</span>
+                  <span className="text-red-600 dark:text-red-400 font-medium">
+                    {team.matchesLost || 0}
+                  </span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Drawn:</span>
-                  <span>{team.matchesDraw || 0}</span>
+                  <span className="font-medium">Drawn:</span>
+                  <span className="text-yellow-600 dark:text-yellow-400 font-medium">
+                    {team.matchesDraw || 0}
+                  </span>
                 </div>
                 <div className="flex justify-between">
-                  <span>NRR:</span>
-                  <span>{team.nrr || 0}</span>
+                  <span className="font-medium">NRR:</span>
+                  <span
+                    className={`font-medium ${
+                      parseFloat(team.nrr || 0) > 0
+                        ? "text-green-600 dark:text-green-400"
+                        : parseFloat(team.nrr || 0) < 0
+                        ? "text-red-600 dark:text-red-400"
+                        : "text-gray-800 dark:text-gray-200"
+                    }`}
+                  >
+                    {team.nrr || 0}
+                  </span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span>Form:</span>
+                  <span className="font-medium">Form:</span>
                   <div className="flex gap-1">
                     {team?.form?.slice(0, 5).map((result, index) => (
                       <div key={index}>{renderResultCircle(result)}</div>
@@ -376,13 +423,26 @@ function PointsTable({ pointsTableData }) {
       </div>
 
       {/* Legend - Simplified and responsive */}
-      <div className="text-xs text-gray-500 px-3 pb-3 flex flex-wrap gap-x-3 gap-y-1">
-        <span>M: Matches</span>
-        <span>W: Won</span>
-        <span>L: Lost</span>
-        <span>D: Drawn</span>
-        <span>Pts: Points</span>
-        <span>NRR: Net Run Rate</span>
+      <div className="text-xs text-gray-500 dark:text-gray-400 px-3 pb-3 flex flex-wrap gap-x-4 gap-y-1 bg-gray-50 dark:bg-gray-700/20 mx-3 mb-3 p-2 rounded-md">
+        <span className="font-medium">
+          <span className="text-gray-700 dark:text-gray-300">M:</span> Matches
+        </span>
+        <span className="font-medium">
+          <span className="text-gray-700 dark:text-gray-300">W:</span> Won
+        </span>
+        <span className="font-medium">
+          <span className="text-gray-700 dark:text-gray-300">L:</span> Lost
+        </span>
+        <span className="font-medium">
+          <span className="text-gray-700 dark:text-gray-300">D:</span> Drawn
+        </span>
+        <span className="font-medium">
+          <span className="text-gray-700 dark:text-gray-300">Pts:</span> Points
+        </span>
+        <span className="font-medium">
+          <span className="text-gray-700 dark:text-gray-300">NRR:</span> Net Run
+          Rate
+        </span>
       </div>
     </div>
   );

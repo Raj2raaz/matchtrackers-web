@@ -9,8 +9,8 @@ export default function MatchOdds({ sofaData }) {
 
   return (
     <div className="w-full space-y-4">
-      <div className=" order-1 lg:order-3">
-        <div className="bg-white rounded-xl shadow-lg overflow-hidden mb-4">
+      <div className="order-1 lg:order-3">
+        <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg overflow-hidden mb-4 border border-gray-200 dark:border-gray-700">
           <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white p-4">
             <h2 className="text-xl font-bold">Match Odds</h2>
           </div>
@@ -20,10 +20,10 @@ export default function MatchOdds({ sofaData }) {
               {sofaData.markets.slice(0, showOdds).map((market) => (
                 <div
                   key={market.id}
-                  className="bg-gradient-to-r from-blue-100 to-blue-50 rounded-lg p-4"
+                  className="bg-gradient-to-r from-blue-100 to-blue-50 dark:from-blue-900 dark:to-blue-800 rounded-lg p-4"
                 >
-                  <div className="flex justify-between items-center border-b border-blue-200 pb-2 mb-3">
-                    <p className="text-lg font-bold text-gray-800">
+                  <div className="flex justify-between items-center border-b border-blue-200 dark:border-blue-700 pb-2 mb-3">
+                    <p className="text-lg font-bold text-gray-800 dark:text-gray-100">
                       {market.marketName}
                     </p>
                     <img
@@ -37,12 +37,12 @@ export default function MatchOdds({ sofaData }) {
                     {market.choices.map((choice) => (
                       <div
                         key={choice.sourceId}
-                        className="flex flex-col items-center p-3 rounded-lg bg-white border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all cursor-pointer"
+                        className="flex flex-col items-center p-3 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-500 hover:shadow-md transition-all cursor-pointer"
                       >
-                        <p className="font-medium text-gray-700">
+                        <p className="font-medium text-gray-700 dark:text-gray-200">
                           {choice.name}
                         </p>
-                        <p className="text-lg font-bold text-blue-700 mt-1">
+                        <p className="text-lg font-bold text-blue-700 dark:text-blue-400 mt-1">
                           {choice.fractionalValue}
                         </p>
                       </div>
@@ -50,7 +50,7 @@ export default function MatchOdds({ sofaData }) {
                   </div>
 
                   <div className="flex text-sm mt-3 justify-between items-center">
-                    <p className="font-semibold text-xs text-gray-600">
+                    <p className="font-semibold text-xs text-gray-600 dark:text-gray-400">
                       Gamble responsibly 18+
                     </p>
                   </div>
@@ -65,7 +65,7 @@ export default function MatchOdds({ sofaData }) {
                       if (showOdds === 2) setShowOdds(sofaData.markets.length);
                       else setShowOdds(2);
                     }}
-                    className="cursor-pointer font-semibold"
+                    className="cursor-pointer font-semibold text-blue-600 dark:text-blue-400 hover:underline"
                   >
                     {showOdds === sofaData.markets.length
                       ? "Show Less"
@@ -76,10 +76,10 @@ export default function MatchOdds({ sofaData }) {
             </div>
           ) : (
             <div className="p-8 text-center">
-              <p className="text-gray-600 font-medium">
+              <p className="text-gray-600 dark:text-gray-300 font-medium">
                 We could not find the odds for this match.
               </p>
-              <p className="text-gray-400 text-sm mt-2">
+              <p className="text-gray-400 dark:text-gray-500 text-sm mt-2">
                 Please check back later for updates.
               </p>
             </div>

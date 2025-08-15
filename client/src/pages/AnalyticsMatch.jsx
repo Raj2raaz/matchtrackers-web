@@ -172,22 +172,22 @@ const AnalyticsMatch = () => {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+      <div className="flex justify-center items-center h-screen bg-white dark:bg-gray-900">
+        <div className="w-12 h-12 border-4 border-blue-600 dark:border-blue-400 border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto px-2 md:px-4 font-sans text-gray-800">
+    <div className="container mx-auto px-2 md:px-4 font-sans text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-900 min-h-screen">
       {/* Match Header for Mobile */}
       {data?.matchInfo && (
-        <div className="md:hidden bg-gradient-to-r from-blue-600 to-blue-800 text-white mt-4 rounded-lg shadow-md p-3 mb-4">
+        <div className="md:hidden bg-gradient-to-r from-blue-600 to-blue-800 dark:from-blue-700 dark:to-blue-900 text-white mt-4 rounded-lg shadow-md p-3 mb-4">
           <div className="flex justify-between items-center mb-2">
-            <span className="text-xs px-2 py-1 bg-blue-100 text-blue-800 rounded-full truncate max-w-40">
+            <span className="text-xs px-2 py-1 bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 rounded-full truncate max-w-40">
               {commentary?.matchHeader?.seriesName}
             </span>
-            <span className="text-xs px-2 py-1 bg-green-100 text-green-800 rounded-full">
+            <span className="text-xs px-2 py-1 bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-200 rounded-full">
               {data.matchInfo.shortStatus}
             </span>
           </div>
@@ -253,8 +253,8 @@ const AnalyticsMatch = () => {
           <div className="flex flex-col lg:flex-row gap-4">
             {/* Left sidebar - Scorecard */}
             <div className="w-full lg:w-1/3 order-2 lg:order-1">
-              <div className="bg-white rounded-xl shadow-lg overflow-hidden mb-4">
-                <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white p-3 md:p-4">
+              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden mb-4 border dark:border-gray-700">
+                <div className="bg-gradient-to-r from-blue-600 to-blue-800 dark:from-blue-700 dark:to-blue-900 text-white p-3 md:p-4">
                   <div className="flex justify-between items-center">
                     {(() => {
                       const miniscore = commentary?.miniscore;
@@ -310,7 +310,7 @@ const AnalyticsMatch = () => {
 
                     {commentary?.matchHeader?.state === "Complete" ? (
                       <div>
-                        <p className="bg-green-500 text-white px-4 py-1 rounded-full text-sm font-semibold">
+                        <p className="bg-green-500 dark:bg-green-600 text-white px-4 py-1 rounded-full text-sm font-semibold">
                           Match Completed
                         </p>
                       </div>
@@ -344,7 +344,7 @@ const AnalyticsMatch = () => {
                         })()}
                       </div>
                     ) : (
-                      <span className="text-xs md:text-sm bg-blue-900 px-2 py-1 rounded-full">
+                      <span className="text-xs md:text-sm bg-blue-900 dark:bg-blue-800 px-2 py-1 rounded-full">
                         Not Started
                       </span>
                     )}
@@ -352,9 +352,9 @@ const AnalyticsMatch = () => {
                 </div>
 
                 {/* Recent Balls - Visual timeline */}
-                <div className="bg-gray-50 px-3 md:px-4 py-3">
+                <div className="bg-gray-50 dark:bg-gray-700 px-3 md:px-4 py-3">
                   <div className="flex items-center mb-1">
-                    <span className="text-xs text-gray-500 mr-2 flex-shrink-0">
+                    <span className="text-xs text-gray-500 dark:text-gray-400 mr-2 flex-shrink-0">
                       RECENT
                     </span>
                     <div className="flex space-x-1 overflow-x-auto pb-1 scrollbar-thin">
@@ -371,11 +371,19 @@ const AnalyticsMatch = () => {
                               <div
                                 key={index}
                                 className={`w-5 h-5 md:w-6 md:h-6 flex items-center justify-center rounded-full text-xs font-medium shrink-0
-              ${ball === "6" ? "bg-blue-600 text-white" : ""}
-              ${ball === "4" ? "bg-green-500 text-white" : ""}
-              ${ball === "W" ? "bg-red-600 text-white font-bold" : ""}
+              ${ball === "6" ? "bg-blue-600 dark:bg-blue-500 text-white" : ""}
+              ${ball === "4" ? "bg-green-500 dark:bg-green-400 text-white" : ""}
+              ${
+                ball === "W"
+                  ? "bg-red-600 dark:bg-red-500 text-white font-bold"
+                  : ""
+              }
               ${ball === "|" ? "border-none" : ""}
-              ${!["6", "4", "W", "|"].includes(ball) ? "bg-gray-200" : ""}
+              ${
+                !["6", "4", "W", "|"].includes(ball)
+                  ? "bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200"
+                  : ""
+              }
             `}
                               >
                                 {ball === "|" ? "•" : ball}
@@ -386,7 +394,7 @@ const AnalyticsMatch = () => {
                             .map((_, index) => (
                               <div
                                 key={index}
-                                className="w-5 h-5 md:w-6 md:h-6 flex items-center justify-center rounded-full text-xs font-medium shrink-0 bg-gray-200"
+                                className="w-5 h-5 md:w-6 md:h-6 flex items-center justify-center rounded-full text-xs font-medium shrink-0 bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200"
                               >
                                 -
                               </div>
@@ -400,27 +408,27 @@ const AnalyticsMatch = () => {
                   {commentary?.miniscore?.batsmanStriker ? (
                     <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
                       <div className="w-full sm:w-1/2">
-                        <h2 className="text-xs uppercase text-gray-500 mb-2 flex items-center">
-                          <div className="w-2 h-2 bg-blue-500 rounded-full mr-1"></div>
+                        <h2 className="text-xs uppercase text-gray-500 dark:text-gray-400 mb-2 flex items-center">
+                          <div className="w-2 h-2 bg-blue-500 dark:bg-blue-400 rounded-full mr-1"></div>
                           BATTING
                         </h2>
                         {/* Striker */}
-                        <div className="mb-3 bg-gray-50 p-2 rounded-lg">
+                        <div className="mb-3 bg-gray-50 dark:bg-gray-700 p-2 rounded-lg">
                           <div className="flex items-center">
-                            <div className="w-2 h-2 bg-green-500 rounded-full mr-2 flex-shrink-0"></div>
-                            <span className="font-semibold text-sm truncate">
+                            <div className="w-2 h-2 bg-green-500 dark:bg-green-400 rounded-full mr-2 flex-shrink-0"></div>
+                            <span className="font-semibold text-sm truncate dark:text-gray-200">
                               {commentary?.miniscore?.batsmanStriker?.batName ||
                                 commentary?.miniscore?.batsmanStriker?.name ||
                                 "Batsman"}
                             </span>
                           </div>
                           <div className="flex mt-1">
-                            <span className="text-xl font-bold mr-2">
+                            <span className="text-xl font-bold mr-2 dark:text-gray-100">
                               {commentary?.miniscore?.batsmanStriker?.batRuns ||
                                 commentary?.miniscore?.batsmanStriker?.runs ||
                                 0}
                             </span>
-                            <span className="text-xs text-gray-500 self-end mb-1">
+                            <span className="text-xs text-gray-500 dark:text-gray-400 self-end mb-1">
                               (
                               {commentary?.miniscore?.batsmanStriker
                                 ?.batBalls ||
@@ -429,7 +437,7 @@ const AnalyticsMatch = () => {
                               )
                             </span>
                           </div>
-                          <div className="flex text-xs text-gray-600 mt-1 space-x-2 flex-wrap">
+                          <div className="flex text-xs text-gray-600 dark:text-gray-300 mt-1 space-x-2 flex-wrap">
                             <span>
                               4s:{" "}
                               {commentary?.miniscore?.batsmanStriker
@@ -455,9 +463,9 @@ const AnalyticsMatch = () => {
                           </div>
                         </div>
                         {/* Non-Striker */}
-                        <div className="bg-gray-50 p-2 rounded-lg">
+                        <div className="bg-gray-50 dark:bg-gray-700 p-2 rounded-lg">
                           <div className="flex items-center">
-                            <span className="text-sm truncate">
+                            <span className="text-sm truncate dark:text-gray-200">
                               {commentary?.miniscore?.batsmanNonStriker
                                 ?.batName ||
                                 commentary?.miniscore?.batsmanNonStriker
@@ -466,14 +474,14 @@ const AnalyticsMatch = () => {
                             </span>
                           </div>
                           <div className="flex mt-1">
-                            <span className="text-xl font-bold mr-2">
+                            <span className="text-xl font-bold mr-2 dark:text-gray-100">
                               {commentary?.miniscore?.batsmanNonStriker
                                 ?.batRuns ||
                                 commentary?.miniscore?.batsmanNonStriker
                                   ?.runs ||
                                 0}
                             </span>
-                            <span className="text-xs text-gray-500 self-end mb-1">
+                            <span className="text-xs text-gray-500 dark:text-gray-400 self-end mb-1">
                               (
                               {commentary?.miniscore?.batsmanNonStriker
                                 ?.batBalls ||
@@ -483,7 +491,7 @@ const AnalyticsMatch = () => {
                               )
                             </span>
                           </div>
-                          <div className="flex text-xs text-gray-600 mt-1 space-x-2 flex-wrap">
+                          <div className="flex text-xs text-gray-600 dark:text-gray-300 mt-1 space-x-2 flex-wrap">
                             <span>
                               4s:{" "}
                               {commentary?.miniscore?.batsmanNonStriker
@@ -511,35 +519,36 @@ const AnalyticsMatch = () => {
                           </div>
                         </div>
                       </div>
-                      <div className="w-full sm:w-1/2 sm:border-l sm:border-gray-200 sm:pl-3 md:pl-4">
-                        <h2 className="text-xs uppercase text-gray-500 mb-2 flex items-center">
-                          <div className="w-2 h-2 bg-red-500 rounded-full mr-1"></div>
+                      <div className="w-full sm:w-1/2 sm:border-l sm:border-gray-200 dark:sm:border-gray-600 sm:pl-3 md:pl-4">
+                        <h2 className="text-xs uppercase text-gray-500 dark:text-gray-400 mb-2 flex items-center">
+                          <div className="w-2 h-2 bg-red-500 dark:bg-red-400 rounded-full mr-1"></div>
                           BOWLING
                         </h2>
+
                         {/* Current Bowler */}
-                        <div className="mb-3 bg-gray-50 p-2 rounded-lg">
+                        <div className="mb-3 bg-gray-50 dark:bg-gray-700 p-2 rounded-lg">
                           <div className="flex items-center">
-                            <div className="w-2 h-2 bg-red-500 rounded-full mr-2 flex-shrink-0"></div>
-                            <span className="font-semibold text-sm truncate">
+                            <div className="w-2 h-2 bg-red-500 dark:bg-red-400 rounded-full mr-2 flex-shrink-0"></div>
+                            <span className="font-semibold text-sm truncate dark:text-gray-200">
                               {commentary?.miniscore?.bowlerStriker?.bowlName ||
                                 commentary?.miniscore?.bowlerStriker?.name ||
                                 "Bowler"}
                             </span>
                           </div>
                           <div className="flex mt-1 items-end">
-                            <span className="text-lg font-bold mr-2">
+                            <span className="text-lg font-bold mr-2 dark:text-gray-100">
                               {commentary?.miniscore?.bowlerStriker?.bowlWkts ||
                                 commentary?.miniscore?.bowlerStriker?.wickets ||
                                 0}
                             </span>
-                            <span className="text-xs text-gray-500">
+                            <span className="text-xs text-gray-500 dark:text-gray-400">
                               /
                               {commentary?.miniscore?.bowlerStriker?.bowlRuns ||
                                 commentary?.miniscore?.bowlerStriker?.runs ||
                                 0}
                             </span>
                           </div>
-                          <div className="flex text-xs text-gray-600 mt-1 space-x-2">
+                          <div className="flex text-xs text-gray-600 dark:text-gray-300 mt-1 space-x-2">
                             <span>
                               Ovs:{" "}
                               {commentary?.miniscore?.bowlerStriker?.bowlOvs ||
@@ -554,10 +563,11 @@ const AnalyticsMatch = () => {
                             </span>
                           </div>
                         </div>
+
                         {/* Other Bowler */}
-                        <div className="bg-gray-50 p-2 rounded-lg">
+                        <div className="bg-gray-50 dark:bg-gray-700 p-2 rounded-lg">
                           <div className="flex items-center">
-                            <span className="text-sm truncate">
+                            <span className="text-sm truncate dark:text-gray-200">
                               {commentary?.miniscore?.bowlerNonStriker
                                 ?.bowlName ||
                                 commentary?.miniscore?.bowlerNonStriker?.name ||
@@ -565,14 +575,14 @@ const AnalyticsMatch = () => {
                             </span>
                           </div>
                           <div className="flex mt-1 items-end">
-                            <span className="text-lg font-bold mr-2">
+                            <span className="text-lg font-bold mr-2 dark:text-gray-100">
                               {commentary?.miniscore?.bowlerNonStriker
                                 ?.bowlWkts ||
                                 commentary?.miniscore?.bowlerNonStriker
                                   ?.wickets ||
                                 0}
                             </span>
-                            <span className="text-xs text-gray-500">
+                            <span className="text-xs text-gray-500 dark:text-gray-400">
                               /
                               {commentary?.miniscore?.bowlerNonStriker
                                 ?.bowlRuns ||
@@ -580,7 +590,7 @@ const AnalyticsMatch = () => {
                                 0}
                             </span>
                           </div>
-                          <div className="flex text-xs text-gray-600 mt-1 space-x-2">
+                          <div className="flex text-xs text-gray-600 dark:text-gray-300 mt-1 space-x-2">
                             <span>
                               Ovs:{" "}
                               {commentary?.miniscore?.bowlerNonStriker
@@ -602,15 +612,15 @@ const AnalyticsMatch = () => {
                       </div>
                     </div>
                   ) : (
-                    <div className="text-center py-4 text-gray-500">
+                    <div className="text-center py-4 text-gray-500 dark:text-gray-400">
                       Match data not available or match hasn't started
                     </div>
                   )}
                 </div>
 
                 {/* Innings Summary */}
-                <div className="p-3 md:p-4 border-t border-gray-200">
-                  <h2 className="text-xs uppercase text-gray-500 mb-2">
+                <div className="p-3 md:p-4 border-t border-gray-200 dark:border-gray-600">
+                  <h2 className="text-xs uppercase text-gray-500 dark:text-gray-400 mb-2">
                     CRR:{" "}
                     {commentary?.miniscore?.currentRunRate ||
                       commentary?.miniscore?.crr ||
@@ -618,22 +628,28 @@ const AnalyticsMatch = () => {
                   </h2>
                   <div className="mt-1 flex justify-between">
                     <div>
-                      <span className="text-xs text-gray-500">Required RR</span>
-                      <div className="font-semibold">
+                      <span className="text-xs text-gray-500 dark:text-gray-400">
+                        Required RR
+                      </span>
+                      <div className="font-semibold dark:text-gray-200">
                         {commentary?.miniscore?.requiredRunRate ||
                           commentary?.miniscore?.rrr ||
                           "0.00"}
                       </div>
                     </div>
                     <div>
-                      <span className="text-xs text-gray-500">Target</span>
-                      <div className="font-semibold">
+                      <span className="text-xs text-gray-500 dark:text-gray-400">
+                        Target
+                      </span>
+                      <div className="font-semibold dark:text-gray-200">
                         {commentary?.miniscore?.target || "N/A"}
                       </div>
                     </div>
                     <div>
-                      <span className="text-xs text-gray-500">Partnership</span>
-                      <div className="font-semibold">
+                      <span className="text-xs text-gray-500 dark:text-gray-400">
+                        Partnership
+                      </span>
+                      <div className="font-semibold dark:text-gray-200">
                         {`${commentary?.miniscore?.partnerShip?.balls}(${commentary?.miniscore?.partnerShip?.runs})` ||
                           "0(0)"}
                       </div>
@@ -643,9 +659,9 @@ const AnalyticsMatch = () => {
 
                 {/* Match Progress Bar */}
                 <div className="px-3 md:px-4 pb-3 md:pb-4">
-                  <div className="w-full bg-gray-200 rounded-full h-2.5 mb-1">
+                  <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2.5 mb-1">
                     <div
-                      className="bg-blue-600 h-2.5 rounded-full"
+                      className="bg-blue-600 dark:bg-blue-500 h-2.5 rounded-full"
                       style={{
                         width: `${
                           commentary?.miniscore?.target &&
@@ -661,7 +677,7 @@ const AnalyticsMatch = () => {
                       }}
                     ></div>
                   </div>
-                  <div className="flex justify-between text-xs text-gray-500">
+                  <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400">
                     <span>
                       Overs: {commentary?.miniscore?.overs || "0.0"}/
                       {commentary?.miniscore?.maxOvers || "0.0"}
@@ -675,11 +691,11 @@ const AnalyticsMatch = () => {
               </div>
 
               {/* Match Overview Card */}
-              <div className="bg-white rounded-xl shadow-lg overflow-hidden mb-4">
-                <div className=" border-b border-gray-200">
-                  <div className="flex bg-gradient-to-r py-5 px-4 text-white from-blue-600 to-blue-800 items-center justify-between">
+              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden mb-4 border dark:border-gray-700">
+                <div className=" border-b border-gray-200 dark:border-gray-600">
+                  <div className="flex bg-gradient-to-r py-5 px-4 text-white from-blue-600 to-blue-800 dark:from-blue-700 dark:to-blue-900 items-center justify-between">
                     <h2 className="font-bold">Match Stats</h2>
-                    <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
+                    <span className="text-xs bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 px-2 py-1 rounded-full">
                       {commentary?.matchHeader?.matchDescription ||
                         "Match Info"}
                     </span>
@@ -688,7 +704,7 @@ const AnalyticsMatch = () => {
 
                 {/* Chart section */}
                 <div className="pr-3 py-3 md:py-4 md:pr-4">
-                  <h3 className="text-sm pl-4 font-medium mb-3">
+                  <h3 className="text-sm pl-4 font-medium mb-3 dark:text-gray-200">
                     Run Rate Chart
                   </h3>
                   <div className="h-48 relative right-4 md:h-64" ref={chartRef}>
@@ -698,22 +714,35 @@ const AnalyticsMatch = () => {
                           data={graphData}
                           margin={{ top: 5, right: 5, left: 0, bottom: 5 }}
                         >
-                          <CartesianGrid strokeDasharray="3 3" />
-                          <XAxis dataKey="name" tick={{ fontSize: 12 }} />
-                          <YAxis tick={{ fontSize: 12 }} />
-                          <Tooltip />
+                          <CartesianGrid
+                            strokeDasharray="3 3"
+                            stroke="#374151"
+                          />
+                          <XAxis
+                            dataKey="name"
+                            tick={{ fontSize: 12, fill: "#6B7280" }}
+                          />
+                          <YAxis tick={{ fontSize: 12, fill: "#6B7280" }} />
+                          <Tooltip
+                            contentStyle={{
+                              backgroundColor: "#1F2937",
+                              border: "1px solid #374151",
+                              borderRadius: "8px",
+                              color: "#F3F4F6",
+                            }}
+                          />
                           <Line
                             type="monotone"
                             dataKey="runs"
                             stroke="#3b82f6"
                             strokeWidth={2}
-                            dot={{ r: 4 }}
-                            activeDot={{ r: 6 }}
+                            dot={{ r: 4, fill: "#3b82f6" }}
+                            activeDot={{ r: 6, fill: "#60a5fa" }}
                           />
                         </LineChart>
                       </ResponsiveContainer>
                     ) : (
-                      <div className="flex items-center justify-center h-full text-gray-500">
+                      <div className="flex items-center justify-center h-full text-gray-500 dark:text-gray-400">
                         No data available to display chart
                       </div>
                     )}
@@ -732,10 +761,10 @@ const AnalyticsMatch = () => {
             <div className="w-full lg:w-2/3 order-1 lg:order-2">
               {/* Match Header for Desktop */}
               {data?.matchInfo && (
-                <div className="hidden md:block bg-white rounded-xl shadow-lg overflow-hidden mb-4">
-                  <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white p-4">
+                <div className="hidden md:block bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden mb-4 border dark:border-gray-700">
+                  <div className="bg-gradient-to-r from-blue-600 to-blue-800 dark:from-blue-700 dark:to-blue-900 text-white p-4">
                     <div className="flex justify-between items-center">
-                      <span className="text-xs px-2 py-1 bg-blue-900 text-white rounded-full">
+                      <span className="text-xs px-2 py-1 bg-blue-900 dark:bg-blue-800 text-white rounded-full">
                         {data?.matchInfo?.series?.name}
                       </span>
                       <div>
@@ -745,7 +774,7 @@ const AnalyticsMatch = () => {
                           }
                         />
                       </div>
-                      <span className="text-xs px-2 py-1 bg-green-500 text-white rounded-full">
+                      <span className="text-xs px-2 py-1 bg-green-500 dark:bg-green-600 text-white rounded-full">
                         {data.matchInfo.shortStatus}
                       </span>
                     </div>
@@ -798,7 +827,7 @@ const AnalyticsMatch = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="flex items-center text-sm text-blue-100 mt-4 justify-center">
+                    <div className="flex items-center text-sm text-blue-100 dark:text-blue-200 mt-4 justify-center">
                       <FaMapMarkerAlt className="mr-2" />
                       <span>
                         {data?.matchInfo?.venue?.name},{" "}
@@ -810,15 +839,15 @@ const AnalyticsMatch = () => {
               )}
 
               {/* Tabs Navigation */}
-              <div className="bg-white rounded-xl shadow-md overflow-hidden">
-                <div className="flex overflow-x-auto scrollbar-thin border-b border-gray-200">
+              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border dark:border-gray-700">
+                <div className="flex overflow-x-auto scrollbar-thin border-b border-gray-200 dark:border-gray-600">
                   {tabs.map((tab) => (
                     <button
                       key={tab.id}
                       className={`flex items-center px-4 py-3 text-sm md:text-base whitespace-nowrap ${
                         activeTab === tab.id
-                          ? "border-b-2 border-blue-600 text-blue-600 font-medium"
-                          : "text-gray-600 hover:text-gray-800"
+                          ? "border-b-2 border-blue-600 dark:border-blue-400 text-blue-600 dark:text-blue-400 font-medium"
+                          : "text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-100"
                       }`}
                       onClick={() => setActiveTab(tab.id)}
                     >
@@ -840,14 +869,16 @@ const AnalyticsMatch = () => {
                   {activeTab === "Squads" && <Sqads data={data} />}
                   {activeTab === "Commentary" && (
                     <div className="p-2 md:p-4">
-                      <h2 className="text-lg font-semibold mb-4">
+                      <h2 className="text-lg font-semibold mb-4 dark:text-gray-200">
                         Match Commentary
                       </h2>
                       <div className="h-64 md:h-96 overflow-y-auto">
                         {commentary?.commentaryList?.map((e, i) => (
                           <div
-                            className={`text-sm py-2 px-2 ${
-                              i !== 0 ? "border-t border-gray-100" : ""
+                            className={`text-sm py-2 px-2 dark:text-gray-300 ${
+                              i !== 0
+                                ? "border-t border-gray-100 dark:border-gray-600"
+                                : ""
                             }`}
                             key={i}
                           >
@@ -880,16 +911,18 @@ const AnalyticsMatch = () => {
               />
             )}
           </div>
-          <div className="bg-white px-5 w-full py-4 flex flex-col items-center rounded-xl border border-gray-200 mb-2">
-            <h1 className="text-xl font-semibold text-blue-600">Umpires</h1>
+          <div className="bg-white dark:bg-gray-800 px-5 w-full py-4 flex flex-col items-center rounded-xl border border-gray-200 dark:border-gray-700 mb-2">
+            <h1 className="text-xl font-semibold text-blue-600 dark:text-blue-400">
+              Umpires
+            </h1>
             <div className="flex flex-wrap gap-2 mt-2">
               {data?.matchInfo?.umpire1 && (
-                <div className="flex border border-gray-300 rounded px-3 py-2 items-center">
+                <div className="flex border border-gray-300 dark:border-gray-600 rounded px-3 py-2 items-center">
                   <div className="text-sm">
-                    <p className="font-medium text-gray-800">
+                    <p className="font-medium text-gray-800 dark:text-gray-200">
                       {data.matchInfo.umpire1.name}
                     </p>
-                    <div className="flex items-center text-xs text-gray-500">
+                    <div className="flex items-center text-xs text-gray-500 dark:text-gray-400">
                       <Flag size={12} className="mr-1" />
                       {data.matchInfo.umpire1.country}
                     </div>
@@ -898,12 +931,12 @@ const AnalyticsMatch = () => {
               )}
 
               {data?.matchInfo?.umpire2 && (
-                <div className="flex border border-gray-300 rounded px-3 py-2 items-center">
+                <div className="flex border border-gray-300 dark:border-gray-600 rounded px-3 py-2 items-center">
                   <div className="text-sm">
-                    <p className="font-medium text-gray-800">
+                    <p className="font-medium text-gray-800 dark:text-gray-200">
                       {data.matchInfo.umpire2.name}
                     </p>
-                    <div className="flex items-center text-xs text-gray-500">
+                    <div className="flex items-center text-xs text-gray-500 dark:text-gray-400">
                       <Flag size={12} className="mr-1" />
                       {data.matchInfo.umpire2.country}
                     </div>
@@ -912,12 +945,12 @@ const AnalyticsMatch = () => {
               )}
 
               {data?.matchInfo?.umpire3 && (
-                <div className="flex border border-gray-300 rounded px-3 py-2 items-center">
+                <div className="flex border border-gray-300 dark:border-gray-600 rounded px-3 py-2 items-center">
                   <div className="text-sm">
-                    <p className="font-medium text-gray-800">
+                    <p className="font-medium text-gray-800 dark:text-gray-200">
                       {data.matchInfo.umpire3.name}
                     </p>
-                    <div className="flex items-center text-xs text-gray-500">
+                    <div className="flex items-center text-xs text-gray-500 dark:text-gray-400">
                       <Flag size={12} className="mr-1" />
                       {data.matchInfo.umpire3.country}
                     </div>

@@ -68,11 +68,19 @@ export default function Poll({ team1, team2, startTime }) {
   };
 
   if (loading) {
-    return <div className="flex justify-center py-6">Loading poll...</div>;
+    return (
+      <div className="flex justify-center py-6 text-gray-600 dark:text-gray-400">
+        Loading poll...
+      </div>
+    );
   }
 
   if (error) {
-    return <div className="text-red-500 text-center py-4">{error}</div>;
+    return (
+      <div className="text-red-500 dark:text-red-400 text-center py-4">
+        {error}
+      </div>
+    );
   }
 
   // Calculate percentages for the progress bars
@@ -83,74 +91,112 @@ export default function Poll({ team1, team2, startTime }) {
     totalVotes > 0 ? Math.round((poll?.team2Votes / totalVotes) * 100) : 50;
 
   return (
-    <div className="bg-white rounded-xl shadow-md p-6 w-full mx-auto">
-      <h2 className="text-xl font-bold text-center mb-6">
+    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md border dark:border-gray-700 p-6 w-full mx-auto">
+      <h2 className="text-xl font-bold text-center mb-6 text-gray-900 dark:text-gray-100">
         Who do you think will WIN?
       </h2>
 
-      <div className="flex justify-between mb-4">
+      <div className="flex justify-between mb-4 gap-2">
         <div
-          className={`flex-1 text-center px-3 py-1 rounded-l-lg transition-all ${
+          className={`flex-1 text-center px-3 py-3 rounded-l-lg transition-all cursor-pointer ${
             userVote === 1
-              ? "bg-green-500 text-white font-bold"
-              : "bg-green-100 hover:bg-green-200"
-          }`}
+              ? "bg-green-500 dark:bg-green-600 text-white font-bold"
+              : "bg-green-100 dark:bg-green-900/30 hover:bg-green-200 dark:hover:bg-green-800/50 text-gray-800 dark:text-gray-200"
+          } ${isSubmitting ? "opacity-50 cursor-not-allowed" : ""}`}
           onClick={() => !isSubmitting && handleVote(1)}
           role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              !isSubmitting && handleVote(1);
+            }
+          }}
         >
           <p className="font-medium">{team1}</p>
-          <p className="text-sm mt-0.5">{poll?.team1Votes || 0} votes</p>
+          <p className="text-sm mt-0.5 opacity-90">
+            {poll?.team1Votes || 0} votes
+          </p>
         </div>
 
         <div
-          className={`flex-1 text-center px-3 py-1 rounded-r-lg transition-all ${
+          className={`flex-1 text-center px-3 py-3 rounded-r-lg transition-all cursor-pointer ${
             userVote === 2
-              ? "bg-red-500 text-white font-bold"
-              : "bg-red-100 hover:bg-red-200"
-          }`}
+              ? "bg-red-500 dark:bg-red-600 text-white font-bold"
+              : "bg-red-100 dark:bg-red-900/30 hover:bg-red-200 dark:hover:bg-red-800/50 text-gray-800 dark:text-gray-200"
+          } ${isSubmitting ? "opacity-50 cursor-not-allowed" : ""}`}
           onClick={() => !isSubmitting && handleVote(2)}
           role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              !isSubmitting && handleVote(2);
+            }
+          }}
         >
           <p className="font-medium">{team2}</p>
-          <p className="text-sm mt-0.5">{poll?.team2Votes || 0} votes</p>
+          <p className="text-sm mt-0.5 opacity-90">
+            {poll?.team2Votes || 0} votes
+          </p>
         </div>
       </div>
 
-      <div className="h-6 bg-gray-200 rounded-full overflow-hidden">
+      {/* Progress Bar */}
+      <div className="h-6 bg-gray-200 dark:bg-gray-600 rounded-full overflow-hidden">
         <div className="flex h-full">
           <div
-            className="bg-green-500 transition-all duration-500 ease-in-out"
+            className="bg-green-500 dark:bg-green-600 transition-all duration-500 ease-in-out"
             style={{ width: `${team1Percentage}%` }}
           />
           <div
-            className="bg-red-500 transition-all duration-500 ease-in-out"
+            className="bg-red-500 dark:bg-red-600 transition-all duration-500 ease-in-out"
             style={{ width: `${team2Percentage}%` }}
           />
         </div>
       </div>
 
-      <div className="flex justify-between mt-2 text-sm text-gray-600">
-        <span>{team1Percentage}%</span>
-        <span>{totalVotes} total votes</span>
-        <span>{team2Percentage}%</span>
+      {/* Vote Statistics */}
+      <div className="flex justify-between mt-2 text-sm text-gray-600 dark:text-gray-400">
+        <span className="font-medium">{team1Percentage}%</span>
+        <span className="font-medium text-center">
+          {totalVotes} total votes
+        </span>
+        <span className="font-medium">{team2Percentage}%</span>
       </div>
 
+      {/* Login Prompt */}
       {!token && (
-        <p className="text-center mt-4 text-sm text-gray-500">
-          Log in to cast your vote!
+        <p className="text-center mt-4 text-sm text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
+          <span className="font-medium">Log in to cast your vote!</span>
         </p>
       )}
 
+      {/* User Vote Status */}
       {userVote && (
-        <p className="text-center mt-4 text-sm">
-          You voted for {userVote === 1 ? team1 : team2}.
-          <span
-            className="text-blue-500 ml-1 cursor-pointer underline"
+        <div className="text-center mt-4 text-sm bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg">
+          <p className="text-gray-700 dark:text-gray-300">
+            You voted for{" "}
+            <span className="font-bold text-blue-600 dark:text-blue-400">
+              {userVote === 1 ? team1 : team2}
+            </span>
+            .
+          </p>
+          <button
+            className="text-blue-500 dark:text-blue-400 ml-1 cursor-pointer underline hover:text-blue-600 dark:hover:text-blue-300 transition-colors font-medium"
             onClick={() => handleVote(userVote === 1 ? 2 : 1)}
+            disabled={isSubmitting}
           >
             Change vote?
-          </span>
-        </p>
+          </button>
+        </div>
+      )}
+
+      {/* Submitting State */}
+      {isSubmitting && (
+        <div className="text-center mt-4 text-sm text-blue-600 dark:text-blue-400 font-medium">
+          Submitting your vote...
+        </div>
       )}
     </div>
   );

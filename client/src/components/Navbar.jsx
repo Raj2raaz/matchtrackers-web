@@ -392,7 +392,7 @@ const Navbar = () => {
             </div>
 
             {openDropdown === "series" && (
-              <div className="absolute top-full right-0 mt-1 w-64 origin-top-right z-70">
+              <div className="absolute top-full right-0 mt-1 w-64 origin-top-right z-70 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg">
                 <SeriesDropdown />
               </div>
             )}
@@ -416,7 +416,7 @@ const Navbar = () => {
             </div>
 
             {openDropdown === "matches" && (
-              <div className="absolute top-full right-0 mt-1 w-40 origin-top-right z-70">
+              <div className="absolute top-full right-0 mt-1 w-40 origin-top-right z-70 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg">
                 <MatchesDropdown />
               </div>
             )}
@@ -440,7 +440,7 @@ const Navbar = () => {
             </div>
 
             {openDropdown === "players" && (
-              <div className="absolute top-full right-0 mt-1 w-40 origin-top-right z-70">
+              <div className="absolute top-full right-0 mt-1 w-40 origin-top-right z-70 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg">
                 <RankingsDropdown />
               </div>
             )}
@@ -464,7 +464,7 @@ const Navbar = () => {
             </div>
 
             {openDropdown === "news" && (
-              <div className="absolute top-full right-0 mt-1 w-72 origin-top-right z-70">
+              <div className="absolute top-full right-0 mt-1 w-72 origin-top-right z-70 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg">
                 <NewsDropdown />
               </div>
             )}
@@ -488,7 +488,7 @@ const Navbar = () => {
             </div>
 
             {openDropdown === "schedules" && (
-              <div className="absolute top-full right-0 mt-1 w-80 origin-top-right z-70">
+              <div className="absolute top-full right-0 mt-1 w-80 origin-top-right z-70 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg">
                 <SchedulesDropdown />
               </div>
             )}
@@ -568,16 +568,16 @@ const Navbar = () => {
             </div>
 
             {/* Theme Toggle Button */}
-              <button
-            onClick={toggleTheme}
-            className="ml-4 mt-3 p-2 rounded-full bg-gray-200 dark:bg-gray-700"
-          >
-            {theme === "light" ? (
-              <FaMoon className="text-gray-800" />
-            ) : (
-              <FaSun className="text-yellow-400" />
-            )}
-          </button>
+            <button
+              onClick={toggleTheme}
+              className="ml-4 mt-3 p-2 rounded-full bg-gray-200 dark:bg-gray-700"
+            >
+              {theme === "light" ? (
+                <FaMoon className="text-gray-800" />
+              ) : (
+                <FaSun className="text-yellow-400" />
+              )}
+            </button>
 
             <div className="py-4">
               {/* Mobile Accordion Menus */}

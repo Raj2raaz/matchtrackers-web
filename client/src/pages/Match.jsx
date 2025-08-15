@@ -341,6 +341,7 @@ const Match = () => {
 
   return (
     <div className="container mx-auto px-4 font-sans text-gray-800">
+
       {/* Match Header for Mobile */}
       {data?.matchInfo && (
         <div className="lg:hidden bg-white rounded-lg shadow-md p-4 ">
@@ -431,325 +432,298 @@ const Match = () => {
       </Helmet>
 
       <div className="flex flex-col lg:flex-row gap-4">
+
         {/* Live Score Card */}
-        <div className="w-full lg:w-1/3 order-2 lg:order-1">
-          <div className="bg-white rounded-xl shadow-lg overflow-hidden mb-4">
-            {/* Header with team score */}
-            <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white p-4">
-              <div className="flex justify-between items-center">
-                <h1 className="text-xl font-bold">
-                  {commentary?.miniscore?.batTeam?.teamScore}/
-                  {commentary?.miniscore?.batTeam?.teamWkts}
-                </h1>
-                <span className="text-sm bg-blue-900 px-2 py-1 rounded-full">
-                  {commentary?.miniscore?.matchStatus}
-                </span>
+<div className="w-full lg:w-1/3 order-2 lg:order-1">
+  <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden mb-4">
+    {/* Header with team score */}
+    <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white p-4">
+      <div className="flex justify-between items-center">
+        <h1 className="text-xl font-bold">
+          {commentary?.miniscore?.batTeam?.teamScore}/
+          {commentary?.miniscore?.batTeam?.teamWkts}
+        </h1>
+        <span className="text-sm bg-blue-900 px-2 py-1 rounded-full">
+          {commentary?.miniscore?.matchStatus}
+        </span>
+      </div>
+      <div className="text-xs mt-1 text-blue-100 flex items-center">
+        <FaRegClock className="mr-1" />
+        {commentary?.miniscore?.batTeam?.teamName} need{" "}
+        {commentary?.miniscore?.target -
+          commentary?.miniscore?.batTeam?.teamScore}{" "}
+        runs from {commentary?.miniscore?.remBalls} balls
+      </div>
+    </div>
+
+    {/* Recent Balls - Visual timeline */}
+    <div className="bg-gray-50 dark:bg-gray-700 px-4 py-3">
+      <div className="flex items-center mb-1">
+        <span className="text-xs text-gray-500 dark:text-gray-400 mr-2">
+          RECENT
+        </span>
+        <div className="flex space-x-1 overflow-x-auto pb-1">
+          {commentary?.miniscore?.recentOvsStats
+            ?.trim()
+            .split(/\s+/)
+            .slice(-8)
+            .map((ball, index) => (
+              <div
+                key={index}
+                className={`w-6 h-6 flex items-center justify-center rounded-full text-xs font-medium shrink-0
+                  ${ball === "6" ? "bg-blue-600 text-white" : ""} 
+                  ${ball === "4" ? "bg-green-500 text-white" : ""}
+                  ${ball === "W" ? "bg-red-600 text-white font-bold" : ""} 
+                  ${ball === "|" ? "border-none" : ""}
+                  ${
+                    !["6", "4", "W", "|"].includes(ball)
+                      ? "bg-gray-200 dark:bg-gray-600 dark:text-gray-200"
+                      : ""
+                  }`}
+              >
+                {ball === "|" ? "•" : ball}
               </div>
-              <div className="text-xs mt-1 text-blue-100 flex items-center">
-                <FaRegClock className="mr-1" />
-                {commentary?.miniscore?.batTeam?.teamName} need{" "}
-                {commentary?.miniscore?.target -
-                  commentary?.miniscore?.batTeam?.teamScore}{" "}
-                runs from {commentary?.miniscore?.remBalls} balls
-              </div>
+            ))}
+        </div>
+      </div>
+    </div>
+
+    {/* Active players section */}
+    <div className="p-4">
+      <div className="flex flex-col sm:flex-row gap-4">
+        {/* Batting */}
+        <div className="w-full sm:w-1/2">
+          <h2 className="text-xs uppercase text-gray-500 dark:text-gray-400 mb-2 flex items-center">
+            <div className="w-2 h-2 bg-blue-500 rounded-full mr-1"></div>
+            BATTING
+          </h2>
+
+          {/* Striker */}
+          <div className="mb-3 bg-gray-50 dark:bg-gray-700 p-2 rounded-lg">
+            <div className="flex items-center">
+              <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+              <span className="font-semibold text-sm truncate">
+                {commentary?.miniscore?.batsmanStriker.batName}
+              </span>
             </div>
-
-            {/* Recent Balls - Visual timeline */}
-            <div className="bg-gray-50 px-4 py-3">
-              <div className="flex items-center mb-1">
-                <span className="text-xs text-gray-500 mr-2">RECENT</span>
-                <div className="flex space-x-1 overflow-x-auto pb-1">
-                  {commentary?.miniscore?.recentOvsStats
-                    ?.trim()
-                    .split(/\s+/)
-                    .slice(-8)
-                    .map((ball, index) => (
-                      <div
-                        key={index}
-                        className={`w-6 h-6 flex items-center justify-center rounded-full text-xs font-medium shrink-0
-                      ${ball === "6" ? "bg-blue-600 text-white" : ""} 
-                      ${ball === "4" ? "bg-green-500 text-white" : ""}
-                      ${ball === "W" ? "bg-red-600 text-white font-bold" : ""} 
-                      ${ball === "|" ? "border-none" : ""}
-                      ${
-                        !["6", "4", "W", "|"].includes(ball)
-                          ? "bg-gray-200"
-                          : ""
-                      }`}
-                      >
-                        {ball === "|" ? "•" : ball}
-                      </div>
-                    ))}
-                </div>
-              </div>
+            <div className="flex mt-1">
+              <span className="text-xl font-bold mr-2">
+                {commentary?.miniscore?.batsmanStriker.batRuns}
+              </span>
+              <span className="text-xs text-gray-500 dark:text-gray-400 self-end mb-1">
+                ({commentary?.miniscore?.batsmanStriker.batBalls})
+              </span>
             </div>
-
-            {/* Active players section */}
-            <div className="p-4">
-              <div className="flex flex-col sm:flex-row gap-4">
-                <div className="w-full sm:w-1/2">
-                  <h2 className="text-xs uppercase text-gray-500 mb-2 flex items-center">
-                    <div className="w-2 h-2 bg-blue-500 rounded-full mr-1"></div>
-                    BATTING
-                  </h2>
-
-                  {/* Striker */}
-                  <div className="mb-3 bg-gray-50 p-2 rounded-lg">
-                    <div className="flex items-center">
-                      <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-                      <span className="font-semibold text-sm truncate">
-                        {commentary?.miniscore?.batsmanStriker.batName}
-                      </span>
-                    </div>
-                    <div className="flex mt-1">
-                      <span className="text-xl font-bold mr-2">
-                        {commentary?.miniscore?.batsmanStriker.batRuns}
-                      </span>
-                      <span className="text-xs text-gray-500 self-end mb-1">
-                        ({commentary?.miniscore?.batsmanStriker.batBalls})
-                      </span>
-                    </div>
-                    <div className="flex text-xs text-gray-600 mt-1 space-x-2">
-                      <span>
-                        4s: {commentary?.miniscore?.batsmanStriker.batFours}
-                      </span>
-                      <span>
-                        6s: {commentary?.miniscore?.batsmanStriker.batSixes}
-                      </span>
-                      <span>
-                        SR:{" "}
-                        {commentary?.miniscore?.batsmanStriker.batStrikeRate}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Non-Striker */}
-                  <div className="bg-gray-50 p-2 rounded-lg">
-                    <div className="flex items-center">
-                      <span className="text-sm truncate">
-                        {commentary?.miniscore?.batsmanNonStriker.batName}
-                      </span>
-                    </div>
-                    <div className="flex mt-1">
-                      <span className="text-xl font-bold mr-2">
-                        {commentary?.miniscore?.batsmanNonStriker.batRuns}
-                      </span>
-                      <span className="text-xs text-gray-500 self-end mb-1">
-                        ({commentary?.miniscore?.batsmanNonStriker.batBalls})
-                      </span>
-                    </div>
-                    <div className="flex text-xs text-gray-600 mt-1 space-x-2">
-                      <span>
-                        4s: {commentary?.miniscore?.batsmanNonStriker.batFours}
-                      </span>
-                      <span>
-                        6s: {commentary?.miniscore?.batsmanNonStriker.batSixes}
-                      </span>
-                      <span>
-                        SR:{" "}
-                        {commentary?.miniscore?.batsmanNonStriker.batStrikeRate}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="w-full sm:w-1/2 sm:border-l sm:border-gray-200 sm:pl-4">
-                  <h2 className="text-xs uppercase text-gray-500 mb-2 flex items-center">
-                    <div className="w-2 h-2 bg-red-500 rounded-full mr-1"></div>
-                    BOWLING
-                  </h2>
-
-                  {/* Current Bowler */}
-                  <div className="mb-3 bg-gray-50 p-2 rounded-lg">
-                    <div className="flex items-center">
-                      <div className="w-2 h-2 bg-red-500 rounded-full mr-2"></div>
-                      <span className="font-semibold text-sm truncate">
-                        {commentary?.miniscore?.bowlerStriker.bowlName}
-                      </span>
-                    </div>
-                    <div className="flex mt-1 items-end">
-                      <span className="text-lg font-bold mr-2">
-                        {commentary?.miniscore?.bowlerStriker.bowlWkts}
-                      </span>
-                      <span className="text-xs text-gray-500">
-                        /{commentary?.miniscore?.bowlerStriker.bowlRuns}
-                      </span>
-                    </div>
-                    <div className="flex text-xs text-gray-600 mt-1 space-x-2">
-                      <span>
-                        Ovs: {commentary?.miniscore?.bowlerStriker.bowlOvs}
-                      </span>
-                      <span>
-                        Econ: {commentary?.miniscore?.bowlerStriker.bowlEcon}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Other Bowler */}
-                  <div className="bg-gray-50 p-2 rounded-lg">
-                    <div className="flex items-center">
-                      <span className="text-sm truncate">
-                        {commentary?.miniscore?.bowlerNonStriker?.bowlName}
-                      </span>
-                    </div>
-                    <div className="flex mt-1 items-end">
-                      <span className="text-lg font-bold mr-2">
-                        {commentary?.miniscore?.bowlerNonStriker.bowlWkts}
-                      </span>
-                      <span className="text-xs text-gray-500">
-                        /{commentary?.miniscore?.bowlerNonStriker.bowlRuns}
-                      </span>
-                    </div>
-                    <div className="flex text-xs text-gray-600 mt-1 space-x-2">
-                      <span>
-                        Ovs: {commentary?.miniscore?.bowlerNonStriker.bowlOvs}
-                      </span>
-                      <span>
-                        Econ: {commentary?.miniscore?.bowlerNonStriker.bowlEcon}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Commentary section */}
-            <div className="bg-gray-50 p-4 border-t border-gray-200">
-              <h2 className="text-xs uppercase text-gray-500 mb-2 flex items-center">
-                <div className="w-2 h-2 bg-red-500 rounded-full mr-1 animate-pulse"></div>
-                LIVE COMMENTARY
-              </h2>
-              <div className="h-64 lg:h-80 overflow-y-auto rounded-lg bg-white p-2">
-                {commentary?.commentaryList?.slice(0, 8).map((e, i) => (
-                  <div
-                    className={`text-sm py-2 px-2 ${
-                      i !== 0 ? "border-t border-gray-100" : ""
-                    } ${i === 0 ? "bg-blue-50 rounded" : ""}`}
-                    key={i}
-                  >
-                    {e?.commText}
-                  </div>
-                ))}
-              </div>
+            <div className="flex text-xs text-gray-600 dark:text-gray-300 mt-1 space-x-2">
+              <span>4s: {commentary?.miniscore?.batsmanStriker.batFours}</span>
+              <span>6s: {commentary?.miniscore?.batsmanStriker.batSixes}</span>
+              <span>SR: {commentary?.miniscore?.batsmanStriker.batStrikeRate}</span>
             </div>
           </div>
 
-          {/* Mobile News Section */}
-          <div className="lg:hidden mb-4">
-            <TopNews />
+          {/* Non-Striker */}
+          <div className="bg-gray-50 dark:bg-gray-700 p-2 rounded-lg">
+            <div className="flex items-center">
+              <span className="text-sm truncate">
+                {commentary?.miniscore?.batsmanNonStriker.batName}
+              </span>
+            </div>
+            <div className="flex mt-1">
+              <span className="text-xl font-bold mr-2">
+                {commentary?.miniscore?.batsmanNonStriker.batRuns}
+              </span>
+              <span className="text-xs text-gray-500 dark:text-gray-400 self-end mb-1">
+                ({commentary?.miniscore?.batsmanNonStriker.batBalls})
+              </span>
+            </div>
+            <div className="flex text-xs text-gray-600 dark:text-gray-300 mt-1 space-x-2">
+              <span>4s: {commentary?.miniscore?.batsmanNonStriker.batFours}</span>
+              <span>6s: {commentary?.miniscore?.batsmanNonStriker.batSixes}</span>
+              <span>SR: {commentary?.miniscore?.batsmanNonStriker.batStrikeRate}</span>
+            </div>
           </div>
         </div>
-        {/* Match Details & Tabs */}
-        {data?.matchInfo && (
-          <div className="w-full lg:w-2/3 order-1 lg:order-2">
-            <div className="bg-white rounded-lg shadow-lg border border-gray-200 mb-4">
-              {/* Match Header - Desktop only */}
-              <div className="hidden lg:block p-4 border-b border-gray-200">
-                <div className="flex justify-between items-center">
-                  <div className="text-sm text-gray-700 mb-1 font-medium">
-                    {commentary?.matchHeader?.seriesName}
-                  </div>
-                  {/* Venue information */}
-                  <div className="flex items-center mb-1 text-xs text-gray-600">
-                    <FaMapMarkerAlt className="mr-1" />
-                    <span>
-                      {data?.matchInfo?.venue?.name},{" "}
-                      {data?.matchInfo?.venue?.city}
-                    </span>
-                  </div>
-                </div>
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
-                  <div className="flex items-center">
-                    <div>
-                      <div className="font-bold">
-                        {data.matchInfo.team1.name}
-                      </div>
-                      <div className="text-sm">
-                        {score?.scorecard?.[0]?.batTeamName ===
-                        data?.matchInfo?.team1.name ? (
-                          <span className="font-medium">
-                            {score?.scorecard[0].score}/
-                            {score?.scorecard[0].wickets} (
-                            {score?.scorecard[0].overs})
-                          </span>
-                        ) : score?.scorecard?.[1] ? (
-                          <span className="font-medium">
-                            {score?.scorecard[1].score}/
-                            {score?.scorecard[1].wickets} (
-                            {score?.scorecard[1].overs})
-                          </span>
-                        ) : null}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="px-4 py-2 bg-gray-100 rounded-lg text-center">
-                    <div className="text-xs text-gray-500">MATCH STATUS</div>
-                    <div className="text-green-600 font-medium">
-                      {data.matchInfo.shortStatus}
-                    </div>
-                  </div>
-                  <div className="flex items-center">
-                    <div className="text-right">
-                      <div className="font-bold">
-                        {data.matchInfo.team2.name}
-                      </div>
-                      <div className="text                        ">
-                        {" "}
-                        {score?.scorecard?.[0]?.batTeamName ===
-                        data?.matchInfo?.team2.name ? (
-                          <span className="font-medium">
-                                                       {" "}
-                            {score?.scorecard[0].score}/
-                            {score?.scorecard[0].wickets}                      
-                                  ({score?.scorecard[0].overs})                
-                                     {" "}
-                          </span>
-                        ) : score?.scorecard?.[1] ? (
-                          <span className="font-medium">
-                                                       {" "}
-                            {score?.scorecard[1].score}/
-                            {score?.scorecard[1].wickets}                      
-                                  ({score?.scorecard[1].overs})                
-                                     {" "}
-                          </span>
-                        ) : null}
-                                             {" "}
-                      </div>
-                                         {" "}
-                    </div>
-                                     {" "}
-                  </div>
-                                 {" "}
-                </div>
-                             {" "}
-              </div>
-                            {/* Tab Navigation */}         
-              <div className="flex border-b border-gray-200">
-                           
-                {tabs.map((tab) => (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    className={`px-6 py-3 text-sm font-medium ${
-                      activeTab === tab.id
-                        ? "border-b-2 border-blue-600 text-blue-600"
-                        : "text-gray-600 hover:text-blue-600 hover:border-b-2 hover:border-blue-600/50"
-                    }`}
-                  >
-                                       
-                    <div className="flex items-center">
-                                            {tab.icon}                 
-                      {tab.label}                 
-                    </div>
-                                   
-                  </button>
-                ))}
-              </div>
-              {/* Tab Content */} {activeTab === "Info" && renderInfoTab()}
-              {activeTab === "Squads" && renderSquadsTab()}
+
+        {/* Bowling */}
+        <div className="w-full sm:w-1/2 sm:border-l sm:border-gray-200 dark:sm:border-gray-600 sm:pl-4">
+          <h2 className="text-xs uppercase text-gray-500 dark:text-gray-400 mb-2 flex items-center">
+            <div className="w-2 h-2 bg-red-500 rounded-full mr-1"></div>
+            BOWLING
+          </h2>
+
+          {/* Current Bowler */}
+          <div className="mb-3 bg-gray-50 dark:bg-gray-700 p-2 rounded-lg">
+            <div className="flex items-center">
+              <div className="w-2 h-2 bg-red-500 rounded-full mr-2"></div>
+              <span className="font-semibold text-sm truncate">
+                {commentary?.miniscore?.bowlerStriker.bowlName}
+              </span>
+            </div>
+            <div className="flex mt-1 items-end">
+              <span className="text-lg font-bold mr-2">
+                {commentary?.miniscore?.bowlerStriker.bowlWkts}
+              </span>
+              <span className="text-xs text-gray-500 dark:text-gray-400">
+                /{commentary?.miniscore?.bowlerStriker.bowlRuns}
+              </span>
+            </div>
+            <div className="flex text-xs text-gray-600 dark:text-gray-300 mt-1 space-x-2">
+              <span>Ovs: {commentary?.miniscore?.bowlerStriker.bowlOvs}</span>
+              <span>Econ: {commentary?.miniscore?.bowlerStriker.bowlEcon}</span>
             </div>
           </div>
-        )}
+
+          {/* Other Bowler */}
+          <div className="bg-gray-50 dark:bg-gray-700 p-2 rounded-lg">
+            <div className="flex items-center">
+              <span className="text-sm truncate">
+                {commentary?.miniscore?.bowlerNonStriker?.bowlName}
+              </span>
+            </div>
+            <div className="flex mt-1 items-end">
+              <span className="text-lg font-bold mr-2">
+                {commentary?.miniscore?.bowlerNonStriker.bowlWkts}
+              </span>
+              <span className="text-xs text-gray-500 dark:text-gray-400">
+                /{commentary?.miniscore?.bowlerNonStriker.bowlRuns}
+              </span>
+            </div>
+            <div className="flex text-xs text-gray-600 dark:text-gray-300 mt-1 space-x-2">
+              <span>Ovs: {commentary?.miniscore?.bowlerNonStriker.bowlOvs}</span>
+              <span>Econ: {commentary?.miniscore?.bowlerNonStriker.bowlEcon}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {/* Commentary section */}
+    <div className="bg-gray-50 dark:bg-gray-700 p-4 border-t border-gray-200 dark:border-gray-600">
+      <h2 className="text-xs uppercase text-gray-500 dark:text-gray-400 mb-2 flex items-center">
+        <div className="w-2 h-2 bg-red-500 rounded-full mr-1 animate-pulse"></div>
+        LIVE COMMENTARY
+      </h2>
+      <div className="h-64 lg:h-80 overflow-y-auto rounded-lg bg-white dark:bg-gray-800 p-2">
+        {commentary?.commentaryList?.slice(0, 8).map((e, i) => (
+          <div
+            className={`text-sm py-2 px-2 ${
+              i !== 0
+                ? "border-t border-gray-100 dark:border-gray-700"
+                : ""
+            } ${i === 0 ? "bg-blue-50 dark:bg-blue-900 rounded" : ""}`}
+            key={i}
+          >
+            {e?.commText}
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  {/* Mobile News Section */}
+  <div className="lg:hidden mb-4">
+    <TopNews />
+  </div>
+</div>
+
+        {/* Match Details & Tabs */}
+{data?.matchInfo && (
+  <div className="w-full lg:w-2/3 order-1 lg:order-2">
+    <div className="bg-white dark:bg-gray-900 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 mb-4">
+      {/* Match Header - Desktop only */}
+      <div className="hidden lg:block p-4 border-b border-gray-200 dark:border-gray-700">
+        <div className="flex justify-between items-center">
+          <div className="text-sm text-gray-700 dark:text-gray-300 mb-1 font-medium">
+            {commentary?.matchHeader?.seriesName}
+          </div>
+          {/* Venue information */}
+          <div className="flex items-center mb-1 text-xs text-gray-600 dark:text-gray-400">
+            <FaMapMarkerAlt className="mr-1" />
+            <span>
+              {data?.matchInfo?.venue?.name},{" "}
+              {data?.matchInfo?.venue?.city}
+            </span>
+          </div>
+        </div>
+
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
+          {/* Team 1 */}
+          <div className="flex items-center">
+            <div>
+              <div className="font-bold text-gray-900 dark:text-white">
+                {data.matchInfo.team1.name}
+              </div>
+              <div className="text-sm text-gray-700 dark:text-gray-300">
+                {score?.scorecard?.[0]?.batTeamName === data?.matchInfo?.team1.name ? (
+                  <span className="font-medium">
+                    {score?.scorecard[0].score}/{score?.scorecard[0].wickets} ({score?.scorecard[0].overs})
+                  </span>
+                ) : score?.scorecard?.[1] ? (
+                  <span className="font-medium">
+                    {score?.scorecard[1].score}/{score?.scorecard[1].wickets} ({score?.scorecard[1].overs})
+                  </span>
+                ) : null}
+              </div>
+            </div>
+          </div>
+
+          {/* Match Status */}
+          <div className="px-4 py-2 bg-gray-100 dark:bg-gray-800 rounded-lg text-center">
+            <div className="text-xs text-gray-500 dark:text-gray-400">MATCH STATUS</div>
+            <div className="text-green-600 dark:text-green-400 font-medium">
+              {data.matchInfo.shortStatus}
+            </div>
+          </div>
+
+          {/* Team 2 */}
+          <div className="flex items-center">
+            <div className="text-right">
+              <div className="font-bold text-gray-900 dark:text-white">
+                {data.matchInfo.team2.name}
+              </div>
+              <div className="text-sm text-gray-700 dark:text-gray-300">
+                {score?.scorecard?.[0]?.batTeamName === data?.matchInfo?.team2.name ? (
+                  <span className="font-medium">
+                    {score?.scorecard[0].score}/{score?.scorecard[0].wickets} ({score?.scorecard[0].overs})
+                  </span>
+                ) : score?.scorecard?.[1] ? (
+                  <span className="font-medium">
+                    {score?.scorecard[1].score}/{score?.scorecard[1].wickets} ({score?.scorecard[1].overs})
+                  </span>
+                ) : null}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Tab Navigation */}
+      <div className="flex border-b border-gray-200 dark:border-gray-700">
+        {tabs.map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className={`px-6 py-3 text-sm font-medium transition-colors ${
+              activeTab === tab.id
+                ? "border-b-2 border-blue-600 text-blue-600 dark:text-blue-400"
+                : "text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:border-b-2 hover:border-blue-600/50 dark:hover:border-blue-400/50"
+            }`}
+          >
+            <div className="flex items-center gap-2">
+              {tab.icon}
+              {tab.label}
+            </div>
+          </button>
+        ))}
+      </div>
+
+      {/* Tab Content */}
+      {activeTab === "Info" && renderInfoTab()}
+      {activeTab === "Squads" && renderSquadsTab()}
+    </div>
+  </div>
+)}
+
         {/* Trending Players (Desktop Only) */}
         <div className="w-full lg:w-1/3 order-3">
           <div className="hidden lg:block">
