@@ -238,14 +238,14 @@ export default function Home() {
         <img
           src={header}
           alt="Hero"
-          className="hidden md:block w-full h-auto transform transition-transform duration-700 hover:scale-105 animate-float"
+          className="hidden md:block w-full h-auto"
         />
 
         {/* Mobile Hero Image */}
         <img
           src={headermv}
           alt="Hero Mobile"
-          className="block md:hidden w-full h-auto transform transition-transform duration-700 hover:scale-105 animate-float"
+          className="block md:hidden w-full h-auto"
         />
 
         {/*
