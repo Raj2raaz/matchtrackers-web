@@ -390,7 +390,7 @@ const Navbar = () => {
             </div>
 
             {openDropdown === "series" && (
-              <div className="absolute top-full right-0 mt-1 w-64 origin-top-right z-70 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg">
+              <div className="absolute top-full right-0 mt-0 w-64 origin-top-right z-70 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg">
                 <SeriesDropdown />
               </div>
             )}
@@ -414,7 +414,7 @@ const Navbar = () => {
             </div>
 
             {openDropdown === "matches" && (
-              <div className="absolute top-full right-0 mt-1 w-40 origin-top-right z-70 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg">
+              <div className="absolute top-full right-0 mt-0 w-40 origin-top-right z-70 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg">
                 <MatchesDropdown />
               </div>
             )}
@@ -438,7 +438,7 @@ const Navbar = () => {
             </div>
 
             {openDropdown === "players" && (
-              <div className="absolute top-full right-0 mt-1 w-40 origin-top-right z-70 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg">
+              <div className="absolute top-full right-0 mt-0 w-40 origin-top-right z-70 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg">
                 <RankingsDropdown />
               </div>
             )}
@@ -462,7 +462,7 @@ const Navbar = () => {
             </div>
 
             {openDropdown === "news" && (
-              <div className="absolute top-full right-0 mt-1 w-72 origin-top-right z-70 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg">
+              <div className="absolute top-full right-0 mt-0 w-72 origin-top-right z-70 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg">
                 <NewsDropdown />
               </div>
             )}
@@ -486,7 +486,7 @@ const Navbar = () => {
             </div>
 
             {openDropdown === "schedules" && (
-              <div className="absolute top-full right-0 mt-1 w-80 origin-top-right z-70 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg">
+              <div className="absolute top-full right-0 mt-0 w-80 origin-top-right z-70 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg">
                 <SchedulesDropdown />
               </div>
             )}
