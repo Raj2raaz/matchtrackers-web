@@ -336,7 +336,7 @@ export default function Home() {
                   key={i}
                   className={`flex-shrink-0 px-3 sm:px-5 py-2 sm:py-3 text-xs sm:text-sm md:text-base font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 ${
                     selectedCat === i
-                      ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg animate-pulse-glow"
+                      ? "bg-white text-black shadow-lg"
                       : "bg-white/10 dark:bg-black/20 text-white hover:bg-white/20 dark:hover:bg-white/10 backdrop-blur-sm border border-white/20"
                   }`}
                   onClick={() => setSelectedCat(i)}
@@ -472,16 +472,16 @@ export default function Home() {
                 </div>
 
                 {/* Bottom Action Bar */}
-                <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-b-2xl -mt-3 p-4 shadow-lg relative overflow-hidden">
-                  <div className="absolute inset-0 shimmer-effect opacity-20"></div>
-                  <div className="flex justify-between font-semibold text-sm text-white items-center relative z-10">
+                <div className="bg-white text-black dark:bg-gray-900 dark:text-gray-200 rounded-b-2xl -mt-3 p-4 shadow-lg relative overflow-hidden">
+                  <div className="absolute inset-0 shimmer-effect opacity-10"></div>
+                  <div className="flex justify-between font-semibold text-sm items-center relative z-10">
                     <button
                       onClick={() =>
                         navigate(
                           "/cricket/schedules/" + match.matchInfo.seriesId
                         )
                       }
-                      className="cursor-pointer hover:text-yellow-300 transition-colors duration-200 flex items-center gap-1 group"
+                      className="cursor-pointer hover:text-blue-600 dark:hover:text-yellow-300 transition-colors duration-200 flex items-center gap-1 group"
                     >
                       <span className="group-hover:rotate-12 transition-transform duration-200">
                         📅
@@ -494,7 +494,7 @@ export default function Home() {
                           "/cricket/points-table/" + match.matchInfo.seriesId
                         )
                       }
-                      className="cursor-pointer hover:text-yellow-300 transition-colors duration-200 flex items-center gap-1 group"
+                      className="cursor-pointer hover:text-blue-600 dark:hover:text-yellow-300 transition-colors duration-200 flex items-center gap-1 group"
                     >
                       <span className="group-hover:rotate-12 transition-transform duration-200">
                         📊

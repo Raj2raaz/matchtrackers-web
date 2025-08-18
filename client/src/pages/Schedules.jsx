@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState, useEffect } from "react";
 import {
   ChevronDown,
@@ -16,6 +17,7 @@ import { cricApiClient as apiClient } from "../utils/axios";
 import Image from "../components/Image";
 import useCricbuzzStore from "../store/cricket";
 import { formatTimeAgo } from "../utils/util";
+import Blogs from "./Blogs";
 import { Helmet } from "react-helmet-async";
 
 const Schedules = () => {
@@ -32,7 +34,7 @@ const Schedules = () => {
   const [teams, setTeams] = useState([]);
   const [matchesLength, setMatchesLength] = useState(4);
   const navigate = useNavigate();
-  const { news } = useCricbuzzStore();
+  const [news, setNews] = useState([]);
   const [pointTable, setPointTable] = useState();
   const [sortedMatches, setSortedMatches] = useState({});
 
@@ -140,6 +142,19 @@ const Schedules = () => {
       setSortedMatches(processedMatches);
     }
   }, [matchDetails, selectedTeam, selectedVenue]);
+
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const blogResponse = await axios.get("/api/blog");
+        console.log(news);
+        setNews(blogResponse.data.blogs || []);
+      } catch (err) {
+        console.error("Error fetching blogs:", err);
+      }
+    };
+    fetchBlogs();
+  }, []);
 
   // Process matches by proximity instead of date
   const processMatchesByProximity = () => {
@@ -727,7 +742,7 @@ const Schedules = () => {
                   Latest News
                 </h2>
                 <a
-                  href="/cricket/news"
+                  href="/cricket/blogs"
                   className="text-blue-600 dark:text-blue-400 text-sm flex items-center gap-1 hover:underline hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
                 >
                   View All
@@ -752,25 +767,24 @@ const Schedules = () => {
                 {news.slice(0, 5).map((item, i) => (
                   <div
                     key={i}
-                    onClick={() => navigate("/cricket/news/" + item.story.id)}
-                    className="flex cursor-pointer gap-3 pb-3 border-b border-gray-100 dark:border-gray-700 last:border-b-0 last:pb-0 hover:bg-gray-50 dark:hover:bg-gray-700 rounded p-2 -m-2 transition-colors"
+                    onClick={() => navigate(`/blog/${item.id}/${item.slug}`)}
+                    className="flex cursor-pointer gap-4 pb-5 border-b border-gray-100 dark:border-gray-700 last:border-b-0 last:pb-0 hover:bg-gray-50 dark:hover:bg-gray-700 rounded p-2 -m-2 transition-colors"
                   >
-                    <Image
-                      faceImageId={item.story?.imageId}
+                    {/* <Image
+                      faceImageId={item.img}
                       className="h-26"
                       resolution="gthumb"
-                    />
+                    /> */}
                     <div>
                       <h3 className="text-gray-800 dark:text-gray-200 font-medium text-sm line-clamp-2">
-                        {item.story.hline}
+                        {item.title}
                       </h3>
                       <p className="overflow-hidden text-xs mt-2 w-56 line-clamp-2 text-gray-600 dark:text-gray-400">
-                        {item.story.intro}
+                        {item.type} {/* or intro if API has it */}
                       </p>
-                      <div className="flex items-center mt-2 text-xs text-gray-500 dark:text-gray-400">
+                      {/* <div className="flex items-center mt-2 text-xs text-gray-500 dark:text-gray-400">
                         <Clock size={12} className="mr-1" />
-                        {formatTimeAgo(Number(item.story.pubTime))}
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 ))}

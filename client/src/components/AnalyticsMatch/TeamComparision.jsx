@@ -123,7 +123,7 @@ export default function TeamComparisonCard({ team1, team2 }) {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-xl  w-full border border-gray-200">
+    <div className="bg-white dark:bg-gray-900 rounded-lg shadow-xl w-full border border-gray-200 dark:border-gray-700">
       <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-4 px-4 rounded-t-xl shadow-md mb-6">
         <h2 className="text-center font-bold text-xl flex items-center justify-center">
           <Trophy size={20} className="mr-2" />
@@ -139,14 +139,14 @@ export default function TeamComparisonCard({ team1, team2 }) {
           <TeamHeader team={team1} isLeft={true} />
         </div>
         <div className="w-2/12 flex justify-center items-center">
-          <div className="h-20 w-px bg-gray-300"></div>
+          <div className="h-20 w-px bg-gray-300 dark:bg-gray-700"></div>
         </div>
         <div className="w-5/12">
           <TeamHeader team={team2} isLeft={false} />
         </div>
       </div>
 
-      <div className="border-t  border-b border-gray-200 ">
+      <div className="border-t border-b border-gray-200 dark:border-gray-700">
         <StatItem
           label="Matches Played"
           team1Value={team1.matchesPlayed}

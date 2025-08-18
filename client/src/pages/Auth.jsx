@@ -241,22 +241,24 @@ const AuthForm = () => {
       {/* Form side */}
       <div className="w-full md:w-1/2 p-6 md:p-10">
         <div className="max-w-md mx-auto">
-          <h1 className="text-2xl font-bold text-gray-800 mb-2">
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-2">
             Verify Your Email
           </h1>
-          <p className="text-gray-600 mb-6">
+          <p className="text-gray-600 dark:text-gray-300 mb-6">
             We've sent a verification code to{" "}
-            <span className="font-medium text-blue-600">{formData.email}</span>
+            <span className="font-medium text-blue-600 dark:text-blue-400">
+              {formData.email}
+            </span>
           </p>
 
           {message && (
-            <div className="mb-6 p-4 bg-green-50 border-l-4 border-green-500 text-green-700 rounded">
+            <div className="mb-6 p-4 bg-green-50 dark:bg-green-900/30 border-l-4 border-green-500 text-green-700 dark:text-green-300 rounded">
               {message}
             </div>
           )}
 
           {error && (
-            <div className="mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded">
+            <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/30 border-l-4 border-red-500 text-red-700 dark:text-red-300 rounded">
               {error}
             </div>
           )}
@@ -264,7 +266,7 @@ const AuthForm = () => {
           <form onSubmit={handleVerifyOtp}>
             <div className="mb-8">
               <label
-                className="block text-gray-700 text-sm font-medium mb-3"
+                className="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-3"
                 htmlFor="otp"
               >
                 Enter 6-digit verification code
@@ -279,7 +281,7 @@ const AuthForm = () => {
                     value={digit}
                     onChange={(e) => handleOtpChange(index, e.target.value)}
                     onKeyDown={(e) => handleOtpKeyDown(index, e)}
-                    className="w-12 h-12 text-center text-xl font-bold border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-12 h-12 text-center text-xl font-bold border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 ))}
               </div>
@@ -324,7 +326,7 @@ const AuthForm = () => {
                 type="button"
                 onClick={handleResendOtp}
                 disabled={loading}
-                className="text-blue-600 hover:text-blue-800 text-sm font-medium flex items-center justify-center mx-auto"
+                className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 text-sm font-medium flex items-center justify-center mx-auto"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -356,44 +358,44 @@ const AuthForm = () => {
       }`}
     >
       {/* Illustration side */}
-      <div className="hidden md:flex md:w-1/2 bg-gradient-to-br from-blue-50 to-indigo-50 justify-center items-center p-6">
+      <div className="hidden md:flex md:w-1/2 bg-gradient-to-br from-blue-200 to-indigo-400 justify-center items-center p-6">
         <div className="w-full max-w-md transition-all duration-300 hover:scale-105">
           {isLogin ? (
             <img
               src={LoginIllustration}
               alt="Login"
-              className="w-full h-auto"
+              className="w-full h-auto drop-shadow-lg"
             />
           ) : (
             <img
               src={SignupIllustration}
               alt="Sign up"
-              className="w-full h-auto"
+              className="w-full h-auto drop-shadow-lg"
             />
           )}
         </div>
       </div>
 
       {/* Form side */}
-      <div className="w-full md:w-1/2 p-6 md:p-10">
+      <div className="w-full md:w-1/2 p-6 md:p-10 bg-white dark:bg-gray-950">
         <div className="max-w-md mx-auto">
-          <h1 className="text-2xl font-bold text-gray-800 mb-2">
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-2">
             {isLogin ? "Welcome back" : "Create an account"}
           </h1>
-          <p className="text-gray-600 mb-6">
+          <p className="text-gray-600 dark:text-gray-400 mb-6">
             {isLogin
               ? "Sign in to access your account"
               : "Join us to get started"}
           </p>
 
           {message && (
-            <div className="mb-6 p-4 bg-green-50 border-l-4 border-green-500 text-green-700 rounded">
+            <div className="mb-6 p-4 bg-green-50 dark:bg-green-900/30 border-l-4 border-green-500 text-green-700 dark:text-green-300 rounded">
               {message}
             </div>
           )}
 
           {error && (
-            <div className="mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded">
+            <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/30 border-l-4 border-red-500 text-red-700 dark:text-red-300 rounded">
               {error}
             </div>
           )}
@@ -415,10 +417,10 @@ const AuthForm = () => {
 
           <div className="relative mb-6">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-300"></div>
+              <div className="w-full border-t border-gray-300 dark:border-gray-700"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-white text-gray-500">
+              <span className="px-4 bg-white dark:bg-gray-950 text-gray-500 dark:text-gray-400">
                 Or continue with email
               </span>
             </div>
@@ -428,7 +430,7 @@ const AuthForm = () => {
             {!isLogin && (
               <div className="mb-5">
                 <label
-                  className="block text-gray-700 text-sm font-medium mb-2"
+                  className="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2"
                   htmlFor="name"
                 >
                   Full Name
@@ -453,7 +455,9 @@ const AuthForm = () => {
                     name="name"
                     type="text"
                     required
-                    className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-700 
+                         bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 
+                         rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                     placeholder="John Doe"
                     value={formData.name}
                     onChange={handleChange}
@@ -464,7 +468,7 @@ const AuthForm = () => {
 
             <div className="mb-5">
               <label
-                className="block text-gray-700 text-sm font-medium mb-2"
+                className="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2"
                 htmlFor="email"
               >
                 Email Address
@@ -486,7 +490,9 @@ const AuthForm = () => {
                   name="email"
                   type="email"
                   required
-                  className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-700 
+                       bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 
+                       rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                   placeholder="your@email.com"
                   value={formData.email}
                   onChange={handleChange}
@@ -496,7 +502,7 @@ const AuthForm = () => {
 
             <div className="mb-6">
               <label
-                className="block text-gray-700 text-sm font-medium mb-2"
+                className="block text-gray-700 dark:text-gray-300 text-sm font-medium mb-2"
                 htmlFor="password"
               >
                 Password
@@ -521,7 +527,9 @@ const AuthForm = () => {
                   name="password"
                   type="password"
                   required
-                  className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-700 
+                       bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 
+                       rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                   placeholder="••••••••"
                   value={formData.password}
                   onChange={handleChange}
@@ -532,7 +540,9 @@ const AuthForm = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out mb-4 disabled:opacity-60"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg shadow-md 
+                   focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 
+                   transition duration-150 ease-in-out mb-4 disabled:opacity-60"
             >
               {loading ? (
                 <span className="flex items-center justify-center">
@@ -568,13 +578,13 @@ const AuthForm = () => {
             <div className="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between">
               <a
                 href="#"
-                className="text-sm text-blue-600 hover:text-blue-800 mb-2 sm:mb-0"
+                className="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 mb-2 sm:mb-0"
               >
                 Forgot your password?
               </a>
               <button
                 onClick={() => setIsLogin(false)}
-                className="text-sm text-blue-600 hover:text-blue-800"
+                className="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
               >
                 Don't have an account? Sign up
               </button>
@@ -583,7 +593,7 @@ const AuthForm = () => {
             <div className="mt-4 text-center">
               <button
                 onClick={() => setIsLogin(true)}
-                className="text-sm text-blue-600 hover:text-blue-800"
+                className="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
               >
                 Already have an account? Sign in
               </button>
@@ -595,41 +605,43 @@ const AuthForm = () => {
   );
 
   return (
-  <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 flex py-8 md:py-16 justify-center p-4 transition-colors duration-300">
-    <div className="w-full max-w-5xl animate-fadeIn">
-      <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl overflow-hidden transition-colors duration-300">
-        {/* Tabs - Hide when in verification mode */}
-        {!verificationMode && (
-          <div className="flex border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
-            <button
-              className={`flex-1 cursor-pointer py-4 font-medium text-sm focus:outline-none transition duration-150 ease-in-out ${
-                isLogin
-                  ? "text-blue-600 border-b-2 border-blue-600"
-                  : "text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-100"
-              }`}
-              onClick={() => setIsLogin(true)}
-            >
-              Login
-            </button>
-            <button
-              className={`flex-1 py-4 cursor-pointer font-medium text-sm focus:outline-none transition duration-150 ease-in-out ${
-                !isLogin
-                  ? "text-blue-600 border-b-2 border-blue-600"
-                  : "text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-100"
-              }`}
-              onClick={() => setIsLogin(false)}
-            >
-              Sign Up
-            </button>
-          </div>
-        )}
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 flex py-8 md:py-16 justify-center p-4 transition-colors duration-300">
+      <div className="w-full max-w-5xl animate-fadeIn">
+        <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-xl overflow-hidden transition-colors duration-300">
+          {/* Tabs - Hide when in verification mode */}
+          {!verificationMode && (
+            <div className="flex border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
+              <button
+                className={`flex-1 cursor-pointer py-4 font-medium text-sm focus:outline-none transition duration-150 ease-in-out ${
+                  isLogin
+                    ? "text-blue-600 border-b-2 border-blue-600"
+                    : "text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100"
+                }`}
+                onClick={() => setIsLogin(true)}
+              >
+                Login
+              </button>
+              <button
+                className={`flex-1 py-4 cursor-pointer font-medium text-sm focus:outline-none transition duration-150 ease-in-out ${
+                  !isLogin
+                    ? "text-blue-600 border-b-2 border-blue-600"
+                    : "text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100"
+                }`}
+                onClick={() => setIsLogin(false)}
+              >
+                Sign Up
+              </button>
+            </div>
+          )}
 
-        {/* Render either verification form or auth form */}
-        {verificationMode ? renderVerificationForm() : renderAuthForm()}
+          {/* Render either verification form or auth form */}
+          <div className="text-gray-800 dark:text-gray-100 transition-colors duration-300">
+            {verificationMode ? renderVerificationForm() : renderAuthForm()}
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
 };
 
 export default AuthForm;

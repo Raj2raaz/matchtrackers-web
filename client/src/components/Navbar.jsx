@@ -32,8 +32,6 @@ const Navbar = () => {
   const [isHovering, setIsHovering] = useState(null);
   const { theme, toggleTheme } = useContext(ThemeContext);
 
-  console.log(theme);
-
   useEffect(() => {
     getData();
 

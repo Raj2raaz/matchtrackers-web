@@ -185,153 +185,193 @@ const Rankings = () => {
 
   return (
     <div className="mx-auto p-3 sm:p-4 dark:bg-gray-900 transition-colors duration-300">
-  <Helmet>
-    {/* ...meta tags remain unchanged */}
-  </Helmet>
+      <Helmet>
+        {" "}
+        <title>Match Trackers | Live Scores, Stats & News</title>{" "}
+        <meta
+          name="description"
+          content="Track live matches, player stats, rankings, and news across all formats and leagues at Match Trackers."
+        />{" "}
+        <meta
+          property="og:title"
+          content="Match Trackers | Live Scores, Stats & News"
+        />{" "}
+        <meta
+          property="og:description"
+          content="Track live matches, player stats, rankings, and news across all formats and leagues."
+        />{" "}
+        <meta
+          property="og:image"
+          content="https://matchtrackers.com/favicon.svg"
+        />{" "}
+        <meta property="og:url" content="https://matchtrackers.com" />{" "}
+        <meta property="og:type" content="website" />{" "}
+        <meta name="twitter:card" content="summary_large_image" />{" "}
+        <meta
+          name="twitter:title"
+          content="Match Trackers | Live Scores, Stats & News"
+        />{" "}
+        <meta
+          name="twitter:description"
+          content="Get updated with the latest scores, rankings and sports news."
+        />{" "}
+        <meta
+          name="twitter:image"
+          content="https://matchtrackers.com/favicon.svg"
+        />{" "}
+      </Helmet>
 
-  <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-100 dark:border-gray-700 transition-colors duration-300">
-    <div className="p-5 sm:p-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-50 to-white dark:from-gray-700 dark:to-gray-800">
-      <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-gray-100">
-        ICC Cricket Rankings
-      </h1>
-      <p className="text-gray-600 dark:text-gray-300 mt-1">Top {activeTab} Rankings</p>
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-100 dark:border-gray-700 transition-colors duration-300">
+        <div className="p-5 sm:p-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-50 to-white dark:from-gray-700 dark:to-gray-800">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-gray-100">
+            ICC Cricket Rankings
+          </h1>
+          <p className="text-gray-600 dark:text-gray-300 mt-1">
+            Top {activeTab} Rankings
+          </p>
 
-      {/* Tab Navigation */}
-      <div className="flex md:flex-row flex-col w-full justify-between mt-5">
-        <div className="flex flex-wrap gap-2">
-          {tabs.map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
-                activeTab === tab
-                  ? "bg-blue-600 text-white shadow-md"
-                  : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
-              }`}
-            >
-              {tab}
-            </button>
-          ))}
-        </div>
-        <div className="flex gap-4 items-center text-gray-700 dark:text-gray-300 text-sm mt-4 md:mt-0">
-          <button
-            onClick={() => setIsMen(true)}
-            className={`px-3 py-2 rounded-full ${
-              isMen ? "bg-blue-600 text-white" : "bg-gray-300 dark:bg-gray-700"
-            }`}
-          >
-            Men
-          </button>
-          <button
-            onClick={() => setIsMen(false)}
-            className={`px-3 py-2 rounded-full ${
-              !isMen ? "bg-blue-600 text-white" : "bg-gray-300 dark:bg-gray-700"
-            }`}
-          >
-            Women
-          </button>
-        </div>
-      </div>
-    </div>
-
-    {isLoading ? (
-      <LoadingSkeleton />
-    ) : error ? (
-      <ErrorDisplay />
-    ) : data ? (
-      <div className="p-4 sm:p-6">
-        {/* Filters Section */}
-        <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 mb-6 transition-colors duration-300">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-            <div className="w-full sm:w-auto">
-              <label className="text-sm text-gray-600 dark:text-gray-300 font-medium block mb-1">
-                Filter by Country
-              </label>
-              <div className="relative">
-                <select
-                  value={filteredCountry}
-                  onChange={(e) => setFilteredCountry(e.target.value)}
-                  className="p-2 pl-3 pr-8 border rounded-lg border-gray-200 dark:border-gray-600 w-full sm:w-48 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 appearance-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+          {/* Tab Navigation */}
+          <div className="flex md:flex-row flex-col w-full justify-between mt-5">
+            <div className="flex flex-wrap gap-2">
+              {tabs.map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                    activeTab === tab
+                      ? "bg-blue-600 text-white shadow-md"
+                      : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
+                  }`}
                 >
-                  <option value="">All Countries</option>
-                  {countries.map((country) => (
-                    <option key={country} value={country}>
-                      {country || "-"}
-                    </option>
-                  ))}
-                </select>
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-200">
-                  <svg
-                    className="fill-current h-4 w-4"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                  </svg>
-                </div>
-              </div>
+                  {tab}
+                </button>
+              ))}
             </div>
-
-            <div className="w-full sm:w-auto flex flex-col sm:items-end">
-              <span className="text-sm text-gray-600 dark:text-gray-300 font-medium mb-1">
-                Last Updated
-              </span>
-              <span className="text-sm text-gray-700 dark:text-gray-200 font-medium">
-                {data.rank[0].lastUpdatedOn}
-              </span>
+            <div className="flex gap-4 items-center text-gray-700 dark:text-gray-300 text-sm mt-4 md:mt-0">
+              <button
+                onClick={() => setIsMen(true)}
+                className={`px-3 py-2 rounded-full ${
+                  isMen
+                    ? "bg-blue-600 text-white"
+                    : "bg-gray-300 dark:bg-gray-700"
+                }`}
+              >
+                Men
+              </button>
+              <button
+                onClick={() => setIsMen(false)}
+                className={`px-3 py-2 rounded-full ${
+                  !isMen
+                    ? "bg-blue-600 text-white"
+                    : "bg-gray-300 dark:bg-gray-700"
+                }`}
+              >
+                Women
+              </button>
             </div>
-
-            <button className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition duration-200 w-full sm:w-auto font-medium flex items-center justify-center gap-2 shadow-sm">
-              {/* Reset icon */}
-              Reset Filters
-            </button>
           </div>
         </div>
 
-        {/* Table for larger screens */}
-        <div className="hidden md:block overflow-hidden rounded-lg border border-gray-200 dark:border-gray-600 transition-colors duration-300">
-          <table className="min-w-full bg-white dark:bg-gray-800 transition-colors duration-300">
-            <thead>
-              <tr className="bg-gray-100 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
-                {/* Table headers remain, just add dark:text-gray-200 for text */}
-              </tr>
-            </thead>
-            <tbody>
-              {sortedRankings.map((player, index) => (
-                <tr
-                  key={player.id}
-                  className={`border-b border-gray-200 dark:border-gray-600 hover:bg-blue-50 dark:hover:bg-gray-600 transition-colors ${
-                    index % 2 === 0 ? "bg-white dark:bg-gray-800" : "bg-gray-50 dark:bg-gray-700"
-                  }`}
-                >
-                  {/* Table data cells: add dark:text-gray-200 or dark:text-gray-300 as needed */}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        {isLoading ? (
+          <LoadingSkeleton />
+        ) : error ? (
+          <ErrorDisplay />
+        ) : data ? (
+          <div className="p-4 sm:p-6">
+            {/* Filters Section */}
+            <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 mb-6 transition-colors duration-300">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div className="w-full sm:w-auto">
+                  <label className="text-sm text-gray-600 dark:text-gray-300 font-medium block mb-1">
+                    Filter by Country
+                  </label>
+                  <div className="relative">
+                    <select
+                      value={filteredCountry}
+                      onChange={(e) => setFilteredCountry(e.target.value)}
+                      className="p-2 pl-3 pr-8 border rounded-lg border-gray-200 dark:border-gray-600 w-full sm:w-48 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 appearance-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                    >
+                      <option value="">All Countries</option>
+                      {countries.map((country) => (
+                        <option key={country} value={country}>
+                          {country || "-"}
+                        </option>
+                      ))}
+                    </select>
+                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-200">
+                      <svg
+                        className="fill-current h-4 w-4"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
 
-        {/* Mobile cards */}
-        <div className="md:hidden space-y-4">
-          {sortedRankings.map((player) => (
-            <div
-              key={player.id}
-              className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm overflow-hidden transition-colors duration-300"
-            >
-              {/* Card content remains, add dark:text-gray-200 / dark:text-gray-300 */}
+                <div className="w-full sm:w-auto flex flex-col sm:items-end">
+                  <span className="text-sm text-gray-600 dark:text-gray-300 font-medium mb-1">
+                    Last Updated
+                  </span>
+                  <span className="text-sm text-gray-700 dark:text-gray-200 font-medium">
+                    {data.rank[0].lastUpdatedOn}
+                  </span>
+                </div>
+
+                <button className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition duration-200 w-full sm:w-auto font-medium flex items-center justify-center gap-2 shadow-sm">
+                  {/* Reset icon */}
+                  Reset Filters
+                </button>
+              </div>
             </div>
-          ))}
-        </div>
 
-        <div className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400 transition-colors duration-300">
-          Data source: {data.appIndex.seoTitle} | {data.appIndex.webURL}
-        </div>
+            {/* Table for larger screens */}
+            <div className="hidden md:block overflow-hidden rounded-lg border border-gray-200 dark:border-gray-600 transition-colors duration-300">
+              <table className="min-w-full bg-white dark:bg-gray-800 transition-colors duration-300">
+                <thead>
+                  <tr className="bg-gray-100 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
+                    {/* Table headers remain, just add dark:text-gray-200 for text */}
+                  </tr>
+                </thead>
+                <tbody>
+                  {sortedRankings.map((player, index) => (
+                    <tr
+                      key={player.id}
+                      className={`border-b border-gray-200 dark:border-gray-600 hover:bg-blue-50 dark:hover:bg-gray-600 transition-colors ${
+                        index % 2 === 0
+                          ? "bg-white dark:bg-gray-800"
+                          : "bg-gray-50 dark:bg-gray-700"
+                      }`}
+                    >
+                      {/* Table data cells: add dark:text-gray-200 or dark:text-gray-300 as needed */}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile cards */}
+            <div className="md:hidden space-y-4">
+              {sortedRankings.map((player) => (
+                <div
+                  key={player.id}
+                  className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm overflow-hidden transition-colors duration-300"
+                >
+                  {/* Card content remains, add dark:text-gray-200 / dark:text-gray-300 */}
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400 transition-colors duration-300">
+              Data source: {data.appIndex.seoTitle} | {data.appIndex.webURL}
+            </div>
+          </div>
+        ) : (
+          <ErrorDisplay />
+        )}
       </div>
-    ) : (
-      <ErrorDisplay />
-    )}
-  </div>
-</div>
+    </div>
   );
 };
 

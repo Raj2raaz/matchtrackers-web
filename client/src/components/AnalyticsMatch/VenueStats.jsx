@@ -56,22 +56,24 @@ export default function VenueStats({ venueData }) {
   );
 
   return (
-    <div className="bg-white rounded-lg mb-4 shadow-lg border border-gray-100 overflow-hidden max-w-3xl">
+    <div className="bg-white dark:bg-gray-900 rounded-lg mb-4 shadow-lg border border-gray-100 dark:border-gray-700 overflow-hidden max-w-3xl">
       <div className="bg-gradient-to-r from-blue-600 to-blue-800 p-4 flex items-center">
         <MapPin className="text-white mr-2" size={20} />
         <h2 className="text-lg font-bold text-white">Venue Statistics</h2>
       </div>
 
-      <div className="grid grid-cols-1  gap-4 p-4">
+      <div className="grid grid-cols-1 gap-4 p-4">
         {filteredStats.map((stat, index) => (
           <div
             key={index}
-            className="flex p-3 rounded-lg border border-gray-100 hover:bg-blue-50 transition-colors"
+            className="flex p-3 rounded-lg border border-gray-100 dark:border-gray-700 hover:bg-blue-50 dark:hover:bg-gray-800 transition-colors"
           >
             <div className="mr-3 mt-1">{getIconForStat(stat.key)}</div>
             <div className="flex-1">
-              <h3 className="text-sm font-medium text-gray-500">{stat.key}</h3>
-              <div className="font-semibold text-gray-800 mt-1">
+              <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                {stat.key}
+              </h3>
+              <div className="font-semibold text-gray-800 dark:text-gray-100 mt-1">
                 {formatValue(stat.value)}
               </div>
             </div>

@@ -94,14 +94,14 @@ export default function ScoreCard({ score, overSummaryList, pointsTableData }) {
       {(selectedScoreCardTab === 1 || selectedScoreCardTab === 2) && (
         <>
           <div className="p-2 md:p-4">
-            <h3 className="font-bold text-base mb-3 flex items-center">
+            <h3 className="font-bold text-base mb-3 flex items-center text-gray-800 dark:text-gray-100">
               <span className="w-3 h-3 bg-blue-500 rounded-full mr-2"></span>
               Batting Stats
             </h3>
             <div className="overflow-x-auto">
-              <table className="min-w-full bg-white">
+              <table className="min-w-full bg-white dark:bg-gray-900">
                 <thead>
-                  <tr className="text-xs text-gray-500 border-b border-gray-200">
+                  <tr className="text-xs text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">
                     <th className="py-2 px-2 text-left">Batter</th>
                     <th className="py-2 px-2 text-center">R</th>
                     <th className="py-2 px-2 text-center">B</th>
@@ -115,24 +115,24 @@ export default function ScoreCard({ score, overSummaryList, pointsTableData }) {
                     getBattersData()?.map((batter, index) => (
                       <tr
                         key={index}
-                        className="text-sm border-b border-gray-200 hover:bg-gray-50"
+                        className="text-sm border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800"
                       >
-                        <td className="py-2 font-semibold px-2 whitespace-nowrap">
+                        <td className="py-2 font-semibold px-2 whitespace-nowrap text-gray-800 dark:text-gray-100">
                           {isLegacyFormat ? batter.batName : batter.name}
                         </td>
-                        <td className="py-2 px-2 text-center font-medium">
+                        <td className="py-2 px-2 text-center font-medium text-gray-900 dark:text-gray-200">
                           {batter.runs}
                         </td>
-                        <td className="py-2 px-2 text-center">
+                        <td className="py-2 px-2 text-center text-gray-700 dark:text-gray-300">
                           {batter.balls}
                         </td>
-                        <td className="py-2 px-2 text-center">
+                        <td className="py-2 px-2 text-center text-gray-700 dark:text-gray-300">
                           {batter.fours}
                         </td>
-                        <td className="py-2 px-2 text-center">
+                        <td className="py-2 px-2 text-center text-gray-700 dark:text-gray-300">
                           {batter.sixes || 0}
                         </td>
-                        <td className="py-2 px-2 text-center">
+                        <td className="py-2 px-2 text-center text-gray-700 dark:text-gray-300">
                           {isLegacyFormat ? batter.strikeRate : batter.strkRate}
                         </td>
                       </tr>
@@ -144,14 +144,14 @@ export default function ScoreCard({ score, overSummaryList, pointsTableData }) {
 
           {/* Bowlers Table */}
           <div className="p-2 md:p-4">
-            <h3 className="font-bold text-base mb-3 flex items-center">
+            <h3 className="font-bold text-base mb-3 flex items-center text-gray-800 dark:text-gray-100">
               <span className="w-3 h-3 bg-green-500 rounded-full mr-2"></span>
               Bowling Stats
             </h3>
             <div className="overflow-x-auto">
-              <table className="min-w-full bg-white">
+              <table className="min-w-full bg-white dark:bg-gray-900">
                 <thead>
-                  <tr className="text-xs text-gray-500 border-b border-gray-200">
+                  <tr className="text-xs text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">
                     <th className="py-2 px-2 text-left">Bowler</th>
                     <th className="py-2 px-2 text-center">O</th>
                     <th className="py-2 px-2 text-center">M</th>
@@ -160,24 +160,29 @@ export default function ScoreCard({ score, overSummaryList, pointsTableData }) {
                     <th className="py-2 px-2 text-center">ECO</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-200">
+                <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
                   {hasData() &&
                     getBowlersData()?.map((bowler, index) => (
-                      <tr key={index} className="text-sm hover:bg-gray-50">
-                        <td className="py-2 font-semibold px-2 whitespace-nowrap">
+                      <tr
+                        key={index}
+                        className="text-sm hover:bg-gray-50 dark:hover:bg-gray-800"
+                      >
+                        <td className="py-2 font-semibold px-2 whitespace-nowrap text-gray-800 dark:text-gray-100">
                           {isLegacyFormat ? bowler.bowlName : bowler.name}
                         </td>
-                        <td className="py-2 px-2 text-center">
+                        <td className="py-2 px-2 text-center text-gray-700 dark:text-gray-300">
                           {bowler.overs}
                         </td>
-                        <td className="py-2 px-2 text-center">
+                        <td className="py-2 px-2 text-center text-gray-700 dark:text-gray-300">
                           {bowler.maidens || 0}
                         </td>
-                        <td className="py-2 px-2 text-center">{bowler.runs}</td>
-                        <td className="py-2 px-2 text-center font-medium">
+                        <td className="py-2 px-2 text-center text-gray-700 dark:text-gray-300">
+                          {bowler.runs}
+                        </td>
+                        <td className="py-2 px-2 text-center font-medium text-gray-900 dark:text-gray-200">
                           {bowler.wickets}
                         </td>
-                        <td className="py-2 px-2 text-center">
+                        <td className="py-2 px-2 text-center text-gray-700 dark:text-gray-300">
                           {bowler.economy}
                         </td>
                       </tr>
