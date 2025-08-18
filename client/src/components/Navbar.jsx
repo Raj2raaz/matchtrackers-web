@@ -111,11 +111,11 @@ const Navbar = () => {
 
   // Shared dropdown content components
   const SeriesDropdown = () => (
-    <div className="max-h-96 overflow-y-auto z-70 py-2 text-black bg-white rounded-md shadow-lg">
+    <div className="max-h-96 overflow-y-auto z-70 py-2 text-black bg-white rounded-md shadow-lg dark:bg-gray-800 dark:text-gray-100">
       {navLinks?.series?.seriesMapProto?.length > 0 ? (
         navLinks?.series?.seriesMapProto.flatMap((month) => (
           <React.Fragment key={month.date}>
-            <div className="px-4 py-1 text-xs font-semibold text-gray-500 bg-gray-50">
+            <div className="px-4 py-1 text-xs font-semibold text-gray-500 bg-gray-50 dark:bg-gray-800 dark:text-gray-400">
               {month.date}
             </div>
             {month.series.map((match, index) => (
@@ -141,7 +141,7 @@ const Navbar = () => {
   );
 
   const MatchesDropdown = () => (
-    <div className="py-2 bg-white z-70 rounded-md text-black shadow-lg">
+    <div className="py-2 bg-white z-70 rounded-md text-black shadow-lg  dark:bg-gray-800 dark:text-gray-100">
       <Link
         to="/cricket/match-list/recent"
         className="block px-4 py-2 hover:bg-blue-50 transition-colors duration-150 text-sm"
@@ -167,7 +167,7 @@ const Navbar = () => {
   );
 
   const RankingsDropdown = () => (
-    <div className="py-2 bg-white z-70 rounded-md text-black shadow-lg">
+    <div className="py-2 bg-white z-70 rounded-md text-black shadow-lg  dark:bg-gray-800 dark:text-gray-100">
       <Link
         to="/cricket/rankings/odi"
         className="block px-4 py-2 hover:bg-blue-50 transition-colors duration-150 text-sm"
@@ -193,7 +193,7 @@ const Navbar = () => {
   );
 
   const NewsDropdown = () => (
-    <div className="py-2 max-h-96 z-70 overflow-y-auto text-black bg-white rounded-md shadow-lg">
+    <div className="py-2 max-h-96 z-70 overflow-y-auto text-black bg-white rounded-md shadow-lg  dark:bg-gray-800 dark:text-gray-100">
       {blogs.length > 0 ? (
         blogs.slice(0, 7).map((blog, i) => (
           <Link
@@ -228,7 +228,7 @@ const Navbar = () => {
   );
 
   const SchedulesDropdown = () => (
-    <div className="py-2 max-h-96 z-70 overflow-y-auto text-black bg-white rounded-md shadow-lg">
+    <div className="py-2 max-h-96 z-70 overflow-y-auto text-black bg-white rounded-md shadow-lg  dark:bg-gray-800 dark:text-gray-100">
       {navLinks?.schedules?.matchScheduleMap
         ?.filter((item) => item.scheduleAdWrapper)
         .slice(0, 6)
@@ -238,32 +238,35 @@ const Navbar = () => {
             item.scheduleAdWrapper.matchScheduleList[0]?.matchInfo || [];
 
           return matches.length > 0 ? (
-            <div key={index} className="border-b border-gray-100 last:border-0">
-              <div className="px-4 py-2 font-medium text-xs text-gray-600 bg-gray-50">
+            <div
+              key={index}
+              className="border-b border-gray-100 dark:border-gray-700 last:border-0"
+            >
+              <div className="px-4 py-2 font-medium text-xs text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-800">
                 {dateInfo}
               </div>
               {matches.map((match, mIndex) => (
                 <Link
                   key={mIndex}
                   to={`/cricket/match/${match.matchId}`}
-                  className="block px-4 py-3 hover:bg-blue-50 transition-colors duration-150"
+                  className="block px-4 py-3 hover:bg-blue-50 dark:hover:bg-gray-600 transition-colors duration-150"
                   onClick={(e) =>
                     handleNavLinkClick(e, `/cricket/match/${match.matchId}`)
                   }
                 >
                   <div className="flex justify-between items-center">
-                    <div className="text-xs text-gray-500">
+                    <div className="text-xs text-gray-500 dark:text-gray-400">
                       {match.matchFormat} • {match.matchDesc}
                     </div>
-                    <div className="text-xs text-gray-500">
+                    <div className="text-xs text-gray-500 dark:text-gray-400">
                       {match.venueInfo.city}
                     </div>
                   </div>
                   <div className="flex justify-between items-center mt-2">
-                    <div className="font-medium text-sm">
+                    <div className="font-medium text-sm dark:text-gray-100">
                       {match.team1.teamSName} vs {match.team2.teamSName}
                     </div>
-                    <div className="text-xs px-2 py-1 bg-blue-50 text-blue-600 rounded-full">
+                    <div className="text-xs px-2 py-1 bg-blue-50 dark:bg-gray-600 text-blue-600 dark:text-blue-300 rounded-full">
                       {new Date(Number(match.startDate)).toLocaleTimeString(
                         "en-US",
                         {

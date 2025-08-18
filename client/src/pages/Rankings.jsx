@@ -184,46 +184,47 @@ const Rankings = () => {
   );
 
   return (
-    <div className="mx-auto p-3 sm:p-4 dark:bg-gray-900 transition-colors duration-300">
+    <div className="mx-auto p-3 sm:p-4">
       <Helmet>
-        {" "}
-        <title>Match Trackers | Live Scores, Stats & News</title>{" "}
+        <title>Match Trackers | Live Scores, Stats & News</title>
         <meta
           name="description"
           content="Track live matches, player stats, rankings, and news across all formats and leagues at Match Trackers."
-        />{" "}
+        />
+
         <meta
           property="og:title"
           content="Match Trackers | Live Scores, Stats & News"
-        />{" "}
+        />
         <meta
           property="og:description"
           content="Track live matches, player stats, rankings, and news across all formats and leagues."
-        />{" "}
+        />
         <meta
           property="og:image"
           content="https://matchtrackers.com/favicon.svg"
-        />{" "}
-        <meta property="og:url" content="https://matchtrackers.com" />{" "}
-        <meta property="og:type" content="website" />{" "}
-        <meta name="twitter:card" content="summary_large_image" />{" "}
+        />
+        <meta property="og:url" content="https://matchtrackers.com" />
+        <meta property="og:type" content="website" />
+
+        <meta name="twitter:card" content="summary_large_image" />
         <meta
           name="twitter:title"
           content="Match Trackers | Live Scores, Stats & News"
-        />{" "}
+        />
         <meta
           name="twitter:description"
           content="Get updated with the latest scores, rankings and sports news."
-        />{" "}
+        />
         <meta
           name="twitter:image"
           content="https://matchtrackers.com/favicon.svg"
-        />{" "}
+        />
       </Helmet>
 
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-100 dark:border-gray-700 transition-colors duration-300">
-        <div className="p-5 sm:p-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-50 to-white dark:from-gray-700 dark:to-gray-800">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-gray-100">
+      <div className="bg-white dark:bg-gray-900 rounded-xl shadow-lg dark:shadow-gray-800 overflow-hidden border border-gray-100 dark:border-gray-700">
+        <div className="p-5 sm:p-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-50 to-white dark:from-gray-800 dark:to-gray-900">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white">
             ICC Cricket Rankings
           </h1>
           <p className="text-gray-600 dark:text-gray-300 mt-1">
@@ -231,8 +232,8 @@ const Rankings = () => {
           </p>
 
           {/* Tab Navigation */}
-          <div className="flex md:flex-row flex-col w-full justify-between mt-5">
-            <div className="flex flex-wrap gap-2">
+          <div className="flex md:flex-row flex-col w-full justify-between">
+            <div className="mt-5 flex flex-wrap gap-2">
               {tabs.map((tab) => (
                 <button
                   key={tab}
@@ -240,7 +241,7 @@ const Rankings = () => {
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
                     activeTab === tab
                       ? "bg-blue-600 text-white shadow-md"
-                      : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
                   }`}
                 >
                   {tab}
@@ -253,7 +254,7 @@ const Rankings = () => {
                 className={`px-3 py-2 rounded-full ${
                   isMen
                     ? "bg-blue-600 text-white"
-                    : "bg-gray-300 dark:bg-gray-700"
+                    : "bg-gray-300 dark:bg-gray-700 dark:text-gray-300"
                 }`}
               >
                 Men
@@ -263,7 +264,7 @@ const Rankings = () => {
                 className={`px-3 py-2 rounded-full ${
                   !isMen
                     ? "bg-blue-600 text-white"
-                    : "bg-gray-300 dark:bg-gray-700"
+                    : "bg-gray-300 dark:bg-gray-700 dark:text-gray-300"
                 }`}
               >
                 Women
@@ -272,6 +273,7 @@ const Rankings = () => {
           </div>
         </div>
 
+        {/* Conditional rendering based on loading and error states */}
         {isLoading ? (
           <LoadingSkeleton />
         ) : error ? (
@@ -279,7 +281,7 @@ const Rankings = () => {
         ) : data ? (
           <div className="p-4 sm:p-6">
             {/* Filters Section */}
-            <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 mb-6 transition-colors duration-300">
+            <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 mb-6 border border-gray-200 dark:border-gray-700">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div className="w-full sm:w-auto">
                   <label className="text-sm text-gray-600 dark:text-gray-300 font-medium block mb-1">
@@ -289,7 +291,7 @@ const Rankings = () => {
                     <select
                       value={filteredCountry}
                       onChange={(e) => setFilteredCountry(e.target.value)}
-                      className="p-2 pl-3 pr-8 border rounded-lg border-gray-200 dark:border-gray-600 w-full sm:w-48 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 appearance-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                      className="p-2 pl-3 pr-8 border rounded-lg border-gray-200 dark:border-gray-700 w-full sm:w-48 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 appearance-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
                     >
                       <option value="">All Countries</option>
                       {countries.map((country) => (
@@ -298,7 +300,7 @@ const Rankings = () => {
                         </option>
                       ))}
                     </select>
-                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-200">
+                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
                       <svg
                         className="fill-current h-4 w-4"
                         xmlns="http://www.w3.org/2000/svg"
@@ -319,51 +321,286 @@ const Rankings = () => {
                   </span>
                 </div>
 
-                <button className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition duration-200 w-full sm:w-auto font-medium flex items-center justify-center gap-2 shadow-sm">
-                  {/* Reset icon */}
+                <button
+                  onClick={resetFilters}
+                  className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition duration-200 w-full sm:w-auto font-medium flex items-center justify-center gap-2 shadow-sm"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                    />
+                  </svg>
                   Reset Filters
                 </button>
               </div>
             </div>
 
             {/* Table for larger screens */}
-            <div className="hidden md:block overflow-hidden rounded-lg border border-gray-200 dark:border-gray-600 transition-colors duration-300">
-              <table className="min-w-full bg-white dark:bg-gray-800 transition-colors duration-300">
+            <div className="hidden md:block overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700">
+              <table className="min-w-full bg-white dark:bg-gray-900">
                 <thead>
-                  <tr className="bg-gray-100 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
-                    {/* Table headers remain, just add dark:text-gray-200 for text */}
+                  <tr className="bg-gray-100 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+                    <th
+                      className="py-3 px-4 text-left cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                      onClick={() => handleSort("rank")}
+                    >
+                      <div className="flex items-center text-gray-700 dark:text-gray-300 font-medium">
+                        Rank
+                        {sortField === "rank" && (
+                          <span className="ml-1 text-blue-600">
+                            {sortDirection === "asc" ? "↑" : "↓"}
+                          </span>
+                        )}
+                      </div>
+                    </th>
+                    <th
+                      className="py-3 px-4 text-left cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                      onClick={() => handleSort("name")}
+                    >
+                      <div className="flex items-center text-gray-700 dark:text-gray-300 font-medium">
+                        Player
+                        {sortField === "name" && (
+                          <span className="ml-1 text-blue-600">
+                            {sortDirection === "asc" ? "↑" : "↓"}
+                          </span>
+                        )}
+                      </div>
+                    </th>
+                    <th
+                      className="py-3 px-4 text-left cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                      onClick={() => handleSort("country")}
+                    >
+                      <div className="flex items-center text-gray-700 dark:text-gray-300 font-medium">
+                        Country
+                        {sortField === "country" && (
+                          <span className="ml-1 text-blue-600">
+                            {sortDirection === "asc" ? "↑" : "↓"}
+                          </span>
+                        )}
+                      </div>
+                    </th>
+                    <th
+                      className="py-3 px-4 text-left cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                      onClick={() => handleSort("rating")}
+                    >
+                      <div className="flex items-center text-gray-700 dark:text-gray-300 font-medium">
+                        Rating
+                        {sortField === "rating" && (
+                          <span className="ml-1 text-blue-600">
+                            {sortDirection === "asc" ? "↑" : "↓"}
+                          </span>
+                        )}
+                      </div>
+                    </th>
+                    <th className="py-3 px-4 text-left text-gray-700 dark:text-gray-300 font-medium">
+                      Trend
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {sortedRankings.map((player, index) => (
                     <tr
                       key={player.id}
-                      className={`border-b border-gray-200 dark:border-gray-600 hover:bg-blue-50 dark:hover:bg-gray-600 transition-colors ${
+                      className={`border-b border-gray-200 dark:border-gray-700 hover:bg-blue-50 dark:hover:bg-gray-800 transition-colors ${
                         index % 2 === 0
-                          ? "bg-white dark:bg-gray-800"
-                          : "bg-gray-50 dark:bg-gray-700"
+                          ? "bg-white dark:bg-gray-900"
+                          : "bg-gray-50 dark:bg-gray-800"
                       }`}
                     >
-                      {/* Table data cells: add dark:text-gray-200 or dark:text-gray-300 as needed */}
+                      <td className="py-3 px-4 font-medium text-gray-900 dark:text-gray-200">
+                        {player.rank}
+                      </td>
+                      <td className="py-3 px-4">
+                        <div className="flex items-center gap-3">
+                          <div className="rounded-full overflow-hidden bg-gray-100 dark:bg-gray-700 flex-shrink-0">
+                            <Image
+                              faceImageId={player.faceImageId}
+                              className="h-10 w-10 object-cover"
+                            />
+                          </div>
+                          <div className="font-medium text-gray-800 dark:text-gray-200">
+                            {player.name}
+                          </div>
+                        </div>
+                      </td>
+                      <td className="py-3 px-4 text-gray-700 dark:text-gray-300">
+                        {player.country || "--"}
+                      </td>
+                      <td className="py-3 px-4 font-semibold text-gray-900 dark:text-gray-200">
+                        {player.rating}
+                      </td>
+                      <td className="py-3 px-4">
+                        {player.trend === "Flat" && (
+                          <span className="text-gray-500 dark:text-gray-400 inline-flex items-center">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-5 w-5"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M5 12h14"
+                              />
+                            </svg>
+                          </span>
+                        )}
+                        {player.trend === "Up" && (
+                          <span className="text-green-500 inline-flex items-center">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-5 w-5"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M5 15l7-7 7 7"
+                              />
+                            </svg>
+                          </span>
+                        )}
+                        {player.trend === "Down" && (
+                          <span className="text-red-500 inline-flex items-center">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-5 w-5"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M19 9l-7 7-7-7"
+                              />
+                            </svg>
+                          </span>
+                        )}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
 
-            {/* Mobile cards */}
+            {/* Card layout for mobile */}
             <div className="md:hidden space-y-4">
               {sortedRankings.map((player) => (
                 <div
                   key={player.id}
-                  className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm overflow-hidden transition-colors duration-300"
+                  className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm overflow-hidden"
                 >
-                  {/* Card content remains, add dark:text-gray-200 / dark:text-gray-300 */}
+                  <div className="p-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="rounded-full overflow-hidden bg-gray-100 dark:bg-gray-700 flex-shrink-0">
+                          <Image
+                            faceImageId={player.faceImageId}
+                            className="h-12 w-12 object-cover"
+                          />
+                        </div>
+
+                        <div>
+                          <h3 className="font-medium text-gray-800 dark:text-gray-200">
+                            {player.name}
+                          </h3>
+                          <p className="text-gray-600 dark:text-gray-400 text-sm">
+                            {player.country}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex flex-col items-end">
+                        <div className="text-xl font-bold text-blue-600">
+                          {player.rating}
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <span className="text-gray-600 dark:text-gray-400 text-sm">
+                            Rank
+                          </span>
+                          <span className="font-semibold text-gray-800 dark:text-gray-200">
+                            {player.rank}
+                          </span>
+                          {player.trend === "Flat" && (
+                            <span className="text-gray-500 dark:text-gray-400">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-4 w-4"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M5 12h14"
+                                />
+                              </svg>
+                            </span>
+                          )}
+                          {player.trend === "Up" && (
+                            <span className="text-green-500">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-4 w-4"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M5 15l7-7 7 7"
+                                />
+                              </svg>
+                            </span>
+                          )}
+                          {player.trend === "Down" && (
+                            <span className="text-red-500">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-4 w-4"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M19 9l-7 7-7-7"
+                                />
+                              </svg>
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>
 
-            <div className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400 transition-colors duration-300">
+            <div className="mt-6 text-center text-sm text-gray-500">
               Data source: {data.appIndex.seoTitle} | {data.appIndex.webURL}
             </div>
           </div>
