@@ -320,9 +320,9 @@ export default function Home() {
       </div>
 
       {/* Enhanced Match Categories Section */}
-      <div className="bg-gradient-to-br from-[#002b5b] via-[#1e40af] to-[#002b5b] py-10 sm:py-12 px-4 sm:px-6 relative overflow-hidden">
+      <div className="bg-[#2834c8] py-10 sm:py-12 px-4 sm:px-6 relative overflow-hidden">
         {/* Animated background */}
-        <div className="absolute inset-0 bg-[#002B5B] opacity-10 z-0"></div>
+        {/* <div className="absolute inset-0 bg-[#002B5B] opacity-10 z-0"></div> */}
 
         {/* Category Buttons */}
         <div

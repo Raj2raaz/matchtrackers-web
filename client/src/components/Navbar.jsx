@@ -293,7 +293,7 @@ const Navbar = () => {
 
   return (
     <div className="sticky z-50 top-0 w-full left-0 shadow-md">
-      <div className="bg-gradient-to-r from-blue-600 to-blue-800 px-4 md:px-6 lg:px-24 py-3 text-white flex w-full justify-between items-center relative">
+      <div className="bg-[#2834c8] px-4 md:px-6 lg:px-24 py-3 text-white flex w-full justify-between items-center relative">
         <img
           onClick={() => navigate("/cricket")}
           className="h-12 md:h-14 cursor-pointer transition-transform hover:scale-105"
