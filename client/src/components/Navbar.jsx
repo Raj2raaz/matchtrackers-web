@@ -122,7 +122,7 @@ const Navbar = () => {
               <Link
                 key={index}
                 to={`/cricket/schedules/${match.id}`}
-                className="block px-4 py-2 hover:bg-blue-50 transition-colors duration-150 text-sm"
+                className="block px-4 py-2 hover:bg-blue-50 dark:hover:bg-gray-600 transition-colors duration-150 text-sm"
                 onClick={(e) =>
                   handleNavLinkClick(e, `/cricket/schedules/${match.id}`)
                 }
@@ -144,21 +144,21 @@ const Navbar = () => {
     <div className="py-2 bg-white z-70 rounded-md text-black shadow-lg  dark:bg-gray-800 dark:text-gray-100">
       <Link
         to="/cricket/match-list/recent"
-        className="block px-4 py-2 hover:bg-blue-50 transition-colors duration-150 text-sm"
+        className="block px-4 py-2 hover:bg-blue-50 dark:hover:bg-gray-600 transition-colors duration-150 text-sm"
         onClick={(e) => handleNavLinkClick(e, "/cricket/match-list/recent")}
       >
         Recent
       </Link>
       <Link
         to="/cricket/match-list/live"
-        className="block px-4 py-2 hover:bg-blue-50 transition-colors duration-150 text-sm"
+        className="block px-4 py-2 hover:bg-blue-50 dark:hover:bg-gray-600 transition-colors duration-150 text-sm"
         onClick={(e) => handleNavLinkClick(e, "/cricket/match-list/live")}
       >
         Live
       </Link>
       <Link
         to="/cricket/match-list/upcoming"
-        className="block px-4 py-2 hover:bg-blue-50 transition-colors duration-150 text-sm"
+        className="block px-4 py-2 hover:bg-blue-50 dark:hover:bg-gray-600 transition-colors duration-150 text-sm"
         onClick={(e) => handleNavLinkClick(e, "/cricket/match-list/upcoming")}
       >
         Upcoming
@@ -170,21 +170,21 @@ const Navbar = () => {
     <div className="py-2 bg-white z-70 rounded-md text-black shadow-lg  dark:bg-gray-800 dark:text-gray-100">
       <Link
         to="/cricket/rankings/odi"
-        className="block px-4 py-2 hover:bg-blue-50 transition-colors duration-150 text-sm"
+        className="block px-4 py-2 hover:bg-blue-50 dark:hover:bg-gray-600 transition-colors duration-150 text-sm"
         onClick={(e) => handleNavLinkClick(e, "./cricket/rankings/odi")}
       >
         ODI
       </Link>
       <Link
         to="/cricket/rankings/test"
-        className="block px-4 py-2 hover:bg-blue-50 transition-colors duration-150 text-sm"
+        className="block px-4 py-2 hover:bg-blue-50 dark:hover:bg-gray-600 transition-colors duration-150 text-sm"
         onClick={(e) => handleNavLinkClick(e, "/cricket/rankings/test")}
       >
         Test
       </Link>
       <Link
         to="/cricket/rankings/t20"
-        className="block px-4 py-2 hover:bg-blue-50 transition-colors duration-150 text-sm"
+        className="block px-4 py-2 hover:bg-blue-50 dark:hover:bg-gray-600 transition-colors duration-150 text-sm"
         onClick={(e) => handleNavLinkClick(e, "/cricket/rankings/t20")}
       >
         T20
@@ -199,7 +199,7 @@ const Navbar = () => {
           <Link
             key={i}
             to={`/blog/${blog.id}/${blog.slug}`} // Adjust the path as necessary
-            className="block px-4 py-3 hover:bg-blue-50 transition-colors duration-150 border-b border-gray-100 last:border-0"
+            className="block px-4 py-3 hover:bg-blue-50 dark:hover:bg-gray-600 transition-colors duration-150 border-b border-gray-100 last:border-0"
             onClick={(event) =>
               handleNavLinkClick(event, `/blog/${blog.id}/${blog.slug}`)
             }
@@ -218,7 +218,7 @@ const Navbar = () => {
       {blogs.length > 0 && (
         <Link
           to="/cricket/blogs" // Adjust the path as necessary
-          className="block px-4 py-2 text-center text-primary text-sm font-medium hover:bg-blue-50"
+          className="block px-4 py-2 text-center text-primary text-sm font-medium hover:bg-blue-50 dark:hover:bg-gray-600"
           onClick={(e) => handleNavLinkClick(e, "/cricket/blogs")}
         >
           View All Blogs
@@ -495,6 +495,7 @@ const Navbar = () => {
             )}
           </div>
 
+          {/* analytics */}
           <div className="">
             <div
               className="capitalize flex gap-1 items-center cursor-pointer py-2 px-1 hover:text-primary transition-colors duration-200"
@@ -582,41 +583,142 @@ const Navbar = () => {
 
             <div className="py-4">
               {/* Mobile Accordion Menus */}
-              {["series", "matches", "players", "news", "schedules"].map(
-                (item) => (
-                  <div
-                    key={item}
-                    className="border-b border-gray-200 dark:border-gray-700"
-                  >
-                    <div
-                      className="flex justify-between items-center py-3 px-6 font-medium cursor-pointer text-gray-800 dark:text-gray-200"
-                      onClick={(event) => toggleDropdown(item, event)}
-                    >
-                      <span>
-                        {item === "players"
-                          ? "Rankings"
-                          : item.charAt(0).toUpperCase() + item.slice(1)}
-                      </span>
-                      <span>
-                        {openDropdown === item ? (
-                          <FaAngleUp />
-                        ) : (
-                          <FaAngleDown />
-                        )}
-                      </span>
-                    </div>
-                    {openDropdown === item && (
-                      <div className="bg-gray-50 dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700 relative z-60">
-                        {item === "series" && <SeriesDropdown />}
-                        {item === "matches" && <MatchesDropdown />}
-                        {item === "players" && <RankingsDropdown />}
-                        {item === "news" && <NewsDropdown />}
-                        {item === "schedules" && <SchedulesDropdown />}
-                      </div>
+
+              {/* Series Dropdown */}
+              <div
+                className="border-b border-gray-200 dark:border-gray-700 relative"
+                ref={(el) => (dropdownRefs.current.series = el)}
+                onMouseEnter={() => handleMouseEnter("series")}
+                onMouseLeave={handleMouseLeave}
+              >
+                <div
+                  className="flex justify-between items-center py-3 px-6 font-medium cursor-pointer text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-900"
+                  onClick={(event) => toggleDropdown("series", event)}
+                >
+                  <span>Series</span>
+                  <span>
+                    {openDropdown === "series" ? (
+                      <FaAngleUp />
+                    ) : (
+                      <FaAngleDown />
                     )}
+                  </span>
+                </div>
+
+                {openDropdown === "series" && (
+                  <div className="bg-gray-50 dark:bg-gray-900 border-t border-gray-100 dark:border-gray-700 relative z-50">
+                    <SeriesDropdown />
                   </div>
-                )
-              )}
+                )}
+              </div>
+
+              {/* Matches Dropdown */}
+              <div
+                className="border-b border-gray-200 dark:border-gray-700 relative"
+                ref={(el) => (dropdownRefs.current.matches = el)}
+                onMouseEnter={() => handleMouseEnter("matches")}
+                onMouseLeave={handleMouseLeave}
+              >
+                <div
+                  className="flex justify-between items-center py-3 px-6 font-medium cursor-pointer text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-900"
+                  onClick={(event) => toggleDropdown("matches", event)}
+                >
+                  <span>Matches</span>
+                  <span>
+                    {openDropdown === "matches" ? (
+                      <FaAngleUp />
+                    ) : (
+                      <FaAngleDown />
+                    )}
+                  </span>
+                </div>
+
+                {openDropdown === "matches" && (
+                  <div className="bg-gray-50 dark:bg-gray-900 border-t border-gray-100 dark:border-gray-700 relative z-50">
+                    <MatchesDropdown />
+                  </div>
+                )}
+              </div>
+
+              {/* Rankings Dropdown */}
+              <div
+                className="border-b border-gray-200 dark:border-gray-700 relative"
+                ref={(el) => (dropdownRefs.current.players = el)}
+                onMouseEnter={() => handleMouseEnter("players")}
+                onMouseLeave={handleMouseLeave}
+              >
+                <div
+                  className="flex justify-between items-center py-3 px-6 font-medium cursor-pointer text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-900"
+                  onClick={(event) => toggleDropdown("players", event)}
+                >
+                  <span>Rankings</span>
+                  <span>
+                    {openDropdown === "players" ? (
+                      <FaAngleUp />
+                    ) : (
+                      <FaAngleDown />
+                    )}
+                  </span>
+                </div>
+
+                {openDropdown === "players" && (
+                  <div className="bg-gray-50 border-t border-gray-100 dark:bg-gray-900 dark:border-gray-700 relative z-60">
+                    <RankingsDropdown />
+                  </div>
+                )}
+              </div>
+
+              {/* News Dropdown */}
+              <div
+                className="border-b border-gray-200 dark:border-gray-700 relative"
+                ref={(el) => (dropdownRefs.current.news = el)}
+                onMouseEnter={() => handleMouseEnter("news")}
+                onMouseLeave={handleMouseLeave}
+              >
+                <div
+                  className="flex justify-between items-center py-3 px-6 font-medium cursor-pointer text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-900"
+                  onClick={(event) => toggleDropdown("news", event)}
+                >
+                  <span>News</span>
+                  <span>
+                    {openDropdown === "news" ? <FaAngleUp /> : <FaAngleDown />}
+                  </span>
+                </div>
+
+                {openDropdown === "news" && (
+                  <div className="bg-gray-50 border-t border-gray-100 dark:bg-gray-900 dark:border-gray-700 relative z-60">
+                    <NewsDropdown />
+                  </div>
+                )}
+              </div>
+
+              {/* Schedules Dropdown */}
+              <div
+                className="border-b border-gray-200 dark:border-gray-700 relative"
+                ref={(el) => (dropdownRefs.current.schedules = el)}
+                onMouseEnter={() => handleMouseEnter("schedules")}
+                onMouseLeave={handleMouseLeave}
+              >
+                <div
+                  className="flex justify-between items-center py-3 px-6 font-medium cursor-pointer text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-900"
+                  onClick={(event) => toggleDropdown("schedules", event)}
+                >
+                  <span>Schedules</span>
+                  <span>
+                    {openDropdown === "schedules" ? (
+                      <FaAngleUp />
+                    ) : (
+                      <FaAngleDown />
+                    )}
+                  </span>
+                </div>
+
+                {openDropdown === "schedules" && (
+                  <div className="bg-gray-50 border-t border-gray-100 dark:bg-gray-900 dark:border-gray-700 relative z-60">
+                    <SchedulesDropdown />
+                  </div>
+                )}
+              </div>
 
               {/* Analytics Link */}
               <div className="border-b border-gray-200 dark:border-gray-700">

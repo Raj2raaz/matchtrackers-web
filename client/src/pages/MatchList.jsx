@@ -80,7 +80,8 @@ const CricketScoresDashboard = ({}) => {
     return (
       <div
         key={matchInfo.matchId}
-        className="bg-white border border-gray-200 rounded-lg shadow-lg p-4 mb-4"
+        className="bg-white border border-gray-200 rounded-lg shadow-lg p-4 mb-4 
+            dark:bg-gray-800 dark:border-gray-700"
       >
         <Helmet>
           <title>Match Trackers | Live Scores, Stats & News</title>
@@ -120,13 +121,13 @@ const CricketScoresDashboard = ({}) => {
         </Helmet>
 
         <div className="flex flex-wrap gap-4 items-center justify-between mb-2">
-          <div className="flex flex-wrap gap-2 items-center text-sm text-gray-600">
+          <div className="flex flex-wrap gap-2 items-center text-sm text-gray-600 dark:text-gray-300">
             {matchInfo.seriesName} -
-            <span className="text-xs px-2 py-1 rounded-full border border-gray-400">
+            <span className="text-xs px-2 py-1 rounded-full border border-gray-400 dark:border-gray-600 dark:text-gray-200">
               {matchFormat}
             </span>
           </div>
-          <div className="text-xs text-gray-500 flex items-center">
+          <div className="text-xs text-gray-500 flex items-center dark:text-gray-400">
             <Calendar className="w-3 h-3 mr-1" />
             {formatDate(matchInfo.startDate)}
           </div>
@@ -134,31 +135,31 @@ const CricketScoresDashboard = ({}) => {
         <div className="flex flex-col sm:flex-row items-start justify-between">
           <div className="flex flex-col gap-3 justify-between w-full sm:w-auto">
             <div className="flex gap-4 items-center">
-              <div className="font-semibold flex gap-3 items-center text-lg">
+              <div className="font-semibold flex gap-3 items-center text-lg dark:text-white">
                 <Image
                   faceImageId={team1.imageId}
                   className="h-7 w-7 rounded-full"
                 />
                 {team1.teamName}
               </div>
-              <div className="text-sm">
+              <div className="text-sm dark:text-gray-300">
                 {getScoreDisplay(matchScore?.team1Score)}
               </div>
             </div>
             <div className="flex gap-4 items-center">
-              <div className="font-semibold flex gap-3 items-center text-lg">
+              <div className="font-semibold flex gap-3 items-center text-lg dark:text-white">
                 <Image
                   faceImageId={team2.imageId}
                   className="h-7 w-7 rounded-full"
                 />
                 {team2.teamName}
               </div>
-              <div className="text-sm">
+              <div className="text-sm dark:text-gray-300">
                 {getScoreDisplay(matchScore?.team2Score)}
               </div>
             </div>
           </div>
-          <div className="text-xs text-gray-500 mt-2 sm:mt-1 flex items-center">
+          <div className="text-xs text-gray-500 mt-2 sm:mt-1 flex items-center dark:text-gray-400">
             <Globe className="w-3 h-3 mr-1" />
             {venueInfo.ground}, {venueInfo.city}
           </div>
@@ -166,7 +167,9 @@ const CricketScoresDashboard = ({}) => {
         <div className="mt-4 flex flex-col sm:flex-row items-end justify-between">
           <div
             className={`font-medium text-sm ${
-              state === "Complete" ? "text-green-600" : "text-blue-600"
+              state === "Complete"
+                ? "text-green-600 dark:text-green-400"
+                : "text-blue-600 dark:text-blue-400"
             }`}
           >
             {status}
@@ -174,7 +177,9 @@ const CricketScoresDashboard = ({}) => {
           <div className="mt-2 sm:mt-0">
             <button
               onClick={() => navigate("/cricket/match/" + matchInfo.matchId)}
-              className="bg-blue-600 text-white px-3 py-1.5 rounded text-sm font-medium hover:bg-blue-700"
+              className="bg-blue-600 text-white px-3 py-1.5 rounded text-sm font-medium 
+                 hover:bg-blue-700 
+                 dark:bg-blue-500 dark:hover:bg-blue-600"
             >
               Match Details
             </button>
@@ -191,7 +196,7 @@ const CricketScoresDashboard = ({}) => {
 
     return (
       <div key={seriesMatch.seriesAdWrapper.seriesId} className="mb-6">
-        <h3 className="text-lg font-semibold mb-3 border-b pb-2">
+        <h3 className="text-lg font-semibold mb-3 border-b pb-2 dark:text-white dark:border-gray-700">
           {seriesMatch.seriesAdWrapper.seriesName}
         </h3>
         {seriesMatch.seriesAdWrapper.matches.length > 0 ? (
@@ -201,11 +206,11 @@ const CricketScoresDashboard = ({}) => {
             )}
           </div>
         ) : (
-          <div className="bg-gray-50 rounded-lg p-6 text-center">
-            <p className="text-gray-500 font-medium">
+          <div className="bg-gray-50 rounded-lg p-6 text-center dark:bg-gray-800">
+            <p className="text-gray-500 font-medium dark:text-gray-300">
               No matches available for this series
             </p>
-            <p className="text-gray-400 text-sm mt-1">
+            <p className="text-gray-400 text-sm mt-1 dark:text-gray-500">
               Check back later for updates
             </p>
           </div>
@@ -231,12 +236,17 @@ const CricketScoresDashboard = ({}) => {
 
   const renderEmptyState = (matchType) => {
     return (
-      <div className="flex flex-col items-center justify-center bg-gray-50 rounded-lg p-8 my-4">
-        <div className="text-gray-400 mb-4">{getTabIcon(matchType)}</div>
-        <h3 className="text-xl font-semibold text-gray-700 mb-2">
+      <div
+        className="flex flex-col items-center justify-center bg-gray-50 rounded-lg p-8 my-4 
+                    dark:bg-gray-800"
+      >
+        <div className="text-gray-400 mb-4 dark:text-gray-500">
+          {getTabIcon(matchType)}
+        </div>
+        <h3 className="text-xl font-semibold text-gray-700 mb-2 dark:text-gray-200">
           No {matchType} Matches Available
         </h3>
-        <p className="text-gray-500 text-center max-w-md">
+        <p className="text-gray-500 text-center max-w-md dark:text-gray-400">
           There are currently no {matchType.toLowerCase()} cricket matches
           scheduled or in progress. Please check back later for updates.
         </p>
@@ -246,14 +256,17 @@ const CricketScoresDashboard = ({}) => {
 
   const renderNoMatchesForType = () => {
     return (
-      <div className="flex flex-col items-center justify-center bg-gray-50 rounded-lg p-8 my-4">
-        <div className="text-gray-400 mb-4">
+      <div
+        className="flex flex-col items-center justify-center bg-gray-50 rounded-lg p-8 my-4 
+                dark:bg-gray-800"
+      >
+        <div className="text-gray-400 mb-4 dark:text-gray-500">
           <Calendar className="w-8 h-8" />
         </div>
-        <h3 className="text-xl font-semibold text-gray-700 mb-2">
+        <h3 className="text-xl font-semibold text-gray-700 mb-2 dark:text-gray-200">
           No {type.toUpperCase()} Matches Available
         </h3>
-        <p className="text-gray-500 text-center max-w-md">
+        <p className="text-gray-500 text-center max-w-md dark:text-gray-400">
           There are currently no {type.toLowerCase()} cricket matches available.
           Try checking other match types or come back later.
         </p>
@@ -264,7 +277,10 @@ const CricketScoresDashboard = ({}) => {
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        <div
+          className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 
+                  border-blue-500 dark:border-blue-400"
+        ></div>
       </div>
     );
   }
@@ -272,17 +288,22 @@ const CricketScoresDashboard = ({}) => {
   if (error) {
     return (
       <div className="mx-auto p-4 text-center">
-        <div className="bg-red-50 border border-red-200 rounded-lg shadow-lg p-8">
-          <h2 className="text-xl font-bold text-red-600 mb-2">
+        <div
+          className="bg-red-50 border border-red-200 rounded-lg shadow-lg p-8 
+                  dark:bg-red-900 dark:border-red-700"
+        >
+          <h2 className="text-xl font-bold text-red-600 mb-2 dark:text-red-400">
             Unable to Load Matches
           </h2>
-          <p className="text-gray-700 mb-4">
+          <p className="text-gray-700 mb-4 dark:text-gray-300">
             We encountered an error while loading the cricket matches. Please
             try again later.
           </p>
           <button
             onClick={() => window.location.reload()}
-            className="bg-blue-600 text-white px-4 py-2 rounded font-medium hover:bg-blue-700"
+            className="bg-blue-600 text-white px-4 py-2 rounded font-medium 
+                 hover:bg-blue-700 
+                 dark:bg-blue-500 dark:hover:bg-blue-600"
           >
             Refresh Page
           </button>
@@ -299,15 +320,20 @@ const CricketScoresDashboard = ({}) => {
           <h1 className="text-2xl capitalize font-bold mb-2">
             {type} Cricket Matches
           </h1>
-          <p className="text-gray-500">
+          <p className="text-gray-500 dark:text-gray-400">
             Stay updated with the latest cricket matches from around the world
           </p>
         </header>
 
         <div className="flex flex-col lg:flex-row gap-6">
           <div className="w-full lg:w-2/3">
-            <div className="bg-white border border-gray-300 rounded-lg shadow-lg">
-              <div className="p-4">{renderNoMatchesForType()}</div>
+            <div
+              className="bg-white border border-gray-300 rounded-lg shadow-lg 
+                          dark:bg-gray-800 dark:border-gray-700"
+            >
+              <div className="p-4 dark:text-gray-200">
+                {renderNoMatchesForType()}
+              </div>
             </div>
           </div>
 
@@ -322,10 +348,10 @@ const CricketScoresDashboard = ({}) => {
   return (
     <div className="mx-auto p-4">
       <header className="mb-3">
-        <h1 className="text-2xl capitalize font-bold mb-2">
+        <h1 className="text-2xl capitalize font-bold mb-2 text-gray-900 dark:text-gray-100">
           {type} Cricket Matches
         </h1>
-        <p className="text-gray-500">
+        <p className="text-gray-500 dark:text-gray-400">
           Stay updated with the latest cricket matches from around the world
         </p>
       </header>
@@ -336,8 +362,8 @@ const CricketScoresDashboard = ({}) => {
             key={type}
             className={`py-2 px-4 text-sm rounded-md whitespace-nowrap ${
               activeTab === type
-                ? "bg-blue-900 text-white"
-                : "border border-gray-300 text-gray-800"
+                ? "bg-blue-900 text-white dark:bg-blue-600 dark:text-white"
+                : "border border-gray-300 text-gray-800 dark:border-gray-600 dark:text-gray-200"
             }`}
             onClick={() => setActiveTab(type)}
           >
@@ -348,7 +374,10 @@ const CricketScoresDashboard = ({}) => {
 
       <div className="flex flex-col lg:flex-row gap-6">
         <div className="w-full lg:w-2/3">
-          <div className="bg-white border border-gray-300 rounded-lg shadow-lg">
+          <div
+            className="bg-white border border-gray-300 rounded-lg shadow-lg 
+                      dark:bg-gray-800 dark:border-gray-700"
+          >
             <div className="p-4">
               {data?.typeMatches?.map((typeMatch) => (
                 <div
@@ -357,7 +386,7 @@ const CricketScoresDashboard = ({}) => {
                     activeTab === typeMatch.matchType ? "block" : "hidden"
                   }
                 >
-                  <h2 className="text-xl font-bold mb-4">
+                  <h2 className="text-xl font-bold mb-4 dark:text-white">
                     {typeMatch.matchType} Matches
                   </h2>
                   {typeMatch.seriesMatches
