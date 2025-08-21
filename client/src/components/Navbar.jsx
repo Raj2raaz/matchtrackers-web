@@ -12,6 +12,7 @@ import {
   FaUser,
 } from "react-icons/fa";
 import navLogo from "../assets/navLogo.svg";
+import ProfileMenu from "./ProfileMenu";
 import favicon from "../assets/favicon.svg";
 import { getNavLinks } from "../api/Home";
 import Cookies from "js-cookie";
@@ -22,8 +23,10 @@ import toast from "react-hot-toast";
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const [user, setUser] = useState(null);
   const [navLinks, setNavLinks] = useState();
   const [openDropdown, setOpenDropdown] = useState(null);
+  const [showMenu, setShowMenu] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [selectedSport, setSelectedSport] = useState("cricket");
   const { content, setContent, refresh, refreshNow } = useMainStore();
@@ -31,6 +34,20 @@ const Navbar = () => {
   const mobileMenuRef = useRef();
   const [isHovering, setIsHovering] = useState(null);
   const { theme, toggleTheme } = useContext(ThemeContext);
+
+  useEffect(() => {
+    const token = Cookies.get("token");
+    if (token) {
+      fetch("http://localhost:5000/api/me", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => setUser(data))
+        .catch((err) => console.error("Failed to fetch user:", err));
+    }
+  }, []);
 
   useEffect(() => {
     getData();
@@ -520,25 +537,31 @@ const Navbar = () => {
             )}
           </button>
 
-          <button
-            className="px-4 py-2 rounded-full bg-primary text-white font-medium text-sm hover:bg-primary/90 transition-colors shadow-sm hover:shadow z-10 relative flex items-center gap-2"
-            onClick={() => {
-              if (Cookies.get("token")) {
-                Cookies.remove("token");
-                navigate("/cricket/");
-                refreshNow();
-              } else {
-                navigate("/auth");
-              }
-            }}
-            key={refresh}
-          >
-            {Cookies.get("token") ? (
-              <FaUser className="text-lg" />
-            ) : (
-              "Login or Signup"
-            )}
-          </button>
+          {Cookies.get("token") ? (
+            // Logged in -> show profile button
+            <div className="relative">
+              <button
+                className="px-4 py-2 rounded-full bg-primary text-white font-medium text-sm hover:bg-primary/90 transition-colors shadow-sm hover:shadow z-10 flex items-center gap-2"
+                onClick={() => setShowMenu(!showMenu)} // toggle dropdown
+              >
+                <FaUser className="text-lg" />
+              </button>
+
+              {showMenu && (
+                <div className="absolute right-0 mt-2 bg-white dark:bg-black/60 shadow-md rounded-lg p-2 text-sm w-40">
+                  <ProfileMenu user={user} onLogout={refreshNow} />
+                </div>
+              )}
+            </div>
+          ) : (
+            // Not logged in -> show login/signup button
+            <button
+              className="px-4 py-2 rounded-full bg-primary text-white font-medium text-sm hover:bg-primary/90 transition-colors shadow-sm hover:shadow z-10 flex items-center gap-2"
+              onClick={() => navigate("/auth")}
+            >
+              Login or Signup
+            </button>
+          )}
         </div>
       </div>
 
