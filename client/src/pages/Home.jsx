@@ -5,6 +5,15 @@ import headermv from "../assets/Landing/headermv.webp";
 import useCricbuzzStore from "../store/cricket";
 import axios from "axios";
 import {
+  FaChevronRight,
+  FaTrophy,
+  FaFire,
+  FaChartLine,
+  FaStar,
+  FaCircle,
+  FaClock,
+} from "react-icons/fa";
+import {
   getAllSeriesList,
   getMatches,
   getNews,
@@ -16,7 +25,6 @@ import { CgChevronDoubleDown, CgChevronDoubleUp } from "react-icons/cg";
 import { Helmet } from "react-helmet-async";
 import { IoMdArrowDroprightCircle } from "react-icons/io";
 import asiacup from "../assets/AsiaCupBanner.webp";
-import { FaChevronRight, FaTrophy, FaFire, FaChartLine } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import YtShorts from "../components/YtShorts";
 import HistoricMoments from "../components/HistoricMoments";
@@ -331,22 +339,32 @@ export default function Home() {
         >
           <div className="flex flex-nowrap gap-2 mx-auto">
             {["Featured", "Live Score", "Upcoming", "Result"].map(
-              (category, i) => (
-                <button
-                  key={i}
-                  className={`flex-shrink-0 px-3 sm:px-5 py-2 sm:py-3 text-xs sm:text-sm md:text-base font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 ${
-                    selectedCat === i
-                      ? "bg-white text-black shadow-lg"
-                      : "bg-white/10 dark:bg-black/20 text-white hover:bg-white/20 dark:hover:bg-white/10 backdrop-blur-sm border border-white/20"
-                  }`}
-                  onClick={() => setSelectedCat(i)}
-                >
-                  <span className="mr-1 sm:mr-2">
-                    {i === 0 ? "⭐" : i === 1 ? "🔴" : i === 2 ? "⏰" : "🏆"}
-                  </span>
-                  {category}
-                </button>
-              )
+              (category, i) => {
+                const icons = [
+                  <FaStar />,
+                  <FaCircle />,
+                  <FaClock />,
+                  <FaTrophy />,
+                ];
+
+                return (
+                  <button
+                    key={i}
+                    className={`flex items-center flex-shrink-0 px-3 sm:px-5 py-2 sm:py-3 text-xs sm:text-sm md:text-base font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 ${
+                      selectedCat === i
+                        ? "bg-white text-black shadow-lg"
+                        : "bg-white/10 dark:bg-black/20 text-white hover:bg-white/20 dark:hover:bg-white/10 backdrop-blur-sm border border-white/20"
+                    }`}
+                    onClick={() => setSelectedCat(i)}
+                  >
+                    {/* Icon + Text */}
+                    <span className="mr-1 sm:mr-2 text-current flex items-center">
+                      {icons[i]}
+                    </span>
+                    {category}
+                  </button>
+                );
+              }
             )}
           </div>
         </div>
