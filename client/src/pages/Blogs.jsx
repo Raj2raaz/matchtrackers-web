@@ -103,26 +103,26 @@ export default function Blogs() {
             }`
           )
         }
-        className="cursor-pointer group"
+        className="cursor-pointer group max-w-xxl mx-auto"
       >
         <div className="relative overflow-hidden rounded-xl shadow-lg">
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-10"></div>
           <img
             src={getBlogImage(blogs[0])}
             alt={blogs[0]?.title}
-            className="w-full h-full object-cover object-center group-hover:scale-105 transition duration-500"
+            className="w-full h-140 object-cover object-center group-hover:scale-105 transition duration-500"
           />
-          <div className="absolute bottom-0 left-0 right-0 p-6 z-20">
-            <div className="flex items-center space-x-2 mb-3">
+          <div className="absolute bottom-0 left-0 right-0 p-5 z-20">
+            <div className="flex items-center space-x-2 mb-2.5">
               <span className="bg-blue-600 text-white text-xs px-3 py-1 rounded-full uppercase tracking-wider font-medium">
                 Featured
               </span>
               <span className="text-gray-200 text-sm">{getRelativeTime()}</span>
             </div>
-            <h2 className="text-3xl font-bold text-white mb-3 group-hover:text-blue-200 transition">
+            <h2 className="text-2xl font-bold text-white mb-2.5 group-hover:text-blue-200 transition">
               {blogs[0]?.title}
             </h2>
-            <p className="text-gray-200 line-clamp-2 mb-4">
+            <p className="text-gray-200 line-clamp-2 mb-3">
               {getBlogPreview(blogs[0])}
             </p>
             <div className="flex items-center justify-between">
@@ -169,9 +169,9 @@ export default function Blogs() {
               <h3 className="text-lg font-bold mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition line-clamp-2 text-gray-900 dark:text-white">
                 {blog.title}
               </h3>
-              <p className="text-gray-600 dark:text-gray-300 text-sm line-clamp-3 mb-4">
+              {/* <p className="text-gray-600 dark:text-gray-300 text-sm line-clamp-3 mb-4">
                 {getBlogPreview(blog)}
-              </p>
+              </p> */}
               <div className="mt-auto pt-4 border-t border-gray-100 dark:border-gray-700 flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                   <img
