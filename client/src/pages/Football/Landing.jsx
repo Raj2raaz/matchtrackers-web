@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Hightlights from "../../components/football/Hightlights";
+import YouTubeVideos from "../../components/YtVideos";
 import data from "../../football.json";
 import { IoChevronDown, IoChevronUp } from "react-icons/io5";
 import { ChevronRight } from "lucide-react";
@@ -84,7 +85,7 @@ export default function Landing() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-black">
       {/* Hero Section */}
       <div className="relative h-96 w-full">
         <img
@@ -114,7 +115,12 @@ export default function Landing() {
       {/* Highlights Section */}
       <Hightlights />
 
-      {/* Main Content */}
+      {/* Youtube videos */}
+      <div className="mx-5 md:mx-24 my-0">
+        <YouTubeVideos links={data.footballyoutubeVideosLinks} />
+      </div>
+
+      {/* leagues, matches, players Content */}
       <div className="container mx-auto md:px-24 px-4 my-8">
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Leagues Section - Now with Season Selector */}

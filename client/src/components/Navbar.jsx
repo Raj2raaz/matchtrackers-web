@@ -138,10 +138,10 @@ const Navbar = () => {
             {month.series.map((match, index) => (
               <Link
                 key={index}
-                to={`/cricket/schedules/${match.id}`}
+                to={`/${content}/schedules/${match.id}`}
                 className="block px-4 py-2 hover:bg-blue-50 dark:hover:bg-gray-600 transition-colors duration-150 text-sm"
                 onClick={(e) =>
-                  handleNavLinkClick(e, `/cricket/schedules/${match.id}`)
+                  handleNavLinkClick(e, `/${content}/schedules/${match.id}`)
                 }
               >
                 {match.name}
@@ -160,23 +160,25 @@ const Navbar = () => {
   const MatchesDropdown = () => (
     <div className="py-2 bg-white z-70 rounded-md text-black shadow-lg  dark:bg-gray-800 dark:text-gray-100">
       <Link
-        to="/cricket/match-list/recent"
+        to="/${content}/match-list/recent"
         className="block px-4 py-2 hover:bg-blue-50 dark:hover:bg-gray-600 transition-colors duration-150 text-sm"
-        onClick={(e) => handleNavLinkClick(e, "/cricket/match-list/recent")}
+        onClick={(e) => handleNavLinkClick(e, `/${content}/match-list/recent`)}
       >
         Recent
       </Link>
       <Link
-        to="/cricket/match-list/live"
+        to="/${content}/match-list/live"
         className="block px-4 py-2 hover:bg-blue-50 dark:hover:bg-gray-600 transition-colors duration-150 text-sm"
-        onClick={(e) => handleNavLinkClick(e, "/cricket/match-list/live")}
+        onClick={(e) => handleNavLinkClick(e, `/${content}/match-list/live`)}
       >
         Live
       </Link>
       <Link
-        to="/cricket/match-list/upcoming"
+        to="/${content}/match-list/upcoming"
         className="block px-4 py-2 hover:bg-blue-50 dark:hover:bg-gray-600 transition-colors duration-150 text-sm"
-        onClick={(e) => handleNavLinkClick(e, "/cricket/match-list/upcoming")}
+        onClick={(e) =>
+          handleNavLinkClick(e, `/${content}/match-list/upcoming`)
+        }
       >
         Upcoming
       </Link>
@@ -186,23 +188,23 @@ const Navbar = () => {
   const RankingsDropdown = () => (
     <div className="py-2 bg-white z-70 rounded-md text-black shadow-lg  dark:bg-gray-800 dark:text-gray-100">
       <Link
-        to="/cricket/rankings/odi"
+        to="/${content}/rankings/odi"
         className="block px-4 py-2 hover:bg-blue-50 dark:hover:bg-gray-600 transition-colors duration-150 text-sm"
-        onClick={(e) => handleNavLinkClick(e, "./cricket/rankings/odi")}
+        onClick={(e) => handleNavLinkClick(e, `/${content}/rankings/odi`)}
       >
         ODI
       </Link>
       <Link
-        to="/cricket/rankings/test"
+        to="/${content}/rankings/test"
         className="block px-4 py-2 hover:bg-blue-50 dark:hover:bg-gray-600 transition-colors duration-150 text-sm"
-        onClick={(e) => handleNavLinkClick(e, "/cricket/rankings/test")}
+        onClick={(e) => handleNavLinkClick(e, `/${content}/rankings/test`)}
       >
         Test
       </Link>
       <Link
-        to="/cricket/rankings/t20"
+        to="/${content}/rankings/t20"
         className="block px-4 py-2 hover:bg-blue-50 dark:hover:bg-gray-600 transition-colors duration-150 text-sm"
-        onClick={(e) => handleNavLinkClick(e, "/cricket/rankings/t20")}
+        onClick={(e) => handleNavLinkClick(e, `/${content}/rankings/t20`)}
       >
         T20
       </Link>
@@ -234,9 +236,9 @@ const Navbar = () => {
       )}
       {blogs.length > 0 && (
         <Link
-          to="/cricket/blogs" // Adjust the path as necessary
+          to="/${content}/blogs" // Adjust the path as necessary
           className="block px-4 py-2 text-center text-primary text-sm font-medium hover:bg-blue-50 dark:hover:bg-gray-600"
-          onClick={(e) => handleNavLinkClick(e, "/cricket/blogs")}
+          onClick={(e) => handleNavLinkClick(e, "/${content}/blogs")}
         >
           View All Blogs
         </Link>
@@ -265,10 +267,10 @@ const Navbar = () => {
               {matches.map((match, mIndex) => (
                 <Link
                   key={mIndex}
-                  to={`/cricket/match/${match.matchId}`}
+                  to={`/${content}/match/${match.matchId}`}
                   className="block px-4 py-3 hover:bg-blue-50 dark:hover:bg-gray-600 transition-colors duration-150"
                   onClick={(e) =>
-                    handleNavLinkClick(e, `/cricket/match/${match.matchId}`)
+                    handleNavLinkClick(e, `/${content}/match/${match.matchId}`)
                   }
                 >
                   <div className="flex justify-between items-center">
@@ -319,6 +321,7 @@ const Navbar = () => {
           alt="Logo"
         />
 
+        {/* switch sport */}
         <div className="bg-white rounded-full flex items-center p-0.5 shadow-sm ">
           <button
             onClick={() => {
@@ -517,7 +520,7 @@ const Navbar = () => {
             <div
               className="capitalize flex gap-1 items-center cursor-pointer py-2 px-1 hover:text-primary transition-colors duration-200"
               onClick={() => {
-                navigate("/cricket/analytics");
+                navigate("/${content}/analytics");
                 closeDropdown();
               }}
             >
@@ -748,7 +751,7 @@ const Navbar = () => {
                 <div
                   className="flex justify-between items-center py-3 px-6 font-medium cursor-pointer text-gray-800 dark:text-gray-200"
                   onClick={() => {
-                    navigate("/cricket/analytics");
+                    navigate("/${content}/analytics");
                     setMobileMenuOpen(false);
                   }}
                 >
