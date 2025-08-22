@@ -8,6 +8,7 @@ import BlogSkeleton from "../components/BlogSkeleton";
 export default function CricketBlog() {
   const [blog, setBlog] = useState(null);
   const { id } = useParams();
+  const [news, setNews] = useState([]);
 
   useEffect(() => {
     const fetchBlog = async () => {
@@ -21,6 +22,19 @@ export default function CricketBlog() {
 
     fetchBlog();
   }, [id]);
+
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const blogResponse = await axios.get("/api/blog");
+        console.log(news);
+        setNews(blogResponse.data.blogs || []);
+      } catch (err) {
+        console.error("Error fetching blogs:", err);
+      }
+    };
+    fetchBlogs();
+  }, []);
 
   if (!blog) {
     return <BlogSkeleton />;
@@ -42,7 +56,10 @@ export default function CricketBlog() {
             );
 
           return (
-            <div key={idx} className="prose prose-gray dark:prose-invert max-w-none">
+            <div
+              key={idx}
+              className="prose prose-gray dark:prose-invert max-w-none"
+            >
               <div dangerouslySetInnerHTML={{ __html: styledHTML }} />
             </div>
           );
@@ -79,7 +96,11 @@ export default function CricketBlog() {
         </div>
       ));
     } else {
-      return <p className="text-gray-500 dark:text-gray-400">No content available.</p>;
+      return (
+        <p className="text-gray-500 dark:text-gray-400">
+          No content available.
+        </p>
+      );
     }
   };
 
@@ -116,42 +137,107 @@ export default function CricketBlog() {
         />
       </Helmet>
 
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-10 px-4 md:px-16 transition-colors duration-300">
-        <div className="max-w-5xl mx-auto">
-          <h1 className="text-4xl font-bold text-center mb-8 text-gray-800 dark:text-gray-100">
-            {blog.title}
-          </h1>
+      <div>
+        {/* Parent Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Blog Content Section (2/3 width) */}
+          <div className="lg:col-span-2 min-h-screen bg-gray-50 dark:bg-gray-900 shadow py-10 px-4 md:px-8 transition-colors duration-300 rounded-lg">
+            <div className="max-w-5xl mx-auto">
+              <h1 className="text-4xl font-bold text-center mb-8 text-gray-800 dark:text-gray-100">
+                {blog.title}
+              </h1>
 
-          {(blog.featuredImage || blog.img) && (
-            <img
-              className="w-full object-cover rounded-xl mb-10 shadow"
-              src={blog.featuredImage || blog.img}
-              alt={blog.title}
-            />
-          )}
+              {(blog.featuredImage || blog.img) && (
+                <img
+                  loading="lazy"
+                  className="w-full object-cover rounded-xl mb-10 shadow"
+                  src={blog.featuredImage || blog.img}
+                  alt={blog.title}
+                />
+              )}
 
-          <div className="space-y-8">{renderContent()}</div>
-
-          <div className="mt-16 border-t border-gray-300 dark:border-gray-700 pt-10">
-            <div className="flex md:flex-row flex-col gap-10 md:gap-0 items-center space-x-6">
-              <img
-                src="https://media.licdn.com/dms/image/v2/C4E03AQEHzBiFN-u1UQ/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1621057196221?e=1756944000&v=beta&t=BJtjmUEiF9Hfgvi-OrEFeAthiwbj7ieL2GGTYchEHJw"
-                alt="Arvind Kumar M"
-                className="w-20 h-20 rounded-full object-cover shadow"
-              />
-              <div>
-                <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
-                  Arvind Kumar M
-                </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400 leading-snug max-w-xl">
-                  As a Writer and Director with four years of experience
-                  collaborating with diverse production houses, visionary
-                  filmmakers, and corporate giants, Arvind brings a
-                  writer-centric approach to content creation. His storytelling
-                  craft shapes industries through emotionally resonant and
-                  visually impactful narratives.
-                </p>
+              <div className="space-y-8  text-gray-800 dark:text-gray-100">
+                {renderContent()}
               </div>
+
+              {/* Author Section */}
+              <div className="mt-16 border-t border-gray-300 dark:border-gray-700 pt-10">
+                <div className="flex flex-col md:flex-row items-center gap-6">
+                  <img
+                    src="https://media.licdn.com/dms/image/v2/C4E03AQEHzBiFN-u1UQ/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1621057196221?e=1756944000&v=beta&t=BJtjmUEiF9Hfgvi-OrEFeAthiwbj7ieL2GGTYchEHJw"
+                    alt="Arvind Kumar M"
+                    className="w-20 h-20 rounded-full object-cover shadow"
+                  />
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
+                      Arvind Kumar M
+                    </h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 leading-snug max-w-xl">
+                      As a Writer and Director with four years of experience
+                      collaborating with diverse production houses, visionary
+                      filmmakers, and corporate giants, Arvind brings a
+                      writer-centric approach to content creation. His
+                      storytelling craft shapes industries through emotionally
+                      resonant and visually impactful narratives.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Latest News Section (Right Sidebar) */}
+          <div className="bg-gray-50 dark:bg-gray-800 rounded-xl shadow p-4 lg:p-5 h-fit max-h-[600px] overflow-y-auto">
+            <div className="flex justify-between items-center mb-3">
+              <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200">
+                Visit More News
+              </h2>
+              <a
+                href="/cricket/blogs"
+                className="text-blue-600 dark:text-blue-400 text-sm flex items-center gap-1 hover:underline hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
+              >
+                View All
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M9 5l7 7-7 7"
+                  ></path>
+                </svg>
+              </a>
+            </div>
+
+            {/* News List */}
+            <div className="space-y-3">
+              {news.slice(0, 5).map((item, i) => (
+                <div
+                  key={i}
+                  onClick={() => navigate(`/blog/${item.id}/${item.slug}`)}
+                  className="flex cursor-pointer gap-3 p-2 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                >
+                  {item.img && (
+                    <img
+                      src={item.img}
+                      alt={item.title}
+                      className="w-16 h-14 object-cover rounded"
+                    />
+                  )}
+                  <div>
+                    <h3 className="text-gray-800 dark:text-gray-200 font-medium text-s line-clamp-2">
+                      {item.title}
+                    </h3>
+                    <p className="text-[11px] mt-1 line-clamp-2 text-gray-600 dark:text-gray-400">
+                      {item.type}
+                    </p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
