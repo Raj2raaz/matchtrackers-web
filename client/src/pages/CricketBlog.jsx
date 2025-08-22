@@ -40,6 +40,21 @@ export default function CricketBlog() {
     return <BlogSkeleton />;
   }
 
+  const getRelativeTime = () => {
+    const options = [
+      "2 hours ago",
+      "4 hours ago",
+      "Yesterday",
+      "2 days ago",
+      "Last week",
+    ];
+    return options[Math.floor(Math.random() * options.length)];
+  };
+
+  const getReadingTime = () => {
+    return `${Math.floor(Math.random() * 8) + 3} min read`;
+  };
+
   const renderContent = () => {
     if (blog.sections && Array.isArray(blog.sections)) {
       // NEW STRUCTURE
@@ -143,10 +158,31 @@ export default function CricketBlog() {
           {/* Blog Content Section (2/3 width) */}
           <div className="lg:col-span-2 min-h-screen bg-gray-50 dark:bg-gray-900 shadow py-10 px-4 md:px-8 transition-colors duration-300 rounded-lg">
             <div className="max-w-5xl mx-auto">
-              <h1 className="text-4xl font-bold text-center mb-8 text-gray-800 dark:text-gray-100">
+              {/* Blog Title */}
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-4 text-gray-800 dark:text-gray-100">
                 {blog.title}
               </h1>
 
+              {/* Meta Info */}
+              <div className="flex flex-wrap justify-center items-center gap-3 mb-8 text-sm">
+                <span className="text-gray-600 dark:text-gray-300">
+                  {blog.author || "Arvind Kumar M"}
+                </span>
+
+                <span className="text-gray-400 dark:text-gray-500">•</span>
+
+                <span className="text-gray-600 dark:text-gray-300">
+                  {getRelativeTime()}
+                </span>
+
+                <span className="text-gray-400 dark:text-gray-500">•</span>
+
+                <span className="text-gray-500 dark:text-gray-400">
+                  {getReadingTime()}
+                </span>
+              </div>
+
+              {/* Featured Image */}
               {(blog.featuredImage || blog.img) && (
                 <img
                   loading="lazy"
@@ -156,7 +192,8 @@ export default function CricketBlog() {
                 />
               )}
 
-              <div className="space-y-8  text-gray-800 dark:text-gray-100">
+              {/* Blog Content */}
+              <div className="space-y-8 text-gray-800 dark:text-gray-100">
                 {renderContent()}
               </div>
 
@@ -170,7 +207,7 @@ export default function CricketBlog() {
                   />
                   <div>
                     <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
-                      Arvind Kumar M
+                      {blog.author || "Arvind Kumar M"}
                     </h3>
                     <p className="text-sm text-gray-600 dark:text-gray-400 leading-snug max-w-xl">
                       As a Writer and Director with four years of experience
