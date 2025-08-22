@@ -1,38 +1,12 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import data from "../data.json";
 
-// Thumbnail imports
-import t1 from "../assets/ytThumbnails/1.jpg";
-import t2 from "../assets/ytThumbnails/2.jpg";
-import t3 from "../assets/ytThumbnails/3.jpg";
-import t4 from "../assets/ytThumbnails/4.jpg";
-import t5 from "../assets/ytThumbnails/5.jpg";
-import t6 from "../assets/ytThumbnails/6.jpg";
-import t7 from "../assets/ytThumbnails/7.jpg";
-import t8 from "../assets/ytThumbnails/8.jpg";
-import t9 from "../assets/ytThumbnails/9.jpg";
-import t10 from "../assets/ytThumbnails/10.jpg";
-
 export default function YtShorts() {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [activeVideo, setActiveVideo] = useState(null);
   const scrollContainerRef = useRef(null);
   const isScrollingRef = useRef(false);
   const autoScrollTimeoutRef = useRef(null);
   const scrollTimeoutRef = useRef(null);
-
-  const thumbnails = {
-    1: t1,
-    2: t2,
-    3: t3,
-    4: t4,
-    5: t5,
-    6: t6,
-    7: t7,
-    8: t8,
-    9: t9,
-    10: t10,
-  };
 
   const videos = data.youtube;
   const totalVideos = videos.length;
@@ -54,7 +28,8 @@ export default function YtShorts() {
       isScrollingRef.current = true;
 
       const container = scrollContainerRef.current;
-      const slideWidth = container.querySelector(".slide-item")?.offsetWidth || 280;
+      const slideWidth =
+        container.querySelector(".slide-item")?.offsetWidth || 280;
       const gap = 16;
 
       const adjustedIndex = index + 1;
@@ -69,36 +44,24 @@ export default function YtShorts() {
 
       setCurrentSlide(index);
 
-      setTimeout(() => {
-        isScrollingRef.current = false;
-      }, smooth ? 500 : 100);
+      setTimeout(
+        () => {
+          isScrollingRef.current = false;
+        },
+        smooth ? 500 : 100
+      );
     }
   }, []);
 
   const handleNext = useCallback(() => {
     const nextIndex = (currentSlide + 1) % totalVideos;
     scrollToIndex(nextIndex);
-    setActiveVideo(null);
   }, [currentSlide, totalVideos, scrollToIndex]);
 
   const handlePrev = useCallback(() => {
     const prevIndex = (currentSlide - 1 + totalVideos) % totalVideos;
     scrollToIndex(prevIndex);
-    setActiveVideo(null);
   }, [currentSlide, totalVideos, scrollToIndex]);
-
-  const handleThumbnailClick = (index) => {
-    const adjustedIndex =
-      index === 0 ? totalVideos - 1 : index === totalVideos + 1 ? 0 : index - 1;
-
-    setActiveVideo(adjustedIndex);
-    setCurrentSlide(adjustedIndex);
-
-    if (autoScrollTimeoutRef.current) {
-      clearTimeout(autoScrollTimeoutRef.current);
-    }
-    startAutoScroll();
-  };
 
   const handleScroll = useCallback(() => {
     if (isScrollingRef.current) return;
@@ -113,7 +76,8 @@ export default function YtShorts() {
         const slideElements = container.querySelectorAll(".slide-item");
         const slideWidth = slideElements[0]?.offsetWidth || 280;
 
-        const containerCenter = container.scrollLeft + container.offsetWidth / 2;
+        const containerCenter =
+          container.scrollLeft + container.offsetWidth / 2;
 
         let closestIndex = 0;
         let closestDistance = Infinity;
@@ -129,7 +93,8 @@ export default function YtShorts() {
         });
 
         const adjustedIndex = closestIndex - 1;
-        const normalizedIndex = ((adjustedIndex % totalVideos) + totalVideos) % totalVideos;
+        const normalizedIndex =
+          ((adjustedIndex % totalVideos) + totalVideos) % totalVideos;
 
         if (normalizedIndex !== currentSlide && !isScrollingRef.current) {
           setCurrentSlide(normalizedIndex);
@@ -184,19 +149,17 @@ export default function YtShorts() {
 
   useEffect(() => {
     return () => {
-      if (autoScrollTimeoutRef.current) clearTimeout(autoScrollTimeoutRef.current);
+      if (autoScrollTimeoutRef.current)
+        clearTimeout(autoScrollTimeoutRef.current);
       if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
     };
   }, []);
 
-  const getThumbnail = (index) => {
-    const thumbnailIndex = (((index % totalVideos) + totalVideos) % totalVideos) + 1;
-    return thumbnails[thumbnailIndex] || null;
-  };
-
   return (
     <div className="bg-gray-200 dark:bg-gray-800 border border-slate-300 dark:border-slate-600 h-full px-6 py-4 rounded-lg">
-      <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">Web Stories</h1>
+      <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+        Web Stories
+      </h1>
       <div className="relative mt-2">
         <div className="absolute left-0 top-0 bottom-0 w-10 bg-gradient-to-r from-gray-200 dark:from-gray-800 to-transparent z-10"></div>
 
@@ -208,8 +171,6 @@ export default function YtShorts() {
           {circularVideos.map((url, i) => {
             const originalIndex =
               i === 0 ? totalVideos - 1 : i === totalVideos + 1 ? 0 : i - 1;
-
-            const isActive = activeVideo === originalIndex;
             const videoId = getVideoId(url);
 
             return (
@@ -222,41 +183,14 @@ export default function YtShorts() {
                 }`}
                 style={{ scrollSnapAlign: "center" }}
               >
-                {isActive ? (
-                  <div className="relative w-full h-full">
-                    <iframe
-                      key={`video-${videoId}`}
-                      src={`https://www.youtube.com/embed/${videoId}?autoplay=${isActive ? 1 : 0}&mute=1&enablejsapi=1`}
-                      title="YouTube Short"
-                      frameBorder="0"
-                      allow="autoplay; encrypted-media; fullscreen; accelerometer; clipboard-write; gyroscope; picture-in-picture"
-                      className="w-full h-full rounded-lg shadow-md"
-                    />
-                  </div>
-                ) : (
-                  <div
-                    className="relative w-full h-full cursor-pointer"
-                    onClick={() => handleThumbnailClick(i)}
-                  >
-                    <img
-                      src={getThumbnail(originalIndex)}
-                      alt={`YouTube Short ${originalIndex + 1}`}
-                      className="w-full h-full object-cover rounded-lg shadow-md transition-transform duration-200 hover:scale-105"
-                      loading="lazy"
-                    />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="bg-black bg-opacity-50 rounded-full p-3 transition-all duration-200 hover:bg-opacity-70">
-                        <svg
-                          className="h-8 w-8 text-white"
-                          fill="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path d="M8 5v14l11-7z" />
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                )}
+                <iframe
+                  key={`video-${videoId}`}
+                  src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&enablejsapi=1`}
+                  title="YouTube Short"
+                  frameBorder="0"
+                  allow="autoplay; encrypted-media; fullscreen; accelerometer; clipboard-write; gyroscope; picture-in-picture"
+                  className="w-full h-full rounded-lg shadow-md"
+                />
               </div>
             );
           })}
@@ -275,7 +209,12 @@ export default function YtShorts() {
             stroke="currentColor"
             viewBox="0 0 24 24"
           >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M15 19l-7-7 7-7"
+            />
           </svg>
         </button>
 
@@ -290,7 +229,12 @@ export default function YtShorts() {
             stroke="currentColor"
             viewBox="0 0 24 24"
           >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M9 5l7 7-7 7"
+            />
           </svg>
         </button>
       </div>
@@ -301,7 +245,6 @@ export default function YtShorts() {
             key={index}
             onClick={() => {
               scrollToIndex(index);
-              setActiveVideo(null);
               if (autoScrollTimeoutRef.current) {
                 clearTimeout(autoScrollTimeoutRef.current);
               }
