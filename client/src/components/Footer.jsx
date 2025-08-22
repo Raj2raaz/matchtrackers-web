@@ -186,7 +186,7 @@ export default function Footer() {
               </svg>
             </a>
             <a
-              href="https://instagram.com"
+              href="https://www.instagram.com/match_trackers/"
               target="_blank"
               rel="noopener noreferrer"
               className="text-gray-400 hover:text-white transition-colors"
@@ -222,7 +222,7 @@ export default function Footer() {
               </svg>
             </a>
             <a
-              href="https://linktr.ee/Matchtrackers"
+              href="https://www.linkedin.com/company/match-trackers"
               target="_blank"
               rel="noopener noreferrer"
               className="text-gray-400 hover:text-white transition-colors"
@@ -238,7 +238,7 @@ export default function Footer() {
               </svg>
             </a>
             <a
-              href="https://youtube.com"
+              href="https://youtube.com/@matchtrackerscricket?si=zRMBcljMY95FPZZv"
               target="_blank"
               rel="noopener noreferrer"
               className="text-gray-400 hover:text-white transition-colors"

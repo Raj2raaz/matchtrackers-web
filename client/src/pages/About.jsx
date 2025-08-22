@@ -1,6 +1,6 @@
 export default function AboutUsPage() {
   return (
-    <div className="max-w-5xl mx-auto px-6 py-12 text-gray-800 leading-relaxed">
+    <div className="max-w-5xl mx-auto px-6 py-12 text-gray-800 dark:text-gray-200 leading-relaxed">
       <h1 className="text-4xl font-bold mb-6 text-center">
         About Match Trackers
       </h1>
