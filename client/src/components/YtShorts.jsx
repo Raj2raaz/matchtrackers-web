@@ -1,18 +1,15 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
-import data from "../data.json";
 
-export default function YtShorts() {
+export default function YtShorts({ shorts }) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const scrollContainerRef = useRef(null);
   const isScrollingRef = useRef(false);
   const autoScrollTimeoutRef = useRef(null);
   const scrollTimeoutRef = useRef(null);
-
-  const videos = data.youtube;
-  const totalVideos = videos.length;
+  const totalVideos = shorts.length;
 
   const createCircularArray = () => {
-    return [videos[totalVideos - 1], ...videos, videos[0]];
+    return [shorts[totalVideos - 1], ...shorts, shorts[0]];
   };
   const circularVideos = createCircularArray();
 
@@ -240,7 +237,7 @@ export default function YtShorts() {
       </div>
 
       <div className="mt-4 flex justify-center space-x-2">
-        {videos.map((_, index) => (
+        {shorts.map((_, index) => (
           <button
             key={index}
             onClick={() => {

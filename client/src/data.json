@@ -149,7 +149,7 @@
       "profileId": "10744"
     }
   ],
-  "youtube": [
+  "youtubeShorts": [
     "https://youtube.com/shorts/-7y0RFbqDC4?si=-s4G2niR4e_6AJS5",
     "https://youtube.com/shorts/kVMEj5MmkPI?si=2NSN7KpH2LVP6_XZ",
     "https://youtube.com/shorts/kcbFrJJWBlw?si=DUOL1fSNQsbwiJff",
@@ -161,6 +161,13 @@
     "https://youtube.com/shorts/W_KwEYdLzjY?si=v4p2lUO5huZmXCRq",
     "https://youtube.com/shorts/Kax8__oJr6Y?si=-X47kLseu8-G-K1q"
   ],
+  "youtubeVideosLinks": [
+    "https://youtu.be/evf7y2_bQ9w?si=FQrBVL67FKgHgVTu",
+    "https://youtu.be/XmkDGPQhTfg?si=U9d_4qIrP7YLiyIe",
+    "https://youtu.be/GukjQPBFbyU?si=cS9ggFF1Jwqs6u7H",
+    "https://youtu.be/sND5yiGfYhM?si=rKno5avX9T5lD-iV"
+  ],
+
   "highlights": [
     {
       "seriesAdWrapper": {

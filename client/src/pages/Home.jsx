@@ -20,6 +20,8 @@ import {
   getRankings,
 } from "../api/Home";
 import Image from "../components/Image";
+import YouTubeVideos from "../components/YtVideos";
+import data from "../data.json";
 import Gallery from "../components/Gallery";
 import { CgChevronDoubleDown, CgChevronDoubleUp } from "react-icons/cg";
 import { Helmet } from "react-helmet-async";
@@ -613,13 +615,18 @@ export default function Home() {
             />
           </div>
           <div className="mt-5 flex-1">
-            <YtShorts />
+            <YtShorts shorts={data.youtubeShorts} />
           </div>
         </div>
       </div>
 
+      {/* Youtube videos */}
+      <div className="mx-5 md:mx-24 my-0">
+        <YouTubeVideos links={data.youtubeVideosLinks} />
+      </div>
+
       {/* <Gallery /> */}
-      <div className="mx-5 md:mx-24 bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300">
+      <div className="mx-5 md:mx-24">
         <Gallery id={1} />
       </div>
     </div>

@@ -93,10 +93,10 @@ export default function Landing() {
           alt="Football stadium"
         />
 
-        {/* Improved gradient overlay */}
+        {/* Improved gradient overlay
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 to-black/80"></div>
 
-        {/* Content container */}
+         Content container 
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
             <span className="text-blue-400 dark:text-blue-300">MatchTrackers</span>
@@ -108,7 +108,7 @@ export default function Landing() {
           <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-8 rounded-md transition duration-300 text-lg shadow-lg dark:bg-blue-700 dark:hover:bg-blue-600">
             Start Tracking Now
           </button>
-        </div>
+        </div> */}
       </div>
 
       {/* Highlights Section */}
@@ -317,7 +317,10 @@ export default function Landing() {
                           <div className="bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-200 font-bold text-sm px-2 py-1 rounded">
                             {item.statistics[0].goals.total}
                           </div>
-                          <ChevronRight size={16} className="text-gray-400 dark:text-gray-500" />
+                          <ChevronRight
+                            size={16}
+                            className="text-gray-400 dark:text-gray-500"
+                          />
                         </div>
                       </div>
                     ))}
@@ -374,7 +377,10 @@ export default function Landing() {
                           <div className="bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200 font-bold text-sm px-2 py-1 rounded">
                             {item.statistics[0].goals.assists}
                           </div>
-                          <ChevronRight size={16} className="text-gray-400 dark:text-gray-500" />
+                          <ChevronRight
+                            size={16}
+                            className="text-gray-400 dark:text-gray-500"
+                          />
                         </div>
                       </div>
                     ))}
