@@ -166,7 +166,7 @@ export default function Footer() {
           </h3>
           <div className="flex justify-center md:justify-start space-x-6">
             <a
-              href="https://facebook.com"
+              href="https://linktr.ee/matchtrackers"
               target="_blank"
               rel="noopener noreferrer"
               className="text-gray-400 hover:text-white transition-colors"
@@ -206,7 +206,7 @@ export default function Footer() {
               </svg>
             </a>
             <a
-              href="https://twitter.com"
+              href="https://linktree.in/matchtrackers"
               target="_blank"
               rel="noopener noreferrer"
               className="text-gray-400 hover:text-white transition-colors"
