@@ -35,6 +35,7 @@ import BlogSection from "../components/HomePage/BlogSection";
 import NewsSection from "../components/HomePage/NewsSection";
 import PlayerRankings from "../components/HomePage/PlayerRankings";
 import UpcomingFixtures from "../components/HomePage/UpcomingFixtures";
+import BlogNewsSection from "../components/HomePage/NewsSection";
 
 const getColorClass = (index) => {
   const colors = [
@@ -618,6 +619,10 @@ export default function Home() {
             <YtShorts shorts={data.youtubeShorts} />
           </div>
         </div>
+      </div>
+
+      <div>
+        <BlogNewsSection blogs={blog} />
       </div>
 
       {/* Youtube videos */}

@@ -94,6 +94,14 @@ export default function CricketRouter() {
         />
         <Route path="/blogs" element={<Blogs />} />
         <Route
+          path="/cricketblog/:id"
+          element={
+            <PaddedLayout>
+              <CricketBlog />
+            </PaddedLayout>
+          }
+        />
+        <Route
           path="/gallery"
           element={
             <PaddedLayout>

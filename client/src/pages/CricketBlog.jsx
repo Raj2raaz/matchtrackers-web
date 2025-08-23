@@ -156,7 +156,7 @@ export default function CricketBlog() {
         {/* Parent Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Blog Content Section (2/3 width) */}
-          <div className="lg:col-span-2 min-h-screen bg-gray-50 dark:bg-gray-900 shadow py-10 px-4 md:px-8 transition-colors duration-300 rounded-lg">
+          <div className="lg:col-span-2 min-h-screen bg-gray-50 dark:bg-gray-800 shadow py-10 px-4 md:px-8 transition-colors duration-300 rounded-xl">
             <div className="max-w-5xl mx-auto">
               {/* Blog Title */}
               <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-4 text-gray-800 dark:text-gray-100">
