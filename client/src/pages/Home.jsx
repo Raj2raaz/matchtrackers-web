@@ -32,7 +32,6 @@ import YtShorts from "../components/YtShorts";
 import HistoricMoments from "../components/HistoricMoments";
 import FanPredictions from "../components/FanPredictions";
 import BlogSection from "../components/HomePage/BlogSection";
-import NewsSection from "../components/HomePage/NewsSection";
 import PlayerRankings from "../components/HomePage/PlayerRankings";
 import UpcomingFixtures from "../components/HomePage/UpcomingFixtures";
 import BlogNewsSection from "../components/HomePage/NewsSection";
@@ -196,8 +195,8 @@ export default function Home() {
       const blogResponse = await axios.get(`/api/blog/${content}`);
       setBlog(blogResponse.data.blogs);
 
-      const news = await getNews();
-      setNews(news);
+      // const news = await getNews();
+      // setNews(news);
     } catch (error) {
       console.log(error);
     }

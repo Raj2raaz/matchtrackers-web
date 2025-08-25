@@ -79,12 +79,12 @@ export default function BlogNewsSection({ blogs = [] }) {
             Match reviews, player interviews, and expert takes
           </p> */}
         </div>
-        <button
+        {/* <button
           onClick={() => navigate("/cricket/blogs")}
           className="flex cursor-pointer items-center gap-2 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium text-sm transition-colors self-start sm:self-auto"
         >
           See All <ExternalLink size={14} />
-        </button>
+        </button> */}
       </div>
 
       {/* Slider */}

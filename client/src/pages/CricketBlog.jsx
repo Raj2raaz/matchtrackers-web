@@ -26,7 +26,7 @@ export default function CricketBlog() {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const blogResponse = await axios.get("/api/blog");
+        const blogResponse = await axios.get(`/api/blog/${content}`);
         console.log(news);
         setNews(blogResponse.data.blogs || []);
       } catch (err) {

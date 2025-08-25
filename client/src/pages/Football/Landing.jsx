@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Hightlights from "../../components/football/Hightlights";
 import YouTubeVideos from "../../components/YtVideos";
+import BlogNewsSection from "../../components/HomePage/NewsSection";
 import data from "../../football.json";
 import { IoChevronDown, IoChevronUp } from "react-icons/io5";
 import { ChevronRight } from "lucide-react";
 import { IoMdArrowDroprightCircle } from "react-icons/io";
 import { footballApiClient } from "../../utils/axios";
+import axios from "axios";
 import {
   Calendar,
   MapPin,
@@ -19,6 +21,7 @@ import {
 } from "lucide-react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import useMainStore from "../../store/MainStore";
 
 export default function Landing() {
   const [noOfRecentMatches, setNoOfRecentMatches] = useState(5);
@@ -26,6 +29,8 @@ export default function Landing() {
   const [selectedSeason, setSelectedSeason] = useState(
     data.topleagues[0].seasons[0]
   );
+  const { content, setContent, refresh, refreshNow } = useMainStore();
+  const [blog, setBlog] = useState([]);
   const [activeTab, setActiveTab] = useState("scorers");
   const [matches, setMatches] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -61,6 +66,21 @@ export default function Landing() {
     };
     getMatches();
   }, [selectedLeague, selectedSeason]);
+
+  useEffect(() => {
+    fetchBlogs();
+  }, []);
+
+  // Fetch blogs
+  const fetchBlogs = async () => {
+    try {
+      const response = await axios.get("/api/blog/football");
+      // Or "/api/blogs?category=football" depending on your backend
+      setBlog(response.data.blogs);
+    } catch (error) {
+      console.error("Error fetching blogs:", error);
+    }
+  };
 
   // Format date
   const formatDate = (dateString) => {
@@ -114,6 +134,9 @@ export default function Landing() {
 
       {/* Highlights Section */}
       <Hightlights />
+
+      {/* News Section */}
+      <BlogNewsSection blogs={blog} />
 
       {/* Youtube videos */}
       <div className="mx-5 md:mx-24 my-0">
