@@ -254,18 +254,21 @@ const Match = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-100 dark:bg-black">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-800 to-blue-600 text-white py-6 shadow-md">
+      <div className="bg-gradient-to-r from-blue-800 to-blue-600 dark:from-gray-900 dark:to-gray-800 text-white py-6 shadow-md">
         <div className="container mx-auto px-4">
           <div className="flex flex-col items-center justify-center">
             <div className="flex items-center space-x-2 mb-2">
-              <Trophy size={24} className="text-yellow-300" />
+              <Trophy
+                size={24}
+                className="text-yellow-300 dark:text-yellow-400"
+              />
               <span className="font-bold text-xl">
                 {league?.name || "Match Details"}
               </span>
             </div>
-            <span className="text-blue-100">
+            <span className="text-blue-100 dark:text-gray-300">
               {league?.round || "Match Day"}
             </span>
           </div>
@@ -273,7 +276,7 @@ const Match = () => {
       </div>
 
       {/* Match Summary */}
-      <div className="bg-white shadow-lg relative">
+      <div className="bg-white dark:bg-gray-900 shadow-lg relative">
         <div className="absolute left-0 right-0 -top-4 flex justify-center">
           <div
             className={`px-4 py-1 rounded-full text-white text-sm font-medium ${getStatusColor(
@@ -286,14 +289,24 @@ const Match = () => {
         <div className="container mx-auto px-4 py-8">
           <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
             <div className="flex items-center space-x-2 mb-4 sm:mb-0">
-              <Calendar size={16} className="text-gray-500" />
-              <span className="text-sm text-gray-600">{formattedDate}</span>
-              <Clock size={16} className="text-gray-500 ml-4" />
-              <span className="text-sm text-gray-600">{formattedTime}</span>
+              <Calendar
+                size={16}
+                className="text-gray-500 dark:text-gray-400"
+              />
+              <span className="text-sm text-gray-600 dark:text-gray-300">
+                {formattedDate}
+              </span>
+              <Clock
+                size={16}
+                className="text-gray-500 ml-4 dark:text-gray-400"
+              />
+              <span className="text-sm text-gray-600 dark:text-gray-300">
+                {formattedTime}
+              </span>
             </div>
             <div className="flex items-center space-x-2">
-              <MapPin size={16} className="text-gray-500" />
-              <span className="text-sm text-gray-600">
+              <MapPin size={16} className="text-gray-500 dark:text-gray-400" />
+              <span className="text-sm text-gray-600 dark:text-gray-300">
                 {fixture?.venue?.name}, {fixture?.venue?.city}
               </span>
             </div>
@@ -302,30 +315,36 @@ const Match = () => {
           {/* Score */}
           <div className="grid grid-cols-1 lg:grid-cols-7 gap-6 items-center">
             <div className="lg:col-span-3 flex flex-col items-center lg:items-end">
-              <div className="w-20 h-20 mb-3 p-1 bg-gray-100 rounded-full flex items-center justify-center">
+              <div className="w-20 h-20 mb-3 p-1 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center">
                 <img
                   src={teams?.home?.logo}
                   alt={teams?.home?.name}
                   className="w-16 h-16 object-contain"
                 />
               </div>
-              <h2 className="text-xl font-bold text-center lg:text-right">
+              <h2 className="text-xl font-bold text-center lg:text-right dark:text-white">
                 {teams?.home?.name}
               </h2>
             </div>
 
             <div className="lg:col-span-1 flex flex-col items-center justify-center">
-              <div className="flex items-center justify-center mb-2 bg-gray-100 px-4 py-2 rounded-lg shadow-sm">
-                <div className="text-4xl font-bold px-3">{goals?.home}</div>
-                <div className="text-gray-400 text-4xl font-light">-</div>
-                <div className="text-4xl font-bold px-3">{goals?.away}</div>
+              <div className="flex items-center justify-center mb-2 bg-gray-100 dark:bg-gray-800 px-4 py-2 rounded-lg shadow-sm">
+                <div className="text-4xl font-bold px-3 dark:text-white">
+                  {goals?.home}
+                </div>
+                <div className="text-gray-400 dark:text-gray-500 text-4xl font-light">
+                  -
+                </div>
+                <div className="text-4xl font-bold px-3 dark:text-white">
+                  {goals?.away}
+                </div>
               </div>
-              <div className="text-xs text-gray-500 mb-1">
+              <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
                 Half-time: {score?.halftime?.home || 0} -{" "}
                 {score?.halftime?.away || 0}
               </div>
               {score?.fulltime && (
-                <div className="text-xs text-gray-500">
+                <div className="text-xs text-gray-500 dark:text-gray-400">
                   Full-time: {score?.fulltime?.home || 0} -{" "}
                   {score?.fulltime?.away || 0}
                 </div>
@@ -333,14 +352,14 @@ const Match = () => {
             </div>
 
             <div className="lg:col-span-3 flex flex-col items-center lg:items-start">
-              <div className="w-20 h-20 mb-3 p-1 bg-gray-100 rounded-full flex items-center justify-center">
+              <div className="w-20 h-20 mb-3 p-1 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center">
                 <img
                   src={teams?.away?.logo}
                   alt={teams?.away?.name}
                   className="w-16 h-16 object-contain"
                 />
               </div>
-              <h2 className="text-xl font-bold text-center lg:text-left">
+              <h2 className="text-xl font-bold text-center lg:text-left dark:text-white">
                 {teams?.away?.name}
               </h2>
             </div>
@@ -353,8 +372,8 @@ const Match = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Left Column */}
           <div className="lg:col-span-3">
-            <div className="bg-white rounded-lg shadow-md p-4 mb-6">
-              <h3 className="text-lg font-semibold mb-4 text-blue-600 border-b border-gray-200 pb-2 flex items-center">
+            <div className="bg-white dark:bg-gray-900 rounded-lg shadow-md p-4 mb-6">
+              <h3 className="text-lg font-semibold mb-4 text-blue-600 dark:text-blue-400 border-b border-gray-200 dark:border-gray-700 pb-2 flex items-center">
                 <Info size={18} className="mr-2" />
                 Match Info
               </h3>
@@ -362,12 +381,17 @@ const Match = () => {
               <div className="grid grid-cols-1 gap-3">
                 {/* Status */}
                 <div className="flex items-center text-sm">
-                  <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mr-3">
-                    <Clock size={16} className="text-blue-600" />
+                  <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center mr-3">
+                    <Clock
+                      size={16}
+                      className="text-blue-600 dark:text-blue-400"
+                    />
                   </div>
                   <div className="flex-1">
-                    <span className="text-gray-500 text-xs">Status</span>
-                    <p className="font-medium">
+                    <span className="text-gray-500 dark:text-gray-400 text-xs">
+                      Status
+                    </span>
+                    <p className="font-medium dark:text-white">
                       {fixture?.status?.long || "Unknown"}
                     </p>
                   </div>
@@ -376,36 +400,57 @@ const Match = () => {
                 {/* Referee */}
                 {fixture?.referee && (
                   <div className="flex items-center text-sm">
-                    <div className="w-8 h-8 rounded-full bg-yellow-100 flex items-center justify-center mr-3">
-                      <User size={16} className="text-yellow-600" />
+                    <div className="w-8 h-8 rounded-full bg-yellow-100 dark:bg-yellow-900 flex items-center justify-center mr-3">
+                      <User
+                        size={16}
+                        className="text-yellow-600 dark:text-yellow-400"
+                      />
                     </div>
                     <div className="flex-1">
-                      <span className="text-gray-500 text-xs">Referee</span>
-                      <p className="font-medium">{fixture.referee}</p>
+                      <span className="text-gray-500 dark:text-gray-400 text-xs">
+                        Referee
+                      </span>
+                      <p className="font-medium dark:text-white">
+                        {fixture.referee}
+                      </p>
                     </div>
                   </div>
                 )}
 
                 {/* League */}
                 <div className="flex items-center text-sm">
-                  <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center mr-3">
-                    <Trophy size={16} className="text-green-600" />
+                  <div className="w-8 h-8 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center mr-3">
+                    <Trophy
+                      size={16}
+                      className="text-green-600 dark:text-green-400"
+                    />
                   </div>
                   <div className="flex-1">
-                    <span className="text-gray-500 text-xs">League</span>
-                    <p className="font-medium">{league?.name || "Unknown"}</p>
+                    <span className="text-gray-500 dark:text-gray-400 text-xs">
+                      League
+                    </span>
+                    <p className="font-medium dark:text-white">
+                      {league?.name || "Unknown"}
+                    </p>
                   </div>
                 </div>
 
                 {/* Season */}
                 {league?.season && (
                   <div className="flex items-center text-sm">
-                    <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center mr-3">
-                      <Calendar size={16} className="text-purple-600" />
+                    <div className="w-8 h-8 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center mr-3">
+                      <Calendar
+                        size={16}
+                        className="text-purple-600 dark:text-purple-400"
+                      />
                     </div>
                     <div className="flex-1">
-                      <span className="text-gray-500 text-xs">Season</span>
-                      <p className="font-medium">{league.season}</p>
+                      <span className="text-gray-500 dark:text-gray-400 text-xs">
+                        Season
+                      </span>
+                      <p className="font-medium dark:text-white">
+                        {league.season}
+                      </p>
                     </div>
                   </div>
                 )}
@@ -413,12 +458,19 @@ const Match = () => {
                 {/* Round */}
                 {league?.round && (
                   <div className="flex items-center text-sm">
-                    <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center mr-3">
-                      <RefreshCw size={16} className="text-indigo-600" />
+                    <div className="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center mr-3">
+                      <RefreshCw
+                        size={16}
+                        className="text-indigo-600 dark:text-indigo-400"
+                      />
                     </div>
                     <div className="flex-1">
-                      <span className="text-gray-500 text-xs">Round</span>
-                      <p className="font-medium">{league.round}</p>
+                      <span className="text-gray-500 dark:text-gray-400 text-xs">
+                        Round
+                      </span>
+                      <p className="font-medium dark:text-white">
+                        {league.round}
+                      </p>
                     </div>
                   </div>
                 )}
@@ -426,12 +478,19 @@ const Match = () => {
                 {/* Venue */}
                 {fixture?.venue?.name && (
                   <div className="flex items-center text-sm">
-                    <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center mr-3">
-                      <MapPin size={16} className="text-red-600" />
+                    <div className="w-8 h-8 rounded-full bg-red-100 dark:bg-red-900 flex items-center justify-center mr-3">
+                      <MapPin
+                        size={16}
+                        className="text-red-600 dark:text-red-400"
+                      />
                     </div>
                     <div className="flex-1">
-                      <span className="text-gray-500 text-xs">Venue</span>
-                      <p className="font-medium">{fixture.venue.name}</p>
+                      <span className="text-gray-500 dark:text-gray-400 text-xs">
+                        Venue
+                      </span>
+                      <p className="font-medium dark:text-white">
+                        {fixture.venue.name}
+                      </p>
                     </div>
                   </div>
                 )}
@@ -439,20 +498,22 @@ const Match = () => {
             </div>
 
             {homeStats?.length > 0 && awayStats?.length > 0 && (
-              <div className="bg-white rounded-lg shadow-md p-4">
-                <h3 className="text-lg font-semibold mb-4 text-blue-600 border-b border-gray-200 pb-2 flex items-center">
+              <div className="bg-white dark:bg-gray-900 rounded-lg shadow-md p-4">
+                <h3 className="text-lg font-semibold mb-4 text-blue-600 dark:text-blue-400 border-b border-gray-200 dark:border-gray-700 pb-2 flex items-center">
                   <Star size={18} className="mr-2" />
                   Key Stats
                 </h3>
                 <div className="space-y-4">
                   <div>
                     <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium">
+                      <span className="text-sm font-medium dark:text-white">
                         {homeStats.find((s) => s.type === "Ball Possession")
                           ?.value || "0%"}
                       </span>
-                      <span className="text-xs text-gray-600">Possession</span>
-                      <span className="text-sm font-medium">
+                      <span className="text-xs text-gray-600 dark:text-gray-400">
+                        Possession
+                      </span>
+                      <span className="text-sm font-medium dark:text-white">
                         {awayStats.find((s) => s.type === "Ball Possession")
                           ?.value || "0%"}
                       </span>
@@ -471,12 +532,14 @@ const Match = () => {
 
                   <div>
                     <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium">
+                      <span className="text-sm font-medium dark:text-white">
                         {homeStats.find((s) => s.type === "Total Shots")
                           ?.value || 0}
                       </span>
-                      <span className="text-xs text-gray-600">Shots</span>
-                      <span className="text-sm font-medium">
+                      <span className="text-xs text-gray-600 dark:text-gray-400">
+                        Shots
+                      </span>
+                      <span className="text-sm font-medium dark:text-white">
                         {awayStats.find((s) => s.type === "Total Shots")
                           ?.value || 0}
                       </span>
@@ -491,12 +554,14 @@ const Match = () => {
 
                   <div>
                     <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium">
+                      <span className="text-sm font-medium dark:text-white">
                         {homeStats.find((s) => s.type === "Shots on Goal")
                           ?.value || 0}
                       </span>
-                      <span className="text-xs text-gray-600">On Target</span>
-                      <span className="text-sm font-medium">
+                      <span className="text-xs text-gray-600 dark:text-gray-400">
+                        On Target
+                      </span>
+                      <span className="text-sm font-medium dark:text-white">
                         {awayStats.find((s) => s.type === "Shots on Goal")
                           ?.value || 0}
                       </span>
@@ -511,12 +576,14 @@ const Match = () => {
 
                   <div>
                     <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium">
+                      <span className="text-sm font-medium dark:text-white">
                         {homeStats.find((s) => s.type === "Corner Kicks")
                           ?.value || 0}
                       </span>
-                      <span className="text-xs text-gray-600">Corners</span>
-                      <span className="text-sm font-medium">
+                      <span className="text-xs text-gray-600 dark:text-gray-400">
+                        Corners
+                      </span>
+                      <span className="text-sm font-medium dark:text-white">
                         {awayStats.find((s) => s.type === "Corner Kicks")
                           ?.value || 0}
                       </span>
@@ -531,14 +598,14 @@ const Match = () => {
 
                   <div>
                     <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium">
+                      <span className="text-sm font-medium dark:text-white">
                         {homeStats.find((s) => s.type === "Yellow Cards")
                           ?.value || 0}
                       </span>
-                      <span className="text-xs text-gray-600">
+                      <span className="text-xs text-gray-600 dark:text-gray-400">
                         Yellow Cards
                       </span>
-                      <span className="text-sm font-medium">
+                      <span className="text-sm font-medium dark:text-white">
                         {awayStats.find((s) => s.type === "Yellow Cards")
                           ?.value || 0}
                       </span>
@@ -558,14 +625,14 @@ const Match = () => {
           {/* Middle Column - Main Content */}
           <div className="lg:col-span-6">
             {/* Navigation Tabs */}
-            <div className="bg-white rounded-lg shadow-md mb-6">
+            <div className="bg-white dark:bg-gray-900 rounded-lg shadow-md mb-6">
               <div className="flex overflow-x-auto">
                 <button
                   onClick={() => setActiveTab("events")}
                   className={`flex-1 py-3 px-2 text-center flex items-center justify-center ${
                     activeTab === "events"
                       ? "text-blue-600 border-b-2 border-blue-600 font-medium"
-                      : "text-gray-600 hover:bg-gray-50"
+                      : "text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
                   }`}
                 >
                   <FaFutbol className="mr-2" size={16} />
@@ -576,7 +643,7 @@ const Match = () => {
                   className={`flex-1 py-3 px-2 text-center flex items-center justify-center ${
                     activeTab === "lineups"
                       ? "text-blue-600 border-b-2 border-blue-600 font-medium"
-                      : "text-gray-600 hover:bg-gray-50"
+                      : "text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
                   }`}
                 >
                   <FaTshirt className="mr-2" size={16} />
@@ -587,7 +654,7 @@ const Match = () => {
                   className={`flex-1 py-3 px-2 text-center flex items-center justify-center ${
                     activeTab === "stats"
                       ? "text-blue-600 border-b-2 border-blue-600 font-medium"
-                      : "text-gray-600 hover:bg-gray-50"
+                      : "text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
                   }`}
                 >
                   <Award className="mr-2" size={16} />
@@ -597,11 +664,11 @@ const Match = () => {
             </div>
 
             {/* Tab Content */}
-            <div className="bg-white rounded-lg shadow-md p-4">
+            <div className="bg-white dark:bg-gray-900 rounded-lg shadow-md p-4">
               {/* Events Tab */}
               {activeTab === "events" && (
                 <div>
-                  <h3 className="text-lg font-semibold mb-4 text-blue-600 border-b border-gray-200 pb-2 flex items-center">
+                  <h3 className="text-lg font-semibold mb-4 text-blue-600 border-b border-gray-200 dark:border-gray-700 pb-2 flex items-center">
                     <FaFutbol className="mr-2" />
                     Match Events
                   </h3>
@@ -611,12 +678,12 @@ const Match = () => {
                       {events.map((event, index) => (
                         <div
                           key={index}
-                          className="flex items-start p-3 bg-gray-50 rounded-lg hover:bg-blue-50 transition-colors"
+                          className="flex items-start p-3 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-blue-50 dark:hover:bg-gray-700 transition-colors"
                         >
                           <div className="w-12 text-center font-medium">
                             {event.time?.elapsed || 0}'
                             {event.time?.extra && (
-                              <span className="text-xs text-gray-500">
+                              <span className="text-xs text-gray-500 dark:text-gray-400">
                                 +{event.time.extra}
                               </span>
                             )}
@@ -645,12 +712,12 @@ const Match = () => {
                                 {event.player?.name || "Unknown Player"}
                               </div>
                               {event.assist?.name && (
-                                <div className="text-xs text-gray-600">
+                                <div className="text-xs text-gray-600 dark:text-gray-400">
                                   Assist: {event.assist.name}
                                 </div>
                               )}
                               {event.detail && (
-                                <div className="text-xs text-gray-500 mt-1">
+                                <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                                   {event.detail}
                                 </div>
                               )}
@@ -660,10 +727,10 @@ const Match = () => {
                       ))}
                     </div>
                   ) : (
-                    <div className="text-center py-10 text-gray-500">
+                    <div className="text-center py-10 text-gray-500 dark:text-gray-400">
                       <FaFutbol
                         size={40}
-                        className="mx-auto mb-4 text-gray-300"
+                        className="mx-auto mb-4 text-gray-300 dark:text-gray-600"
                       />
                       <p>No events recorded for this match yet</p>
                     </div>
@@ -674,7 +741,7 @@ const Match = () => {
               {/* Lineups Tab */}
               {activeTab === "lineups" && (
                 <div>
-                  <h3 className="text-lg font-semibold mb-4 text-blue-600 border-b border-gray-200 pb-2 flex items-center">
+                  <h3 className="text-lg font-semibold mb-4 text-blue-600 border-b border-gray-200 dark:border-gray-700 pb-2 flex items-center">
                     <FaTshirt className="mr-2" />
                     Starting XI
                   </h3>
@@ -692,7 +759,7 @@ const Match = () => {
                                 className="w-6 h-6 mr-2"
                               />
                             )}
-                            <h4 className="text-md font-medium text-blue-800">
+                            <h4 className="text-md font-medium text-blue-800 dark:text-blue-400">
                               {teams?.home?.name || "Home Team"}
                             </h4>
                           </div>
@@ -705,7 +772,7 @@ const Match = () => {
                                     "/football/player/" + player.player.id
                                   )
                                 }
-                                className="flex justify-between cursor-pointer items-center text-sm bg-gray-50 p-2 rounded hover:bg-blue-50 transition-colors"
+                                className="flex justify-between cursor-pointer items-center text-sm bg-gray-50 dark:bg-gray-800 p-2 rounded hover:bg-blue-50 dark:hover:bg-gray-700 transition-colors"
                               >
                                 <div className="flex items-center gap-2">
                                   <div className="relative">
@@ -742,7 +809,7 @@ const Match = () => {
                                 className="w-6 h-6 mr-2"
                               />
                             )}
-                            <h4 className="text-md font-medium text-red-800">
+                            <h4 className="text-md font-medium text-red-800 dark:text-red-400">
                               {teams?.away?.name || "Away Team"}
                             </h4>
                           </div>
@@ -755,7 +822,7 @@ const Match = () => {
                                   )
                                 }
                                 key={player.player?.id}
-                                className="flex items-center cursor-pointer justify-between text-sm bg-gray-50 p-2 rounded hover:bg-red-50 transition-colors"
+                                className="flex items-center cursor-pointer justify-between text-sm bg-gray-50 dark:bg-gray-800 p-2 rounded hover:bg-red-50 dark:hover:bg-gray-700 transition-colors"
                               >
                                 <div className="flex items-center gap-2">
                                   <img
@@ -781,7 +848,7 @@ const Match = () => {
                         </div>
                       </div>
 
-                      <h3 className="text-lg font-semibold mb-4 text-blue-600 border-b border-gray-200 pb-2 flex items-center">
+                      <h3 className="text-lg font-semibold mb-4 text-blue-600 border-b border-gray-200 dark:border-gray-700 pb-2 flex items-center">
                         <FaExchangeAlt className="mr-2" />
                         Substitutes
                       </h3>
@@ -799,7 +866,7 @@ const Match = () => {
                                     )
                                   }
                                   key={player.player?.id}
-                                  className="flex items-center cursor-pointer justify-between text-sm bg-gray-50 p-2 rounded hover:bg-blue-50 transition-colors opacity-80"
+                                  className="flex items-center cursor-pointer justify-between text-sm bg-gray-50 dark:bg-gray-800 p-2 rounded hover:bg-blue-50 dark:hover:bg-gray-700 transition-colors opacity-80"
                                 >
                                   <div className="flex items-center gap-2">
                                     <img
@@ -817,7 +884,7 @@ const Match = () => {
                                 </div>
                               ))
                             ) : (
-                              <div className="text-sm text-gray-500 text-center py-2">
+                              <div className="text-sm text-gray-500 dark:text-gray-400 text-center py-2">
                                 No substitutes listed
                               </div>
                             )}
@@ -836,7 +903,7 @@ const Match = () => {
                                     )
                                   }
                                   key={player.player?.id}
-                                  className="flex justify-between cursor-pointer items-center text-sm bg-gray-50 p-2 rounded hover:bg-red-50 transition-colors opacity-80"
+                                  className="flex justify-between cursor-pointer items-center text-sm bg-gray-50 dark:bg-gray-800 p-2 rounded hover:bg-red-50 dark:hover:bg-gray-700 transition-colors opacity-80"
                                 >
                                   <div className="flex items-center gap-2">
                                     <img
@@ -854,7 +921,7 @@ const Match = () => {
                                 </div>
                               ))
                             ) : (
-                              <div className="text-sm text-gray-500 text-center py-2">
+                              <div className="text-sm text-gray-500 dark:text-gray-400 text-center py-2">
                                 No substitutes listed
                               </div>
                             )}
@@ -863,10 +930,10 @@ const Match = () => {
                       </div>
                     </>
                   ) : (
-                    <div className="text-center py-10 text-gray-500">
+                    <div className="text-center py-10 text-gray-500 dark:text-gray-400">
                       <FaTshirt
                         size={40}
-                        className="mx-auto mb-4 text-gray-300"
+                        className="mx-auto mb-4 text-gray-300 dark:text-gray-600"
                       />
                       <p>No lineup information available for this match</p>
                     </div>
@@ -877,7 +944,7 @@ const Match = () => {
               {/* Stats Tab */}
               {activeTab === "stats" && (
                 <div>
-                  <h3 className="text-lg font-semibold mb-4 text-blue-600 border-b border-gray-200 pb-2 flex items-center">
+                  <h3 className="text-lg font-semibold mb-4 text-blue-600 border-b border-gray-200 dark:border-gray-700 pb-2 flex items-center">
                     <Award className="mr-2" />
                     Match Statistics
                   </h3>
@@ -893,11 +960,13 @@ const Match = () => {
                               className="w-full h-full object-contain"
                             />
                           </div>
-                          <span className="text-sm font-medium text-blue-800">
+                          <span className="text-sm font-medium text-blue-800 dark:text-blue-400">
                             {teams?.home?.name}
                           </span>
                         </div>
-                        <div className="mx-4 text-sm text-gray-500">vs</div>
+                        <div className="mx-4 text-sm text-gray-500 dark:text-gray-400">
+                          vs
+                        </div>
                         <div className="flex items-center">
                           <div className="w-8 h-8 mr-2">
                             <img
@@ -906,7 +975,7 @@ const Match = () => {
                               className="w-full h-full object-contain"
                             />
                           </div>
-                          <span className="text-sm font-medium text-red-800">
+                          <span className="text-sm font-medium text-red-800 dark:text-red-400">
                             {teams?.away?.name}
                           </span>
                         </div>
@@ -924,13 +993,13 @@ const Match = () => {
                             return (
                               <div key={index} className="space-y-1">
                                 <div className="flex justify-between items-center">
-                                  <span className="text-sm font-medium text-blue-800">
+                                  <span className="text-sm font-medium text-blue-800 dark:text-blue-400">
                                     {stat.value}
                                   </span>
-                                  <span className="text-xs text-gray-600 font-medium">
+                                  <span className="text-xs text-gray-600 dark:text-gray-400 font-medium">
                                     {stat.type}
                                   </span>
-                                  <span className="text-sm font-medium text-red-800">
+                                  <span className="text-sm font-medium text-red-800 dark:text-red-400">
                                     {awayStat.value}
                                   </span>
                                 </div>
@@ -944,7 +1013,7 @@ const Match = () => {
                         <div className="text-center pt-4">
                           <button
                             onClick={() => setIsStatsExpanded(!isStatsExpanded)}
-                            className="inline-flex items-center text-sm text-blue-600 hover:text-blue-800"
+                            className="inline-flex items-center text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
                           >
                             {isStatsExpanded ? (
                               <>
@@ -962,8 +1031,11 @@ const Match = () => {
                       )}
                     </div>
                   ) : (
-                    <div className="text-center py-10 text-gray-500">
-                      <Award size={40} className="mx-auto mb-4 text-gray-300" />
+                    <div className="text-center py-10 text-gray-500 dark:text-gray-400">
+                      <Award
+                        size={40}
+                        className="mx-auto mb-4 text-gray-300 dark:text-gray-600"
+                      />
                       <p>No statistics available for this match</p>
                     </div>
                   )}
@@ -975,8 +1047,8 @@ const Match = () => {
           {/* Right Column */}
           <div className="lg:col-span-3">
             {/* Team Form */}
-            <div className="bg-white rounded-lg shadow-md p-4 mb-6">
-              <h3 className="text-lg font-semibold mb-4 text-blue-600 border-b border-gray-200 pb-2 flex items-center">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 mb-6">
+              <h3 className="text-lg font-semibold mb-4 text-blue-600 dark:text-blue-400 border-b border-gray-200 dark:border-gray-700 pb-2 flex items-center">
                 <FaShieldAlt className="mr-2" />
                 Team Form
               </h3>
@@ -991,7 +1063,7 @@ const Match = () => {
                         className="w-6 h-6 mr-2"
                       />
                     )}
-                    <h4 className="text-md font-medium">
+                    <h4 className="text-md font-medium dark:text-gray-200">
                       {teams?.home?.name || "Home Team"}
                     </h4>
                   </div>
@@ -1023,7 +1095,7 @@ const Match = () => {
                         className="w-6 h-6 mr-2"
                       />
                     )}
-                    <h4 className="text-md font-medium">
+                    <h4 className="text-md font-medium dark:text-gray-200">
                       {teams?.away?.name || "Away Team"}
                     </h4>
                   </div>
@@ -1048,8 +1120,8 @@ const Match = () => {
             </div>
 
             {/* Head to Head */}
-            <div className="bg-white rounded-lg shadow-md p-4 mb-6">
-              <h3 className="text-lg font-semibold mb-4 text-blue-600 border-b border-gray-200 pb-2 flex items-center">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 mb-6">
+              <h3 className="text-lg font-semibold mb-4 text-blue-600 dark:text-blue-400 border-b border-gray-200 dark:border-gray-700 pb-2 flex items-center">
                 <Trophy className="mr-2" size={18} />
                 Head to Head
               </h3>
@@ -1083,12 +1155,12 @@ const Match = () => {
                 ].map((match, index) => (
                   <div
                     key={index}
-                    className="p-2 bg-gray-50 rounded-md hover:bg-blue-50 transition-colors"
+                    className="p-2 bg-gray-50 dark:bg-gray-700 rounded-md hover:bg-blue-50 dark:hover:bg-gray-600 transition-colors"
                   >
-                    <div className="text-xs text-gray-500 mb-1">
+                    <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
                       {match.date}
                     </div>
-                    <div className="flex justify-between items-center">
+                    <div className="flex justify-between items-center text-gray-700 dark:text-gray-200">
                       <span className="text-sm">{match.homeTeam}</span>
                       <span className="text-sm font-bold">{match.score}</span>
                       <span className="text-sm">{match.awayTeam}</span>

@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import footballheader from "../../assets/Landing/footballheader.webp";
+import footballheadermv from "../../assets/Landing/footballheadermv.webp";
 import Hightlights from "../../components/football/Hightlights";
 import YouTubeVideos from "../../components/YtVideos";
 import BlogNewsSection from "../../components/HomePage/NewsSection";
@@ -108,10 +110,18 @@ export default function Landing() {
     <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-black">
       {/* Hero Section */}
       <div className="relative h-96 w-full">
+        {/* Desktop Hero Image */}
         <img
-          src="https://images7.alphacoders.com/932/932701.jpg"
-          className="h-full w-full object-cover"
-          alt="Football stadium"
+          src={footballheader}
+          alt="Hero"
+          className="hidden md:block w-full h-auto"
+        />
+
+        {/* Mobile Hero Image */}
+        <img
+          src={footballheadermv}
+          alt="Hero Mobile"
+          className="block md:hidden w-full h-auto"
         />
 
         {/* Improved gradient overlay
