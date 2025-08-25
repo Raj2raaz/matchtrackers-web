@@ -116,15 +116,16 @@ app.get("/api/blogs", async (req, res) => {
   }
 });
 
-app.get("/api/blog", async (req, res) => {
+app.get("/api/blog/:type", async (req, res) => {
   try {
+    const { type } = req.params;
     const blogs = await prisma.blog.findMany({
+      where: { type },
       orderBy: {
         createdAt: "desc",
       },
       take: 7,
     });
-
     // console.log(blogs);
     res.status(200).json({
       blogs,

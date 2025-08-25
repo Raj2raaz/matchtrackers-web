@@ -85,7 +85,7 @@ const Navbar = () => {
       setNavLinks(data);
 
       // Fetch blog articles
-      const blogResponse = await axios.get("/api/blog");
+      const blogResponse = await axios.get(`/api/blog/${content}`);
       setBlogs(blogResponse.data.blogs); // Assuming the response data is an array of blogs
     } catch (error) {
       console.error("Failed to fetch data:", error);
@@ -238,7 +238,7 @@ const Navbar = () => {
         <Link
           to="/${content}/blogs" // Adjust the path as necessary
           className="block px-4 py-2 text-center text-primary text-sm font-medium hover:bg-blue-50 dark:hover:bg-gray-600"
-          onClick={(e) => handleNavLinkClick(e, "/${content}/blogs")}
+          onClick={(e) => handleNavLinkClick(e, `/${content}/blogs`)}
         >
           View All Blogs
         </Link>

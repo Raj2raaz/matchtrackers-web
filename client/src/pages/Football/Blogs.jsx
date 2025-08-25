@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ArticleSkeleton from "../components/ArticleSkeleton.jsx";
-import useMainStore from "../store/MainStore.js";
 
 export default function Blogs() {
   const [blogs, setBlogs] = useState([]);

@@ -36,6 +36,7 @@ import NewsSection from "../components/HomePage/NewsSection";
 import PlayerRankings from "../components/HomePage/PlayerRankings";
 import UpcomingFixtures from "../components/HomePage/UpcomingFixtures";
 import BlogNewsSection from "../components/HomePage/NewsSection";
+import useMainStore from "../store/MainStore";
 
 const getColorClass = (index) => {
   const colors = [
@@ -81,7 +82,7 @@ export default function Home() {
   const [topSectionMatches, setTopSectionMatches] = useState([]);
   const [seriesList, setSeriesList] = useState([]);
   const [seriesShown, setSeriesShown] = useState(9);
-
+  const { content, setContent, refresh, refreshNow } = useMainStore();
   const [upcomingMatches, setUpcomingMatches] = useState([]);
   const [blog, setBlog] = useState(null);
   const navigate = useNavigate();
@@ -192,7 +193,7 @@ export default function Home() {
       const upcoming = await getMatches("upcoming");
       setUpcomingMatches(upcoming);
 
-      const blogResponse = await axios.get("/api/blog");
+      const blogResponse = await axios.get(`/api/blog/${content}`);
       setBlog(blogResponse.data.blogs);
 
       const news = await getNews();
