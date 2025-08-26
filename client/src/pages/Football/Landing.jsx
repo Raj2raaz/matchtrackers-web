@@ -158,7 +158,7 @@ export default function Landing() {
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Leagues Section - Now with Season Selector */}
           <div className="w-full lg:w-1/3">
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-100 dark:border-gray-700">
+            <div className="bg-gray-200 dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-100 dark:border-gray-700">
               {/* League & Season Selector Header */}
               <div className="bg-gradient-to-r from-blue-600 to-blue-800 p-4">
                 <div className="flex justify-between items-center">
@@ -241,7 +241,7 @@ export default function Landing() {
               </div>
             </div>
 
-            <div className="bg-white dark:bg-gray-800 mt-5 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 shadow-md max-w-md">
+            <div className="bg-gray-200 dark:bg-gray-800 mt-5 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 shadow-md max-w-md">
               {/* Header */}
               <div className="bg-gradient-to-r from-blue-700 to-blue-600 p-4 text-white">
                 <div className="flex items-center gap-2 mb-3">
@@ -437,7 +437,7 @@ export default function Landing() {
 
           {/* Matches Section */}
           <div className="w-full lg:w-2/3">
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-100 dark:border-gray-700">
+            <div className="bg-gray-200 dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-100 dark:border-gray-700">
               {/* Matches Header */}
               <div className="bg-gradient-to-r from-blue-600 to-blue-800 p-4">
                 <div className="flex justify-between items-center">

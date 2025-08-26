@@ -14,7 +14,9 @@ export default function Highlights() {
       try {
         const matches = await getFixtures();
         setMatches(matches);
-        cardRefs.current = matches.map((_, i) => cardRefs.current[i] || React.createRef());
+        cardRefs.current = matches.map(
+          (_, i) => cardRefs.current[i] || React.createRef()
+        );
       } catch (error) {
         console.error("Error fetching fixtures:", error);
       }
@@ -38,7 +40,8 @@ export default function Highlights() {
     ) {
       const currentCard = cardRefs.current[currentIndex].current;
       if (currentCard) {
-        const containerRect = scrollContainerRef.current.getBoundingClientRect();
+        const containerRect =
+          scrollContainerRef.current.getBoundingClientRect();
         const cardRect = currentCard.getBoundingClientRect();
         const scrollPosition =
           cardRect.left -
@@ -147,7 +150,7 @@ export default function Highlights() {
                     ? "border-blue-500 scale-100"
                     : "border-blue-400 scale-95"
                 } 
-                bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100`}
+                bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-gray-100`}
             >
               {/* Match header */}
               <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-3">
@@ -217,9 +220,13 @@ export default function Highlights() {
                   <div className="bg-blue-600 text-white py-2 px-4 rounded-lg shadow-md">
                     {match.goals.home !== null && match.goals.away !== null ? (
                       <div className="flex items-center gap-2">
-                        <span className="text-xl font-bold">{match.goals.home}</span>
+                        <span className="text-xl font-bold">
+                          {match.goals.home}
+                        </span>
                         <span className="text-sm text-white">|</span>
-                        <span className="text-xl font-bold">{match.goals.away}</span>
+                        <span className="text-xl font-bold">
+                          {match.goals.away}
+                        </span>
                       </div>
                     ) : (
                       <div className="text-lg font-medium text-gray-300 dark:text-gray-400">

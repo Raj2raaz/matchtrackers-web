@@ -160,21 +160,21 @@ const Navbar = () => {
   const MatchesDropdown = () => (
     <div className="py-2 bg-white z-70 rounded-md text-black shadow-lg  dark:bg-gray-800 dark:text-gray-100">
       <Link
-        to="/${content}/match-list/recent"
+        to={`/${content}/match-list/recent`}
         className="block px-4 py-2 hover:bg-blue-50 dark:hover:bg-gray-600 transition-colors duration-150 text-sm"
         onClick={(e) => handleNavLinkClick(e, `/${content}/match-list/recent`)}
       >
         Recent
       </Link>
       <Link
-        to="/${content}/match-list/live"
+        to={`/${content}/match-list/live`}
         className="block px-4 py-2 hover:bg-blue-50 dark:hover:bg-gray-600 transition-colors duration-150 text-sm"
         onClick={(e) => handleNavLinkClick(e, `/${content}/match-list/live`)}
       >
         Live
       </Link>
       <Link
-        to="/${content}/match-list/upcoming"
+        to={`/${content}/match-list/upcoming`}
         className="block px-4 py-2 hover:bg-blue-50 dark:hover:bg-gray-600 transition-colors duration-150 text-sm"
         onClick={(e) =>
           handleNavLinkClick(e, `/${content}/match-list/upcoming`)
@@ -186,28 +186,53 @@ const Navbar = () => {
   );
 
   const RankingsDropdown = () => (
-    <div className="py-2 bg-white z-70 rounded-md text-black shadow-lg  dark:bg-gray-800 dark:text-gray-100">
-      <Link
-        to="/${content}/rankings/odi"
-        className="block px-4 py-2 hover:bg-blue-50 dark:hover:bg-gray-600 transition-colors duration-150 text-sm"
-        onClick={(e) => handleNavLinkClick(e, `/${content}/rankings/odi`)}
-      >
-        ODI
-      </Link>
-      <Link
-        to="/${content}/rankings/test"
-        className="block px-4 py-2 hover:bg-blue-50 dark:hover:bg-gray-600 transition-colors duration-150 text-sm"
-        onClick={(e) => handleNavLinkClick(e, `/${content}/rankings/test`)}
-      >
-        Test
-      </Link>
-      <Link
-        to="/${content}/rankings/t20"
-        className="block px-4 py-2 hover:bg-blue-50 dark:hover:bg-gray-600 transition-colors duration-150 text-sm"
-        onClick={(e) => handleNavLinkClick(e, `/${content}/rankings/t20`)}
-      >
-        T20
-      </Link>
+    <div className="py-2 bg-white z-70 rounded-md text-black shadow-lg dark:bg-gray-800 dark:text-gray-100">
+      {content === "cricket" ? (
+        <>
+          <Link
+            to={`/${content}/rankings/odi`}
+            className="block px-4 py-2 hover:bg-blue-50 dark:hover:bg-gray-600 transition-colors duration-150 text-sm"
+            onClick={(e) => handleNavLinkClick(e, `/${content}/rankings/odi`)}
+          >
+            ODI
+          </Link>
+          <Link
+            to={`/${content}/rankings/test`}
+            className="block px-4 py-2 hover:bg-blue-50 dark:hover:bg-gray-600 transition-colors duration-150 text-sm"
+            onClick={(e) => handleNavLinkClick(e, `/${content}/rankings/test`)}
+          >
+            Test
+          </Link>
+          <Link
+            to={`/${content}/rankings/t20`}
+            className="block px-4 py-2 hover:bg-blue-50 dark:hover:bg-gray-600 transition-colors duration-150 text-sm"
+            onClick={(e) => handleNavLinkClick(e, `/${content}/rankings/t20`)}
+          >
+            T20
+          </Link>
+        </>
+      ) : content === "football" ? (
+        <>
+          <Link
+            to={`/${content}/rankings/scorers`}
+            className="block px-4 py-2 hover:bg-blue-50 dark:hover:bg-gray-600 transition-colors duration-150 text-sm"
+            onClick={(e) =>
+              handleNavLinkClick(e, `/${content}/rankings/scorers`)
+            }
+          >
+            Scorers
+          </Link>
+          <Link
+            to={`/${content}/rankings/assists`}
+            className="block px-4 py-2 hover:bg-blue-50 dark:hover:bg-gray-600 transition-colors duration-150 text-sm"
+            onClick={(e) =>
+              handleNavLinkClick(e, `/${content}/rankings/assists`)
+            }
+          >
+            Assists
+          </Link>
+        </>
+      ) : null}
     </div>
   );
 
@@ -520,7 +545,7 @@ const Navbar = () => {
             <div
               className="capitalize flex gap-1 items-center cursor-pointer py-2 px-1 hover:text-primary transition-colors duration-200"
               onClick={() => {
-                navigate("/${content}/analytics");
+                navigate(`/${content}/analytics`);
                 closeDropdown();
               }}
             >
@@ -751,7 +776,7 @@ const Navbar = () => {
                 <div
                   className="flex justify-between items-center py-3 px-6 font-medium cursor-pointer text-gray-800 dark:text-gray-200"
                   onClick={() => {
-                    navigate("/${content}/analytics");
+                    navigate(`/${content}/analytics`);
                     setMobileMenuOpen(false);
                   }}
                 >
