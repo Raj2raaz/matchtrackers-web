@@ -144,10 +144,14 @@ export default function Landing() {
       </div>
 
       {/* Highlights Section */}
-      <Hightlights />
+      <div className="w-full ">
+        <Hightlights />
+      </div>
 
       {/* News Section */}
-      <BlogNewsSection blogs={blog} />
+      <div className="w-full ">
+        <BlogNewsSection blogs={blog} />
+      </div>
 
       {/* leagues, matches, players Content */}
       <div className="container mx-auto md:px-24 px-4 my-8">
