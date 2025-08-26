@@ -24,6 +24,7 @@ import {
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import useMainStore from "../../store/MainStore";
+import YtShorts from "../../components/YtShorts";
 
 export default function Landing() {
   const [noOfRecentMatches, setNoOfRecentMatches] = useState(5);
@@ -147,11 +148,6 @@ export default function Landing() {
 
       {/* News Section */}
       <BlogNewsSection blogs={blog} />
-
-      {/* Youtube videos */}
-      <div className="mx-5 md:mx-24 my-0">
-        <YouTubeVideos links={data.footballyoutubeVideosLinks} />
-      </div>
 
       {/* leagues, matches, players Content */}
       <div className="container mx-auto md:px-24 px-4 my-8">
@@ -435,8 +431,14 @@ export default function Landing() {
             </div>
           </div>
 
-          {/* Matches Section */}
+          {/* right Section */}
           <div className="w-full lg:w-2/3">
+            {/* Web Stories Section */}
+            <div className="bg-gray-200 dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-100 dark:border-gray-700 mb-6 w-full h-[600px]">
+              <YtShorts shorts={data.footballyoutubeShorts} />
+            </div>
+
+            {/* matches section */}
             <div className="bg-gray-200 dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-100 dark:border-gray-700">
               {/* Matches Header */}
               <div className="bg-gradient-to-r from-blue-600 to-blue-800 p-4">
@@ -653,6 +655,11 @@ export default function Landing() {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Youtube videos */}
+      <div className="mx-5 md:mx-24 my-0">
+        <YouTubeVideos links={data.footballyoutubeVideosLinks} />
       </div>
     </div>
   );

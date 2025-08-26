@@ -34,6 +34,8 @@ const Navbar = () => {
   const mobileMenuRef = useRef();
   const [isHovering, setIsHovering] = useState(null);
   const { theme, toggleTheme } = useContext(ThemeContext);
+  const [blogs, setBlogs] = useState([]);
+  const [matches, setMatches] = useState([]);
 
   useEffect(() => {
     const token = Cookies.get("token");
@@ -76,8 +78,6 @@ const Navbar = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [openDropdown, mobileMenuOpen]);
-
-  const [blogs, setBlogs] = useState([]);
 
   const getData = async () => {
     try {
@@ -272,59 +272,139 @@ const Navbar = () => {
   );
 
   const SchedulesDropdown = () => (
-    <div className="py-2 max-h-96 z-70 overflow-y-auto text-black bg-white rounded-md shadow-lg  dark:bg-gray-800 dark:text-gray-100">
-      {navLinks?.schedules?.matchScheduleMap
-        ?.filter((item) => item.scheduleAdWrapper)
-        .slice(0, 6)
-        .map((item, index) => {
-          const dateInfo = item.scheduleAdWrapper.date;
-          const matches =
-            item.scheduleAdWrapper.matchScheduleList[0]?.matchInfo || [];
+    <div
+      className="py-2 max-h-96 z-70 overflow-y-auto text-black bg-white rounded-md shadow-lg 
+                dark:bg-gray-800 dark:text-gray-100 scrollbar-thin scrollbar-thumb-gray-300 
+                dark:scrollbar-thumb-gray-600 scrollbar-track-transparent"
+    >
+      {/* Cricket schedules */}
+      {content === "cricket" &&
+        navLinks?.schedules?.matchScheduleMap
+          ?.filter((item) => item.scheduleAdWrapper)
+          .slice(0, 6)
+          .map((item, index) => {
+            const dateInfo = item.scheduleAdWrapper.date;
+            const matches = item.scheduleAdWrapper.matchScheduleList.flatMap(
+              (list) => list.matchInfo || []
+            );
 
-          return matches.length > 0 ? (
+            return matches.length > 0 ? (
+              <div
+                key={index}
+                className="border-b border-gray-100 dark:border-gray-700 last:border-0"
+              >
+                <div
+                  className="px-4 py-2 font-medium text-xs text-gray-600 dark:text-gray-400 
+                            bg-gray-50 dark:bg-gray-700 sticky top-0 z-10"
+                >
+                  {dateInfo}
+                </div>
+
+                {matches.map((match, mIndex) => (
+                  <Link
+                    key={mIndex}
+                    to={`/${content}/match/${match.matchId}`}
+                    className="block px-4 py-3 hover:bg-blue-50 dark:hover:bg-gray-600 
+                           transition-colors duration-150 rounded-md"
+                    onClick={(e) =>
+                      handleNavLinkClick(
+                        e,
+                        `/${content}/match/${match.matchId}`
+                      )
+                    }
+                  >
+                    <div className="flex justify-between items-center">
+                      <div className="text-xs text-gray-500 dark:text-gray-400">
+                        {match.matchFormat} • {match.matchDesc}
+                      </div>
+                      <div className="text-xs text-gray-500 dark:text-gray-400">
+                        {match.venueInfo.city}
+                      </div>
+                    </div>
+
+                    <div className="flex justify-between items-center mt-2">
+                      <div className="font-medium text-sm dark:text-gray-100">
+                        {match.team1.teamSName} vs {match.team2.teamSName}
+                      </div>
+                      <div
+                        className="text-xs px-2 py-1 bg-blue-50 dark:bg-gray-600 
+                                  text-blue-600 dark:text-blue-300 rounded-full"
+                      >
+                        {new Date(Number(match.startDate)).toLocaleTimeString(
+                          "en-US",
+                          {
+                            hour: "numeric",
+                            minute: "numeric",
+                            hour12: true,
+                          }
+                        )}
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            ) : null;
+          })}
+
+      {/* Football schedules */}
+      {content === "football" &&
+        matches?.slice(0, 6).map((match, index) => {
+          const dateInfo = new Date(match.fixture.date).toLocaleDateString(
+            "en-US",
+            {
+              weekday: "short",
+              month: "short",
+              day: "numeric",
+            }
+          );
+
+          return (
             <div
               key={index}
               className="border-b border-gray-100 dark:border-gray-700 last:border-0"
             >
-              <div className="px-4 py-2 font-medium text-xs text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-800">
+              <div
+                className="px-4 py-2 font-medium text-xs text-gray-600 dark:text-gray-400 
+                          bg-gray-50 dark:bg-gray-700 sticky top-0 z-10"
+              >
                 {dateInfo}
               </div>
-              {matches.map((match, mIndex) => (
-                <Link
-                  key={mIndex}
-                  to={`/${content}/match/${match.matchId}`}
-                  className="block px-4 py-3 hover:bg-blue-50 dark:hover:bg-gray-600 transition-colors duration-150"
-                  onClick={(e) =>
-                    handleNavLinkClick(e, `/${content}/match/${match.matchId}`)
-                  }
-                >
-                  <div className="flex justify-between items-center">
-                    <div className="text-xs text-gray-500 dark:text-gray-400">
-                      {match.matchFormat} • {match.matchDesc}
-                    </div>
-                    <div className="text-xs text-gray-500 dark:text-gray-400">
-                      {match.venueInfo.city}
-                    </div>
+
+              <Link
+                to={`/${content}/match/${match.fixture.id}`}
+                className="block px-4 py-3 hover:bg-blue-50 dark:hover:bg-gray-600 
+                       transition-colors duration-150 rounded-md"
+                onClick={(e) =>
+                  handleNavLinkClick(e, `/${content}/match/${match.fixture.id}`)
+                }
+              >
+                <div className="flex justify-between items-center">
+                  <div className="text-xs text-gray-500 dark:text-gray-400">
+                    {match.league.name} • {match.fixture.round}
                   </div>
-                  <div className="flex justify-between items-center mt-2">
-                    <div className="font-medium text-sm dark:text-gray-100">
-                      {match.team1.teamSName} vs {match.team2.teamSName}
-                    </div>
-                    <div className="text-xs px-2 py-1 bg-blue-50 dark:bg-gray-600 text-blue-600 dark:text-blue-300 rounded-full">
-                      {new Date(Number(match.startDate)).toLocaleTimeString(
-                        "en-US",
-                        {
-                          hour: "numeric",
-                          minute: "numeric",
-                          hour12: true,
-                        }
-                      )}
-                    </div>
+                  <div className="text-xs text-gray-500 dark:text-gray-400">
+                    {match.fixture.venue.city}
                   </div>
-                </Link>
-              ))}
+                </div>
+
+                <div className="flex justify-between items-center mt-2">
+                  <div className="font-medium text-sm dark:text-gray-100">
+                    {match.teams.home.name} vs {match.teams.away.name}
+                  </div>
+                  <div
+                    className="text-xs px-2 py-1 bg-blue-50 dark:bg-gray-600 
+                              text-blue-600 dark:text-blue-300 rounded-full"
+                  >
+                    {new Date(match.fixture.date).toLocaleTimeString("en-US", {
+                      hour: "numeric",
+                      minute: "numeric",
+                      hour12: true,
+                    })}
+                  </div>
+                </div>
+              </Link>
             </div>
-          ) : null;
+          );
         })}
     </div>
   );
