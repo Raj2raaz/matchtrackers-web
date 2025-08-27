@@ -148,11 +148,6 @@ export default function Landing() {
         <Hightlights />
       </div>
 
-      {/* News Section */}
-      <div className="w-full ">
-        <BlogNewsSection blogs={blog} />
-      </div>
-
       {/* leagues, matches, players Content */}
       <div className="container mx-auto md:px-24 px-4 my-8">
         <div className="flex flex-col lg:flex-row gap-6">
@@ -659,6 +654,11 @@ export default function Landing() {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* News Section */}
+      <div className="w-full ">
+        <BlogNewsSection blogs={blog} />
       </div>
 
       {/* Youtube videos */}
