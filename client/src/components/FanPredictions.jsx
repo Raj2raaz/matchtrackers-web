@@ -85,11 +85,11 @@ export default function FanPredictions({
         `}
       </style>
 
-      <div className="flex-1 bg-gray-200 dark:bg-gray-800 border rounded-xl border-slate-300 dark:border-slate-600 p-5">
-        <h2 className="text-xl font-bold mb-1 text-gray-900 dark:text-gray-100">
+      <div className="flex-1 bg-gray-200 dark:bg-gray-800 border rounded-xl border-slate-300 dark:border-slate-600 p-3 md:p-5">
+        <h2 className="text-base md:text-xl font-bold mb-1 text-gray-900 dark:text-gray-100">
           Fan Predictions
         </h2>
-        <p className="text-gray-700 dark:text-gray-300 mb-4">
+        <p className="text-xs md:text-sm text-gray-700 dark:text-gray-300 mb-3 md:mb-4">
           Cast your vote — who’s winning today?
         </p>
 
@@ -105,9 +105,9 @@ export default function FanPredictions({
               : "wave-default";
 
           return (
-            <div className="relative mb-4" key={index}>
+            <div className="relative mb-3 md:mb-4" key={index}>
               <div
-                className={`absolute top-0 left-0 h-full rounded-xl overflow-hidden z-20 wave-bar shimmer ${
+                className={`absolute top-0 left-0 h-full rounded-lg md:rounded-xl overflow-hidden z-20 wave-bar shimmer ${
                   isSelected ? "selected-glow" : ""
                 } ${waveColor}`}
                 style={{
@@ -123,11 +123,13 @@ export default function FanPredictions({
               </div>
 
               <div
-                className={`relative border rounded-xl border-slate-300 dark:border-slate-600 py-4 z-10 text-center font-semibold cursor-pointer bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-all duration-300`}
+                className={`relative border rounded-lg md:rounded-xl border-slate-300 dark:border-slate-600 py-2 md:py-4 z-10 text-center font-medium md:font-semibold cursor-pointer bg-white dark:bg-gray-900 text-sm md:text-base text-gray-900 dark:text-gray-100 transition-all duration-300`}
                 onClick={() => handlePredictionClick(index)}
               >
                 {prediction.team}{" "}
-                <span className="ml-2 text-sm">{prediction.percentage}%</span>
+                <span className="ml-1 md:ml-2 text-xs md:text-sm">
+                  {prediction.percentage}%
+                </span>
               </div>
             </div>
           );

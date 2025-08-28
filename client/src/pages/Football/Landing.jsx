@@ -433,7 +433,7 @@ export default function Landing() {
           {/* right Section */}
           <div className="w-full lg:w-2/3">
             {/* Web Stories Section */}
-            <div className="bg-gray-200 dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-100 dark:border-gray-700 mb-6 w-full h-[600px]">
+            <div className="bg-gray-200 dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-100 dark:border-gray-700 mb-6 w-full">
               <YtShorts shorts={data.footballyoutubeShorts} />
             </div>
 

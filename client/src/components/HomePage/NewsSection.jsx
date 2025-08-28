@@ -70,15 +70,17 @@ export default function BlogNewsSection({ blogs = [] }) {
   return (
     <div className="bg-gray-200 dark:bg-gray-800 border rounded-xl border-slate-300 dark:border-slate-600 mx-2 sm:mx-5 md:mx-24 flex-1 mb-5 overflow-hidden shadow-sm">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700 gap-3 sm:gap-0">
+      <div
+        className="flex flex-col sm:flex-row justify-between items-start sm:items-center 
+             p-3 sm:p-6 gap-2 sm:gap-0
+             bg-blue-600 border-b border-blue-700 rounded-t-xl"
+      >
         <div>
-          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100">
+          <h1 className="text-lg sm:text-2xl font-bold text-white">
             Latest News
           </h1>
-          {/* <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-            Match reviews, player interviews, and expert takes
-          </p> */}
         </div>
+
         {/* <button
           onClick={() => navigate("/cricket/blogs")}
           className="flex cursor-pointer items-center gap-2 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium text-sm transition-colors self-start sm:self-auto"
@@ -88,7 +90,7 @@ export default function BlogNewsSection({ blogs = [] }) {
       </div>
 
       {/* Slider */}
-      <div className="relative mb-6">
+      <div className="relative mt-4 mb-6">
         <div className="relative overflow-hidden rounded-xl">
           <div
             className="flex transition-transform duration-500 ease-in-out"
@@ -104,7 +106,7 @@ export default function BlogNewsSection({ blogs = [] }) {
                 onClick={() => navigate(`/cricket/cricketblog/${blogItem.id}`)}
               >
                 <div className="mx-1 sm:mx-2">
-                  <div className="relative h-64 sm:h-72 lg:h-80 rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-700">
+                  <div className="relative h-52 sm:h-72 lg:h-80 rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-700">
                     <img
                       src={blogItem.featuredImage}
                       alt={blogItem.title}
@@ -146,6 +148,38 @@ export default function BlogNewsSection({ blogs = [] }) {
               </button>
             </>
           )}
+        </div>
+      </div>
+
+      {/** Mobile-only grid under slider */}
+      <div className="block sm:hidden px-3 pb-5">
+        <div className="grid grid-cols-2 gap-3">
+          {displayBlogs.slice(0, 4).map((blogItem, index) => (
+            <div
+              key={index}
+              onClick={() => navigate(`/cricket/cricketblog/${blogItem.id}`)}
+              className="bg-white dark:bg-gray-700 rounded-lg overflow-hidden shadow cursor-pointer"
+            >
+              <div className="h-24 sm:h-28 w-full overflow-hidden">
+                <img
+                  src={blogItem.featuredImage}
+                  alt={blogItem.title}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="p-2">
+                <h3 className="text-xs font-semibold text-gray-800 dark:text-gray-100 line-clamp-2">
+                  {blogItem.title}
+                </h3>
+                <p className="text-[10px] text-gray-500 dark:text-gray-300 mt-1">
+                  {new Date(blogItem.publishedAt).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </p>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>

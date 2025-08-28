@@ -153,11 +153,13 @@ export default function YtShorts({ shorts }) {
   }, []);
 
   return (
-    <div className="bg-gray-200 dark:bg-gray-800 border border-slate-300 dark:border-slate-600 h-full px-6 py-4 rounded-lg">
-      <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
-        Web Stories
-      </h1>
-      <div className="relative mt-2">
+    <div className="bg-gray-200 dark:bg-gray-800 border border-slate-300 dark:border-slate-600 h-full max-h-[500px] sm:max-h-[550px] md:max-h-[800px] rounded-xl">
+      <div className="bg-blue-600 px-6 py-3 border-b border-blue-700 rounded-t-lg">
+        <h1 className="text-lg sm:text-xl font-semibold text-white">
+          Web Stories
+        </h1>
+      </div>
+      <div className="relative mt-2 px-6 py-2 ">
         <div className="absolute left-0 top-0 bottom-0 w-10 bg-gradient-to-r from-gray-200 dark:from-gray-800 to-transparent z-10"></div>
 
         <div
@@ -173,7 +175,7 @@ export default function YtShorts({ shorts }) {
             return (
               <div
                 key={`${i}-${originalIndex}`}
-                className={`slide-item flex-shrink-0 w-full max-w-[280px] aspect-[9/16] mx-2 transition-all duration-300 ease-in-out ${
+                className={`slide-item flex-shrink-0 w-full max-w-[150px] sm:max-w-[220px] md:max-w-[280px] aspect-[9/16] mx-1 sm:mx-2 transition-all duration-300 ease-in-out ${
                   originalIndex === currentSlide
                     ? "scale-100 opacity-100"
                     : "scale-95 opacity-90"
@@ -236,7 +238,7 @@ export default function YtShorts({ shorts }) {
         </button>
       </div>
 
-      <div className="mt-4 flex justify-center space-x-2">
+      <div className="mt-4 flex justify-center space-x-2 py-1">
         {shorts.map((_, index) => (
           <button
             key={index}

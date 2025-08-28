@@ -331,10 +331,7 @@ export default function Home() {
       </div>
 
       {/* Enhanced Match Categories Section */}
-      <div className="bg-[#2834c8] py-10 sm:py-12 px-4 sm:px-6 relative overflow-hidden">
-        {/* Animated background */}
-        {/* <div className="absolute inset-0 bg-[#002B5B] opacity-10 z-0"></div> */}
-
+      <div className="bg-[#2834c8] py-6 max-sm:py-4 px-4 sm:px-6 relative overflow-hidden">
         {/* Category Buttons */}
         <div
           className="flex justify-center overflow-x-auto gap-2 mb-6 sm:mb-8 scrollbar-hide"
@@ -353,7 +350,7 @@ export default function Home() {
                 return (
                   <button
                     key={i}
-                    className={`flex items-center flex-shrink-0 px-3 sm:px-5 py-2 sm:py-3 text-xs sm:text-sm md:text-base font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 ${
+                    className={`flex items-center flex-shrink-0 px-2 max-sm:px-2 py-1.5 max-sm:py-1 text-xs sm:text-sm md:text-base font-semibold rounded-lg sm:rounded-xl transition-all duration-300 transform hover:scale-105 ${
                       selectedCat === i
                         ? "bg-white text-black shadow-lg"
                         : "bg-white/10 dark:bg-black/20 text-white hover:bg-white/20 dark:hover:bg-white/10 backdrop-blur-sm border border-white/20"
@@ -361,10 +358,10 @@ export default function Home() {
                     onClick={() => setSelectedCat(i)}
                   >
                     {/* Icon + Text */}
-                    <span className="mr-1 sm:mr-2 text-current flex items-center">
+                    <span className="mr-1 sm:mr-2 text-current flex items-center text-sm max-sm:text-xs">
                       {icons[i]}
                     </span>
-                    {category}
+                    <span className="max-sm:text-xs">{category}</span>
                   </button>
                 );
               }
@@ -378,7 +375,7 @@ export default function Home() {
             topSectionMatches.map((match, i) => (
               <div
                 key={i}
-                className="flex-shrink-0 min-w-[90%] sm:min-w-[340px] max-w-sm mx-2 sm:mx-0"
+                className="flex-shrink-0 min-w-[85%] max-sm:min-w-[80%] sm:min-w-[340px] max-w-sm mx-2 sm:mx-0"
                 data-animate
                 style={{ animationDelay: `${i * 0.2}s` }}
               >
@@ -387,29 +384,30 @@ export default function Home() {
                   onClick={() =>
                     navigate("/cricket/match/" + match.matchInfo.matchId)
                   }
-                  className="match-card bg-white/95 dark:bg-gray-800/90 backdrop-blur-sm relative cursor-pointer shadow-xl mt-4 rounded-2xl border border-white/20 dark:border-gray-700 p-4 sm:p-6 hover:shadow-2xl group overflow-hidden"
+                  className="match-card bg-white/95 dark:bg-gray-800/90 backdrop-blur-sm relative cursor-pointer 
+                  shadow-md sm:shadow-xl mt-2 sm:mt-4 rounded-xl sm:rounded-2xl border border-white/20 dark:border-gray-700 
+                  p-3 sm:p-6 hover:shadow-lg group overflow-hidden flex flex-col justify-between 
+                  w-full sm:w-[320px] lg:w-[380px] 
+                  min-h-[180px] sm:min-h-[220px] lg:min-h-[260px]"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-50 dark:from-gray-700 to-purple-50 dark:to-gray-800 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  <div className="absolute top-0 right-0 w-full h-1 bg-gradient-to-r from-blue-500 to-purple-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
-
                   {/* Top info section */}
-                  <div className="flex flex-col sm:flex-row text-sm items-start sm:items-center justify-between gap-2 sm:gap-0 relative z-10">
+                  <div className="flex flex-col sm:flex-row text-xs sm:text-sm items-start sm:items-center justify-between gap-2 sm:gap-0 relative z-10">
                     <div className="space-y-1">
                       <div className="flex items-center flex-wrap gap-2">
-                        <p className="font-semibold text-xs text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded-full">
+                        <p className="font-semibold text-[10px] sm:text-xs text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded-full">
                           {match.matchInfo.matchDesc}
                         </p>
-                        <p className="font-semibold text-xs text-gray-600 dark:text-gray-300 bg-blue-100 dark:bg-blue-900 px-2 py-1 rounded-full">
+                        <p className="font-semibold text-[10px] sm:text-xs text-gray-600 dark:text-gray-300 bg-blue-100 dark:bg-blue-900 px-2 py-0.5 rounded-full">
                           {match.matchInfo.matchFormat}
                         </p>
                       </div>
-                      <p className="text-xs truncate max-w-[220px] text-gray-500 dark:text-gray-400 font-medium">
+                      <p className="text-[10px] sm:text-xs truncate max-w-[160px] sm:max-w-[220px] text-gray-500 dark:text-gray-400 font-medium">
                         📍 {match?.matchInfo?.venueInfo?.ground}
                       </p>
                     </div>
 
                     <div
-                      className={`px-2 py-2 text-xs flex items-center font-semibold rounded-full transition-all duration-300 ${
+                      className={`px-2 py-1 text-[10px] sm:text-xs flex items-center font-semibold rounded-full transition-all duration-300 ${
                         match.matchInfo.state === "In Progress"
                           ? "bg-gradient-to-r from-red-500 to-red-600 text-white animate-pulse shadow-lg"
                           : match.matchInfo.state === "Complete"
@@ -417,7 +415,7 @@ export default function Home() {
                           : "bg-gradient-to-r from-gray-300 dark:from-gray-600 to-gray-400 dark:to-gray-700 text-gray-700 dark:text-gray-200"
                       }`}
                     >
-                      <span className="mr-1 sm:mr-2">
+                      <span className="mr-1 sm:mr-2 text-xs">
                         {match.matchInfo.state === "In Progress"
                           ? "🔴"
                           : match.matchInfo.state === "Complete"
@@ -429,20 +427,20 @@ export default function Home() {
                   </div>
 
                   {/* Team Comparison Section */}
-                  <div className="flex justify-between items-center mt-6 gap-3 sm:gap-6 relative z-10">
+                  <div className="flex justify-between items-center mt-3 sm:mt-6 gap-2 sm:gap-6 relative z-10">
                     {/* Team 1 */}
-                    <div className="flex flex-col flex-1 items-start space-y-2 relative">
-                      <div className="flex items-center font-bold text-lg gap-2 group/team hover:scale-105 transition-transform duration-200">
+                    <div className="flex flex-col flex-1 items-start space-y-1 sm:space-y-2">
+                      <div className="flex items-center font-bold text-xs sm:text-lg gap-1 sm:gap-2 group/team hover:scale-105 transition-transform duration-200">
                         <Image
                           faceImageId={match.matchInfo.team1.imageId}
-                          className="w-7 h-7 sm:w-8 sm:h-8 rounded-full ring-2 ring-blue-100 group-hover/team:ring-blue-300 transition-all duration-200"
+                          className="w-5 h-5 sm:w-8 sm:h-8 rounded-full ring-1 sm:ring-2 ring-blue-100 group-hover/team:ring-blue-300 transition-all duration-200"
                         />
                         <span className="group-hover/team:text-blue-600 dark:group-hover/team:text-blue-400 transition-colors duration-200 dark:text-gray-100">
                           {match.matchInfo.team1.teamSName}
                         </span>
                       </div>
-                      <div className="bg-gradient-to-r from-blue-50 dark:from-gray-700 to-purple-50 dark:to-gray-700 px-2 py-1 rounded-lg">
-                        <p className="text-sm font-semibold text-gray-700 dark:text-gray-200">
+                      <div className="bg-gradient-to-r from-blue-50 dark:from-gray-700 to-purple-50 dark:to-gray-700 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-lg">
+                        <p className="text-[11px] sm:text-sm font-semibold text-gray-700 dark:text-gray-200">
                           {match?.matchScore?.team1Score?.inngs1?.runs || 0}/
                           {match?.matchScore?.team1Score?.inngs1?.wickets || 0}{" "}
                           (
@@ -454,31 +452,31 @@ export default function Home() {
                       </div>
                     </div>
 
-                    {/* VS Text + Date */}
-                    <div className="text-center space-y-2">
-                      <p className="font-bold text-xl sm:text-2xl text-gray-400 dark:text-gray-500 animate-pulse">
+                    {/* VS */}
+                    <div className="text-center space-y-1 sm:space-y-2">
+                      <p className="font-bold text-base sm:text-2xl text-gray-400 dark:text-gray-500 animate-pulse">
                         vs
                       </p>
-                      <div className="bg-gradient-to-r from-gray-100 dark:from-gray-700 to-gray-200 dark:to-gray-800 rounded-full px-3 py-1 shadow-inner">
-                        <p className="text-xs font-semibold text-gray-700 dark:text-gray-200">
+                      <div className="bg-gradient-to-r from-gray-100 dark:from-gray-700 to-gray-200 dark:to-gray-800 rounded-full px-2 py-0.5 sm:px-3 sm:py-1 shadow-inner">
+                        <p className="text-[10px] sm:text-xs font-semibold text-gray-700 dark:text-gray-200">
                           {getReadableDate(match.matchInfo.startDate)}
                         </p>
                       </div>
                     </div>
 
                     {/* Team 2 */}
-                    <div className="flex flex-col flex-1 items-end space-y-2 relative">
-                      <div className="flex items-center font-bold text-lg gap-2 group/team hover:scale-105 transition-transform duration-200">
+                    <div className="flex flex-col flex-1 items-end space-y-1 sm:space-y-2">
+                      <div className="flex items-center font-bold text-xs sm:text-lg gap-1 sm:gap-2 group/team hover:scale-105 transition-transform duration-200">
                         <span className="group-hover/team:text-purple-600 dark:group-hover/team:text-purple-400 transition-colors duration-200 dark:text-gray-100">
                           {match.matchInfo.team2.teamSName}
                         </span>
                         <Image
                           faceImageId={match.matchInfo.team2.imageId}
-                          className="w-7 h-7 sm:w-8 sm:h-8 rounded-full ring-2 ring-purple-100 group-hover/team:ring-purple-300 transition-all duration-200"
+                          className="w-5 h-5 sm:w-8 sm:h-8 rounded-full ring-1 sm:ring-2 ring-purple-100 group-hover/team:ring-purple-300 transition-all duration-200"
                         />
                       </div>
-                      <div className="bg-gradient-to-r from-purple-50 dark:from-gray-700 to-blue-50 dark:to-gray-700 px-2 py-1 rounded-lg">
-                        <p className="text-sm font-semibold text-gray-700 dark:text-gray-200">
+                      <div className="bg-gradient-to-r from-purple-50 dark:from-gray-700 to-blue-50 dark:to-gray-700 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-lg">
+                        <p className="text-[11px] sm:text-sm font-semibold text-gray-700 dark:text-gray-200">
                           {match?.matchScore?.team2Score?.inngs1?.runs || 0}/
                           {match?.matchScore?.team2Score?.inngs1?.wickets || 0}{" "}
                           (
@@ -490,18 +488,16 @@ export default function Home() {
                       </div>
                     </div>
                   </div>
-                </div>
 
-                {/* Bottom Action Bar */}
-                <div className="bg-white text-black dark:bg-gray-900 dark:text-gray-200 rounded-b-2xl -mt-3 p-4 shadow-lg relative overflow-hidden">
-                  <div className="absolute inset-0 shimmer-effect opacity-10"></div>
-                  <div className="flex justify-between font-semibold text-sm items-center relative z-10">
+                  {/* Bottom Action Bar (merged inside card) */}
+                  <div className="mt-3 sm:mt-5 border-t border-gray-200 dark:border-gray-700 pt-2 sm:pt-4 flex justify-between font-medium sm:font-semibold text-[11px] sm:text-sm items-center">
                     <button
-                      onClick={() =>
+                      onClick={(e) => {
+                        e.stopPropagation();
                         navigate(
                           "/cricket/schedules/" + match.matchInfo.seriesId
-                        )
-                      }
+                        );
+                      }}
                       className="cursor-pointer hover:text-blue-600 dark:hover:text-yellow-300 transition-colors duration-200 flex items-center gap-1 group"
                     >
                       <span className="group-hover:rotate-12 transition-transform duration-200">
@@ -510,11 +506,12 @@ export default function Home() {
                       Schedule
                     </button>
                     <button
-                      onClick={() =>
+                      onClick={(e) => {
+                        e.stopPropagation();
                         navigate(
                           "/cricket/points-table/" + match.matchInfo.seriesId
-                        )
-                      }
+                        );
+                      }}
                       className="cursor-pointer hover:text-blue-600 dark:hover:text-yellow-300 transition-colors duration-200 flex items-center gap-1 group"
                     >
                       <span className="group-hover:rotate-12 transition-transform duration-200">
@@ -532,13 +529,22 @@ export default function Home() {
       {/* Enhanced Main Content Section */}
       <div className="flex flex-col md:flex-row gap-8 my-8 px-5 md:px-24">
         {/* Recent Highlights Section */}
-        <div className="w-full md:w-1/3 flex flex-col">
-          <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4">
-            Recent Highlights
-          </h2>
+        <div
+          className="w-full max-w-xs sm:max-w-none md:w-1/3 
+     flex flex-col rounded-xl shadow-md 
+     border border-gray-300 dark:border-gray-700 overflow-hidden 
+     max-h-[16rem] sm:max-h-none"
+        >
+          {/* Header */}
+          <div className="bg-blue-600 px-3 py-2 sm:px-4 sm:py-3">
+            <h2 className="text-base sm:text-xl lg:text-2xl font-bold text-white">
+              Recent Highlights
+            </h2>
+          </div>
 
+          {/* Content */}
           <div
-            className="overflow-y-auto space-y-4 pr-1 scrollbar-hide"
+            className="overflow-y-auto space-y-2 sm:space-y-3 p-2 sm:p-4 lg:p-5 pr-1 scrollbar-hide bg-gray-50 dark:bg-gray-900"
             style={{ maxHeight: "28rem" }}
           >
             {seriesList && seriesList.length > 0 ? (
@@ -546,15 +552,32 @@ export default function Home() {
                 <div
                   onClick={() => navigate("/cricket/schedules/" + e.id)}
                   key={i}
-                  className="bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer w-full px-4 py-3 rounded-lg shadow-sm border border-gray-300 dark:border-gray-700 transition duration-200"
+                  className="flex items-center gap-2 sm:gap-4 lg:gap-5 
+             bg-white dark:bg-gray-800 
+             hover:bg-gray-100 dark:hover:bg-gray-700 
+             cursor-pointer w-full 
+             px-2 py-2 sm:px-4 sm:py-3 lg:px-5 lg:py-4 
+             rounded-md sm:rounded-lg shadow-sm 
+             border border-gray-200 dark:border-gray-700 
+             transition duration-200"
                 >
-                  <p className="text-base text-gray-800 dark:text-gray-100 font-semibold leading-snug break-words">
+                  {/* Series Image */}
+                  {e.imageUrl && (
+                    <img
+                      src={e.imageUrl}
+                      alt={e.name}
+                      className="w-8 h-8 sm:w-12 sm:h-12 lg:w-16 lg:h-16 object-cover rounded-md border border-gray-300 dark:border-gray-600"
+                    />
+                  )}
+
+                  {/* Series Name */}
+                  <p className="text-xs sm:text-base lg:text-lg text-gray-800 dark:text-gray-100 font-semibold leading-snug break-words">
                     {e.name}
                   </p>
                 </div>
               ))
             ) : (
-              <p className="text-gray-500 dark:text-gray-400 italic text-lg">
+              <p className="text-gray-500 dark:text-gray-400 italic text-base sm:text-lg">
                 No recent matches available
               </p>
             )}
@@ -579,16 +602,25 @@ export default function Home() {
               </p>
             </div>
           </div>
-          <div className="flex md:flex-row flex-col gap-3 mt-4 font-semibold w-full">
+          <div className="flex flex-row md:flex-row gap-2 sm:gap-3 mt-4 font-semibold w-full">
             <button
               onClick={() => navigate("/cricket/schedules/10587")}
-              className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 flex-1 py-3 text-white cursor-pointer rounded-xl transition-all duration-300 hover:shadow-lg transform hover:scale-105"
+              className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 
+               flex-1 py-2 sm:py-3 text-sm sm:text-base 
+               text-white cursor-pointer rounded-lg sm:rounded-xl 
+               transition-all duration-300 hover:shadow-lg transform hover:scale-105"
             >
               🎥 View Full Highlights
             </button>
             <button
               onClick={() => navigate("/cricket/schedules/10587")}
-              className="text-blue-700 dark:text-blue-400 flex-1 py-3 border-2 border-blue-700 dark:border-blue-400 rounded-xl hover:bg-blue-700 dark:hover:bg-blue-400 hover:text-white dark:hover:text-gray-900 transition-all duration-300 hover:shadow-lg transform hover:scale-105"
+              className="text-blue-700 dark:text-blue-400 
+               flex-1 py-2 sm:py-3 text-sm sm:text-base 
+               border-2 border-blue-700 dark:border-blue-400 
+               rounded-lg sm:rounded-xl 
+               hover:bg-blue-700 dark:hover:bg-blue-400 
+               hover:text-white dark:hover:text-gray-900 
+               transition-all duration-300 hover:shadow-lg transform hover:scale-105"
             >
               View Match Summary
             </button>

@@ -26,18 +26,19 @@ const YouTubeVideos = ({ links }) => {
 
   return (
     <div className="py-6 px-4 md:px-8 bg-gray-200 dark:bg-gray-900 transition-colors duration-300 rounded-lg border my-3 shadow border-slate-300 dark:border-gray-700">
-      {/* <h2 className="text-3xl font-bold mb-6 text-gray-900 dark:text-gray-100 text-center">
-    YouTube Videos
-  </h2> */}
-
-      <div className="flex space-x-6 overflow-x-auto pb-4 scrollbar-hide">
+      <div
+        className="
+          grid grid-cols-2 gap-4
+          md:flex md:space-x-6 md:overflow-x-auto md:pb-4 md:scrollbar-hide
+        "
+      >
         {links.map((link, index) => (
           <div
             key={index}
-            className="flex-shrink-0 w-72 rounded-lg overflow-hidden shadow-lg bg-white dark:bg-gray-800"
+            className="flex-shrink-0 w-full md:w-72 rounded-lg overflow-hidden shadow-lg bg-white dark:bg-gray-800"
           >
             <iframe
-              className="w-full h-48"
+              className="w-full h-28 md:h-48"
               src={getEmbedUrl(link)}
               title={`YouTube video ${index}`}
               frameBorder="0"
