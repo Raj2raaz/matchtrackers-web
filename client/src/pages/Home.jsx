@@ -527,7 +527,7 @@ export default function Home() {
       </div>
 
       {/* Enhanced Main Content Section */}
-      <div className="flex flex-col md:flex-row gap-8 my-8 px-5 md:px-24">
+      <div className="flex flex-col md:flex-row gap-8 my-8 px-5 md:px-24 items-center justify-center">
         {/* Recent Highlights Section */}
         <div
           className="w-full max-w-xs sm:max-w-none md:w-1/3 

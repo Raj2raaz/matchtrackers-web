@@ -11,10 +11,11 @@ import {
 } from "react-icons/fa";
 
 import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
 import { cricApiClient as apiClient, sofaScoreApi } from "../utils/axios";
 import Image from "../components/Image";
-import MatchVideosSection from "../components/MatchVideosSection";
-import YtShorts from "../components/YtShorts";
+import BlogSection from "../components/HomePage/BlogSection";
+import PlayerRankings from "../components/HomePage/PlayerRankings";
 import {
   LineChart,
   Line,
@@ -54,6 +55,7 @@ const AnalyticsMatch = () => {
   const [overData, setOverData] = useState([]);
   const [pTable, setPtable] = useState({});
   const [venuStats, setVenueStats] = useState();
+  const [blog, setBlog] = useState(null);
 
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
 
@@ -134,6 +136,19 @@ const AnalyticsMatch = () => {
     fetchData();
   }, [id]);
 
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const loadData = async () => {
+    try {
+      const blogResponse = await axios.get("/api/blog/cricket");
+      setBlog(blogResponse.data.blogs);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const tabs = useMemo(
     () => [
       {
@@ -182,19 +197,22 @@ const AnalyticsMatch = () => {
     <div className="container mx-auto px-2 md:px-4 font-sans text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-900 min-h-screen">
       {/* Match Header for Mobile */}
       {data?.matchInfo && (
-        <div className="md:hidden bg-gradient-to-r from-blue-600 to-blue-800 dark:from-blue-700 dark:to-blue-900 text-white mt-4 rounded-lg shadow-md p-3 mb-4">
-          <div className="flex justify-between items-center mb-2">
-            <span className="text-xs px-2 py-1 bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 rounded-full truncate max-w-40">
+        <div className="md:hidden bg-gradient-to-r from-blue-600 to-blue-800 dark:from-blue-700 dark:to-blue-900 text-white mt-4 rounded-lg shadow-md p-3 mb-4 overflow-hidden">
+          {/* Top Row */}
+          <div className="flex justify-between items-center mb-2 gap-2">
+            <span className="text-xs px-2 py-1 bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 rounded-full truncate flex-1">
               {commentary?.matchHeader?.seriesName}
             </span>
-            <span className="text-xs px-2 py-1 bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-200 rounded-full">
+            <span className="text-xs px-2 py-1 bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-200 rounded-full whitespace-nowrap">
               {data.matchInfo.shortStatus}
             </span>
           </div>
 
-          <div className="flex justify-between items-center mb-3">
-            <div className="flex items-center max-w-32">
-              <div>
+          {/* Teams Row */}
+          <div className="flex justify-between items-center mb-3 gap-2">
+            {/* Team 1 */}
+            <div className="flex items-center min-w-0 flex-1">
+              <div className="min-w-0">
                 <div className="font-bold truncate">
                   {data.matchInfo.team1.name}
                 </div>
@@ -202,21 +220,25 @@ const AnalyticsMatch = () => {
                   {score?.scorecard?.[0]?.batTeamName ===
                   data?.matchInfo?.team1.name ? (
                     <span>
-                      {score?.scorecard[0].score}/{score?.scorecard[0].wickets}(
-                      {score?.scorecard[0].overs})
+                      {score?.scorecard[0].score}/{score?.scorecard[0].wickets}{" "}
+                      ({score?.scorecard[0].overs})
                     </span>
                   ) : score?.scorecard?.[1] ? (
                     <span>
-                      {score?.scorecard[1].score}/{score?.scorecard[1].wickets}(
-                      {score?.scorecard[1].overs})
+                      {score?.scorecard[1].score}/{score?.scorecard[1].wickets}{" "}
+                      ({score?.scorecard[1].overs})
                     </span>
                   ) : null}
                 </div>
               </div>
             </div>
-            <span className="text-base md:text-xl px-1">vs</span>
-            <div className="flex items-center max-w-32">
-              <div className="text-right">
+
+            {/* VS */}
+            <span className="text-base md:text-xl px-1 shrink-0">vs</span>
+
+            {/* Team 2 */}
+            <div className="flex items-center min-w-0 flex-1 justify-end">
+              <div className="min-w-0 text-right">
                 <div className="font-bold truncate">
                   {data.matchInfo.team2.name}
                 </div>
@@ -224,13 +246,13 @@ const AnalyticsMatch = () => {
                   {score?.scorecard?.[0]?.batTeamName ===
                   data?.matchInfo?.team2.name ? (
                     <span>
-                      {score?.scorecard[0].score}/{score?.scorecard[0].wickets}(
-                      {score?.scorecard[0].overs})
+                      {score?.scorecard[0].score}/{score?.scorecard[0].wickets}{" "}
+                      ({score?.scorecard[0].overs})
                     </span>
                   ) : score?.scorecard?.[1] ? (
                     <span>
-                      {score?.scorecard[1].score}/{score?.scorecard[1].wickets}(
-                      {score?.scorecard[1].overs})
+                      {score?.scorecard[1].score}/{score?.scorecard[1].wickets}{" "}
+                      ({score?.scorecard[1].overs})
                     </span>
                   ) : null}
                 </div>
@@ -238,8 +260,9 @@ const AnalyticsMatch = () => {
             </div>
           </div>
 
-          <div className="flex items-center text-xs  justify-center">
-            <FaMapMarkerAlt className="mr-1 flex-shrink-0" />
+          {/* Venue */}
+          <div className="flex items-center text-xs justify-center text-center px-2">
+            <FaMapMarkerAlt className="mr-1 shrink-0" />
             <span className="truncate">
               {data?.matchInfo?.venue?.name}, {data?.matchInfo?.venue?.city}
             </span>
@@ -971,8 +994,20 @@ const AnalyticsMatch = () => {
         </div>
       </div>
 
-      <TrendingPlayers />
-      <EditorPicks />
+      {/* Boundary Section */}
+      <div className="w-full border-t border-gray-300 dark:border-gray-600 my-8"></div>
+
+      <div className="flex flex-col lg:flex-row gap-4 mt-6 mx-auto max-w-6xl mb-2 lg:items-stretch">
+        {/* Player Rankings */}
+        <div className="w-full lg:w-1/3 flex justify-center lg:justify-end mb-2">
+          <PlayerRankings />
+        </div>
+
+        {/* Blog Section */}
+        <div className="flex-1 flex justify-center lg:justify-start">
+          <BlogSection blog={blog} />
+        </div>
+      </div>
     </div>
   );
 };
