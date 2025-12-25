@@ -7,7 +7,7 @@ import useMainStore from "../store/MainStore";
 import { getPlayers } from "../api/Football";
 
 export default function TrendingPlayers() {
-  const { trendingPlayers } = useCricbuzzStore();
+  const { trendingPlayers } = useCricbuzzStore((state) => state.trendingPlayers);
   const navigate = useNavigate();
   const { content } = useMainStore();
   const [fbPlayers, setFbPlayers] = useState([]);

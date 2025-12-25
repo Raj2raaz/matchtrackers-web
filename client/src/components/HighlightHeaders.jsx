@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useCallback } from "react-router-dom";
 import county from "../assets/headerMatches/county.jpg";
 import hk from "../assets/headerMatches/hk.jpg";
 import iccWomen from "../assets/headerMatches/iccWomen.jpg";
@@ -66,9 +66,9 @@ export default function HighlightHeaders() {
     }, 2000);
 
     return () => clearInterval(interval);
-  }, [currentIndex, isPaused, cardWidth]);
+  }, [currentIndex, isPaused, cardWidth, handleNext]);
 
-  const scrollToCard = (index) => {
+  const scrollToCard = useCallback((index) => {
     if (scrollContainerRef.current && cardWidth > 0) {
       const normalizedIndex = index % imageData.length;
       scrollContainerRef.current.scrollTo({
@@ -76,7 +76,7 @@ export default function HighlightHeaders() {
         behavior: "smooth",
       });
     }
-  };
+  },[cardWidth, imageData.length]);
 
   const handlePrev = () => {
     setIsPaused(true);
@@ -88,11 +88,11 @@ export default function HighlightHeaders() {
     setTimeout(() => setIsPaused(false), 5000);
   };
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     const newIndex = (currentIndex + 1) % imageData.length;
     setCurrentIndex(newIndex);
     scrollToCard(newIndex);
-  };
+  },[scrollToCard, currentIndex, imageData.length]);
 
   const handleImageClick = (id) => {
     navigate(`/cricket/schedules/${id}`);

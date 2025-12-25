@@ -10,6 +10,9 @@ import {
   getNavLinks,
 } from "../api/Home.js";
 
+let hasFetchedOnce = false;
+let fetchPromise = null;
+
 const useCricbuzzStore = create((set) => ({
   recentMatches: [],
   trendingPlayers: [],
@@ -23,43 +26,56 @@ const useCricbuzzStore = create((set) => ({
   error: null,
 
   fetchData: async () => {
+
+    console.log("🔥 fetchData CALLED");
+    // 🔒 HARD STOP duplicate calls
+    if (hasFetchedOnce) return fetchPromise;
+
+    if (fetchPromise) return fetchPromise;
+
     set({ loading: true, error: null });
 
-    try {
-      const [
-        matches,
-        players,
-        live,
-        imgs,
-        news,
-        editorPicks,
-        schedules,
-        navLinks,
-      ] = await Promise.all([
-        getRecentMatches(),
-        getTrendingPlayers(),
-        getLiveMatches(),
-        getGalaryImages(),
-        getNews(),
-        getEditorPicks(),
-        getSchedules(),
-        getNavLinks(),
-      ]);
+    fetchPromise = (async () => {
+      try {
+        const [
+          matches,
+          players,
+          live,
+          imgs,
+          news,
+          editorPicks,
+          schedules,
+          // navLinks,
+        ] = await Promise.all([
+          getRecentMatches(),
+          getTrendingPlayers(),
+          getLiveMatches(),
+          getGalaryImages(),
+          getNews(),
+          getEditorPicks(),
+          getSchedules(),
+          // getNavLinks(),
+        ]);
 
-      set({
-        recentMatches: matches || [],
-        trendingPlayers: players || [],
-        liveMatches: live || [],
-        news: news || [],
-        galleries: imgs,
-        schedules: schedules,
-        editorPicks: editorPicks,
-        navLinks: navLinks,
-        loading: false,
-      });
-    } catch (error) {
-      set({ error: "Failed to fetch data", loading: false });
-    }
+        set({
+          recentMatches: matches || [],
+          trendingPlayers: players || [],
+          liveMatches: live || [],
+          galleries: imgs || [],
+          news: news || [],
+          editorPicks: editorPicks || [],
+          schedules: schedules || [],
+          // navLinks: navLinks || [],
+          loading: false,
+        });
+
+        hasFetchedOnce = true;
+      } catch (error) {
+        set({ error: "Failed to fetch data", loading: false });
+      }
+    })();
+
+    return fetchPromise;
   },
 }));
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FaChevronRight } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import useCricbuzzStore from "../store/cricket";
+// import useCricbuzzStore from "../store/cricket";
 import Image from "./Image";
 import { getGalaryImages } from "../api/Home";
 

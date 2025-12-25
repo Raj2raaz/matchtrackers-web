@@ -6,7 +6,7 @@ import Image from "./Image";
 
 export default function EditorPicks() {
   const navigate = useNavigate();
-  const { editorPicks } = useCricbuzzStore();
+  const { editorPicks } = useCricbuzzStore((state) => state.editorPicks);
 
   return (
     <div>

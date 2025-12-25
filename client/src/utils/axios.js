@@ -31,32 +31,39 @@ const footballApiClient = axios.create({
 
 // Interceptor to handle potential CORS or network errors
 cricApiClient.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response && error.response.status === 429) {
-      console.warn("Rate limit exceeded. Waiting before retrying...");
-      // Implement exponential backoff or retry mechanism
-      return new Promise((resolve) =>
-        setTimeout(() => resolve(cricApiClient(error.config)), 1000)
-      );
+  (res) => res,
+  async (error) => {
+    const config = error.config;
+
+    if (!config) return Promise.reject(error);
+
+    config.__retryCount = config.__retryCount || 0;
+
+    if (error.response?.status === 429 && config.__retryCount < 3) {
+      config.__retryCount += 1;
+      console.warn("429 hit → retrying once...");
+      await new Promise((r) => setTimeout(r, 1500));
+      return cricApiClient(config);
     }
+
     return Promise.reject(error);
   }
 );
 
-footballApiClient.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response && error.response.status === 429) {
-      console.warn("Rate limit exceeded. Waiting before retrying...");
-      // Implement exponential backoff or retry mechanism
-      return new Promise((resolve) =>
-        setTimeout(() => resolve(footballApiClient(error.config)), 1000)
-      );
-    }
-    return Promise.reject(error);
-  }
-);
+
+// footballApiClient.interceptors.response.use(
+//   (response) => response,
+//   (error) => {
+//     if (error.response && error.response.status === 429) {
+//       console.warn("Rate limit exceeded. Waiting before retrying...");
+//       // Implement exponential backoff or retry mechanism
+//       return new Promise((resolve) =>
+//         setTimeout(() => resolve(footballApiClient(error.config)), 1000)
+//       );
+//     }
+//     return Promise.reject(error);
+//   }
+// );
 
 const sofaScoreApi = axios.create({
   baseURL: "https://sofascore.p.rapidapi.com",

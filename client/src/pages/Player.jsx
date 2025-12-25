@@ -14,7 +14,7 @@ const Player = () => {
   const [activeTab, setActiveTab] = useState("overview");
   const [info, setInfo] = useState({});
   const [error, setError] = useState(null);
-  const { trendingPlayers } = useCricbuzzStore();
+  const { trendingPlayers } = useCricbuzzStore((state) => state.trendingPlayers);
   const [expandeBio, setExpandedBio] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const { content } = useMainStore();

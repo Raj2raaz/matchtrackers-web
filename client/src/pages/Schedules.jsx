@@ -15,7 +15,7 @@ import {
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { cricApiClient as apiClient } from "../utils/axios";
 import Image from "../components/Image";
-import useCricbuzzStore from "../store/cricket";
+// import useCricbuzzStore from "../store/cricket";
 import { formatTimeAgo } from "../utils/util";
 import Blogs from "./Blogs";
 import { Helmet } from "react-helmet-async";

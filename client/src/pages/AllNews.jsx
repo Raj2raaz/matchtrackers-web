@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import useCricbuzzStore from "../store/cricket";
+// import useCricbuzzStore from "../store/cricket";
 import { getNews } from "../api/Home";
 import Image from "../components/Image";
 import { useNavigate } from "react-router-dom";

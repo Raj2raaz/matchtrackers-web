@@ -1,4 +1,4 @@
-import React from "react";
+import {useEffect} from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -37,12 +37,20 @@ import CricketBlog from "./pages/CricketBlog";
 // ✅ Import ThemeProvider
 import { ThemeProvider } from "./context/ThemeContext";
 
+import useCricbuzzStore from "./store/cricket";
+
 // Layout component to add padding to certain routes
 const PaddedLayout = ({ children }) => {
   return <div className="px-2 md:px-24 md:py-8">{children}</div>;
 };
 
 export default function App() {
+    const fetchData = useCricbuzzStore((state) => state.fetchData);
+
+    useEffect(() => {
+      fetchData();
+    }, []); // empty dependency → only runs once on mount
+    
   return (
     <ThemeProvider>
       <div className="font-inter bg-[#F5F5F5] dark:bg-[#1A1A1A] h-full w-full transition-colors duration-300">

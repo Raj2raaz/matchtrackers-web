@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import HomeSkeleton from "../components/HomeSkeleton";
 import header from "../assets/Landing/header.webp";
 import headermv from "../assets/Landing/headermv.webp";
-import useCricbuzzStore from "../store/cricket";
+// import useCricbuzzStore from "../store/cricket";
 import axios from "axios";
 import {
   FaChevronRight,
@@ -89,17 +89,34 @@ export default function Home() {
   const [isVisible, setIsVisible] = useState({});
   const [isLoading, setIsLoading] = useState(true);
 
-  // Initial data loading
-  useEffect(() => {
-    loadData().finally(() => setIsLoading(false));
-  }, []);
+  // // Initial data loading
+  // useEffect(() => {
+  //   loadData().finally(() => setIsLoading(false));
+  // }, []);
 
-  // Load data when category changes (but don't show skeleton for category changes)
+  // // Load data when category changes (but don't show skeleton for category changes)
+  // useEffect(() => {
+  //   if (!isLoading) {
+  //     loadData();
+  //   }
+  // }, [selectedCat]);
+
   useEffect(() => {
-    if (!isLoading) {
-      loadData();
-    }
-  }, [selectedCat]);
+  let mounted = true;
+
+  const init = async () => {
+    setIsLoading(true);
+    await loadData(selectedCat);
+    if (mounted) setIsLoading(false);
+  };
+
+  init();
+
+  return () => {
+    mounted = false;
+  };
+}, [selectedCat]);
+
 
   // Intersection Observer for animations
   useEffect(() => {
@@ -180,27 +197,54 @@ export default function Home() {
     setSelectedPrediction(index);
   };
 
-  const loadData = async () => {
+  // const loadData = async () => {
+  //   try {
+  //     const rcMatches = await getMatches(
+  //       selectedCat === 1 ? "live" : selectedCat === 2 ? "upcoming" : "recent"
+  //     );
+  //     setTopSectionMatches(rcMatches);
+  //     const series = await getAllSeriesList();
+  //     setSeriesList(series);
+
+  //     const upcoming = await getMatches("upcoming");
+  //     setUpcomingMatches(upcoming);
+
+  //     const blogResponse = await axios.get(`/api/blog/${content}`);
+  //     setBlog(blogResponse.data.blogs);
+
+  //     // const news = await getNews();
+  //     // setNews(news);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  const loadData = useCallback(async (category) => {
     try {
-      const rcMatches = await getMatches(
-        selectedCat === 1 ? "live" : selectedCat === 2 ? "upcoming" : "recent"
-      );
-      setTopSectionMatches(rcMatches);
-      const series = await getAllSeriesList();
-      setSeriesList(series);
+      const type =
+        category === 1
+          ? "live"
+          : category === 2
+          ? "upcoming"
+          : "recent";
 
-      const upcoming = await getMatches("upcoming");
-      setUpcomingMatches(upcoming);
+      const [topMatches, series, upcoming, blogResponse] =
+        await Promise.all([
+          getMatches(type),
+          getAllSeriesList(),
+          category === 2 ? Promise.resolve([]) : getMatches("upcoming"),
+          axios.get(`/api/blog/${content}`),
+        ]);
 
-      const blogResponse = await axios.get(`/api/blog/${content}`);
+      setTopSectionMatches(topMatches || []);
+      setSeriesList(series || []);
+      setUpcomingMatches(upcoming || []);
       setBlog(blogResponse.data.blogs);
-
-      // const news = await getNews();
-      // setNews(news);
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      console.error(err);
     }
-  };
+  }, [content]);
+
 
   // Show skeleton while loading
   if (isLoading) {

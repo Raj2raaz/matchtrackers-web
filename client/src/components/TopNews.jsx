@@ -7,7 +7,7 @@ import { Clock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 export default function TopNews({ length = 5 }) {
-  const { news } = useCricbuzzStore();
+  const { news } = useCricbuzzStore((state) => state.news);
   const navigate = useNavigate();
   return (
     <div>

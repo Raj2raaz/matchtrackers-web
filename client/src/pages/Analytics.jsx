@@ -15,7 +15,7 @@ import { Star } from "lucide-react";
 import Image from "../components/Image";
 import findTournamentIdAndFetchOdds from "../utils/getOdds";
 import TimeDisplay from "../components/TimeDisplay";
-import useCricbuzzStore from "../store/cricket";
+// import useCricbuzzStore from "../store/cricket";
 import Cookies from "js-cookie";
 import useMainStore from "../store/MainStore";
 import data from "../data.json";
