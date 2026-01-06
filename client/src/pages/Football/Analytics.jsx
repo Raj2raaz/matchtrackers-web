@@ -41,7 +41,7 @@ export default function Analytics() {
   useEffect(() => {
     const getOdds = async () => {
       const odds = await footballApiClient.get(
-        `/v3/odds?fixture=${selectedMatch}`
+        `/odds?fixture=${selectedMatch}`
       );
       setOdds(odds.data.response);
     };
@@ -55,17 +55,17 @@ export default function Analytics() {
       setLoading(true);
       try {
         const response = await footballApiClient.get(
-          `/v3/fixtures?league=${selectedLeague.id}&season=${selectedSeason}&last=20`
+          `/fixtures?league=${selectedLeague.id}&season=${selectedSeason}&last=20`
         );
         setMatches(response.data.response);
 
         const scorers = await footballApiClient.get(
-          `/v3/players/topscorers?league=${selectedLeague.id}&season=${selectedSeason}`
+          `/players/topscorers?league=${selectedLeague.id}&season=${selectedSeason}`
         );
         setScorers(scorers.data.response);
 
         const assists = await footballApiClient.get(
-          `/v3/players/topassists?league=${selectedLeague.id}&season=${selectedSeason}`
+          `/players/topassists?league=${selectedLeague.id}&season=${selectedSeason}`
         );
         setAssists(assists.data.response);
       } catch (error) {
